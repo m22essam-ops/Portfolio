@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Mohamed Essam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Architects+Daughter&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav id="siteNav">
+  <div class="wrap">
+    <div class="logo">mohamed essam<em>.</em></div>
+    <div class="nav-links">
+      <a href="index.html#work">WORK</a>
+      <a href="about.html">ABOUT</a>
+    </div>
+    <div class="badge"><span class="badge-dot"></span>AVAILABLE FOR WORK</div>
+  </div>
+</nav>
+
+<section id="about" style="border-top: none; padding-top: 40px;">
+  <div class="wrap">
+    <span class="section-label reveal">02 — About</span>
+    <h2 class="reveal">A little about me.</h2>
+    <div class="about-grid reveal">
+      <img class="about-portrait" src="about-photo.jpg" alt="Mohamed Essam">
+      <div>
+        <p class="about-text">
+          <strong>Award-losing copywriter</strong> (so far). Four years writing for people
+          who skip the ads, twelve years writing in my drafts, and a whole life having fun
+          being serious about chasing whatever makes ordinary things look good.
+        </p>
+        <p class="about-text">
+          Designed in Egypt, put to work in the UAE, licensed in Madrid, which makes my
+          buffet of ideas accidentally intercontinental.
+        </p>
+        <div class="skills-list">
+          <span class="skill-tag">Big idea development</span>
+          <span class="skill-tag">Brand campaigns</span>
+          <span class="skill-tag">Arabic copywriting</span>
+          <span class="skill-tag">Social & content</span>
+          <span class="skill-tag">Script & VO</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="exp-list reveal">
+      <div class="exp-row">
+        <div><span class="exp-role">Senior Creative Copywriter</span><span class="exp-org">Yango, MENA</span></div>
+        <span class="exp-time">Jun 2024 – Jul 2025</span>
+      </div>
+      <div class="exp-row">
+        <div><span class="exp-role">Copywriter</span><span class="exp-org">Ducklife, Dubai (part-time)</span></div>
+        <span class="exp-time">Feb 2024 – Aug 2025</span>
+      </div>
+      <div class="exp-row">
+        <div><span class="exp-role">Arabic Copywriter</span><span class="exp-org">We Are Social, Dubai</span></div>
+        <span class="exp-time">Jul 2023 – Jun 2024</span>
+      </div>
+      <div class="exp-row">
+        <div><span class="exp-role">Creative Copywriter</span><span class="exp-org">Social Nuts, Cairo</span></div>
+        <span class="exp-time">Feb 2018 – Jun 2023</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p class="footer-line">© 2026 · written by luck. Copywriters reserved, I know.</p>
+  </div>
+  <div class="mega-mark" aria-hidden="true">MOHAMED ESSAM<sup>®</sup></div>
+</footer>
+
+<script>
+(function () {
+  const nav = document.getElementById('siteNav');
+  const onScroll = () => nav.classList.toggle('is-scrolled', window.scrollY > 12);
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  const revealEls = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(el => io.observe(el));
+  } else {
+    revealEls.forEach(el => el.classList.add('is-visible'));
+  }
+})();
+</script>
+
+</body>
+</html>

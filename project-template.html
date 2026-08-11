@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- TEMPLATE: duplicate this file per project. Rename to a slug, e.g. work/yango-wedding-rush.html -->
+<title>Yango — The Wedding Rush · Mohamed Essam</title>
+<meta name="description" content="[one line about the project]">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Architects+Daughter&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="vignette" aria-hidden="true"></div>
+
+<nav id="siteNav">
+  <div class="wrap">
+    <div class="logo">mohamed essam<em>.</em></div>
+    <div class="nav-links">
+      <a href="index.html#work">WORK</a>
+      <a href="about.html">ABOUT</a>
+    </div>
+    <div class="badge"><span class="badge-dot"></span>AVAILABLE FOR WORK</div>
+  </div>
+</nav>
+
+<section class="project">
+  <div class="wrap">
+
+    <!-- back link -->
+    <a class="back-link" href="index.html#work">&larr; ALL WORK</a>
+
+    <!-- meta line: client · category · year · status -->
+    <p class="project-meta">Yango · Ride-hailing · 2025 · <span class="status-produced">PRODUCED</span></p>
+
+    <!-- title -->
+    <h1 class="project-title">The Wedding Rush</h1>
+
+    <!-- the story: 2-4 short paragraphs. brief, insight, idea, outcome. -->
+    <div class="project-body">
+      <p>[The situation. What the brand was up against, in one or two sentences.]</p>
+      <p>[The insight. The thing nobody else noticed.]</p>
+      <p>[The idea. What we made, and why it answered the insight.]</p>
+      <p>[The result. A real number if there is one. If there isn't, say nothing.
+         Never write "the results were great" or "it really resonated."]</p>
+    </div>
+
+    <!-- media: images and/or video embeds. duplicate blocks as needed. -->
+    <figure class="project-media">
+      <img src="https://picsum.photos/seed/yango-wedding/1600/900" alt="[describe the frame]">
+      <figcaption>[optional caption]</figcaption>
+    </figure>
+
+    <figure class="project-media">
+      <div class="video-wrap">
+        <iframe src="" title="[project film]" frameborder="0"
+                allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+      </div>
+      <figcaption>[optional caption]</figcaption>
+    </figure>
+
+    <!-- credits -->
+    <div class="credits">
+      <h2 class="credits-head">Credits</h2>
+      <ul class="credits-list">
+        <li><span>Copywriter</span> Mohamed Essam</li>
+        <li><span>Agency</span> [agency]</li>
+        <li><span>Creative Director</span> [name]</li>
+        <li><span>Art Director</span> [name]</li>
+      </ul>
+    </div>
+
+    <!-- next project: ONE link, not a dump of ten -->
+    <a class="next-project" href="[next-slug].html">
+      <span class="next-label">NEXT</span>
+      <span class="next-title">[Next project name]</span>
+      <span class="next-arrow">&rarr;</span>
+    </a>
+
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p class="footer-line">© 2026 · written by luck. Copywriters reserved, I know.</p>
+  </div>
+  <div class="mega-mark" aria-hidden="true">MOHAMED ESSAM<sup>®</sup></div>
+</footer>
+
+<script>
+(function () {
+  var nav = document.getElementById('siteNav');
+  var onScroll = function () { nav.classList.toggle('is-scrolled', window.scrollY > 12); };
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+
+</body>
+</html>

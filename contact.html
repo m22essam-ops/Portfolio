@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — Mohamed Essam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Architects+Daughter&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav id="siteNav">
+  <div class="wrap">
+    <div class="logo">mohamed essam<em>.</em></div>
+    <div class="nav-links">
+      <a href="index.html#work">WORK</a>
+      <a href="about.html">ABOUT</a>
+    </div>
+    <div class="badge"><span class="badge-dot"></span>AVAILABLE FOR WORK</div>
+  </div>
+</nav>
+
+<section id="contact" style="border-top: none; padding-top: 60px;">
+  <div class="wrap">
+    <span class="section-label reveal">03 — Get in touch</span>
+    <p class="contact-line reveal">Have a project? <a href="mailto:m22essam@gmail.com">Let's write it.</a></p>
+    <div class="contact-details reveal">
+      <a href="mailto:m22essam@gmail.com">m22essam@gmail.com</a>
+      <a href="https://wa.me/34685037158" target="_blank" rel="noopener">WhatsApp</a>
+      <a href="https://www.linkedin.com/in/essameldeen/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://www.instagram.com/essam_93" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://vimeo.com/essam93" target="_blank" rel="noopener">Vimeo</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p class="footer-line">© 2026 · written by luck. Copywriters reserved, I know.</p>
+  </div>
+  <div class="mega-mark" aria-hidden="true">MOHAMED ESSAM<sup>®</sup></div>
+</footer>
+
+<script>
+(function () {
+  const nav = document.getElementById('siteNav');
+  const onScroll = () => nav.classList.toggle('is-scrolled', window.scrollY > 12);
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  const revealEls = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(el => io.observe(el));
+  } else {
+    revealEls.forEach(el => el.classList.add('is-visible'));
+  }
+})();
+</script>
+
+</body>
+</html>
