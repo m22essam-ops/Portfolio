@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mohamed Essam — Copywriter</title>
-<meta name="description" content="Mohamed Essam — award-losing copywriter (so far). Work that got produced, and work that got pitched.">
+<meta name="description" content="Mohamed Essam, copywriter. Work that got produced, and work that got presented.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Architects+Daughter&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
@@ -24,8 +24,6 @@
 
 <header class="hero">
   <div class="wrap">
-    <p class="hero-desc"><span class="si">award-losing</span> copywriter (so far). tried my luck, it didn't work. <span class="si">yours might.</span></p>
-
     <p class="hero-sentence" id="heroSentence"></p>
   </div>
 </header>
@@ -34,130 +32,134 @@
 
 <div class="vignette" aria-hidden="true"></div>
 
-<div class="crow-mark" style="top: 460px; right: 6%;" aria-hidden="true">
-  <svg viewBox="0 0 100 100" fill="currentColor">
-    <path d="M18,68 Q13,50 28,44 Q22,34 33,29 Q38,18 49,24 Q54,14 64,19 Q70,14 76,19 Q81,25 75,30 L86,34 Q80,40 71,37 Q69,49 58,54 L64,70 L56,67 L53,72 L46,67 L43,72 L36,69 Q27,72 18,68 Z"/>
-  </svg>
-</div>
-
 <section id="work">
   <div class="curtain-texture" aria-hidden="true"></div>
   <div class="wrap">
     <h2 class="reveal">A handpicked selection of my work</h2>
 
-    <div class="work-columns">
+    <div class="work-toggle reveal" role="tablist">
+      <button class="work-toggle-btn active" data-panel="produced" role="tab" aria-selected="true" type="button">Presented and produced</button>
+      <button class="work-toggle-btn" data-panel="presented" role="tab" aria-selected="false" type="button">Just presented</button>
+    </div>
 
-      <div class="work-column reveal">
-        <h3 class="work-column-label">Produced</h3>
-        <div class="work-grid">
-          <a class="work-card reveal reveal-stagger" style="--d:0.02s" href="work/yango-wedding-rush.html">
-            <span class="work-index">01</span>
-            <img src="https://picsum.photos/seed/yango-wedding/1200/900" alt="Yango — The Wedding Rush">
-            <div class="work-card-body">
-              <div>
-                <span class="work-title">Yango — The Wedding Rush</span>
-                <span class="work-meta">Ride-hailing · 2025</span>
-              </div>
-              <span class="work-arrow">↗</span>
+    <div class="work-panel active" id="panel-produced">
+      <div class="work-grid">
+        <a class="work-card reveal reveal-stagger" style="--d:0.02s" href="work/yango-wedding-rush.html">
+          <span class="work-index">01</span>
+          <img src="https://picsum.photos/seed/yango-wedding/1200/900" alt="Yango — The Wedding Rush">
+          <div class="work-card-body">
+            <div>
+              <span class="work-title">Yango — The Wedding Rush</span>
+              <span class="work-meta">Ride-hailing · 2025</span>
             </div>
-          </a>
-          <a class="work-card reveal reveal-stagger" style="--d:0.06s" href="#">
-            <span class="work-index">02</span>
-            <img src="https://picsum.photos/seed/yango-ride/1200/900" alt="Yango — Unstoppable Rides">
-            <div class="work-card-body">
-              <div>
-                <span class="work-title">Yango — Unstoppable Rides</span>
-                <span class="work-meta">Ride-hailing · 2025</span>
-              </div>
-              <span class="work-arrow">↗</span>
+            <span class="work-arrow">↗</span>
+          </div>
+        </a>
+        <a class="work-card reveal reveal-stagger" style="--d:0.08s" href="#">
+          <span class="work-index">02</span>
+          <img src="https://picsum.photos/seed/yango-ride/1200/900" alt="Yango — Unstoppable Rides">
+          <div class="work-card-body">
+            <div>
+              <span class="work-title">Yango — Unstoppable Rides</span>
+              <span class="work-meta">Ride-hailing · 2025</span>
             </div>
-          </a>
-          <a class="work-card reveal reveal-stagger" style="--d:0.1s" href="#">
-            <span class="work-index">03</span>
-            <img src="https://picsum.photos/seed/dominos-colors/1200/900" alt="Domino's — The True Colors">
-            <div class="work-card-body">
-              <div>
-                <span class="work-title">Domino's — The True Colors</span>
-                <span class="work-meta">QSR · 2026</span>
-              </div>
-              <span class="work-arrow">↗</span>
+            <span class="work-arrow">↗</span>
+          </div>
+        </a>
+        <a class="work-card reveal reveal-stagger" style="--d:0.02s" href="#">
+          <span class="work-index">03</span>
+          <img src="https://picsum.photos/seed/dominos-colors/1200/900" alt="Domino's — The True Colors">
+          <div class="work-card-body">
+            <div>
+              <span class="work-title">Domino's — The True Colors</span>
+              <span class="work-meta">QSR · 2026</span>
             </div>
-          </a>
-          <a class="work-card reveal reveal-stagger" style="--d:0.02s" href="#">
-            <span class="work-index">04</span>
-            <img src="https://picsum.photos/seed/pringles-cheese/1200/900" alt="Pringles Arabia — Cheesy Cheese">
-            <div class="work-card-body">
-              <div>
-                <span class="work-title">Pringles Arabia — Cheesy Cheese</span>
-                <span class="work-meta">Snacks · 2023</span>
-              </div>
-              <span class="work-arrow">↗</span>
+            <span class="work-arrow">↗</span>
+          </div>
+        </a>
+        <a class="work-card reveal reveal-stagger" style="--d:0.08s" href="#">
+          <span class="work-index">04</span>
+          <img src="https://picsum.photos/seed/pringles-cheese/1200/900" alt="Pringles Arabia — Cheesy Cheese">
+          <div class="work-card-body">
+            <div>
+              <span class="work-title">Pringles Arabia — Cheesy Cheese</span>
+              <span class="work-meta">Snacks · 2023</span>
             </div>
-          </a>
-          <a class="work-card reveal reveal-stagger" style="--d:0.06s" href="#">
-            <span class="work-index">05</span>
-            <img src="https://picsum.photos/seed/nivea-sun/1200/900" alt="Nivea — I Might Never See The Sun Again">
-            <div class="work-card-body">
-              <div>
-                <span class="work-title">Nivea — I Might Never See the Sun Again</span>
-                <span class="work-meta">Beauty &amp; Care · 2026</span>
-              </div>
-              <span class="work-arrow">↗</span>
+            <span class="work-arrow">↗</span>
+          </div>
+        </a>
+        <a class="work-card reveal reveal-stagger" style="--d:0.02s" href="#">
+          <span class="work-index">05</span>
+          <img src="https://picsum.photos/seed/nivea-sun/1200/900" alt="Nivea — I Might Never See the Sun Again">
+          <div class="work-card-body">
+            <div>
+              <span class="work-title">Nivea — I Might Never See the Sun Again</span>
+              <span class="work-meta">Beauty &amp; Care · 2026</span>
             </div>
-          </a>
-          <a class="work-card reveal reveal-stagger" style="--d:0.1s" href="#">
-            <span class="work-index">06</span>
-            <img src="https://picsum.photos/seed/tuborg-party/1200/900" alt="Tuborg — The Pressure Party">
-            <div class="work-card-body">
-              <div>
-                <span class="work-title">Tuborg — The Pressure Party</span>
-                <span class="work-meta">Beverage · 2026</span>
-              </div>
-              <span class="work-arrow">↗</span>
+            <span class="work-arrow">↗</span>
+          </div>
+        </a>
+        <a class="work-card reveal reveal-stagger" style="--d:0.08s" href="#">
+          <span class="work-index">06</span>
+          <img src="https://picsum.photos/seed/tuborg-party/1200/900" alt="Tuborg — The Pressure Party">
+          <div class="work-card-body">
+            <div>
+              <span class="work-title">Tuborg — The Pressure Party</span>
+              <span class="work-meta">Beverage · 2026</span>
             </div>
-          </a>
-          <a class="work-card reveal reveal-stagger" style="--d:0.02s" href="#">
-            <span class="work-index">07</span>
-            <img src="https://picsum.photos/seed/afg-invest/1200/900" alt="AFG — 5-Star Investment">
-            <div class="work-card-body">
-              <div>
-                <span class="work-title">AFG — 5-Star Investment</span>
-                <span class="work-meta">Real estate · 2023</span>
-              </div>
-              <span class="work-arrow">↗</span>
+            <span class="work-arrow">↗</span>
+          </div>
+        </a>
+        <a class="work-card reveal reveal-stagger" style="--d:0.02s" href="#">
+          <span class="work-index">07</span>
+          <img src="https://picsum.photos/seed/afg-invest/1200/900" alt="AFG — 5-Star Investment">
+          <div class="work-card-body">
+            <div>
+              <span class="work-title">AFG — 5-Star Investment</span>
+              <span class="work-meta">Real estate · 2023</span>
             </div>
-          </a>
-        </div>
+            <span class="work-arrow">↗</span>
+          </div>
+        </a>
+        <a class="work-card reveal reveal-stagger" style="--d:0.08s" href="#">
+          <span class="work-index">08</span>
+          <img src="https://picsum.photos/seed/rivan-tower/1200/900" alt="Rivan Tower — The Hotel Is Yours">
+          <div class="work-card-body">
+            <div>
+              <span class="work-title">Rivan Tower — The Hotel Is Yours</span>
+              <span class="work-meta">Real estate · 2023</span>
+            </div>
+            <span class="work-arrow">↗</span>
+          </div>
+        </a>
       </div>
+    </div>
 
-      <div class="work-column reveal">
-        <h3 class="work-column-label work-column-label--pitched">Pitched</h3>
-        <div class="work-grid">
-          <a class="work-card reveal reveal-stagger" style="--d:0.02s" href="#">
-            <span class="work-index">01</span>
-            <img src="https://picsum.photos/seed/haan-spain/1200/900" alt="Haan — Spanish market launch">
-            <div class="work-card-body">
-              <div>
-                <span class="work-title">Haan — Spanish Market Launch</span>
-                <span class="work-meta">Miami Ad School</span>
-              </div>
-              <span class="work-arrow">↗</span>
+    <div class="work-panel" id="panel-presented">
+      <div class="work-grid">
+        <a class="work-card reveal reveal-stagger" style="--d:0.02s" href="#">
+          <span class="work-index">01</span>
+          <img src="https://picsum.photos/seed/haan-spain/1200/900" alt="Haan — Spanish Market Launch">
+          <div class="work-card-body">
+            <div>
+              <span class="work-title">Haan — Spanish Market Launch</span>
+              <span class="work-meta">Miami Ad School</span>
             </div>
-          </a>
-          <a class="work-card reveal reveal-stagger" style="--d:0.06s" href="#">
-            <span class="work-index">02</span>
-            <img src="https://picsum.photos/seed/spec-project-02/1200/900" alt="Spec project">
-            <div class="work-card-body">
-              <div>
-                <span class="work-title">[Project name]</span>
-                <span class="work-meta">Miami Ad School</span>
-              </div>
-              <span class="work-arrow">↗</span>
+            <span class="work-arrow">↗</span>
+          </div>
+        </a>
+        <a class="work-card reveal reveal-stagger" style="--d:0.08s" href="#">
+          <span class="work-index">02</span>
+          <img src="https://picsum.photos/seed/spec-project-02/1200/900" alt="Spec project">
+          <div class="work-card-body">
+            <div>
+              <span class="work-title">[Project name]</span>
+              <span class="work-meta">Miami Ad School</span>
             </div>
-          </a>
-        </div>
+            <span class="work-arrow">↗</span>
+          </div>
+        </a>
       </div>
-
     </div>
   </div>
 </section>
@@ -172,21 +174,20 @@
 <script>
 (function () {
   /* ---------- hero: bio-sentence glitch mechanic ----------
-     3 hand-written versions (owner-approved copy, see CLAUDE.md).
-     Clicking a highlighted keyword glitch-transitions to the version
-     that leads with that word. No auto-cycle — click only. */
+     3 versions. Clicking a highlighted keyword glitch-transitions to the
+     version that leads with that word. No auto-cycle, click only. */
   const RAW_VERSIONS = [
     {
-      lead: 'drafts',
-      html: 'Twelve years of <button class="kw" data-lead="drafts" type="button">drafts</button> nobody asked to read, four years of <button class="kw" data-lead="ads" type="button">ads</button> everybody paid to skip, and an <button class="kw" data-lead="awards" type="button">award</button> shelf so clean you could eat off it.'
+      lead: 'write',
+      html: 'I <button class="kw" data-lead="write" type="button">write</button>, I concept, I <button class="kw" data-lead="dream" type="button">dream</button>. The best lines come in dreams, the rest come with <button class="kw" data-lead="deadline" type="button">deadlines</button>, and I wake up new every day.'
     },
     {
-      lead: 'ads',
-      html: '<button class="kw" data-lead="ads" type="button">Ads</button> are what they paid me for, <button class="kw" data-lead="drafts" type="button">drafts</button> are what I actually wrote, and the <button class="kw" data-lead="awards" type="button">awards</button> went to whoever was in the room when the client said yes.'
+      lead: 'dream',
+      html: 'I <button class="kw" data-lead="dream" type="button">dream</button>, I concept, I <button class="kw" data-lead="write" type="button">write</button>. Some lines come with <button class="kw" data-lead="deadline" type="button">deadlines</button>, the best come in dreams, and I wake up new every day.'
     },
     {
-      lead: 'awards',
-      html: '<button class="kw" data-lead="awards" type="button">Awards</button> never came, and neither did the luck, but twelve years of <button class="kw" data-lead="drafts" type="button">drafts</button> and four years of skippable <button class="kw" data-lead="ads" type="button">ads</button> left me able to write anything you need by Thursday.'
+      lead: 'deadline',
+      html: 'Some lines come with <button class="kw" data-lead="deadline" type="button">deadlines</button>, the best come in dreams. I <button class="kw" data-lead="write" type="button">write</button>, I concept, I <button class="kw" data-lead="dream" type="button">dream</button>, and I wake up new every day.'
     }
   ];
 
@@ -212,9 +213,8 @@
     isTransitioning = true;
     heroSentence.classList.add('is-glitching');
 
-    const durationMs = 600;
     const frameMs = 28;
-    const totalFrames = Math.round(durationMs / frameMs);
+    const totalFrames = Math.round(600 / frameMs);
     let frame = 0;
 
     const timer = setInterval(function () {
@@ -223,11 +223,9 @@
       let out = '';
       for (let i = 0; i < target.text.length; i++) {
         const ch = target.text[i];
-        if (i < revealCount || ch === ' ') {
-          out += ch;
-        } else {
-          out += GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)];
-        }
+        out += (i < revealCount || ch === ' ')
+          ? ch
+          : GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)];
       }
       heroSentence.textContent = out;
 
@@ -246,7 +244,6 @@
     if (!btn || isTransitioning) return;
     const targetIndex = versions.findIndex(function (v) { return v.lead === btn.dataset.lead; });
     if (targetIndex === -1 || targetIndex === currentIndex) return;
-
     if (reduceMotion) {
       currentIndex = targetIndex;
       renderStatic(targetIndex);
@@ -257,13 +254,29 @@
 
   renderStatic(0);
 
+  /* work toggle */
+  const toggleBtns = document.querySelectorAll('.work-toggle-btn');
+  const panels = {
+    produced: document.getElementById('panel-produced'),
+    presented: document.getElementById('panel-presented')
+  };
+  toggleBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      toggleBtns.forEach(function (b) { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+      Object.keys(panels).forEach(function (k) { panels[k].classList.remove('active'); });
+      panels[btn.dataset.panel].classList.add('active');
+    });
+  });
+
   /* nav shrink on scroll */
   const nav = document.getElementById('siteNav');
   const onScroll = function () { nav.classList.toggle('is-scrolled', window.scrollY > 12); };
   document.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
-  /* scroll reveal (cards, headings) */
+  /* scroll reveal */
   const revealEls = document.querySelectorAll('.reveal');
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver(function (entries) {

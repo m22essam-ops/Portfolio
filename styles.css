@@ -34,7 +34,7 @@ body::before {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  opacity: 0.72;
+  opacity: 0.18;
   z-index: 0;
   mix-blend-mode: screen;
   background-image: url("grain-bg.png");
@@ -49,7 +49,7 @@ body::after {
   inset: 0;
   pointer-events: none;
   z-index: 1;
-  opacity: 0.5;
+  opacity: 0.14;
   background-image:
     linear-gradient(90deg, transparent 12%, rgba(237,237,237,0.05) 12.1%, transparent 12.3%),
     linear-gradient(90deg, transparent 41%, rgba(237,237,237,0.04) 41.1%, transparent 41.3%),
@@ -58,12 +58,9 @@ body::after {
   animation: scratchFlicker 6s ease-in-out infinite;
 }
 @keyframes scratchFlicker {
-  0%, 100% { opacity: 0.5; }
-  47% { opacity: 0.5; }
-  48% { opacity: 0.1; }
-  49% { opacity: 0.6; }
-  50% { opacity: 0.2; }
-  51% { opacity: 0.5; }
+  0%, 100% { opacity: 0.14; }
+  48% { opacity: 0.06; }
+  50% { opacity: 0.16; }
 }
 /* deep vignette — the murky, high-contrast frame edge from an old negative */
 .vignette {
@@ -73,7 +70,7 @@ body::after {
   pointer-events: none;
   z-index: 1;
   background:
-    radial-gradient(140% 110% at 50% 8%, transparent 45%, rgba(0,0,0,0.5) 100%);
+    radial-gradient(140% 110% at 50% 8%, transparent 55%, rgba(0,0,0,0.32) 100%);
 }
 
 /* ---------- abstract style flourishes (vector, not photographic) ---------- */
@@ -165,8 +162,22 @@ header.hero { padding: 84px 0 0; text-align: center; }
   color: var(--ink);
 }
 
+.hero-sentence .w {
+  display: inline-block;
+  will-change: transform;
+}
+.hero-sentence .w.is-new {
+  animation: wordDrop 0.5s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes wordDrop {
+  0% { opacity: 0; transform: translateY(-10px) rotate(-4deg); filter: blur(3px); }
+  100% { opacity: 1; transform: none; filter: blur(0); }
+}
+.hero-sentence.is-shuffling .w { text-shadow: 1px 0 var(--accent-bright), -1px 0 var(--accent2-bright); }
+
 .hero-sentence .kw {
   all: unset;
+  display: inline-block;
   cursor: pointer;
   font-weight: 700;
   color: var(--accent-bright);
@@ -230,21 +241,38 @@ h2 .si { color: var(--accent-bright); }
 .reveal.is-visible { opacity: 1; transform: translateY(0); }
 .reveal-stagger.is-visible { transition-delay: var(--d, 0s); }
 
-/* ---------- produced / pitched columns (parallel, not tabs) ---------- */
-.work-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; text-align: left; }
-
-.work-column-label {
-  font-family: 'Space Mono', monospace;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  margin-bottom: 22px;
-  color: var(--accent-bright);
+/* ---------- produced / presented toggle ---------- */
+.work-toggle {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  margin-bottom: 46px;
 }
-.work-column-label--pitched { color: var(--accent2-bright); }
+.work-toggle-btn {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 10px 22px;
+  border-radius: 999px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: var(--ink-soft);
+  transition: background 0.25s ease, color 0.25s ease;
+}
+.work-toggle-btn[data-panel="produced"] { color: var(--accent-bright); }
+.work-toggle-btn[data-panel="presented"] { color: var(--accent2-bright); }
+.work-toggle-btn[data-panel="produced"].active { background: var(--accent); color: #FBF1E6; }
+.work-toggle-btn[data-panel="presented"].active { background: var(--accent2); color: #EAF6F5; }
+.work-toggle-btn:not(.active):hover { opacity: 0.7; }
 
-.work-column .work-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+.work-panel { display: none; }
+.work-panel.active { display: block; }
 
 .work-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; text-align: left; }
 a.work-card {
@@ -319,7 +347,6 @@ footer { border-top: 1px solid var(--line); padding: 36px 0 0; overflow: hidden;
 
 @media (max-width: 700px) {
   .work-grid { grid-template-columns: 1fr; }
-  .work-columns { grid-template-columns: 1fr; gap: 40px; }
   .about-grid { grid-template-columns: 1fr; text-align: center; }
   .about-portrait { max-width: 220px; margin: 0 auto; }
   .exp-row { justify-content: flex-start; }
