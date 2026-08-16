@@ -370,11 +370,57 @@ window.SITE_CONTENT = {
         client: "Canesten",
         category: "Health",
         year: "2026",
-        image: "https://picsum.photos/seed/canesteen-taboo/1200/900",
+        image: "Circle_Sticker_Mockup_4.png",
         alt: "Let's Call It What It Is — Canesteen",
-        story: [],
-        media: [],
-        credits: [],
+        story: [
+          "Women don't struggle with symptoms; they struggle with the words. We whisper, we nickname, \"down there,\" \"the itch,\" and that avoidance is what keeps people from getting help.",
+          "So we hijacked the one game where nicknames are actually illegal. Taboo, rebuilt: say \"down there,\" you lose. Say \"thrush,\" you score.",
+          "We launched it in Brazil and the UAE with the same rule everywhere: you can't treat what you can't name."
+        ],
+        media: [
+          {
+            type: "image",
+            src: "Down there.jpg",
+            caption: "",
+            layout: "half"
+          },
+          {
+            type: "image",
+            src: "pinky toe.jpg",
+            caption: "",
+            layout: "half"
+          },
+          {
+            type: "image",
+            src: "stickers .jpg",
+            caption: "",
+            layout: "full"
+          },
+          {
+            type: "image",
+            src: "Window Sign Mockup.jpg",
+            caption: "",
+            layout: "full"
+          }
+        ],
+        credits: [
+          {
+            role: "Copywriter",
+            name: "Mohammed Essam, Tiago Lima "
+          },
+          {
+            role: "Art Director",
+            name: "Anna Zurbashvili, Maddalena Manchetta"
+          },
+          {
+            role: "Teacher",
+            name: "Victor Gonzales"
+          },
+          {
+            role: "Client",
+            name: "Canesten, Miami Ad School Madrid"
+          }
+        ],
         next: {}
       },
       {
