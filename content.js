@@ -284,7 +284,7 @@ window.SITE_CONTENT = {
         client: "Tuborg",
         category: "Beverage",
         year: "2026",
-        image: "Tuborg project cover.jpg",
+        image: "poster.png",
         alt: "Tuborg project cover",
         story: [
           "Rising depression and anxiety are holding London's youth back.",
@@ -442,13 +442,9 @@ window.SITE_CONTENT = {
           },
           {
             type: "image",
-            src: "Dominos mag 1.jpg",
-            caption: ""
-          },
-          {
-            type: "image",
             src: "Dominos art style .jpg",
-            caption: ""
+            caption: "",
+            layout: "full"
           },
           {
             type: "video",
@@ -458,12 +454,14 @@ window.SITE_CONTENT = {
           {
             type: "image",
             src: "dominos bus stop poster mockup.jpg",
-            caption: ""
+            caption: "",
+            layout: "half"
           },
           {
             type: "image",
             src: "Dominos news.jpg",
-            caption: ""
+            caption: "",
+            layout: "half"
           }
         ],
         credits: [
