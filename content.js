@@ -7,7 +7,7 @@
 window.SITE_CONTENT = {
   nav: {
     logo: "mohammed essam.",
-    tagline: "Just write",
+    tagline: "(all caps)",
     badge: "available for work copywriter"
   },
   hero: {
