@@ -7,18 +7,23 @@
 window.SITE_CONTENT = {
   nav: {
     logo: "mohammed essam.",
-    badge: "COPYWRITER"
+    tagline: "(all caps)",
+    badge: "available for work copywriter"
   },
   hero: {
     versions: [
-      "I [write], I concept, I [dream]. The best lines come in dreams, the rest come with [deadlines], and I wake up new every day.",
-      "I [dream], I concept, I [write]. Some lines come with [deadlines], the best come in dreams, and I wake up new every day.",
-      "Some lines come with [deadlines], the best come in dreams. I [write], I concept, I [dream], and I wake up new every day."
-    ]
+      "An [opening] sentence with zero personality, mixed up with a generic portfolio? Hell no. [What] does a CD expect from my [dark], personal work? I'm not a CD, so I can't tell you. All I have goes directly under this section.",
+      "[What] does a CD expect from my portfolio? A generic [opening] sentence? Hell no. [Something] with personality, but not overly [dark] and personal? I'm not a CD, so I can't tell you. All I have is the work, and it goes directly under this section.",
+      "[Something] with zero personality, mixed up with a [dark], generic [opening] sentence? Hell, that's all I have. [What] does a CD expect from my personal portfolio? I'm not a CD, so I can't tell you. The work goes directly under this section."
+    ],
+    light: "Wow, it is so bright here! So nice and happy. Let the good light come in to wash away all the dark jokes and bring out big, safe, sunshine smiles. Oh, my CD, I love the day. I love early morning talks. I love making the logo bigger and giving 28 options for a 3-word CTA. I really love working [latenight] for free! All I have is a super happy heart and work that goes right under this section."
+  },
+  home: {
+    dateline: "Creative copywriter · Cairo → Dubai → Madrid → your city?"
   },
   work: {
     heading: "A handpicked selection of my work that are ",
-    producedLabel: "That found their way through",
+    producedLabel: "Sold and produced",
     presentedLabel: "waiting to be bought",
     produced: [
       {
@@ -515,9 +520,14 @@ window.SITE_CONTENT = {
   },
   contact: {
     label: "03 — Get in touch",
-    headline: "Have a project?",
-    ctaText: "Let's write it.",
+    headline: "Have a project? A vacancy?",
+    ctaText: "Now we talk.",
     ctaUrl: "mailto:m22essam@gmail.com",
+    sub: "",
+    resume: {
+      label: "Résumé",
+      url: ""
+    },
     links: [
       {
         label: "m22essam@gmail.com",
@@ -543,6 +553,7 @@ window.SITE_CONTENT = {
   },
   footer: {
     line: "© 2026 · Written by luck. Copywriters reserved, I know.",
-    mark: "MOHAMED ESSAM®"
+    mark: "MOHAMED ESSAM PG-13",
+    joke: "for the jokes in this portfolio."
   }
 };
