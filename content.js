@@ -7,7 +7,7 @@
 window.SITE_CONTENT = {
   nav: {
     logo: "mohammed essam.",
-    tagline: "(all caps)",
+    tagline: "Just write",
     badge: "available for work copywriter"
   },
   hero: {
@@ -370,35 +370,10 @@ window.SITE_CONTENT = {
         client: "Canesten",
         category: "Health",
         year: "2026",
-        image: "Circle_Sticker_Mockup_4.png",
+        image: "https://picsum.photos/seed/canesteen-taboo/1200/900",
         alt: "Let's Call It What It Is — Canesteen",
         story: [],
-        media: [
-          {
-            type: "image",
-            src: "pinky toe.jpg",
-            caption: "",
-            layout: "half"
-          },
-          {
-            type: "image",
-            src: "Down there.jpg",
-            caption: "",
-            layout: "half"
-          },
-          {
-            type: "image",
-            src: "stickers .jpg",
-            caption: "",
-            layout: "full"
-          },
-          {
-            type: "image",
-            src: "Window Sign Mockup.jpg",
-            caption: "",
-            layout: "half"
-          }
-        ],
+        media: [],
         credits: [],
         next: {}
       },
