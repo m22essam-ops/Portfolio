@@ -27,52 +27,63 @@ server or bundler breaks his workflow. Do not suggest React/Tailwind/Vite.
 "**Award-losing copywriter (so far)**". Self-deprecating, dry, anti-life-coach,
 anti-hustle-culture. Never earnest, never corporate, never motivational.
 
-### Hero mechanic (REPLACES the old slot machine)
+### Hero mechanic (REPLACES the slot machine AND the three-version shuffle)
 
-The hero is a long bio sentence with three keywords highlighted in the accent
-color: **drafts**, **ads**, **awards**. Clicking a keyword glitch-transitions
-to a different version of the bio that *leads* with that word. Three versions
-total, each hand-written, each telling something different.
+The hero is a **word chain**: six short sentences (`hero.sentences` in
+content.js), one shown at a time. Each sentence ends with its clickable word
+— the LAST word, detected automatically (trailing punctuation stripped, no
+brackets needed). Clicking it glitch-transitions to the next sentence, which
+begins with that same word. The **last sentence ends the chain**: clicking
+its word ("work") smooth-scrolls to the work section instead of advancing.
+A small mono **"↺ back to the start"** control sits under the hero — it
+only appears on the **last sentence**, clicking it glitches back to the
+first sentence, so the chain loops by choice. The echoed opening word (the previous sentence's
+click word) renders dimmed in italic. Owner-approved copy, Aug 2026.
 
-1. Twelve years of **drafts** nobody asked to read, four years of **ads**
-   everybody paid to skip, and an **award** shelf so clean you could eat off it.
-2. **Ads** are what they paid me for, **drafts** are what I actually wrote, and
-   the **awards** went to whoever was in the room when the client said yes.
-3. **Awards** never came, and neither did the luck, but twelve years of
-   **drafts** and four years of skippable **ads** left me able to write anything
-   you need by Thursday.
+The chain rule the owner must keep while editing: sentence N+1 opens with
+sentence N's last word; the last sentence's last word is the "go to work"
+word, so it should read naturally as leading into the work below.
 
-Version 1 is the default on load. Do not auto-cycle; it only changes on click.
+The hero reserves the height of its longest sentence once on load, so the
+page below never jumps when a shorter sentence shows.
 
 Transition: character scramble ("glitch") that resolves left-to-right over
-~600ms, with an RGB-split text-shadow using the two accent colors, plus a small
-shake. Resolving left-to-right matters: it reads as *recovering from
-corruption*, not as randomizing. That distinction is the whole point, because
-the site must never look like it generates its own copy.
+~1000ms, with an RGB-split text-shadow using the two accent colors, plus a
+small shake. Resolving left-to-right matters: it reads as *recovering from
+corruption*, not as randomizing. The site must never look like it generates
+its own copy.
 
-**The slot machine is retired.** Old jackpot reels, the 25 sentences, the lever,
-and the reelWords/sentences objects are no longer the hero. Don't reinstate them.
+**The slot machine and the three-version keyword shuffle are retired.** Don't
+reinstate them. Light mode is gone too: the site is dark-only, the nav toggle
+was removed.
 
 ## Copy rules
 
 - Owner writes the lines. Claude drafts, owner approves or kills.
 - Style: famous proverb/quote twisted literally into something bleak and
   personal. Deadpan, "Airplane!"-level absurdity. Single sentence, short.
-- Every sentence MUST contain its 3 reel words verbatim (word-boundary match,
-  case-insensitive). Highlighting sorts longest-first so LUCK never matches
-  inside UNLUCKY.
+- Every hero sentence ends with its click word (the last word). Each sentence
+  after the first MUST open with the previous sentence's last word — that
+  chain is the whole mechanic. The click word is detected automatically.
 - No em dashes anywhere in copy. Owner dislikes them.
 - Don't silently replace a line the owner rejected. Flag it and ask.
 
 ## Art direction
 
-Dark cinematic. Near-black `#0A0A0A`, off-white `#EDEDED` text, rust-orange
-`#C2410C` primary accent, teal `#1F6F6B` secondary (used only for the SPEC
-CLIENTS tab). Real grain photo as fixed background + film-scratch and vignette
-overlays. Mood reference: Tarantino script meets Stephen King tension.
+Warm editorial (owner-approved Aug 2026). Deep espresso `#12100D` background,
+warm cream `#F1E9DE` text, caramel `#C97B2E`/`#E8A35A` primary accent, soft
+sage `#6E8468`/`#8FA87E` secondary (the produced/presented tab colors). Real
+grain photo as the single atmosphere layer at 0.10 opacity — the scratches,
+vignette, curtain, and feature-band layers were removed (A+ decision).
+Mood reference: old cinema poster, warm film, editorial coffee-shop.
 
-Type pairing: **Space Mono** for headlines, nav, and all mechanical/UI text.
-**Inter** for body copy. **Architects Daughter** for the reel words only.
+Type pairing (redesigned Aug 2026, owner-approved): **Fraunces** is the
+display voice — hero (weight 400, "Quiet" treatment), section headings,
+card titles, project titles, contact line, next-project link, footer
+wordmark. **Space Mono** is the system voice — logo, nav, labels, meta,
+index numbers, toggles, footer line. **Inter** is body copy. Architects
+Daughter was removed (it was loaded but never used). Fraunces is loaded
+on all four pages from Google Fonts.
 
 The slot machine is drawn in the style of a minimal New Yorker cartoon: thin
 1.5px uniform ink line, no fills, no distress, no wobble, plus one small
@@ -88,7 +99,7 @@ look. All rejected. Don't reintroduce them.
 Top to bottom:
 1. Nav: logo left ("mohamed essam." lowercase), WORK + ABOUT centre,
    "AVAILABLE FOR WORK" + green pulsing dot right
-2. Hero: the three-version bio sentence (above)
+2. Hero: the word chain — six short sentences, click the last word to advance (above)
 3. Full-width horizontal band (divider / image strip)
 4. Section heading: "A handpicked selection of my work"
    NOTE: owner's sketch spells it "handpiked". That is a typo, use "handpicked".
@@ -97,7 +108,10 @@ Top to bottom:
    - Right column: work **that got pitched** (spec / school / unsold)
    Owner's sketch labels these "that produced" / "Just presented". Tighten the
    wording but keep the distinction, it is the honest and interesting split.
-6. Project cards in each column, captioned "Client — Project title"
+6. Project cards in each column, captioned "Client — Project title".
+   Counts are capped by `work.producedLimit` / `work.presentedLimit`
+   (0 = show all), editable in admin. Projects with `draft: true` never
+   render on the site (admin checkbox "Keep in drafts").
 7. Footer: giant MOHAMED ESSAM wordmark
 
 The produced/pitched split replaces the old CLIENTS / SPEC CLIENTS tabs.
@@ -128,15 +142,22 @@ Rules for project copy:
 - The strongest real result the owner has: Rivan Tower sold out in a week.
   That belongs high on the site, not buried.
 
+## Project inventory (ported from mohammedessam.com, in content.js)
+
+All 18 live-site projects are ported and split into produced/presented.
+Sort rule: a project credited "Miami Ad School / Teacher" on its live page
+is presented; agency-era work is produced. Flags for the owner:
+Wedding Rush (not on live site), Tuborg (inferred school), Pringles
+Champions of Fun / Modon / Song for the Cashless (inferred produced),
+Red Expo (unknown, conservative pick). See PROJECT-NOTES.md.
+
 ## Known open items
 
-- `index.html` still contains the retired slot machine. It needs rebuilding to
-  the wireframe layout: bio-sentence hero + two produced/pitched columns.
-- Work thumbnails are all placeholders. Needs real campaign screenshots.
-- No project detail pages exist yet; only `project-template.html`.
-- Card `href="#"` links need real destinations once the pages exist.
-- Owner has ~16 real projects on mohammedessam.com to port over, and needs to
-  sort each into produced vs pitched.
+- Work thumbnails are all picsum placeholders. Needs real campaign screenshots
+  (owner drops files in `images/` and names them in admin.html).
+- Project stories/credits are empty except the Wedding Rush placeholders.
+- `work/yango-wedding-rush.html` and `project-template.html` are retired.
+- All content is edited via admin.html or by hand in content.js.
 
 ## Standing corrections (from the live site audit)
 

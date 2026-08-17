@@ -2,3 +2,17 @@
 files.zip
 _archive-cms-build/
 .claude/
+
+# large local test videos — not used by the site (Tuborg & Domino's use Vimeo embeds)
+images/Dominos V5.mp4
+images/tuborg final video case.mp4
+images/Nothing Phone Case Study V3 3.mov
+
+# local tooling + scratch/option pages (not part of the site)
+.freebuff/
+edit-options.html
+hero-directions.html
+hero-sets-mine.html
+hero-sets.html
+word-pools.html
+word-pools-2.html

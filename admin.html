@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio editor — Mohamed Essam</title>
+<style>
+:root {
+  --bg: #0A0A0A;
+  --panel: #141414;
+  --panel2: #1B1B1B;
+  --line: #2A2A2A;
+  --ink: #EDEDED;
+  --soft: #9C9C9C;
+  --accent: #C2410C;
+  --teal: #1F6F6B;
+  --danger: #B33030;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+  padding-bottom: 120px;
+}
+a { color: var(--teal); }
+
+/* ---------- top bar ---------- */
+.admin-top {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(10, 10, 10, 0.96);
+  border-bottom: 1px solid var(--line);
+  padding: 18px 28px;
+}
+.admin-top h1 {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 6px;
+  letter-spacing: .02em;
+}
+.admin-top p { color: var(--soft); margin: 0 0 14px; max-width: 720px; font-size: 13px; }
+.admin-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.btn {
+  display: inline-block;
+  background: var(--accent);
+  color: #FBF1E6;
+  border: 1px solid var(--accent);
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.btn:hover { filter: brightness(1.1); }
+.btn.ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+.btn.ghost:hover { border-color: var(--soft); }
+#statusLine { color: var(--teal); font-size: 13px; }
+
+/* ---------- sections ---------- */
+main { max-width: 880px; margin: 0 auto; padding: 34px 24px 0; }
+.howto {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin-bottom: 34px;
+}
+.howto h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .12em; color: var(--soft); margin: 0 0 10px; }
+.howto ol { margin: 0; padding-left: 20px; color: var(--soft); }
+.howto li { margin-bottom: 6px; }
+.howto code { color: var(--ink); background: var(--panel2); padding: 1px 6px; border-radius: 4px; font-size: 12px; }
+
+.admin-section {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--panel);
+  padding: 22px 24px;
+  margin-bottom: 26px;
+}
+.admin-section > h2 { font-size: 15px; font-weight: 700; margin: 0 0 4px; }
+.admin-section > .hint { color: var(--soft); font-size: 13px; margin: 0 0 18px; max-width: 640px; }
+.group-head {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--soft);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 8px;
+  margin: 22px 0 12px;
+}
+.group-head.produced { color: var(--accent); }
+.group-head.presented { color: var(--teal); }
+
+/* ---------- form fields ---------- */
+label.field { display: block; margin-bottom: 12px; }
+label.field > span { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--soft); margin-bottom: 4px; }
+label.field input, label.field textarea, label.field select,
+.row input, .row select {
+  width: 100%;
+  background: var(--panel2);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  border-radius: 6px;
+  padding: 9px 12px;
+  font-size: 14px;
+  font-family: inherit;
+}
+label.field input:focus, label.field textarea:focus,
+.row input:focus, .row select:focus {
+  outline: none;
+  border-color: var(--teal);
+}
+label.field textarea { resize: vertical; min-height: 64px; }
+label.field small { display: block; color: #6E6E6E; font-size: 11.5px; margin-top: 3px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
+@media (max-width: 620px) { .grid2 { grid-template-columns: 1fr; } }
+label.field.check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .04em;
+  color: #6E6E6E;
+  cursor: pointer;
+}
+label.field.check input {
+  width: auto;
+  accent-color: var(--accent-bright);
+  cursor: pointer;
+}
+
+/* ---------- project cards ---------- */
+.card {
+  background: var(--panel2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+.card summary {
+  cursor: pointer;
+  padding: 12px 16px;
+  font-size: 14px;
+  list-style: none;
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+.card summary::-webkit-details-marker { display: none; }
+.card summary:before { content: "▸ "; color: var(--soft); }
+.card[open] summary:before { content: "▾ "; }
+.card summary .card-sub { color: var(--soft); font-size: 12px; font-family: monospace; }
+.card-body { padding: 4px 16px 16px; border-top: 1px solid var(--line); padding-top: 14px; }
+.subhead {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--soft);
+  margin: 16px 0 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.row { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 10px; }
+.row-media { grid-template-columns: 130px 1fr 1fr auto; }
+.row-credits { grid-template-columns: 1fr 1fr auto; }
+.row-link { grid-template-columns: 1fr 2fr auto; }
+.row-exp { grid-template-columns: 1fr 1fr 1fr auto; }
+@media (max-width: 720px) {
+  .row-media, .row-credits, .row-link, .row-exp { grid-template-columns: 1fr; }
+}
+button.mini, button.del {
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--soft);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: inherit;
+}
+button.mini:hover { border-color: var(--soft); color: var(--ink); }
+button.del:hover { border-color: var(--danger); color: var(--danger); }
+.add-btn {
+  background: transparent;
+  border: 1px dashed var(--line);
+  color: var(--soft);
+  border-radius: 6px;
+  padding: 10px 14px;
+  width: 100%;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: inherit;
+  margin-bottom: 8px;
+}
+.add-btn:hover { border-color: var(--teal); color: var(--teal); }
+.card-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+
+/* ---------- GitHub publish ---------- */
+.gh-connect-row { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 10px; }
+.gh-connect-row .field { min-width: 300px; flex: 1; }
+.gh-status { font-size: 13px; margin: 0 0 12px; }
+.gh-status.ok { color: var(--teal); }
+.gh-status.err { color: var(--danger); }
+.img-field { display: flex; gap: 8px; }
+.img-field input { flex: 1; }
+.img-preview { margin: 8px 0; }
+.img-preview img { max-width: 220px; max-height: 140px; border: 1px solid var(--line); border-radius: 6px; display: block; }
+.img-missing { color: var(--danger); font-size: 12px; }
+
+/* ---------- media grid in project cards: images 2-up, video full width ---------- */
+.media-grid-admin { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+.media-slot, .media-video-slot {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px;
+}
+.media-slot input, .media-video-slot input, .media-video-slot textarea, .media-slot select {
+  width: 100%;
+  background: var(--panel2);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 13px;
+  font-family: inherit;
+  margin-bottom: 6px;
+}
+.media-slot input:focus, .media-video-slot input:focus, .media-video-slot textarea:focus, .media-slot select:focus {
+  outline: none;
+  border-color: var(--teal);
+}
+.media-video-slot textarea { resize: vertical; min-height: 52px; }
+.media-actions { display: flex; gap: 6px; }
+.media-actions button { padding: 6px 10px; }
+.media-pick { display: flex; gap: 6px; align-items: center; }
+.media-pick input { flex: 1; margin-bottom: 6px; }
+.media-pick .mini { flex-shrink: 0; margin-bottom: 6px; }
+.media-preview img {
+  max-width: 100%;
+  max-height: 90px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  margin-bottom: 6px;
+  display: block;
+  background: #000;
+}
+@media (max-width: 720px) { .media-grid-admin { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header class="admin-top">
+  <h1>Portfolio editor</h1>
+  <p>Everything you can change on the site, in one place. Nothing here breaks the design, only the words.</p>
+  <div class="admin-actions">
+    <button class="btn" id="btnSaveLocal" type="button">Save locally</button>
+    <button class="btn" id="btnGithub" type="button" disabled>Save to GitHub</button>
+    <button class="btn ghost" id="btnDownload" type="button">Download updated content.js</button>
+    <button class="btn ghost" id="btnCopy" type="button">Copy to clipboard</button>
+    <label class="btn ghost">Load a content.js file
+      <input type="file" id="fileLoad" accept=".js,text/javascript" hidden>
+    </label>
+    <span id="statusLine"></span>
+  </div>
+</header>
+
+<main>
+  <div class="howto">
+    <h2>How this works</h2>
+    <ol>
+      <li>Change anything on this page. Your changes stay here while you work.</li>
+      <li>Click <strong>Save locally</strong> — it writes <code>content.js</code> (and any picked images/videos) straight into the site folder. No downloading, no replacing.</li>
+      <li>The site tab <strong>refreshes itself</strong> — switch to it and watch it update. (If you ever open the site from <code>file://</code> instead of the server, hit <strong>&#8984;R</strong> instead.)</li>
+    </ol>
+    <p><strong>Save locally</strong> needs the little local server running: double-click <strong>Start Site.command</strong> in the portfolio folder, and open the site (and admin) from the address it shows — <code>http://127.0.0.1:8888/...</code>. It also works if you open admin straight from the folder (<code>file://</code>) — the button just talks to the server on port 8888.</p>
+    <p style="margin-bottom:0"><strong>Going live later?</strong> Connect GitHub in the section below and hit <strong>Save to GitHub</strong> — it pushes content.js, admin.html and picked files to your repo, and updates the live site once Pages is on. No downloads either way. <strong>Download / Copy / Load</strong> stay as backups.</p>
+  </div>
+
+  <!-- ================= GITHUB PUBLISH ================= -->
+  <section class="admin-section">
+    <h2>Publish to GitHub (optional)</h2>
+    <p class="hint">Saves your content straight to the repository, on the branch your GitHub Pages site serves from, then waits and confirms when the live site is actually updated. It also pushes this admin editor itself, so the live admin.html always matches the version you're using — no downloading files. The token stays in your browser only (this page's storage). Treat it like a password; revoke it anytime at github.com/settings/tokens.</p>
+
+    <div id="ghConnect">
+      <div class="gh-connect-row">
+        <label class="field"><span>GitHub token</span>
+          <input type="password" id="ghToken" placeholder="github_pat_... or ghp_..." autocomplete="off">
+        </label>
+        <button class="btn" id="btnConnect" type="button">Connect</button>
+      </div>
+      <p class="hint">How to get one: github.com/settings/tokens → Generate new token (fine-grained) → Repository access: only select repositories, pick the one that hosts this site → Permissions: Contents → Read and write (required), plus Pages → Read (optional, lets the save button wait and confirm the live update). Generate token. Paste it here.</p>
+    </div>
+
+    <div id="ghConnected" hidden>
+      <p id="ghStatus" class="gh-status"></p>
+      <label class="field"><span>Repository</span>
+        <select id="ghRepo"></select>
+      </label>
+      <p class="hint" id="ghBranch">Saves to the default branch.</p>
+      <button class="btn ghost" id="btnDisconnect" type="button">Disconnect</button>
+    </div>
+  </section>
+
+  <!-- ================= PROJECTS ================= -->
+  <section class="admin-section">
+    <h2>1. Projects</h2>
+    <p class="hint">These fill the home page grid and each project's own page. The two groups below match the two tabs on the home page. Tip: a project needs a "slug" (link address) to be clickable, a story to have text on its page, and a cover image to look right.</p>
+
+    <div class="group-head produced">Presented and produced</div>
+    <div id="produced-list"></div>
+    <button class="add-btn" data-act="add-project" data-group="produced" type="button">+ Add project (produced)</button>
+
+    <div class="group-head presented">Just presented</div>
+    <div id="presented-list"></div>
+    <button class="add-btn" data-act="add-project" data-group="presented" type="button">+ Add project (presented)</button>
+  </section>
+
+  <!-- ================= HERO ================= -->
+  <section class="admin-section">
+    <h2>2. Hero — the word chain</h2>
+    <p class="hint">Six short sentences, one shown at a time. The <b>last word</b> of each line becomes the clickable amber word — clicking it glitches to the next sentence. Each sentence should <b>start with the previous sentence's last word</b> (sentence 2 opens with sentence 1's last word, and so on). Sentence 6 ends the chain: clicking its last word (<b>"work"</b>) scrolls down to the work section. No brackets needed — the clickable word is detected automatically.</p>
+    <label class="field"><span>Sentence 1 — ends with the word that starts sentence 2</span><textarea data-path="hero.sentences.0" rows="2"></textarea></label>
+    <label class="field"><span>Sentence 2 — ends with the word that starts sentence 3</span><textarea data-path="hero.sentences.1" rows="2"></textarea></label>
+    <label class="field"><span>Sentence 3 — ends with the word that starts sentence 4</span><textarea data-path="hero.sentences.2" rows="2"></textarea></label>
+    <label class="field"><span>Sentence 4 — ends with the word that starts sentence 5</span><textarea data-path="hero.sentences.3" rows="2"></textarea></label>
+    <label class="field"><span>Sentence 5 — ends with the word that starts sentence 6</span><textarea data-path="hero.sentences.4" rows="2"></textarea></label>
+    <label class="field"><span>Sentence 6 — ends with the word that scrolls to the work section (currently "work")</span><textarea data-path="hero.sentences.5" rows="2"></textarea></label>
+  </section>
+
+  <!-- ================= HOME EXTRAS ================= -->
+  <section class="admin-section">
+    <h2>3. Home extras — dateline</h2>
+    <p class="hint">The small positioning line under the hero sentence.</p>
+    <label class="field"><span>Dateline (under the hero)</span><input data-path="home.dateline" placeholder="e.g. Senior copywriter · Cairo → Dubai → Madrid"></label>
+  </section>
+
+  <!-- ================= WORK SECTION ================= -->
+  <section class="admin-section">
+    <h2>4. Work section labels</h2>
+    <p class="hint">The heading and the two tab names on the home page.</p>
+    <label class="field"><span>Section heading</span><input data-path="work.heading"></label>
+    <div class="grid2">
+      <label class="field"><span>First tab (produced)</span><input data-path="work.producedLabel"></label>
+      <label class="field"><span>Second tab (presented)</span><input data-path="work.presentedLabel"></label>
+    </div>
+    <div class="grid2">
+      <label class="field"><span>Show this many produced projects (0 = show all)</span><input data-path="work.producedLimit" type="number" min="0" placeholder="8"></label>
+      <label class="field"><span>Show this many presented projects (0 = show all)</span><input data-path="work.presentedLimit" type="number" min="0" placeholder="0"></label>
+    </div>
+    <p class="hint" style="margin-bottom:0">Only the first N projects in each list are shown on the site. Reorder projects to choose <em>which</em> ones appear. To hide a single project entirely, tick <strong>Keep in drafts</strong> inside it — it stays in the editor but never renders.</p>
+  </section>
+
+  <!-- ================= ABOUT ================= -->
+  <section class="admin-section">
+    <h2>5. About page</h2>
+    <div class="grid2">
+      <label class="field"><span>Section label</span><input data-path="about.label"></label>
+      <label class="field"><span>Heading</span><input data-path="about.heading"></label>
+    </div>
+    <label class="field"><span>Portrait file name (put the file in images/)</span><input data-path="about.portrait"></label>
+    <label class="field"><span>Bio (one paragraph per line)</span><textarea data-path="about.paragraphs" data-type="textlist" rows="5"></textarea></label>
+    <label class="field"><span>Skills (one per line)</span><textarea data-path="about.skills" data-type="textlist" rows="4"></textarea></label>
+    <div class="subhead">Work experience</div>
+    <div id="expRows"></div>
+    <button class="add-btn" data-act="add-row" data-path="about.experience" data-row="experience" type="button">+ Add experience row</button>
+  </section>
+
+  <!-- ================= CONTACT ================= -->
+  <section class="admin-section">
+    <h2>6. Contact (shown at the end of the About page)</h2>
+    <p class="hint">This block closes the About page. The icons are picked automatically from each link's name (LinkedIn → "in", Instagram → camera, email → envelope). A link that starts with mailto: is treated as the primary email.</p>
+    <div class="grid2">
+      <label class="field"><span>Section label</span><input data-path="contact.label"></label>
+      <label class="field"><span>Headline</span><input data-path="contact.headline"></label>
+      <label class="field"><span>Call to action text</span><input data-path="contact.ctaText"></label>
+      <label class="field"><span>Call to action link</span><input data-path="contact.ctaUrl"></label>
+    </div>
+    <label class="field"><span>Sub-line under the heading (leave empty to hide)</span><input data-path="contact.sub" placeholder="Leave empty — the icons do the talking"></label>
+    <div class="grid2">
+      <label class="field"><span>Résumé button text</span><input data-path="contact.resume.label"></label>
+      <label class="field"><span>Résumé link (PDF or Drive)</span><input data-path="contact.resume.url" placeholder="https://... — leave empty to hide the button"></label>
+    </div>
+    <div class="subhead">Contact links (icons only — the icon is picked from each link's name)</div>
+    <div id="linkRows"></div>
+    <button class="add-btn" data-act="add-row" data-path="contact.links" data-row="link" type="button">+ Add link</button>
+  </section>
+
+  <!-- ================= NAV + FOOTER ================= -->
+  <section class="admin-section">
+    <h2>7. Top bar and footer</h2>
+    <div class="grid2">
+      <label class="field"><span>Logo text</span><input data-path="nav.logo"></label>
+      <label class="field"><span>Tagline under logo (shown exactly as typed)</span><input data-path="nav.tagline" placeholder="e.g. Just write"></label>
+      <label class="field"><span>Badge (top right)</span><input data-path="nav.badge"></label>
+    </div>
+    <label class="field"><span>Footer line</span><input data-path="footer.line"></label>
+    <label class="field"><span>Footer wordmark (replaces the ® — write "PG-13" in it to render the MPAA-style rating label)</span><input data-path="footer.mark"></label>
+    <label class="field"><span>PG-13 punchline (the hidden line revealed on hover)</span><input data-path="footer.joke" placeholder="e.g. for the jokes in this portfolio."></label>
+  </section>
+</main>
+
+<input type="file" id="imgPicker" accept="image/*" hidden>
+<input type="file" id="videoPicker" accept="video/*" hidden>
+<script src="content.js"></script>
+<script>
+(function () {
+  /* ---------------- helpers ---------------- */
+  function $$ (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+  function getPath(obj, path) {
+    return path.split('.').reduce(function (a, k) { return (a == null) ? a : a[k]; }, obj);
+  }
+  function setPath(obj, path, value) {
+    var parts = path.split('.');
+    var cur = obj;
+    for (var i = 0; i < parts.length - 1; i++) cur = cur[parts[i]];
+    cur[parts[parts.length - 1]] = value;
+  }
+  function parseProjPath(path) {
+    var parts = path.split('.');
+    return { group: parts[1], idx: parseInt(parts[2], 10) };
+  }
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+  function status(msg) { document.getElementById('statusLine').textContent = msg; }
+
+  /* ---------------- working copy of the content ---------------- */
+  var M = JSON.parse(JSON.stringify(window.SITE_CONTENT || {}));
+
+  function ensureStructure() {
+    M.nav = M.nav || {};
+    M.hero = M.hero || {};
+    if (!Array.isArray(M.hero.sentences)) M.hero.sentences = ['', '', '', '', '', ''];
+    M.home = M.home || {};
+    M.work = M.work || {};
+    if (!Array.isArray(M.work.produced)) M.work.produced = [];
+    if (!Array.isArray(M.work.presented)) M.work.presented = [];
+    if (typeof M.work.producedLimit !== 'number') M.work.producedLimit = 8;
+    if (typeof M.work.presentedLimit !== 'number') M.work.presentedLimit = 0;
+    M.about = M.about || {};
+    if (!Array.isArray(M.about.paragraphs)) M.about.paragraphs = [];
+    if (!Array.isArray(M.about.skills)) M.about.skills = [];
+    if (!Array.isArray(M.about.experience)) M.about.experience = [];
+    M.contact = M.contact || {};
+    if (!Array.isArray(M.contact.links)) M.contact.links = [];
+    M.contact.resume = M.contact.resume || {};
+    M.footer = M.footer || {};
+  }
+
+  /* ---------------- rendering ---------------- */
+  function emptyProject() {
+    return { slug: '', title: '', client: '', category: '', year: '', image: '', alt: '', story: [], media: [], credits: [], draft: false, next: {} };
+  }
+
+  function projectCardHtml(p, group, idx) {
+    var base = 'work.' + group + '.' + idx;
+    var title = p.title || 'Untitled project';
+    var sub = p.slug || 'no link yet';
+
+    var imgSlots = '', vidSlots = '';
+    (p.media || []).forEach(function (m, i) {
+      if (m.type === 'video') {
+        vidSlots += '<div class="media-video-slot">' +
+          '<textarea data-path="' + base + '.media.' + i + '.src" rows="2" placeholder="Vimeo / YouTube link, or paste the full embed code — or pick a video file below (uploads to images/ on Save to GitHub)">' + esc(m.src) + '</textarea>' +
+          '<div class="media-pick">' +
+            '<button class="mini" data-act="pick-video" data-field="' + base + '.media.' + i + '.src" type="button" title="Pick a video file from your computer — its name fills in here and it uploads to images/ on save">Pick video file</button>' +
+          '</div>' +
+          '<input data-path="' + base + '.media.' + i + '.caption" placeholder="Caption" value="' + esc(m.caption) + '">' +
+          '<div class="media-actions">' +
+            '<button class="del" data-act="remove-row" data-path="' + base + '" data-row="media" data-idx="' + i + '" type="button">Remove video</button>' +
+          '</div></div>';
+        return;
+      }
+      imgSlots += '<div class="media-slot">' +
+        '<div class="media-pick">' +
+          '<input data-path="' + base + '.media.' + i + '.src" placeholder="File name in images/, or full http link" value="' + esc(m.src) + '">' +
+          '<button class="mini" data-act="pick-image" data-field="' + base + '.media.' + i + '.src" type="button" title="Pick a file — its name is filled in for you">Pick file</button>' +
+        '</div>' +
+        '<div class="media-preview"' + (m.src && !/^https?:\/\//i.test(m.src) ? '' : ' hidden') + '>' +
+          '<img data-preview="' + base + '.media.' + i + '.src" src="' + esc(imgUrl(m.src)) + '" alt="" onerror="this.parentNode.hidden=true">' +
+        '</div>' +
+        '<select data-path="' + base + '.media.' + i + '.layout" title="Grid block size">' +
+          '<option value=""' + (!m.layout ? ' selected' : '') + '>Auto (by shape)</option>' +
+          '<option value="full"' + (m.layout === 'full' ? ' selected' : '') + '>Full width</option>' +
+          '<option value="half"' + (m.layout === 'half' ? ' selected' : '') + '>Half width</option>' +
+        '</select>' +
+        '<input data-path="' + base + '.media.' + i + '.caption" placeholder="Caption (also used as alt text)" value="' + esc(m.caption) + '">' +
+        '<div class="media-actions">' +
+          '<button class="mini" data-act="move-media" data-path="' + base + '" data-idx="' + i + '" data-dir="-1" type="button" title="Move image up">&uarr;</button>' +
+          '<button class="mini" data-act="move-media" data-path="' + base + '" data-idx="' + i + '" data-dir="1" type="button" title="Move image down">&darr;</button>' +
+          '<button class="del" data-act="remove-row" data-path="' + base + '" data-row="media" data-idx="' + i + '" type="button">Remove</button>' +
+        '</div></div>';
+    });
+
+    var creditRows = (p.credits || []).map(function (c, i) {
+      return '<div class="row row-credits">' +
+        '<input data-path="' + base + '.credits.' + i + '.role" placeholder="Role, e.g. Creative Director" value="' + esc(c.role) + '">' +
+        '<input data-path="' + base + '.credits.' + i + '.name" placeholder="Name" value="' + esc(c.name) + '">' +
+        '<button class="del" data-act="remove-row" data-path="' + base + '" data-row="credits" data-idx="' + i + '" type="button">Remove</button>' +
+        '</div>';
+    }).join('');
+
+    var next = p.next || {};
+
+    return '<details class="card">' +
+      '<summary><strong>' + esc(title) + '</strong><span class="card-sub">' + esc(sub) + '</span></summary>' +
+      '<div class="card-body">' +
+        '<div class="grid2">' +
+          '<label class="field"><span>Project title</span><input data-path="' + base + '.title" value="' + esc(p.title) + '"></label>' +
+          '<label class="field"><span>Client</span><input data-path="' + base + '.client" value="' + esc(p.client) + '"></label>' +
+          '<label class="field"><span>Category</span><input data-path="' + base + '.category" value="' + esc(p.category) + '"></label>' +
+          '<label class="field"><span>Year</span><input data-path="' + base + '.year" value="' + esc(p.year) + '"></label>' +
+        '</div>' +
+        '<label class="field check"><input data-path="' + base + '.draft" type="checkbox"' + (p.draft ? ' checked' : '') + '> Keep in drafts (hidden from the site)</label>' +
+        '<label class="field"><span>Link address (slug)</span><input data-path="' + base + '.slug" placeholder="lowercase-no-spaces, e.g. yango-wedding-rush" value="' + esc(p.slug) + '"><small>Leave empty and the card will not link anywhere.</small></label>' +
+        '<label class="field"><span>Cover image</span>' +
+          '<div class="img-field">' +
+            '<input data-path="' + base + '.image" placeholder="e.g. yango-wedding.jpg, or paste a full http link" value="' + esc(p.image) + '">' +
+            '<button class="mini" data-act="pick-image" data-path="' + base + '" type="button">Pick file</button>' +
+          '</div>' +
+          '<div class="img-preview"' + (p.image ? '' : ' hidden') + '>' +
+            '<img data-preview="' + base + '.image" src="' + esc(imgUrl(p.image)) + '" alt="Cover preview" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">' +
+            '<span class="img-missing" hidden>File not found in images/</span>' +
+          '</div>' +
+          '<small>Put the file in the images/ folder first. Just the file name, no images/ prefix. This image is the card thumbnail on the home page and in "You may also like" — it does not appear inside the project page.</small></label>' +
+        '<label class="field"><span>Image alt text</span><input data-path="' + base + '.alt" value="' + esc(p.alt) + '"></label>' +
+        '<label class="field"><span>Story (project page, one paragraph per line)</span><textarea data-path="' + base + '.story" data-type="textlist" rows="4" placeholder="Situation, insight, idea, result. Empty = the page shows the basics only.">' + esc((p.story || []).join('\n')) + '</textarea></label>' +
+        '<div class="subhead">Images (blocks) — <em>Auto</em> lays out by shape (landscape wide, portrait paired), <em>Full width</em> spans the row, <em>Half</em> pairs 50/50. Use the arrows to reorder.</div>' +
+        '<div class="media-grid-admin">' + imgSlots + '</div>' +
+        '<button class="add-btn" data-act="add-row" data-path="' + base + '" data-row="media-image" type="button">+ Add image slot</button>' +
+        '<div class="subhead">Video (full width on the site, outside the image grid)</div>' +
+        vidSlots +
+        '<button class="add-btn" data-act="add-row" data-path="' + base + '" data-row="media-video" type="button">+ Add video slot</button>' +
+        '<div class="subhead">Credits (4 slots) <button class="mini" data-act="add-row" data-path="' + base + '" data-row="credits" type="button">+ Add credit</button></div>' +
+        creditRows +
+        '<div class="grid2">' +
+          '<label class="field"><span>Next project title</span><input data-path="' + base + '.next.title" value="' + esc(next.title) + '"><small>Blank = page links back to all work.</small></label>' +
+          '<label class="field"><span>Next project slug</span><input data-path="' + base + '.next.slug" placeholder="lowercase-no-spaces" value="' + esc(next.slug) + '"></label>' +
+        '</div>' +
+        '<div class="card-actions">' +
+          '<button class="mini" data-act="move-project" data-path="' + base + '" data-dir="-1" type="button">Move up</button>' +
+          '<button class="mini" data-act="move-project" data-path="' + base + '" data-dir="1" type="button">Move down</button>' +
+          '<button class="del" data-act="remove-project" data-path="' + base + '" type="button">Delete this project</button>' +
+        '</div>' +
+      '</div></details>';
+  }
+
+  function renderProjects(group) {
+    /* pad each project so the forms always show at least 3 image slots,
+       1 video slot, and 4 credit slots (empty slots are dropped on export) */
+    (M.work[group] || []).forEach(function (p) {
+      if (!Array.isArray(p.media)) p.media = [];
+      if (!Array.isArray(p.credits)) p.credits = [];
+      var imgs = p.media.filter(function (m) { return m.type !== 'video'; }).length;
+      for (var i = imgs; i < 3; i++) p.media.push({ type: 'image', src: '', caption: '' });
+      if (!p.media.some(function (m) { return m.type === 'video'; })) {
+        p.media.push({ type: 'video', src: '', caption: '' });
+      }
+      for (var c = p.credits.length; c < 4; c++) p.credits.push({ role: '', name: '' });
+    });
+    var list = document.getElementById(group + '-list');
+    /* remember which cards are open, so adding a slot or credit (or moving/
+       removing a project) doesn't collapse the card you're working in */
+    var openTitles = {};
+    Array.prototype.forEach.call(list.querySelectorAll('details.card[open]'), function (d) {
+      var s = d.querySelector('summary');
+      openTitles[s ? s.textContent : ''] = true;
+    });
+    list.innerHTML =
+      (M.work[group] || []).map(function (p, i) { return projectCardHtml(p, group, i); }).join('');
+    Array.prototype.forEach.call(list.querySelectorAll('details.card'), function (d) {
+      var s = d.querySelector('summary');
+      if (openTitles[s ? s.textContent : '']) d.open = true;
+    });
+  }
+
+  function renderExperience() {
+    document.getElementById('expRows').innerHTML = (M.about.experience || []).map(function (e, i) {
+      return '<div class="row row-exp">' +
+        '<input data-path="about.experience.' + i + '.role" placeholder="Role" value="' + esc(e.role) + '">' +
+        '<input data-path="about.experience.' + i + '.org" placeholder="Company" value="' + esc(e.org) + '">' +
+        '<input data-path="about.experience.' + i + '.time" placeholder="Dates" value="' + esc(e.time) + '">' +
+        '<button class="del" data-act="remove-row" data-path="about.experience" data-row="experience" data-idx="' + i + '" type="button">Remove</button>' +
+        '</div>';
+    }).join('');
+  }
+
+  function renderLinks() {
+    document.getElementById('linkRows').innerHTML = (M.contact.links || []).map(function (l, i) {
+      return '<div class="row row-link">' +
+        '<input data-path="contact.links.' + i + '.label" placeholder="Label, e.g. WhatsApp" value="' + esc(l.label) + '">' +
+        '<input data-path="contact.links.' + i + '.url" placeholder="Link, e.g. https://..." value="' + esc(l.url) + '">' +
+        '<button class="del" data-act="remove-row" data-path="contact.links" data-row="link" data-idx="' + i + '" type="button">Remove</button>' +
+        '</div>';
+    }).join('');
+  }
+
+  function renderAll() {
+    ensureStructure();
+    $$('input[data-path], textarea[data-path], select[data-path]').forEach(function (el) {
+      var v = getPath(M, el.dataset.path);
+      if (el.type === 'checkbox') { el.checked = !!v; return; }
+      if (el.type === 'number') { el.value = (v == null || v === '') ? '' : v; return; }
+      el.value = (el.dataset.type === 'textlist')
+        ? (Array.isArray(v) ? v : []).join('\n')
+        : (v == null ? '' : v);
+    });
+    renderProjects('produced');
+    renderProjects('presented');
+    renderExperience();
+    renderLinks();
+  }
+
+  /* ---------------- edits: keep M in sync with the forms ---------------- */
+  function imgUrl(v) {
+    if (!v) return '';
+    return /^https?:\/\//i.test(v) ? v : 'images/' + String(v).replace(/^images\//, '');
+  }
+
+  function updateFromPath(e) {
+    var el = e.target;
+    if (!el.dataset.path) return;
+    var v = el.value;
+    if (el.type === 'checkbox') {
+      v = el.checked;
+    } else if (el.type === 'number') {
+      v = el.value === '' ? null : Number(el.value);
+    } else if (el.dataset.type === 'textlist') {
+      v = v.split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
+    }
+    setPath(M, el.dataset.path, v);
+    /* live preview for cover images and media slots */
+    if (/\.(image|src)$/.test(el.dataset.path)) {
+      var prev = document.querySelector('[data-preview="' + el.dataset.path + '"]');
+      if (prev) {
+        var pbox = prev.closest('.img-preview, .media-preview');
+        if (pbox) pbox.hidden = !v;
+        prev.style.display = v ? '' : 'none';
+        var missing = prev.nextElementSibling;
+        if (missing && missing.classList && missing.classList.contains('img-missing')) {
+          missing.style.display = 'none';
+        }
+        prev.src = v ? imgUrl(v) : '';
+      }
+    }
+  }
+  document.addEventListener('input', updateFromPath);
+  document.addEventListener('change', updateFromPath);
+
+  /* ---------------- structural actions (add / remove / move) ---------------- */
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('button[data-act]');
+    if (!btn) return;
+    var act = btn.dataset.act;
+    var path = btn.dataset.path;
+    var idx = parseInt(btn.dataset.idx, 10);
+
+    if (act === 'add-project') {
+      M.work[btn.dataset.group].push(emptyProject());
+      renderProjects(btn.dataset.group);
+    } else if (act === 'remove-project') {
+      if (!confirm('Delete this project?')) return;
+      var pr = parseProjPath(path);
+      M.work[pr.group].splice(pr.idx, 1);
+      renderProjects(pr.group);
+    } else if (act === 'move-project') {
+      var pr2 = parseProjPath(path);
+      var arr = M.work[pr2.group];
+      var to = pr2.idx + parseInt(btn.dataset.dir, 10);
+      if (to < 0 || to >= arr.length) return;
+      arr.splice(to, 0, arr.splice(pr2.idx, 1)[0]);
+      renderProjects(pr2.group);
+    } else if (act === 'move-media') {
+      /* move one image up/down among the other images (videos stay put) */
+      var prm = parseProjPath(path);
+      var projM = M.work[prm.group][prm.idx];
+      var arrM = projM.media;
+      var idxM = parseInt(btn.dataset.idx, 10);
+      var dirM = parseInt(btn.dataset.dir, 10);
+      var t = idxM + dirM;
+      while (t >= 0 && t < arrM.length && arrM[t].type !== arrM[idxM].type) t += dirM;
+      if (t < 0 || t >= arrM.length) return;
+      arrM.splice(t, 0, arrM.splice(idxM, 1)[0]);
+      renderProjects(prm.group);
+    } else if (act === 'pick-image') {
+      /* cover image buttons pass data-path (base) and we append '.image';
+         media-slot buttons pass the exact field via data-field */
+      imgPicker.dataset.target = btn.dataset.field || (path + '.image');
+      imgPicker.click();
+    } else if (act === 'pick-video') {
+      videoPicker.dataset.target = btn.dataset.field;
+      videoPicker.click();
+    } else if (act === 'add-row') {
+      if (path === 'about.experience') {
+        M.about.experience.push({ role: '', org: '', time: '' });
+        renderExperience();
+      } else if (path === 'contact.links') {
+        M.contact.links.push({ label: '', url: '' });
+        renderLinks();
+      } else {
+        var pr3 = parseProjPath(path);
+        var proj = M.work[pr3.group][pr3.idx];
+        if (btn.dataset.row === 'media-image') proj.media.push({ type: 'image', src: '', caption: '' });
+        else if (btn.dataset.row === 'media-video') proj.media.push({ type: 'video', src: '', caption: '' });
+        else if (btn.dataset.row === 'media') proj.media.push({ type: 'image', src: '', caption: '' });
+        else proj.credits.push({ role: '', name: '' });
+        renderProjects(pr3.group);
+      }
+    } else if (act === 'remove-row') {
+      if (path === 'about.experience') {
+        M.about.experience.splice(idx, 1);
+        renderExperience();
+      } else if (path === 'contact.links') {
+        M.contact.links.splice(idx, 1);
+        renderLinks();
+      } else {
+        var pr4 = parseProjPath(path);
+        var proj2 = M.work[pr4.group][pr4.idx];
+        if (btn.dataset.row === 'media') proj2.media.splice(idx, 1);
+        else proj2.credits.splice(idx, 1);
+        renderProjects(pr4.group);
+      }
+    }
+  });
+
+  /* ---------------- export ---------------- */
+  function serialize() {
+    /* drop the padded empty media / credit slots so the exported file stays clean */
+    function cleanProject(p) {
+      p.media = (p.media || []).filter(function (m) { return m.src && String(m.src).trim(); });
+      p.credits = (p.credits || []).filter(function (c) {
+        return (c.role && String(c.role).trim()) || (c.name && String(c.name).trim());
+      });
+      return p;
+    }
+    (M.work.produced || []).forEach(cleanProject);
+    (M.work.presented || []).forEach(cleanProject);
+    var header = [
+      '/* ============================================================',
+      '   YOUR SITE\'S CONTENT',
+      '   Generated by admin.html. Change the text between quotes,',
+      '   save, refresh the page.',
+      '   ============================================================ */',
+      '',
+      'window.SITE_CONTENT = '
+    ].join('\n');
+    var json = JSON.stringify(M, null, 2)
+      .replace(/^(\s*)"([A-Za-z_][A-Za-z0-9_]*)"(\s*:)(\s*[\[{"\d\-])/gm, '$1$2$3$4');
+    return header + json + ';\n';
+  }
+
+  function download() {
+    var blob = new Blob([serialize()], { type: 'text/javascript' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'content.js';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+    status('Downloaded. Replace content.js in the site folder, then refresh the pages.');
+  }
+  document.getElementById('btnDownload').addEventListener('click', download);
+
+  document.getElementById('btnCopy').addEventListener('click', function () {
+    var text = serialize();
+    function fallback() {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); status('Copied to clipboard.'); } catch (err) { status('Could not copy.'); }
+      ta.remove();
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { status('Copied to clipboard.'); }, fallback);
+    } else {
+      fallback();
+    }
+  });
+
+  /* ---------------- pick an image or video file (fills the field with the file name) ---------------- */
+  var imgPicker = document.getElementById('imgPicker');
+  var videoPicker = document.getElementById('videoPicker');
+  /* files picked on this machine, keyed by field path — uploaded to images/
+     (or videos/) on the next Save to GitHub so the live site can see them */
+  var pickedFiles = {};
+  function rememberPick(input, folder) {
+    var f = input.files[0];
+    if (!f || !input.dataset.target) return;
+    var el = document.querySelector('[data-path="' + input.dataset.target + '"]');
+    if (el) {
+      el.value = f.name;
+      el.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+    pickedFiles[input.dataset.target] = { file: f, folder: folder };
+    input.value = '';
+  }
+  imgPicker.addEventListener('change', function () { rememberPick(this, 'images'); });
+  videoPicker.addEventListener('change', function () { rememberPick(this, 'images'); });
+
+  /* ---------------- Save locally: no GitHub, no downloads ----------------
+     Talks to the little local server (Start Site.command) which writes
+     content.js and picked images/videos straight into the folder. */
+  function localSaveUrl() {
+    if (location.protocol === 'http:' || location.protocol === 'https:') {
+      return location.origin + '/api/save';
+    }
+    return 'http://127.0.0.1:8888/api/save'; /* opened via file:// — the default server port */
+  }
+  function readPickedFiles() {
+    var keys = Object.keys(pickedFiles);
+    var files = {};
+    var chain = Promise.resolve();
+    keys.forEach(function (key) {
+      var entry = pickedFiles[key];
+      if (!entry || !entry.file) return;
+      chain = chain.then(function () {
+        return new Promise(function (resolve) {
+          var reader = new FileReader();
+          reader.onload = function () {
+            files[entry.file.name] = String(reader.result).replace(/^data:[^;]*;base64,/, '');
+            resolve();
+          };
+          reader.onerror = function () { resolve(); };
+          reader.readAsDataURL(entry.file);
+        });
+      });
+    });
+    return chain.then(function () { return files; });
+  }
+  document.getElementById('btnSaveLocal').addEventListener('click', function () {
+    status('Saving to the folder...');
+    readPickedFiles().then(function (files) {
+      return fetch(localSaveUrl(), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: serialize(), files: files })
+      });
+    }).then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d && d.ok) {
+          pickedFiles = {};
+          status('Saved to the folder \u2713 — the site tab refreshes itself (\u2318R still works if it ever doesn\u2019t).');
+        } else {
+          status('Save failed: ' + ((d && d.error) || 'unknown error') + '.', true);
+        }
+      })
+      .catch(function () {
+        status('Could not reach the local server. Double-click \u201CStart Site.command\u201D in the portfolio folder, then open admin from the address it shows.', true);
+      });
+  });
+
+  /* ---------------- load from disk ---------------- */
+  document.getElementById('fileLoad').addEventListener('change', function () {
+    var f = this.files[0];
+    if (!f) return;
+    var reader = new FileReader();
+    reader.onload = function () {
+      try {
+        var sandbox = {};
+        new Function('window', reader.result)(sandbox);
+        if (!sandbox.SITE_CONTENT) throw new Error('no SITE_CONTENT found');
+        M = sandbox.SITE_CONTENT;
+        renderAll();
+        status('Loaded from ' + f.name + '.');
+      } catch (err) {
+        status('Could not read that file: ' + err.message);
+      }
+    };
+    reader.readAsText(f);
+    this.value = '';
+  });
+
+  /* ---------------- GitHub: save straight to the repo ---------------- */
+  var GH_KEY = 'admin_github_save';
+  var gh = { token: '', owner: '', repo: '', branch: '' };
+  var ghStorageOk = true;
+  function ghPersist() {
+    if (!ghStorageOk) return;
+    try { localStorage.setItem(GH_KEY, JSON.stringify(gh)); } catch (e) { ghStorageOk = false; }
+  }
+  function ghLoadStored() {
+    try {
+      var raw = localStorage.getItem(GH_KEY);
+      if (raw) gh = Object.assign(gh, JSON.parse(raw));
+    } catch (e) { ghStorageOk = false; }
+  }
+  ghLoadStored();
+
+  var elGhToken = document.getElementById('ghToken');
+  var elGhConnect = document.getElementById('ghConnect');
+  var elGhConnected = document.getElementById('ghConnected');
+  var elGhRepo = document.getElementById('ghRepo');
+  var elGhStatus = document.getElementById('ghStatus');
+  var elGhBranch = document.getElementById('ghBranch');
+  var btnGithub = document.getElementById('btnGithub');
+  var btnConnect = document.getElementById('btnConnect');
+  var btnDisconnect = document.getElementById('btnDisconnect');
+
+  function ghStatus(msg, isErr) {
+    elGhStatus.textContent = msg;
+    elGhStatus.className = 'gh-status' + (isErr ? ' err' : ' ok');
+  }
+  function ghApi(path, opts) {
+    return fetch('https://api.github.com' + path, Object.assign({
+      headers: {
+        Authorization: 'Bearer ' + gh.token,
+        Accept: 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28'
+      }
+    }, opts || {}));
+  }
+  function ghErrFor(status) {
+    if (status === 401) return 'Token not accepted by GitHub. Reconnect with a valid token.';
+    if (status === 403) return 'No permission. The token needs Contents: Read and write on the repo.';
+    if (status === 404) return 'Repo not found, or this token cannot see it.';
+    return 'GitHub error (' + status + '). Try again.';
+  }
+  /* read/write content on the branch the site actually serves from */
+  function ghRef() { return gh.branch ? '?ref=' + encodeURIComponent(gh.branch) : ''; }
+  /* pull GitHub's own message out of a failed response, so errors say exactly
+     what's wrong (wrong branch, missing permission, file too large, ...) */
+  function ghErrFrom(res) {
+    return res.json().then(function (d) {
+      var msg = d && d.message ? ' \u2014 ' + d.message : '';
+      if (res.status === 401) return 'Token not accepted by GitHub.' + msg;
+      if (res.status === 403) return 'No permission: the token needs Contents: Read and write on the repo.' + msg;
+      if (res.status === 404) return 'Not found \u2014 check the repo name, and that it has a ' + (gh.branch || 'default') + ' branch.' + msg;
+      if (res.status === 409) return 'The file changed on GitHub while saving \u2014 retried once and it still conflicts.' + msg;
+      return 'GitHub error (' + res.status + ').' + msg;
+    });
+  }
+  function ghShowConnected(show) {
+    elGhConnect.hidden = show;
+    elGhConnected.hidden = !show;
+    btnGithub.disabled = !(show && gh.repo && gh.token);
+  }
+  function ghFillRepoList(repos) {
+    elGhRepo.innerHTML = '';
+    var auto = '';
+    var m = /^([^.]+)\.github\.io$/.exec(location.hostname || '');
+    if (m) {
+      var seg = (location.pathname || '').split('/').filter(Boolean)[0] || '';
+      if (seg) auto = m[1] + '/' + seg;
+    }
+    var foundStored = false;
+    repos.forEach(function (r) {
+      var opt = document.createElement('option');
+      opt.value = r.full_name;
+      opt.textContent = r.full_name;
+      if (r.full_name === gh.owner + '/' + gh.repo) foundStored = true;
+      elGhRepo.appendChild(opt);
+    });
+    var pick = foundStored
+      ? gh.owner + '/' + gh.repo
+      : (auto && repos.some(function (r) { return r.full_name === auto; })
+          ? auto
+          : (repos[0] ? repos[0].full_name : ''));
+    elGhRepo.value = pick || '';
+    var parts = (elGhRepo.value || '').split('/');
+    gh.owner = parts[0] || '';
+    gh.repo = parts[1] || '';
+    ghPersist();
+  }
+  function ghRefreshBranch() {
+    if (!gh.owner || !gh.repo) return;
+    ghApi('/repos/' + gh.owner + '/' + gh.repo).then(function (res) {
+      if (!res.ok) return;
+      return res.json().then(function (data) {
+        gh.branch = data.default_branch || 'main';
+        ghPersist();
+        elGhBranch.textContent = 'Saves to the default branch (' + gh.branch + ').';
+        ghRefreshPages();
+      });
+    }).catch(function () { });
+  }
+  /* learn how the live site is served, so saves land on the branch that
+     actually deploys (and the button can confirm the update) */
+  function ghRefreshPages() {
+    if (!gh.owner || !gh.repo) return;
+    ghApi('/repos/' + gh.owner + '/' + gh.repo + '/pages').then(function (res) {
+      if (res.status === 404) {
+        elGhBranch.textContent = 'No GitHub Pages site on this repo — enable Pages in the repo settings so saves update a live site.';
+        return;
+      }
+      if (!res.ok) return; /* token may lack Pages read: keep the default-branch message */
+      return res.json().then(function (data) {
+        if (data.build_type === 'legacy' && data.source && data.source.branch) {
+          gh.branch = data.source.branch;
+          ghPersist();
+          elGhBranch.textContent = 'Saves to ' + gh.branch + ', the branch your live site serves from — the site updates automatically on save.';
+        } else if (data.build_type === 'workflow') {
+          elGhBranch.textContent = 'Your site builds via GitHub Actions. Saves go to ' + gh.branch + ' — the live site updates when that workflow runs.';
+        }
+      });
+    }).catch(function () { });
+  }
+
+  btnConnect.addEventListener('click', function () {
+    var token = (elGhToken.value || '').trim();
+    if (!token) { ghStatus('Paste a token first.', true); return; }
+    gh.token = token;
+    ghStatus('Connecting...', false);
+    ghApi('/user').then(function (res) {
+      if (!res.ok) { ghStatus(ghErrFor(res.status), true); gh.token = ''; return; }
+      return res.json().then(function (user) {
+        gh.owner = user.login || '';
+        return ghApi('/user/repos?affiliation=owner,collaborator&per_page=100&sort=updated').then(function (res2) {
+          return res2.json().then(function (repos) {
+            if (!Array.isArray(repos)) repos = [];
+            ghFillRepoList(repos);
+            ghStatus('Connected as ' + (user.login || '') + '. Pick the repo that hosts this site.', false);
+            ghShowConnected(true);
+            ghPersist();
+            ghRefreshBranch();
+            elGhToken.value = '';
+          });
+        });
+      });
+    }).catch(function () { ghStatus('Could not reach GitHub. Check your connection.', true); });
+  });
+
+  elGhRepo.addEventListener('change', function () {
+    var parts = (elGhRepo.value || '').split('/');
+    gh.owner = parts[0] || '';
+    gh.repo = parts[1] || '';
+    ghPersist();
+    ghRefreshBranch();
+  });
+
+  btnDisconnect.addEventListener('click', function () {
+    try { localStorage.removeItem(GH_KEY); } catch (e) { }
+    gh = { token: '', owner: '', repo: '', branch: '' };
+    elGhToken.value = '';
+    ghShowConnected(false);
+    ghStatus('Disconnected.', false);
+  });
+
+  function b64encode(str) {
+    var bytes = new TextEncoder().encode(str);
+    var bin = '';
+    for (var i = 0; i < bytes.length; i += 0x8000) {
+      bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+    }
+    return btoa(bin);
+  }
+
+  function ghSaveOnce(sha) {
+    var msg = 'Update portfolio content (' + new Date().toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: 'numeric' }) + ')';
+    var body = { message: msg, content: b64encode(serialize()) };
+    if (sha) body.sha = sha;
+    if (gh.branch) body.branch = gh.branch;
+    return ghApi('/repos/' + gh.owner + '/' + gh.repo + '/contents/content.js', {
+      method: 'PUT',
+      body: JSON.stringify(body)
+    });
+  }
+
+  /* upload each picked image/video into images/ (or videos/) — the name must
+     match what the field holds */
+  function ghUploadImages() {
+    var paths = Object.keys(pickedFiles);
+    if (!paths.length) return Promise.resolve();
+    var chain = Promise.resolve();
+    var done = 0;
+    paths.forEach(function (key) {
+      var entry = pickedFiles[key];
+      if (!entry || !entry.file) return;
+      var f = entry.file;
+      var folder = entry.folder === 'videos' ? 'videos' : 'images';
+      var kind = folder === 'videos' ? 'video' : 'image';
+      chain = chain.then(function () {
+        return new Promise(function (resolve, reject) {
+          var reader = new FileReader();
+          reader.onload = function () {
+            var b64 = String(reader.result).replace(/^data:[^;]*;base64,/, '');
+            var path = folder + '/' + encodeURIComponent(f.name);
+            ghApi('/repos/' + gh.owner + '/' + gh.repo + '/contents/' + path)
+              .then(function (res) {
+                var sha = null;
+                if (res.ok) return res.json().then(function (d) { sha = d.sha; return sha; });
+                if (res.status === 404) return null;
+                return ghErrFrom(res).then(function (m) { throw new Error(m); });
+              })
+              .then(function (sha) {
+                var body = { message: 'Add ' + kind + ' ' + f.name, content: b64 };
+                if (sha) body.sha = sha;
+                if (gh.branch) body.branch = gh.branch;
+                return ghApi('/repos/' + gh.owner + '/' + gh.repo + '/contents/' + path, {
+                  method: 'PUT',
+                  body: JSON.stringify(body)
+                });
+              })
+              .then(function (res) {
+                if (!res.ok) return ghErrFrom(res).then(function (m) { throw new Error(m); });
+                done++;
+                ghStatus('Uploading files to GitHub... (' + done + '/' + paths.length + ')', false);
+                resolve();
+              })
+              .catch(reject);
+          };
+          reader.onerror = reject;
+          reader.readAsDataURL(f);
+        });
+      });
+    });
+    return chain.then(function () { pickedFiles = {}; });
+  }
+
+  /* after a save, poll GitHub Pages builds until the live site is rebuilt */
+  function ghPollLive(savedAt, tries) {
+    tries = tries || 0;
+    ghApi('/repos/' + gh.owner + '/' + gh.repo + '/pages/builds').then(function (res) {
+      if (res.status === 403 || res.status === 404) {
+        ghStatus('Saved to GitHub. The live site rebuilds in a minute or two.', false);
+        return;
+      }
+      return res.json().then(function (builds) {
+        var latest = Array.isArray(builds) && builds.length ? builds[0] : null;
+        var fresh = latest && (new Date(latest.created_at).getTime() >= new Date(savedAt).getTime() - 15000);
+        if (latest && fresh && latest.status === 'built') {
+          ghStatus('Saved + deployed \u2713 — the live site is showing the new content.', false);
+        } else if (latest && fresh && latest.status === 'errored') {
+          ghStatus('GitHub accepted the save but the Pages build failed. Check the repo\u2019s Pages tab.', true);
+        } else if (tries < 26) {
+          setTimeout(function () { ghPollLive(savedAt, tries + 1); }, 8000);
+        } else {
+          ghStatus('Saved to GitHub. Deployment is still building \u2014 it usually finishes within a minute or two.', false);
+        }
+      });
+    }).catch(function () {
+      ghStatus('Saved to GitHub. The live site rebuilds in a minute or two.', false);
+    });
+  }
+
+  /* push the admin editor itself alongside content.js, so the live site's
+     admin.html always matches the version you're using (no downloading) */
+  function ghSyncAdmin() {
+    return fetch('admin.html')
+      .then(function (r) { if (!r.ok) throw new Error('skip'); return r.text(); })
+      .then(function (src) {
+        var path = 'admin.html';
+        return ghApi('/repos/' + gh.owner + '/' + gh.repo + '/contents/' + path + ghRef())
+          .then(function (res) {
+            if (res.ok) return res.json().then(function (d) { return d.sha; });
+            if (res.status === 404) return null;
+            throw new Error('skip');
+          })
+          .then(function (sha) {
+            var body = { message: 'Update admin editor', content: b64encode(src) };
+            if (sha) body.sha = sha;
+            if (gh.branch) body.branch = gh.branch;
+            return ghApi('/repos/' + gh.owner + '/' + gh.repo + '/contents/' + path, {
+              method: 'PUT',
+              body: JSON.stringify(body)
+            });
+          });
+      })
+      .catch(function () { /* fetch or upload failed — non-fatal; content.js is the save that matters */ });
+  }
+
+  btnGithub.addEventListener('click', function () {
+    if (!gh.token || !gh.owner || !gh.repo) { ghStatus('Connect to GitHub first.', true); return; }
+    btnGithub.disabled = true;
+    ghStatus('Saving to GitHub...', false);
+    ghUploadImages()
+      .then(function () {
+        /* read the current sha on the serving branch — not the default branch,
+           or writes to a non-default Pages branch would always 409 */
+        return ghApi('/repos/' + gh.owner + '/' + gh.repo + '/contents/content.js' + ghRef());
+      })
+      .then(function (res) {
+        if (res.status === 404) return ghSaveOnce(null);
+        if (!res.ok) return ghErrFrom(res).then(function (m) { throw new Error(m); });
+        return res.json().then(function (data) { return ghSaveOnce(data.sha); });
+      })
+      .then(function (putRes) {
+        if (putRes.status === 409 || putRes.status === 422) {
+          /* the file changed on GitHub since we read it: refetch the sha on the
+             serving branch and retry once */
+          return ghApi('/repos/' + gh.owner + '/' + gh.repo + '/contents/content.js' + ghRef())
+            .then(function (res) { return res.json(); })
+            .then(function (data) { return ghSaveOnce(data.sha); });
+        }
+        return putRes;
+      })
+      .then(function (putRes) {
+        if (!putRes.ok) return ghErrFrom(putRes).then(function (m) { throw new Error(m); });
+        /* content saved — now push the admin editor too, then confirm the live build */
+        ghStatus('Saved. Syncing the admin editor to GitHub...', false);
+        return ghSyncAdmin().then(function () {
+          ghPollLive(new Date().toISOString(), 0);
+          btnGithub.disabled = false;
+        });
+      })
+      .catch(function (err) {
+        ghStatus(err.message || 'Save failed.', true);
+        btnGithub.disabled = false;
+      });
+  });
+
+  /* restore a saved connection on load */
+  if (gh.token && gh.owner && gh.repo) {
+    var opt = document.createElement('option');
+    opt.value = gh.owner + '/' + gh.repo;
+    opt.textContent = gh.owner + '/' + gh.repo;
+    elGhRepo.appendChild(opt);
+    ghShowConnected(true);
+    elGhBranch.textContent = 'Saves to the default branch (' + (gh.branch || 'main') + '), the same one your site is served from.';
+    elGhStatus.textContent = 'Connected as ' + gh.owner + '.';
+    elGhStatus.className = 'gh-status ok';
+  }
+
+  /* ---------------- go ---------------- */
+  renderAll();
+})();
+</script>
+
+</body>
+</html>

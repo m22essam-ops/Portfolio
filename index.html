@@ -6,291 +6,251 @@
 <title>Mohamed Essam — Copywriter</title>
 <meta name="description" content="Mohamed Essam, copywriter. Work that got produced, and work that got presented.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Architects+Daughter&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;1,9..144,400;1,9..144,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
 <nav id="siteNav">
   <div class="wrap">
-    <div class="logo">mohamed essam<em>.</em></div>
+    <div class="brand">
+      <a class="logo" href="index.html" aria-label="Mohamed Essam — home"></a>
+      <span class="tagline"></span>
+    </div>
     <div class="nav-links">
       <a href="index.html#work">WORK</a>
       <a href="about.html">ABOUT</a>
     </div>
-    <div class="badge"><span class="badge-dot"></span>AVAILABLE FOR WORK</div>
+    <div class="badge"><span class="badge-dot"></span><span class="badge-text"></span></div>
   </div>
 </nav>
 
 <header class="hero">
   <div class="wrap">
     <p class="hero-sentence" id="heroSentence"></p>
+    <p class="hero-loop"><button id="heroLoop" type="button" style="visibility:hidden">↺ back to the start</button></p>
+    <p class="hero-dateline" id="heroDateline"></p>
   </div>
 </header>
 
-<div class="feature-band" aria-hidden="true"></div>
-
-<div class="vignette" aria-hidden="true"></div>
-
 <section id="work">
-  <div class="curtain-texture" aria-hidden="true"></div>
   <div class="wrap">
-    <h2 class="reveal">A handpicked selection of my work</h2>
+    <h2 class="reveal" id="workHeading"></h2>
 
     <div class="work-toggle reveal" role="tablist">
-      <button class="work-toggle-btn active" data-panel="produced" role="tab" aria-selected="true" type="button">Presented and produced</button>
-      <button class="work-toggle-btn" data-panel="presented" role="tab" aria-selected="false" type="button">Just presented</button>
+      <button class="work-toggle-btn active" data-panel="produced" role="tab" aria-selected="true" type="button" id="tabProduced"></button>
+      <button class="work-toggle-btn" data-panel="presented" role="tab" aria-selected="false" type="button" id="tabPresented"></button>
     </div>
 
     <div class="work-panel active" id="panel-produced">
-      <div class="work-grid">
-        <a class="work-card reveal reveal-stagger" style="--d:0.02s" href="work/yango-wedding-rush.html">
-          <span class="work-index">01</span>
-          <img src="https://picsum.photos/seed/yango-wedding/1200/900" alt="Yango — The Wedding Rush">
-          <div class="work-card-body">
-            <div>
-              <span class="work-title">Yango — The Wedding Rush</span>
-              <span class="work-meta">Ride-hailing · 2025</span>
-            </div>
-            <span class="work-arrow">↗</span>
-          </div>
-        </a>
-        <a class="work-card reveal reveal-stagger" style="--d:0.08s" href="#">
-          <span class="work-index">02</span>
-          <img src="https://picsum.photos/seed/yango-ride/1200/900" alt="Yango — Unstoppable Rides">
-          <div class="work-card-body">
-            <div>
-              <span class="work-title">Yango — Unstoppable Rides</span>
-              <span class="work-meta">Ride-hailing · 2025</span>
-            </div>
-            <span class="work-arrow">↗</span>
-          </div>
-        </a>
-        <a class="work-card reveal reveal-stagger" style="--d:0.02s" href="#">
-          <span class="work-index">03</span>
-          <img src="https://picsum.photos/seed/dominos-colors/1200/900" alt="Domino's — The True Colors">
-          <div class="work-card-body">
-            <div>
-              <span class="work-title">Domino's — The True Colors</span>
-              <span class="work-meta">QSR · 2026</span>
-            </div>
-            <span class="work-arrow">↗</span>
-          </div>
-        </a>
-        <a class="work-card reveal reveal-stagger" style="--d:0.08s" href="#">
-          <span class="work-index">04</span>
-          <img src="https://picsum.photos/seed/pringles-cheese/1200/900" alt="Pringles Arabia — Cheesy Cheese">
-          <div class="work-card-body">
-            <div>
-              <span class="work-title">Pringles Arabia — Cheesy Cheese</span>
-              <span class="work-meta">Snacks · 2023</span>
-            </div>
-            <span class="work-arrow">↗</span>
-          </div>
-        </a>
-        <a class="work-card reveal reveal-stagger" style="--d:0.02s" href="#">
-          <span class="work-index">05</span>
-          <img src="https://picsum.photos/seed/nivea-sun/1200/900" alt="Nivea — I Might Never See the Sun Again">
-          <div class="work-card-body">
-            <div>
-              <span class="work-title">Nivea — I Might Never See the Sun Again</span>
-              <span class="work-meta">Beauty &amp; Care · 2026</span>
-            </div>
-            <span class="work-arrow">↗</span>
-          </div>
-        </a>
-        <a class="work-card reveal reveal-stagger" style="--d:0.08s" href="#">
-          <span class="work-index">06</span>
-          <img src="https://picsum.photos/seed/tuborg-party/1200/900" alt="Tuborg — The Pressure Party">
-          <div class="work-card-body">
-            <div>
-              <span class="work-title">Tuborg — The Pressure Party</span>
-              <span class="work-meta">Beverage · 2026</span>
-            </div>
-            <span class="work-arrow">↗</span>
-          </div>
-        </a>
-        <a class="work-card reveal reveal-stagger" style="--d:0.02s" href="#">
-          <span class="work-index">07</span>
-          <img src="https://picsum.photos/seed/afg-invest/1200/900" alt="AFG — 5-Star Investment">
-          <div class="work-card-body">
-            <div>
-              <span class="work-title">AFG — 5-Star Investment</span>
-              <span class="work-meta">Real estate · 2023</span>
-            </div>
-            <span class="work-arrow">↗</span>
-          </div>
-        </a>
-        <a class="work-card reveal reveal-stagger" style="--d:0.08s" href="#">
-          <span class="work-index">08</span>
-          <img src="https://picsum.photos/seed/rivan-tower/1200/900" alt="Rivan Tower — The Hotel Is Yours">
-          <div class="work-card-body">
-            <div>
-              <span class="work-title">Rivan Tower — The Hotel Is Yours</span>
-              <span class="work-meta">Real estate · 2023</span>
-            </div>
-            <span class="work-arrow">↗</span>
-          </div>
-        </a>
-      </div>
+      <div class="work-grid" id="grid-produced"></div>
     </div>
 
     <div class="work-panel" id="panel-presented">
-      <div class="work-grid">
-        <a class="work-card reveal reveal-stagger" style="--d:0.02s" href="#">
-          <span class="work-index">01</span>
-          <img src="https://picsum.photos/seed/haan-spain/1200/900" alt="Haan — Spanish Market Launch">
-          <div class="work-card-body">
-            <div>
-              <span class="work-title">Haan — Spanish Market Launch</span>
-              <span class="work-meta">Miami Ad School</span>
-            </div>
-            <span class="work-arrow">↗</span>
-          </div>
-        </a>
-        <a class="work-card reveal reveal-stagger" style="--d:0.08s" href="#">
-          <span class="work-index">02</span>
-          <img src="https://picsum.photos/seed/spec-project-02/1200/900" alt="Spec project">
-          <div class="work-card-body">
-            <div>
-              <span class="work-title">[Project name]</span>
-              <span class="work-meta">Miami Ad School</span>
-            </div>
-            <span class="work-arrow">↗</span>
-          </div>
-        </a>
-      </div>
+      <div class="work-grid" id="grid-presented"></div>
     </div>
   </div>
 </section>
 
 <footer>
   <div class="wrap">
-    <p class="footer-line">© 2026 · written by luck. Copywriters reserved, I know.</p>
+    <p class="footer-line"></p>
   </div>
-  <div class="mega-mark" aria-hidden="true">MOHAMED ESSAM<sup>®</sup></div>
+  <div class="mega-mark" aria-hidden="true"></div>
 </footer>
 
+<script src="content.js"></script>
+<script src="site.js"></script>
+<script src="auto-refresh.js"></script>
 <script>
 (function () {
-  /* ---------- hero: bio-sentence glitch mechanic ----------
-     3 versions. Clicking a highlighted keyword glitch-transitions to the
-     version that leads with that word. No auto-cycle, click only. */
-  const RAW_VERSIONS = [
-    {
-      lead: 'write',
-      html: 'I <button class="kw" data-lead="write" type="button">write</button>, I concept, I <button class="kw" data-lead="dream" type="button">dream</button>. The best lines come in dreams, the rest come with <button class="kw" data-lead="deadline" type="button">deadlines</button>, and I wake up new every day.'
-    },
-    {
-      lead: 'dream',
-      html: 'I <button class="kw" data-lead="dream" type="button">dream</button>, I concept, I <button class="kw" data-lead="write" type="button">write</button>. Some lines come with <button class="kw" data-lead="deadline" type="button">deadlines</button>, the best come in dreams, and I wake up new every day.'
-    },
-    {
-      lead: 'deadline',
-      html: 'Some lines come with <button class="kw" data-lead="deadline" type="button">deadlines</button>, the best come in dreams. I <button class="kw" data-lead="write" type="button">write</button>, I concept, I <button class="kw" data-lead="dream" type="button">dream</button>, and I wake up new every day.'
+  var C = window.SITE_CONTENT;
+
+  /* ---------- section heading and tab labels ---------- */
+  document.getElementById('workHeading').textContent = C.work.heading;
+  document.getElementById('tabProduced').textContent = C.work.producedLabel;
+  document.getElementById('tabPresented').textContent = C.work.presentedLabel;
+
+  /* ---------- hero: the word chain — one sentence at a time ----------
+     Each sentence ends with its clickable word — the LAST word, detected
+     automatically (trailing punctuation stripped). Clicking it glitches to
+     the next sentence, which begins with that same word. The last sentence
+     ends the chain: clicking its word ("work") scrolls to the work section.
+     The echoed opening word of each sentence (the previous one's click
+     word) is dimmed in italic. */
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  var sentences = (C.hero.sentences || []).filter(Boolean);
+  var heroSentence = document.getElementById('heroSentence');
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var currentIndex = 0;
+  var isTransitioning = false;
+  var GLITCH_CHARS = '!<>-_\\/[]{}=+*^?#$%&';
+
+  function lastWord(text) {
+    var t = String(text).trim().replace(/[.,!?;:…]+$/, '');
+    var m = t.match(/(\S+)$/);
+    return m ? m[1] : t;
+  }
+
+  function sentenceHtml(index) {
+    var text = sentences[index];
+    var kw = lastWord(text);
+    var kwAt = text.lastIndexOf(kw);
+    var head = text.slice(0, kwAt);
+    var tail = text.slice(kwAt + kw.length);
+    var open = '';
+    var body = head;
+    if (index > 0) {
+      var prev = lastWord(sentences[index - 1]);
+      var first = text.match(/^(\S+)/);
+      if (first && first[1].toLowerCase() === prev.toLowerCase()) {
+        open = '<span class="echo">' + esc(first[1]) + '</span>';
+        body = text.slice(first[1].length, kwAt);
+      }
     }
-  ];
-
-  const GLITCH_CHARS = '!<>-_\\/[]{}=+*^?#$%&';
-
-  const versions = RAW_VERSIONS.map(function (v) {
-    const tmp = document.createElement('div');
-    tmp.innerHTML = v.html;
-    return { lead: v.lead, html: v.html, text: tmp.textContent };
-  });
-
-  const heroSentence = document.getElementById('heroSentence');
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let currentIndex = 0;
-  let isTransitioning = false;
-
-  function renderStatic(index) {
-    heroSentence.innerHTML = versions[index].html;
+    return open + esc(body) + '<button class="kw" type="button">' + esc(kw) + '</button>' + esc(tail);
   }
 
   function scrambleTo(index) {
-    const target = versions[index];
+    var target = sentences[index];
     isTransitioning = true;
     heroSentence.classList.add('is-glitching');
 
-    const frameMs = 28;
-    const totalFrames = Math.round(600 / frameMs);
-    let frame = 0;
+    var frameMs = 40;
+    var totalFrames = Math.round(1000 / frameMs);
+    var frame = 0;
 
-    const timer = setInterval(function () {
+    var timer = setInterval(function () {
       frame++;
-      const revealCount = Math.floor((frame / totalFrames) * target.text.length);
-      let out = '';
-      for (let i = 0; i < target.text.length; i++) {
-        const ch = target.text[i];
-        out += (i < revealCount || ch === ' ')
-          ? ch
-          : GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)];
+      var revealCount = Math.floor((frame / totalFrames) * target.length);
+      var out = '';
+      for (var i = 0; i < target.length; i++) {
+        var ch = target[i];
+        out += (i < revealCount || ch === ' ') ? ch : GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)];
       }
       heroSentence.textContent = out;
 
       if (frame >= totalFrames) {
         clearInterval(timer);
-        heroSentence.innerHTML = target.html;
+        heroSentence.innerHTML = sentenceHtml(index);
         heroSentence.classList.remove('is-glitching');
         currentIndex = index;
         isTransitioning = false;
+        updateLoop();
       }
     }, frameMs);
   }
 
+  /* keep the layout rock-steady: reserve the height of the longest sentence
+     once, so a short sentence never lets the page below jump up */
+  if (sentences.length) {
+    var tallest = 0;
+    for (var si = 0; si < sentences.length; si++) {
+      heroSentence.innerHTML = sentenceHtml(si);
+      tallest = Math.max(tallest, heroSentence.offsetHeight);
+    }
+    heroSentence.style.minHeight = tallest + 'px';
+    heroSentence.innerHTML = sentenceHtml(0);
+  }
+  updateLoop();
+
   heroSentence.addEventListener('click', function (e) {
-    const btn = e.target.closest('.kw');
-    if (!btn || isTransitioning) return;
-    const targetIndex = versions.findIndex(function (v) { return v.lead === btn.dataset.lead; });
-    if (targetIndex === -1 || targetIndex === currentIndex) return;
+    var btn = e.target.closest('.kw');
+    if (!btn || isTransitioning || sentences.length < 2) return;
+    /* the last sentence ends the chain: its click word ("work") scrolls to
+       the work section instead of advancing */
+    if (currentIndex === sentences.length - 1) {
+      var workSection = document.getElementById('work');
+      if (workSection) workSection.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
+      return;
+    }
+    var next = currentIndex + 1;
     if (reduceMotion) {
-      currentIndex = targetIndex;
-      renderStatic(targetIndex);
+      currentIndex = next;
+      heroSentence.innerHTML = sentenceHtml(next);
+      updateLoop();
     } else {
-      scrambleTo(targetIndex);
+      scrambleTo(next);
     }
   });
 
-  renderStatic(0);
+  /* ↺ back to the start: the chain's loop. Visible once you've left the
+     first sentence; clicking it glitches back to sentence 1. */
+  var heroLoop = document.getElementById('heroLoop');
+  function updateLoop() {
+    /* the ↺ only appears once the chain is finished — on the last sentence */
+    if (heroLoop) heroLoop.style.visibility = (sentences.length > 1 && currentIndex === sentences.length - 1) ? 'visible' : 'hidden';
+  }
+  if (heroLoop) {
+    heroLoop.addEventListener('click', function () {
+      if (isTransitioning || currentIndex === 0) return;
+      if (reduceMotion) {
+        currentIndex = 0;
+        heroSentence.innerHTML = sentenceHtml(0);
+        updateLoop();
+      } else {
+        scrambleTo(0);
+      }
+    });
+  }
 
-  /* work toggle */
-  const toggleBtns = document.querySelectorAll('.work-toggle-btn');
-  const panels = {
+  /* ---------- dateline under the hero ---------- */
+  var home = C.home || {};
+  document.getElementById('heroDateline').textContent = home.dateline || '';
+
+  /* ---------- work cards ---------- */
+  function num(i) { return String(i + 1).padStart(2, '0'); }
+  function metaLine(p) { return [p.category, p.year].filter(Boolean).join(' · '); }
+
+  function cardHtml(p, i) {
+    var href = p.slug ? 'work.html?slug=' + encodeURIComponent(p.slug) : '#';
+    var img = p.image
+      ? '<img src="' + esc(window.imgSrc(p.image)) + '" alt="' + esc(p.alt || p.title) + '">'
+      : '';
+    var d = (i % 2 === 0) ? '0.02s' : '0.08s';
+    return '<a class="work-card reveal reveal-stagger" style="--d:' + d + '" href="' + href + '">' +
+      '<span class="work-index">' + num(i) + '</span>' +
+      img +
+      '<div class="work-card-body"><div>' +
+      '<span class="work-title">' + esc(p.title) + '</span>' +
+      '<span class="work-meta">' + esc(metaLine(p)) + '</span>' +
+      '</div><span class="work-arrow">↗</span></div></a>';
+  }
+
+  /* draft projects never show; the limits (work.producedLimit /
+     presentedLimit, editable in admin) cap how many cards render — 0 = all */
+  function shown(list, limit) {
+    var v = (list || []).filter(function (p) { return !p.draft; });
+    return (limit > 0) ? v.slice(0, limit) : v;
+  }
+  document.getElementById('grid-produced').innerHTML = shown(C.work.produced, C.work.producedLimit).map(cardHtml).join('');
+  document.getElementById('grid-presented').innerHTML = shown(C.work.presented, C.work.presentedLimit).map(cardHtml).join('');
+
+  /* ---------- work toggle ---------- */
+  var toggleBtns = document.querySelectorAll('.work-toggle-btn');
+  var panels = {
     produced: document.getElementById('panel-produced'),
     presented: document.getElementById('panel-presented')
   };
-  toggleBtns.forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      toggleBtns.forEach(function (b) { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
-      btn.classList.add('active');
-      btn.setAttribute('aria-selected', 'true');
-      Object.keys(panels).forEach(function (k) { panels[k].classList.remove('active'); });
-      panels[btn.dataset.panel].classList.add('active');
+  function activateTab(k) {
+    toggleBtns.forEach(function (b) {
+      var on = b.dataset.panel === k;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-selected', on ? 'true' : 'false');
     });
-  });
-
-  /* nav shrink on scroll */
-  const nav = document.getElementById('siteNav');
-  const onScroll = function () { nav.classList.toggle('is-scrolled', window.scrollY > 12); };
-  document.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
-
-  /* scroll reveal */
-  const revealEls = document.querySelectorAll('.reveal');
-  if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          io.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
-    revealEls.forEach(function (el) { io.observe(el); });
-  } else {
-    revealEls.forEach(function (el) { el.classList.add('is-visible'); });
+    Object.keys(panels).forEach(function (p) { panels[p].classList.toggle('active', p === k); });
   }
+  toggleBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () { activateTab(btn.dataset.panel); });
+  });
+  /* deep link: the PRESENTED/PRODUCED status on a project page opens the matching tab */
+  activateTab(new URLSearchParams(location.search).get('tab') === 'presented' ? 'presented' : 'produced');
+
+  /* cards were injected after site.js ran, so reveal them now */
+  window.observeReveals();
 })();
 </script>
 
