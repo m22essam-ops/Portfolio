@@ -525,12 +525,13 @@ window.SITE_CONTENT = {
   },
   about: {
     label: "02 — About",
-    heading: "A little about me.",
+    heading: "A little about my little me.",
     portrait: "about-photo.jpg",
     portraitAlt: "Mohamed Essam",
     paragraphs: [
-      "Four years writing for people who skip the ads, twelve years writing in my drafts, and a whole life having fun being serious about chasing whatever makes ordinary things look good. Award-losing, so far.",
-      "Designed in Egypt, put to work in the UAE, licensed in Madrid, which makes my buffet of ideas accidentally intercontinental."
+      "Four years writing for people who skip the ads, and a bunch of other years writing just because I like to. Add to that an entire life having fun being dead serious about making ordinary things look superficially good (my room included).",
+      "I am an award-losing copywriter so far. Designed in Egypt, put to work in the UAE, and licensed in Madrid, which makes my buffet of ideas accidentally intercontinental.",
+      "I only believe in two things. One, buttlines are just headlines done butt first. And two, he who was born in a city can't be named a farmer. I don't know; I really just needed a second thing."
     ],
     skills: [
       "Big idea development",
