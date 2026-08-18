@@ -24,9 +24,9 @@ window.SITE_CONTENT = {
     dateline: "Creative copywriter · Cairo → Dubai → Madrid → your city?"
   },
   work: {
-    heading: "A handpicked selection of my work that are ",
-    producedLabel: "Sold and produced",
-    presentedLabel: "waiting to be bought",
+    heading: "A handpicked selection.",
+    producedLabel: "Produced",
+    presentedLabel: "Work",
     producedLimit: 8,
     presentedLimit: 6,
     produced: [
@@ -307,23 +307,27 @@ window.SITE_CONTENT = {
           },
           {
             type: "image",
-            src: "Tuborg wall  mockup.png",
-            caption: ""
-          },
-          {
-            type: "image",
             src: "Tuborg Poster Mockup 44.jpg",
-            caption: ""
+            caption: "",
+            layout: "half"
           },
           {
             type: "image",
             src: "Tuborg poster on poster.jpg",
-            caption: ""
+            caption: "",
+            layout: "half"
+          },
+          {
+            type: "image",
+            src: "Tuborg wall  mockup.png",
+            caption: "",
+            layout: "half"
           },
           {
             type: "image",
             src: "tuborg tote.jpg",
-            caption: ""
+            caption: "",
+            layout: "half"
           }
         ],
         credits: [

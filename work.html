@@ -68,8 +68,8 @@
   var html = '';
   html += '<p class="project-meta">' + esc([proj.client, proj.category, proj.year].filter(Boolean).join(' · ')) +
     ' · <a class="status-link ' + (isProduced ? 'status-produced' : 'status-pitched') + '" href="index.html?tab=' +
-    (isProduced ? 'produced' : 'presented') + '#work" title="See all ' + (isProduced ? 'sold and produced' : 'waiting to be bought') + '">' +
-    (isProduced ? 'PRODUCED' : 'PRESENTED') + '</a></p>';
+    (isProduced ? 'produced' : 'presented') + '#work" title="See all ' +    (isProduced ? 'produced' : 'work') + '">' +
+    (isProduced ? 'PRODUCED' : 'WORK') + '</a></p>';
   html += '<h1 class="project-title">' + esc(proj.title) + '</h1>';
 
   if (proj.story && proj.story.length) {
@@ -144,10 +144,16 @@
       '</div></div>';
   }
 
-  var next = proj.next;
-  if (next && next.slug && next.title) {
-    html += '<a class="next-project" href="work.html?slug=' + encodeURIComponent(next.slug) + '">' +
-      '<span class="next-label">NEXT</span><span class="next-title">' + esc(next.title) + '</span>' +
+  /* next project: find the actual next project in the full list */
+  var allProjects = produced.concat(presented).filter(function (p) { return !p.draft; });
+  var currentIdx = -1;
+  for (var ni = 0; ni < allProjects.length; ni++) {
+    if (allProjects[ni].slug === proj.slug) { currentIdx = ni; break; }
+  }
+  var nextProj = (currentIdx >= 0 && currentIdx < allProjects.length - 1) ? allProjects[currentIdx + 1] : null;
+  if (nextProj) {
+    html += '<a class="next-project" href="work.html?slug=' + encodeURIComponent(nextProj.slug) + '">' +
+      '<span class="next-label">NEXT</span><span class="next-title">' + esc(nextProj.title) + '</span>' +
       '<span class="next-arrow">&rarr;</span></a>';
   } else {
     html += '<a class="next-project" href="index.html#work">' +

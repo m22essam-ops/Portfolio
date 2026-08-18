@@ -202,7 +202,6 @@
   document.getElementById('heroDateline').textContent = home.dateline || '';
 
   /* ---------- work cards ---------- */
-  function num(i) { return String(i + 1).padStart(2, '0'); }
   function metaLine(p) { return [p.category, p.year].filter(Boolean).join(' · '); }
 
   function cardHtml(p, i) {
@@ -212,7 +211,6 @@
       : '';
     var d = (i % 2 === 0) ? '0.02s' : '0.08s';
     return '<a class="work-card reveal reveal-stagger" style="--d:' + d + '" href="' + href + '">' +
-      '<span class="work-index">' + num(i) + '</span>' +
       img +
       '<div class="work-card-body"><div>' +
       '<span class="work-title">' + esc(p.title) + '</span>' +

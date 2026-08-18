@@ -116,12 +116,12 @@ a.logo:hover { color: var(--accent-bright); }
 @keyframes pulseDot { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
 
 /* ---------- HERO (bio-sentence + glitch click mechanic) ---------- */
-header.hero { padding: 84px 0 0; text-align: center; }
+header.hero { padding: 56px 0 0; text-align: center; }
 
 .hero-sentence {
   font-family: 'Fraunces', serif;
   font-weight: 400;
-  font-size: clamp(26px, 4.2vw, 42px);
+  font-size: clamp(18px, 2.8vw, 28px);
   line-height: 1.4;
   letter-spacing: -0.015em;
   max-width: 760px;
@@ -226,8 +226,8 @@ header.hero { padding: 84px 0 0; text-align: center; }
 .cta-action:hover { background: var(--accent); color: #171007; }
 
 /* ---------- SECTIONS ---------- */
-section { padding: 70px 0; text-align: center; position: relative; }
-section[id] { scroll-margin-top: 84px; }
+section { padding: 56px 0; text-align: center; position: relative; }
+section[id] { scroll-margin-top: 60px; }
 
 .section-label {
   display: block;
@@ -294,11 +294,8 @@ a.work-card {
   transition: transform 0.35s cubic-bezier(.22,1,.36,1);
 }
 a.work-card:hover { transform: translateY(-4px); }
-.work-index {
-  position: absolute; top: 14px; left: 14px; z-index: 3;
-  font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.05em;
-  color: var(--accent-bright); background: rgba(10,10,10,0.6); padding: 4px 9px; border-radius: 4px;
-}
+a.work-card:hover .work-title { color: var(--accent-bright); }
+
 .work-card img {
   width: 100%; aspect-ratio: 5/4; object-fit: cover; display: block;
   transition: transform 0.5s cubic-bezier(.22,1,.36,1);
@@ -317,9 +314,10 @@ a.work-card:hover .work-arrow { opacity: 1; transform: translate(0,0); }
 /* ---------- about ---------- */
 .about-grid { display: grid; grid-template-columns: auto 1fr; gap: 44px; align-items: start; text-align: left; max-width: 960px; margin: 0 auto; }
 /* the portrait is a square as big as the text beside it — JS sets the wrap's
-   width AND height to the text column's height. The square photo (1:1) then
-   fills it with zero crop. The hairline border matches the framing used on
-   every project image. */
+   width AND height to the text column's height, so the photo fills the whole
+   left area with no gap underneath. The square photo (1:1) then fills it
+   with zero crop. The hairline border matches the framing used on every
+   project image. */
 .about-portrait-wrap { width: 320px; height: 320px; }
 .about-portrait { width: 100%; height: 100%; object-fit: cover; display: block; border: 1px solid var(--line); background: var(--surface); }
 .about-text { font-size: 15.5px; color: var(--ink-soft); margin-bottom: 16px; }
@@ -390,7 +388,8 @@ a.work-card:hover .work-arrow { opacity: 1; transform: translate(0,0); }
   stroke-linejoin: round;
   transition: opacity 0.2s ease;
 }
-.contact-links a { opacity: 0.75; }
+.contact-links a { opacity: 0.85; }
+.contact-links a svg { width: 26px; height: 26px; }
 .contact-links a:hover { color: var(--accent-bright); opacity: 1; }
 .contact-links a.email { color: var(--accent-bright); opacity: 1; }
 .contact-links a.email:hover { color: var(--accent); }

@@ -101,14 +101,12 @@ Top to bottom:
    "AVAILABLE FOR WORK" + green pulsing dot right
 2. Hero: the word chain — six short sentences, click the last word to advance (above)
 3. Full-width horizontal band (divider / image strip)
-4. Section heading: "A handpicked selection of my work"
-   NOTE: owner's sketch spells it "handpiked". That is a typo, use "handpicked".
-5. **Two side-by-side columns**, not tabs:
-   - Left column: work **that got produced** (real, made, shipped)
-   - Right column: work **that got pitched** (spec / school / unsold)
-   Owner's sketch labels these "that produced" / "Just presented". Tighten the
-   wording but keep the distinction, it is the honest and interesting split.
-6. Project cards in each column, captioned "Client — Project title".
+4. Section heading: "A handpicked selection."
+5. **Two tab buttons** (pill toggle):
+   - "Produced" tab: work **that got produced** (real, made, shipped)
+   - "Work" tab: work **that got pitched** (spec / school / unsold)
+   Default tab is "Produced". Cards show no index numbers (removed).
+6. Project cards in each tab, captioned "Client — Project title".
    Counts are capped by `work.producedLimit` / `work.presentedLimit`
    (0 = show all), editable in admin. Projects with `draft: true` never
    render on the site (admin checkbox "Keep in drafts").
@@ -129,10 +127,12 @@ To add a project: duplicate the template, rename to a slug, fill it in.
 
 Template structure: back link → meta line (client · category · year · status)
 → title → 2-4 short paragraphs (situation, insight, idea, result) → media
-blocks → credits list → ONE "next project" link.
+blocks → credits list → ONE "next project" link. The next-project link
+auto-finds the next project in the combined list (produced + presented,
+excluding drafts); on the last project it shows "BACK TO All Work →".
 
 Status uses `.status-produced` (orange) or `.status-pitched` (teal) to match
-the column it came from.
+the tab it came from. Labels are "PRODUCED" / "WORK".
 
 Rules for project copy:
 - Real results only. If there is no number, write nothing. Never

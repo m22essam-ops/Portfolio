@@ -24,7 +24,7 @@
   </div>
 </nav>
 
-<section id="about" style="border-top: none; padding-top: 40px;">
+<section id="about" style="border-top: none; padding-top: 56px;">
   <div class="wrap">
     <span class="section-label reveal" id="aboutLabel"></span>
     <h2 class="reveal" id="aboutHeading"></h2>
@@ -138,16 +138,15 @@
   }
 
   /* the portrait is a square as big as the text beside it: its side is set
-     to the text column's height, so the two always balance. Two passes
-     converge (the first pass narrows the text column, which changes its
-     height), and it re-runs when fonts settle or the window resizes. */
+     to the text column's height, so the photo fills the whole left area
+     with no gap underneath. Two passes converge (the first pass narrows
+     the text column, which changes its height), and it re-runs when fonts
+     settle or the window resizes. */
   var pwrap = document.getElementById('aboutPortraitWrap');
   function sizePortrait() {
     if (!pwrap) return;
     if (window.matchMedia('(max-width: 700px)').matches) return; /* mobile: fixed square, centered by CSS */
-    /* the square mirrors the text height; 480 caps it so a very long bio
-       can't crush the text column into a sliver */
-    var side = Math.max(260, Math.min(480, Math.round(box.offsetHeight)));
+    var side = Math.max(260, Math.round(box.offsetHeight));
     pwrap.style.width = side + 'px';
     pwrap.style.height = side + 'px';
   }
