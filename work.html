@@ -68,8 +68,8 @@
   var html = '';
   html += '<p class="project-meta">' + esc([proj.client, proj.category, proj.year].filter(Boolean).join(' · ')) +
     ' · <a class="status-link ' + (isProduced ? 'status-produced' : 'status-pitched') + '" href="index.html?tab=' +
-    (isProduced ? 'produced' : 'presented') + '#work" title="See all ' +    (isProduced ? 'produced' : 'work') + '">' +
-    (isProduced ? 'PRODUCED' : 'WORK') + '</a></p>';
+    (isProduced ? 'produced' : 'presented') + '#work" title="See all ' +    (isProduced ? 'produced' : 'spec') + '">' +
+    (isProduced ? 'PRODUCED' : 'SPEC') + '</a></p>';
   html += '<h1 class="project-title">' + esc(proj.title) + '</h1>';
 
   if (proj.story && proj.story.length) {

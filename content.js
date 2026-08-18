@@ -24,9 +24,9 @@ window.SITE_CONTENT = {
     dateline: "Creative copywriter · Cairo → Dubai → Madrid → your city?"
   },
   work: {
-    heading: "A handpicked selection.",
+    heading: "A handpicked selection of my projects.",
     producedLabel: "Produced",
-    presentedLabel: "Work",
+    presentedLabel: "Spec",
     producedLimit: 8,
     presentedLimit: 6,
     produced: [
