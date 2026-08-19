@@ -62,65 +62,6 @@ window.SITE_CONTENT = {
     presentedLimit: 0,
     produced: [
       {
-        slug: "rivan-tower",
-        title: "The Hotel Is Yours",
-        client: "Rivan Tower",
-        category: "Film",
-        year: "2023",
-        image: "live/rivan-tower-cover.jpg",
-        alt: "Rivan Tower, The Hotel Is Yours",
-        sticker: "Sold out in a week",
-        tagline: "Own the room, do not rent it.",
-        story: [
-          "Rivan Tower wanted to change how Egyptians see hotels: own the room instead of renting it.",
-          "We cast Bayoumi Fouad and shot a comedy film in two days that treated hotel living as a permanent address rather than a holiday.",
-          "The entire tower sold out within a week."
-        ],
-        media: [
-          {
-            type: "video",
-            src: "https://www-ccv.adobe.io/v1/player/ccv/QP3a6A_8ZBQ/embed?bgcolor=%23191919&lazyLoading=true&api_key=BehancePro2View",
-            caption: ""
-          }
-        ],
-        credits: [
-          {
-            role: "Written and directed by",
-            name: "Mohammed Essam"
-          },
-          {
-            role: "Creative strategist",
-            name: "Aya El-Hadad"
-          },
-          {
-            role: "DOP",
-            name: "Haitham Nasser"
-          },
-          {
-            role: "Editor and colorist",
-            name: "Donia Sallam"
-          },
-          {
-            role: "Motion graphics",
-            name: "Ahmad Mokhtar, Omar Abdelmonem"
-          },
-          {
-            role: "Account director",
-            name: "Dina Abuel-Magd"
-          },
-          {
-            role: "Production",
-            name: "Mohamed Gharieb, Mahmoud Gharieb, Osama Nakeeb"
-          },
-          {
-            role: "Agency",
-            name: "Social Nuts"
-          }
-        ],
-        next: {},
-        "draft": false
-      },
-      {
         slug: "yango-unstoppable-rides",
         title: "Unstoppable Rides",
         client: "Yango",
@@ -253,6 +194,116 @@ window.SITE_CONTENT = {
           {
             role: "Account managers",
             name: "Mo Awkel, Marwa Elkhateeb"
+          }
+        ],
+        next: {},
+        "draft": false
+      },
+      {
+        slug: "rivan-tower",
+        title: "The Hotel Is Yours",
+        client: "Rivan Tower",
+        category: "Film",
+        year: "2023",
+        image: "live/rivan-tower-cover.jpg",
+        alt: "Rivan Tower, The Hotel Is Yours",
+        sticker: "Sold out in a week",
+        tagline: "Own the room, do not rent it.",
+        story: [
+          "Rivan Tower wanted to change how Egyptians see hotels: own the room instead of renting it.",
+          "We cast Bayoumi Fouad and shot a comedy film in two days that treated hotel living as a permanent address rather than a holiday.",
+          "The entire tower sold out within a week."
+        ],
+        media: [
+          {
+            type: "video",
+            src: "https://www-ccv.adobe.io/v1/player/ccv/QP3a6A_8ZBQ/embed?bgcolor=%23191919&lazyLoading=true&api_key=BehancePro2View",
+            caption: ""
+          }
+        ],
+        credits: [
+          {
+            role: "Written and directed by",
+            name: "Mohammed Essam"
+          },
+          {
+            role: "Creative strategist",
+            name: "Aya El-Hadad"
+          },
+          {
+            role: "DOP",
+            name: "Haitham Nasser"
+          },
+          {
+            role: "Editor and colorist",
+            name: "Donia Sallam"
+          },
+          {
+            role: "Motion graphics",
+            name: "Ahmad Mokhtar, Omar Abdelmonem"
+          },
+          {
+            role: "Account director",
+            name: "Dina Abuel-Magd"
+          },
+          {
+            role: "Production",
+            name: "Mohamed Gharieb, Mahmoud Gharieb, Osama Nakeeb"
+          },
+          {
+            role: "Agency",
+            name: "Social Nuts"
+          }
+        ],
+        next: {},
+        "draft": false
+      },
+      {
+        slug: "pringles-cheesy-cheese",
+        title: "Cheesy Cheese",
+        client: "Pringles Arabia",
+        category: "Film",
+        year: "2023",
+        image: "live/pringles-arabia-cheesy-cheese-cover.jpg",
+        alt: "Pringles Arabia, Cheesy Cheese",
+        sticker: "Cheese ad, no cheese",
+        tagline: "A cheese pun with the cheese legally removed.",
+        story: [
+          "Pringles launched its Deli range in a region that loves bold flavour, but faced a legal restriction: no saying cheese in Arabic.",
+          "So we built the whole commercial on a couple so taken with the flavour that they start hallucinating, and let the laughs and the nonsense carry the taste instead of the word."
+        ],
+        media: [
+          {
+            type: "video",
+            src: "https://www-ccv.adobe.io/v1/player/ccv/Fqoa4rIC3su/embed?bgcolor=%23191919&lazyLoading=true&api_key=BehancePro2View",
+            caption: ""
+          },
+          {
+            type: "video",
+            src: "https://www-ccv.adobe.io/v1/player/ccv/I2Dv8Adn5NA/embed?bgcolor=%23191919&lazyLoading=true&api_key=BehancePro2View",
+            caption: ""
+          }
+        ],
+        credits: [
+          {
+            role: "Copywriters",
+            name: "Jack Rogers, Mohammed Essam"
+          },
+          {
+            role: "Creative director",
+            name: "Jason Velasquez Burayag"
+          },
+          {
+            role: "Account manager",
+            name: "Mohamed Awkal"
+          },
+          {
+            role: "Account executive",
+            name: "Rahim"
+          },
+          {
+            role: "Agency",
+            name: "Socialize, We Are Social"
           }
         ],
         next: {},
@@ -640,57 +691,6 @@ window.SITE_CONTENT = {
           {
             role: "Agency",
             name: "Social Nuts"
-          }
-        ],
-        next: {},
-        "draft": false
-      },
-      {
-        slug: "pringles-cheesy-cheese",
-        title: "Cheesy Cheese",
-        client: "Pringles Arabia",
-        category: "Film",
-        year: "2023",
-        image: "live/pringles-arabia-cheesy-cheese-cover.jpg",
-        alt: "Pringles Arabia, Cheesy Cheese",
-        sticker: "Cheese ad, no cheese",
-        tagline: "A cheese pun with the cheese legally removed.",
-        story: [
-          "Pringles launched its Deli range in a region that loves bold flavour, but faced a legal restriction: no saying cheese in Arabic.",
-          "So we built the whole commercial on a couple so taken with the flavour that they start hallucinating, and let the laughs and the nonsense carry the taste instead of the word."
-        ],
-        media: [
-          {
-            type: "video",
-            src: "https://www-ccv.adobe.io/v1/player/ccv/Fqoa4rIC3su/embed?bgcolor=%23191919&lazyLoading=true&api_key=BehancePro2View",
-            caption: ""
-          },
-          {
-            type: "video",
-            src: "https://www-ccv.adobe.io/v1/player/ccv/I2Dv8Adn5NA/embed?bgcolor=%23191919&lazyLoading=true&api_key=BehancePro2View",
-            caption: ""
-          }
-        ],
-        credits: [
-          {
-            role: "Copywriters",
-            name: "Jack Rogers, Mohammed Essam"
-          },
-          {
-            role: "Creative director",
-            name: "Jason Velasquez Burayag"
-          },
-          {
-            role: "Account manager",
-            name: "Mohamed Awkal"
-          },
-          {
-            role: "Account executive",
-            name: "Rahim"
-          },
-          {
-            role: "Agency",
-            name: "Socialize, We Are Social"
           }
         ],
         next: {},
@@ -1134,7 +1134,7 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        "draft": false
+        "draft": true
       },
       {
         slug: "murder-your-thirst",
@@ -1150,7 +1150,7 @@ window.SITE_CONTENT = {
         media: [],
         credits: [],
         next: {},
-        "draft": false
+        "draft": true
       }
     ]
   },
