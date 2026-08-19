@@ -11,7 +11,7 @@ window.SITE_CONTENT = {
     badge: "available for work"
   },
   ticket: {
-    band: "The National Award Lottery",
+    band: "Luck is not as random as you think.",
     game: "Instant win · Game no. 13 · Price: free",
     serial: "No. 0000000 · Exp. never",
     titleTop: "Award-losing",
