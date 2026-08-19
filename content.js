@@ -55,7 +55,7 @@ window.SITE_CONTENT = {
   },
   work: {
     heading: "The work.",
-    note: "Eighteen projects. The sticker on each one tells you what actually happened to it.",
+    note: "Some are real. Some are spec. None of them are in Japanese.",
     producedLabel: "Produced",
     presentedLabel: "Spec",
     producedLimit: 0,
