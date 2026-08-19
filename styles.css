@@ -3,9 +3,31 @@
    Red, flat, loud. No halftone, no sunburst, no gold, no drop
    shadows: those read as 1970s pastiche, which reads as old.
    Two registers only:
-     home  = flat red field, white ticket, black type
-     rest  = near-black gallery so the work carries the colour
+     home  = flat red field, off-white ticket, black type
+     rest  = off-white gallery
    ============================================================ */
+
+/* ---- MONIQA -------------------------------------------------
+   Free typeface by Rajesh Rajput, SIL Open Font License 1.1.
+   The files are NOT in this repo: get them from the designer's
+   own page (behance.net/gallery/114431757) and drop whatever you
+   download into a "fonts" folder next to this file. Any ONE of the
+   names below is enough, the rest are ignored.
+   Until then the page falls back to Bodoni Moda, which is the
+   closest free stand-in, so nothing looks broken while you wait.
+   -------------------------------------------------------------- */
+@font-face{
+  font-family:"Moniqa";
+  src:url("fonts/Moniqa.woff2") format("woff2-variations"),
+      url("fonts/Moniqa-Variable.woff2") format("woff2-variations"),
+      url("fonts/Moniqa.woff2") format("woff2"),
+      url("fonts/Moniqa-Regular.woff2") format("woff2"),
+      url("fonts/Moniqa-Regular.otf") format("opentype"),
+      url("fonts/Moniqa-Regular.ttf") format("truetype");
+  font-weight:100 900;
+  font-style:normal;
+  font-display:swap;
+}
 
 :root{
   --red:#E3261A;
@@ -13,11 +35,23 @@
   --red-hot:#FF3B2B;
   --ink:#0B0A09;
   --paper:#F6F3EE;
-  --paper-dim:#F6F3EEa6;
-  --paper-faint:#F6F3EE40;
   --ink-60:#0B0A0999;
   --ink-30:#0B0A094d;
   --ink-12:#0B0A091f;
+
+  /* page (non-home) palette — off-white gallery */
+  --bg:#F2EEE5;
+  --fg:#0B0A09;
+  --fg-dim:#0B0A09a8;
+  --fg-faint:#0B0A0961;
+  --line:#0B0A091f;
+  --well:#E4DFD2;
+
+  /* the home headline. Moniqa first, Bodoni Moda while it is missing. */
+  --display-home:"Moniqa","Bodoni Moda","Bricolage Grotesque",Georgia,serif;
+  --display:"Bricolage Grotesque","Hanken Grotesk",sans-serif;
+  --mono:"Barlow Condensed","Hanken Grotesk",sans-serif;
+
   --ease:cubic-bezier(.2,.8,.2,1);
   --wrap:1240px;
 }
@@ -26,8 +60,8 @@
 html{-webkit-text-size-adjust:100%}
 body{
   margin:0;
-  background:var(--ink);
-  color:var(--paper);
+  background:var(--bg);
+  color:var(--fg);
   font-family:"Hanken Grotesk",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   font-size:17px;
   line-height:1.6;
@@ -40,16 +74,15 @@ a{color:inherit}
 
 /* mono voice: labels, serials, small print */
 .mono,.serial,.tk-top,.tk-terms,.page-nav,.sticker,.project-meta,
-.next-label,.exp-time,.skill-tag,.terms,.note,.tk-band,.tk-badge{
-  font-family:"Barlow Condensed","Hanken Grotesk",sans-serif;
+.next-label,.exp-time,.skill-tag,.terms,.note,.tk-band,.tk-badge,.joke{
+  font-family:var(--mono);
   text-transform:uppercase;
   letter-spacing:.14em;
   font-weight:600;
 }
 
-/* display voice */
-h1,h2,h3,.tk-title,.big{
-  font-family:"Bricolage Grotesque","Hanken Grotesk",sans-serif;
+h1,h2,h3,.big{
+  font-family:var(--display);
   font-weight:800;
   letter-spacing:-.03em;
   line-height:.95;
@@ -71,9 +104,10 @@ body.is-home{
   color:var(--ink);
   position:relative;
   border-radius:4px;
+  display:flex;flex-direction:column;
 }
 /* perforated edges, drawn as plain dots. no texture, no shadow. */
-.perf{height:14px;position:relative;background:var(--paper);border-radius:4px 4px 0 0}
+.perf{height:14px;position:relative;background:var(--paper);border-radius:4px 4px 0 0;flex:none}
 .perf.bot{border-radius:0 0 4px 4px}
 .perf::before{
   content:"";position:absolute;left:0;right:0;height:14px;
@@ -85,12 +119,12 @@ body.is-home{
 
 .tk-band{
   background:var(--ink);color:var(--paper);
-  padding:11px 30px;font-size:12px;
+  padding:11px 30px;font-size:12px;flex:none;
   display:flex;justify-content:space-between;align-items:center;gap:16px;
 }
 .tk-band .stars{letter-spacing:.3em;opacity:.5}
 
-.tk-body{padding:44px 46px 34px}
+.tk-body{padding:44px 46px 34px;flex:1;display:flex;flex-direction:column}
 
 .tk-top{
   display:flex;justify-content:space-between;gap:16px;
@@ -98,36 +132,35 @@ body.is-home{
 }
 
 .tk-badge{
-  display:inline-block;
+  align-self:flex-start;
   background:var(--red);color:var(--paper);
   font-size:11.5px;padding:6px 13px;border-radius:100px;
   margin-bottom:20px;
 }
 
+/* the headline. Moniqa when present, Bodoni Moda until then. */
 .tk-title{
+  font-family:var(--display-home);
+  font-weight:700;
+  letter-spacing:-.02em;
+  line-height:.92;
+  margin:0 0 18px;
   font-size:clamp(52px,10.5vw,124px);
   color:var(--ink);
-  margin-bottom:18px;
 }
 .tk-title span{display:block}
 .tk-title span:last-child{color:var(--red)}
 
-.tk-sub{
-  font-size:16px;color:var(--ink-60);
-  margin:0 0 30px;max-width:52ch;
-}
+.tk-sub{font-size:16px;color:var(--ink-60);margin:0 0 30px;max-width:52ch}
 
-.tear{
-  border:0;border-top:2px dashed var(--ink-12);
-  margin:0 0 28px;
-}
+.tear{border:0;border-top:2px dashed var(--ink-12);margin:0 0 28px}
 
 /* the proof, printed in the open. it used to be hidden under a
    scratch panel, which is a strange place to keep your best fact. */
 .proof{margin-bottom:34px}
 .proof .win-line{
-  font-family:"Bricolage Grotesque",sans-serif;
-  font-weight:800;letter-spacing:-.025em;line-height:1.05;
+  font-family:var(--display-home);
+  font-weight:700;letter-spacing:-.015em;line-height:1.05;
   font-size:clamp(23px,3.4vw,34px);
   margin:0 0 8px;color:var(--ink);
 }
@@ -139,18 +172,15 @@ body.is-home{
   border:2px solid var(--ink);border-radius:3px;
   padding:17px 16px;text-decoration:none;color:var(--ink);
   display:flex;justify-content:space-between;align-items:baseline;gap:10px;
-  font-family:"Bricolage Grotesque",sans-serif;font-weight:800;
+  font-family:var(--display);font-weight:800;
   letter-spacing:-.02em;font-size:19px;
   transition:background .16s var(--ease),color .16s var(--ease);
 }
-.tk-nav a i{
-  font-style:normal;font-family:"Barlow Condensed",sans-serif;
-  font-size:12px;letter-spacing:.14em;opacity:.45;
-}
+.tk-nav a i{font-style:normal;font-family:var(--mono);font-size:12px;letter-spacing:.14em;opacity:.45}
 .tk-nav a:hover{background:var(--red);border-color:var(--red);color:var(--paper)}
 .tk-nav a:hover i{opacity:.8}
 
-.tk-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:26px}
+.tk-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:26px;margin-top:auto}
 /* explicit box: in the stacked layout the flex axis turns vertical,
    so a flex-basis here would size the height and collapse the width */
 .barcode{
@@ -163,68 +193,78 @@ body.is-home{
 
 /* the awards switch: when he finally wins something */
 body.has-won .tk-badge{background:var(--ink)}
-body.has-won .tk-title span:last-child{color:var(--red)}
 .won-list{margin:0 0 30px;padding:0;list-style:none}
 .won-list li{
-  font-family:"Barlow Condensed",sans-serif;text-transform:uppercase;
+  font-family:var(--mono);text-transform:uppercase;
   letter-spacing:.14em;font-size:13px;font-weight:600;
   padding:9px 0;border-bottom:1px solid var(--ink-12);
+}
+
+/* ---- fill the screen on a landscape display ----
+   The ticket takes 95% of the viewport both ways and the body
+   spreads its blocks down the height, so it reads as one printed
+   object filling the screen instead of a card floating in red. */
+@media (orientation:landscape) and (min-width:900px){
+  body.is-home{padding:2.5vh 2.5vw}
+  .ticket{width:95vw;max-width:none;min-height:95vh}
+  .tk-body{
+    padding:clamp(30px,3.4vh,58px) clamp(34px,3.6vw,72px) clamp(24px,2.6vh,40px);
+    justify-content:space-between;
+  }
+  .tk-title{font-size:clamp(64px,8.6vw,190px)}
+  .proof .win-line{font-size:clamp(26px,2.7vw,46px)}
+  .tk-nav{max-width:min(100%,1100px)}
+  .tk-nav a{font-size:clamp(19px,1.5vw,26px);padding:clamp(16px,2vh,26px) 20px}
+  .tk-top,.tk-sub,.tear,.tk-badge,.proof,.tk-nav{margin-bottom:0}
 }
 
 /* ============================ SHARED PAGE CHROME ============================ */
 
 .page-nav{
   position:sticky;top:0;z-index:50;
-  background:#0B0A09f2;backdrop-filter:blur(9px);
-  border-bottom:1px solid #F6F3EE1f;
+  background:#F2EEE5f2;backdrop-filter:blur(9px);
+  border-bottom:1px solid var(--line);
   font-size:12px;
 }
 .page-nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;height:62px}
 .page-nav .logo{
-  text-decoration:none;font-family:"Bricolage Grotesque",sans-serif;
+  text-decoration:none;font-family:var(--display);
   font-weight:800;letter-spacing:-.03em;text-transform:none;font-size:19px;
 }
 .page-nav .logo em{color:var(--red);font-style:normal}
 .page-nav .links{display:flex;gap:24px}
-.page-nav .links a{text-decoration:none;opacity:.6;transition:opacity .16s}
-.page-nav .links a:hover,.page-nav .links a.on{opacity:1;color:var(--red-hot)}
+.page-nav .links a{text-decoration:none;opacity:.55;transition:opacity .16s}
+.page-nav .links a:hover,.page-nav .links a.on{opacity:1;color:var(--red)}
 
 .page-head{padding:88px 0 44px}
 .page-head h1{font-size:clamp(52px,11vw,138px)}
-.page-head .note{
-  margin:22px 0 0;font-size:12px;color:var(--paper-dim);
-  max-width:60ch;letter-spacing:.12em;
-}
+.page-head .note{margin:22px 0 0;font-size:12px;color:var(--fg-dim);max-width:60ch;letter-spacing:.12em}
 
-.page-foot{margin-top:120px;border-top:1px solid #F6F3EE1f;padding:64px 0 54px}
+.page-foot{margin-top:120px;border-top:1px solid var(--line);padding:64px 0 54px}
 .page-foot .big{font-size:clamp(30px,5.4vw,60px);margin-bottom:26px}
-.page-foot .big a{color:var(--red-hot);text-decoration:none;border-bottom:3px solid currentColor}
-.page-foot .terms{font-size:10.5px;color:var(--paper-faint);letter-spacing:.09em;max-width:70ch;margin:0}
-.page-foot .joke{font-size:11px;color:var(--paper-faint);letter-spacing:.1em;margin:16px 0 0}
+.page-foot .big a{color:var(--red);text-decoration:none;border-bottom:3px solid currentColor}
+.page-foot .terms{font-size:10.5px;color:var(--fg-faint);letter-spacing:.09em;max-width:70ch;margin:0}
+.page-foot .joke{font-size:11px;color:var(--fg-faint);letter-spacing:.1em;margin:16px 0 0}
 
 /* ============================ WORK GRID ============================ */
 /* one uniform grid. no alternating sizes, no two lists, no tabs.
    the sticker carries the status instead. */
 
-.work-list{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:56px 40px;
-}
+.work-list{display:grid;grid-template-columns:repeat(2,1fr);gap:56px 40px}
 .piece{text-decoration:none;display:block;color:inherit}
 
 .frame{
   position:relative;overflow:hidden;border-radius:3px;
-  aspect-ratio:4/3;background:#17150F;
-  border:1px solid #F6F3EE14;
+  aspect-ratio:4/3;background:var(--well);
+  border:1px solid var(--line);
 }
 .frame img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
 .piece:hover .frame img{transform:scale(1.035)}
 .frame.empty::after{
   content:"NO IMAGE YET";position:absolute;inset:0;
   display:flex;align-items:center;justify-content:center;
-  font-family:"Barlow Condensed",sans-serif;letter-spacing:.2em;
-  font-size:12px;color:var(--paper-faint);
+  font-family:var(--mono);letter-spacing:.2em;
+  font-size:12px;color:var(--fg-faint);
 }
 
 /* THE STICKER — what actually happened to this piece */
@@ -236,15 +276,13 @@ body.has-won .tk-title span:last-child{color:var(--red)}
   max-width:calc(100% - 28px);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
-.sticker.spec{background:var(--paper);color:var(--ink);transform:rotate(2.5deg)}
+/* spec work: ink on paper, so it reads as a different kind of label */
+.sticker.spec{background:var(--ink);color:var(--paper);transform:rotate(2.5deg)}
 
-.piece .serial{
-  display:block;margin:16px 0 7px;
-  font-size:11px;color:var(--paper-faint);
-}
+.piece .serial{display:block;margin:16px 0 7px;font-size:11px;color:var(--fg-faint)}
 .piece h2{font-size:clamp(21px,2.3vw,29px);margin-bottom:6px}
-.piece:hover h2{color:var(--red-hot)}
-.piece p{margin:0;font-size:15px;color:var(--paper-dim);max-width:44ch}
+.piece:hover h2{color:var(--red)}
+.piece p{margin:0;font-size:15px;color:var(--fg-dim);max-width:44ch}
 
 .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
 .reveal.is-visible{opacity:1;transform:none}
@@ -254,79 +292,64 @@ body.has-won .tk-title span:last-child{color:var(--red)}
 .project{padding:56px 0 0}
 .back-link{
   display:inline-block;text-decoration:none;margin-bottom:44px;
-  font-family:"Barlow Condensed",sans-serif;text-transform:uppercase;
-  letter-spacing:.16em;font-size:12px;font-weight:600;color:var(--paper-dim);
+  font-family:var(--mono);text-transform:uppercase;
+  letter-spacing:.16em;font-size:12px;font-weight:600;color:var(--fg-dim);
 }
-.back-link:hover{color:var(--red-hot)}
+.back-link:hover{color:var(--red)}
 
-.project-meta{font-size:11.5px;color:var(--paper-faint);margin:0 0 16px}
-.status-produced{color:var(--red-hot)}
-.status-pitched{color:var(--paper-dim)}
+.project-meta{font-size:11.5px;color:var(--fg-faint);margin:0 0 16px}
+.status-produced{color:var(--red)}
+.status-pitched{color:var(--fg-dim)}
 .project-title{font-size:clamp(42px,8vw,104px);margin-bottom:40px}
 
 .project-body{max-width:62ch;margin-bottom:60px}
-.project-body p{font-size:19px;line-height:1.62;margin:0 0 22px;color:#F6F3EEd9}
+.project-body p{font-size:19px;line-height:1.62;margin:0 0 22px;color:var(--fg-dim)}
 
 .media-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:28px;margin-bottom:70px}
 .project-media{margin:0;grid-column:1/-1}
 .project-media[data-layout="half"]{grid-column:auto}
-.project-media img{width:100%;border-radius:3px}
+.project-media img{width:100%;border-radius:3px;border:1px solid var(--line)}
 .project-media figcaption{
-  margin-top:11px;font-size:12px;color:var(--paper-faint);
-  font-family:"Barlow Condensed",sans-serif;letter-spacing:.1em;text-transform:uppercase;
+  margin-top:11px;font-size:12px;color:var(--fg-faint);
+  font-family:var(--mono);letter-spacing:.1em;text-transform:uppercase;
 }
 .video-wrap{position:relative;padding-top:56.25%;border-radius:3px;overflow:hidden;background:#000}
 .video-wrap iframe,.video-wrap video{position:absolute;inset:0;width:100%;height:100%;border:0}
 
 .credits{margin-bottom:70px}
 .credits-head{
-  font-family:"Barlow Condensed",sans-serif;text-transform:uppercase;
+  font-family:var(--mono);text-transform:uppercase;
   letter-spacing:.18em;font-size:12px;font-weight:600;
-  color:var(--paper-faint);margin-bottom:18px;
+  color:var(--fg-faint);margin-bottom:18px;
 }
 .credits-list{list-style:none;padding:0;margin:0;max-width:640px}
-.credits-list li{
-  display:flex;gap:20px;padding:11px 0;border-top:1px solid #F6F3EE14;
-  font-size:15px;
-}
+.credits-list li{display:flex;gap:20px;padding:11px 0;border-top:1px solid var(--line);font-size:15px}
 .credits-list li span{
-  flex:0 0 40%;color:var(--paper-faint);
-  font-family:"Barlow Condensed",sans-serif;text-transform:uppercase;letter-spacing:.1em;
+  flex:0 0 40%;color:var(--fg-faint);
+  font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;
 }
 
 .next-project{
   display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;
   text-decoration:none;border-top:2px solid var(--red);padding:34px 0 0;
 }
-.next-label{font-size:11.5px;color:var(--paper-faint)}
-.next-title{
-  font-family:"Bricolage Grotesque",sans-serif;font-weight:800;
-  letter-spacing:-.03em;font-size:clamp(28px,5vw,58px);
-}
-.next-project:hover .next-title{color:var(--red-hot)}
+.next-label{font-size:11.5px;color:var(--fg-faint)}
+.next-title{font-family:var(--display);font-weight:800;letter-spacing:-.03em;font-size:clamp(28px,5vw,58px)}
+.next-project:hover .next-title{color:var(--red)}
 .next-arrow{margin-left:auto;font-size:30px;color:var(--red)}
 
 /* ============================ ABOUT ============================ */
 
 .about-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:56px;align-items:start;margin-bottom:96px}
-.about-portrait{
-  width:100%;border-radius:3px;
-  border:9px solid var(--paper);transform:rotate(-1.6deg);
-}
-.about-text{font-size:19px;line-height:1.62;margin:0 0 22px;color:#F6F3EEd9}
+.about-portrait{width:100%;border-radius:2px;border:10px solid var(--ink);transform:rotate(-1.6deg)}
+.about-text{font-size:19px;line-height:1.62;margin:0 0 22px;color:var(--fg-dim)}
 .skills-list{display:flex;flex-wrap:wrap;gap:9px;margin-top:32px}
-.skill-tag{
-  border:1px solid #F6F3EE38;border-radius:100px;
-  padding:6px 13px;font-size:11px;color:var(--paper-dim);
-}
+.skill-tag{border:1px solid var(--line);border-radius:100px;padding:6px 13px;font-size:11px;color:var(--fg-dim)}
 .exp-list{margin-bottom:40px}
-.exp-row{
-  display:flex;justify-content:space-between;align-items:baseline;gap:20px;
-  padding:19px 0;border-top:1px solid #F6F3EE14;
-}
-.exp-role{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;letter-spacing:-.02em;font-size:21px;display:block}
-.exp-org{font-size:15px;color:var(--paper-dim)}
-.exp-time{font-size:11.5px;color:var(--paper-faint);white-space:nowrap}
+.exp-row{display:flex;justify-content:space-between;align-items:baseline;gap:20px;padding:19px 0;border-top:1px solid var(--line)}
+.exp-role{font-family:var(--display);font-weight:800;letter-spacing:-.02em;font-size:21px;display:block}
+.exp-org{font-size:15px;color:var(--fg-dim)}
+.exp-time{font-size:11.5px;color:var(--fg-faint);white-space:nowrap}
 
 /* ============================ RESPONSIVE ============================ */
 
