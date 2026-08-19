@@ -3,253 +3,198 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mohamed Essam — Copywriter</title>
-<meta name="description" content="Mohamed Essam, copywriter. Work that got produced, and work that got presented.">
+<title>Mohamed Essam — Award-losing copywriter</title>
+<meta name="description" content="Mohamed Essam, copywriter. Cairo, Dubai, Madrid. Work that ran, and work that didn't.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;1,9..144,400;1,9..144,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="is-home">
 
-<nav id="siteNav">
-  <div class="wrap">
-    <div class="brand">
-      <a class="logo" href="index.html" aria-label="Mohamed Essam — home"></a>
-      <span class="tagline"></span>
-    </div>
-    <div class="nav-links">
-      <a href="index.html#work">WORK</a>
-      <a href="about.html">ABOUT</a>
-      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light mode" title="Toggle theme">☀️</button>
-    </div>
-    <div class="badge"><span class="badge-dot"></span><span class="badge-text"></span></div>
+<main class="ticket" id="ticket">
+  <div class="perf top" aria-hidden="true"></div>
+
+  <div class="tk-band">
+    <span id="tkBand"></span>
+    <span class="stars" aria-hidden="true">★★★★★</span>
   </div>
-</nav>
 
-<header class="hero">
-  <div class="wrap">
-    <p class="hero-sentence" id="heroSentence"></p>
-    <p class="hero-loop"><button id="heroLoop" type="button" style="visibility:hidden">↺ back to the start</button></p>
-    <p class="hero-dateline" id="heroDateline"></p>
-  </div>
-</header>
+  <div class="tk-body">
+    <div class="burst" aria-hidden="true"></div>
 
-<section id="work">
-  <div class="wrap">
-    <h2 class="reveal" id="workHeading"></h2>
-
-    <div class="work-toggle reveal" role="tablist">
-      <button class="work-toggle-btn active" data-panel="produced" role="tab" aria-selected="true" type="button" id="tabProduced"></button>
-      <button class="work-toggle-btn" data-panel="presented" role="tab" aria-selected="false" type="button" id="tabPresented"></button>
+    <div class="tk-top">
+      <span id="tkGame"></span>
+      <span id="tkSerial"></span>
     </div>
 
-    <div class="work-panel active" id="panel-produced">
-      <div class="work-grid" id="grid-produced"></div>
+    <div class="tk-badge" id="tkBadge"></div>
+
+    <h1 class="tk-title"><span id="tkTitleTop"></span><span id="tkTitleBottom"></span></h1>
+    <p class="tk-sub" id="tkSub"></p>
+
+    <hr class="tear">
+
+    <div class="panels">
+      <div class="panel" id="panelWin">
+        <div class="beneath">
+          <p class="win-line" id="winLine"></p>
+          <p class="win-sub" id="winSub"></p>
+        </div>
+        <canvas></canvas>
+      </div>
+      <div class="panel" id="panelJoke">
+        <div class="beneath">
+          <p class="joke" id="jokeText"></p>
+          <button class="again" id="againBtn" type="button">Scratch again</button>
+        </div>
+        <canvas></canvas>
+      </div>
     </div>
 
-    <div class="work-panel" id="panel-presented">
-      <div class="work-grid" id="grid-presented"></div>
+    <nav class="tk-nav" id="tkNav"></nav>
+
+    <div class="tk-foot">
+      <div class="barcode" aria-hidden="true"></div>
+      <p class="tk-terms" id="tkTerms"></p>
     </div>
   </div>
-</section>
 
-<footer>
-  <div class="wrap">
-    <p class="footer-line"></p>
-  </div>
-  <div class="mega-mark" aria-hidden="true"></div>
-</footer>
+  <div class="perf bot" aria-hidden="true"></div>
+</main>
 
 <script src="content.js"></script>
-<script src="site.js"></script>
 <script src="auto-refresh.js"></script>
 <script>
 (function () {
-  var C = window.SITE_CONTENT;
+  var T = (window.SITE_CONTENT && window.SITE_CONTENT.ticket) || {};
 
-  /* ---------- section heading and tab labels ---------- */
-  document.getElementById('workHeading').textContent = C.work.heading;
-  document.getElementById('tabProduced').textContent = C.work.producedLabel;
-  document.getElementById('tabPresented').textContent = C.work.presentedLabel;
-
-  /* ---------- hero: the word chain — one sentence at a time ----------
-     Each sentence ends with its clickable word — the LAST word, detected
-     automatically (trailing punctuation stripped). Clicking it glitches to
-     the next sentence, which begins with that same word. The last sentence
-     ends the chain: clicking its word ("work") scrolls to the work section.
-     The echoed opening word of each sentence (the previous one's click
-     word) is dimmed in italic. */
-  function esc(s) {
-    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  function set(id, val) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = val || '';
   }
 
-  var sentences = (C.hero.sentences || []).filter(Boolean);
-  var heroSentence = document.getElementById('heroSentence');
-  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var currentIndex = 0;
-  var isTransitioning = false;
-  var GLITCH_CHARS = '!<>-_\\/[]{}=+*^?#$%&';
+  set('tkBand', T.band);
+  set('tkGame', T.game);
+  set('tkSerial', T.serial);
+  set('tkBadge', T.badge);
+  set('tkTitleTop', T.titleTop);
+  set('tkTitleBottom', T.titleBottom);
+  set('tkSub', T.sub);
+  set('winLine', T.winLine);
+  set('winSub', T.winSub);
+  set('tkTerms', T.terms);
 
-  function lastWord(text) {
-    var t = String(text).trim().replace(/[.,!?;:…]+$/, '');
-    var m = t.match(/(\S+)$/);
-    return m ? m[1] : t;
-  }
-
-  function sentenceHtml(index) {
-    var text = sentences[index];
-    var kw = lastWord(text);
-    var kwAt = text.lastIndexOf(kw);
-    var head = text.slice(0, kwAt);
-    var tail = text.slice(kwAt + kw.length);
-    var open = '';
-    var body = head;
-    if (index > 0) {
-      var prev = lastWord(sentences[index - 1]);
-      var first = text.match(/^(\S+)/);
-      if (first && first[1].toLowerCase() === prev.toLowerCase()) {
-        open = '<span class="echo">' + esc(first[1]) + '</span>';
-        body = text.slice(first[1].length, kwAt);
-      }
-    }
-    return open + esc(body) + '<button class="kw" type="button">' + esc(kw) + '</button>' + esc(tail);
-  }
-
-  function scrambleTo(index) {
-    var target = sentences[index];
-    isTransitioning = true;
-    heroSentence.classList.add('is-glitching');
-
-    var frameMs = 40;
-    var totalFrames = Math.round(1000 / frameMs);
-    var frame = 0;
-
-    var timer = setInterval(function () {
-      frame++;
-      var revealCount = Math.floor((frame / totalFrames) * target.length);
-      var out = '';
-      for (var i = 0; i < target.length; i++) {
-        var ch = target[i];
-        out += (i < revealCount || ch === ' ') ? ch : GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)];
-      }
-      heroSentence.textContent = out;
-
-      if (frame >= totalFrames) {
-        clearInterval(timer);
-        heroSentence.innerHTML = sentenceHtml(index);
-        heroSentence.classList.remove('is-glitching');
-        currentIndex = index;
-        isTransitioning = false;
-        updateLoop();
-      }
-    }, frameMs);
-  }
-
-  /* keep the layout rock-steady: reserve the height of the longest sentence
-     once, so a short sentence never lets the page below jump up */
-  if (sentences.length) {
-    var tallest = 0;
-    for (var si = 0; si < sentences.length; si++) {
-      heroSentence.innerHTML = sentenceHtml(si);
-      tallest = Math.max(tallest, heroSentence.offsetHeight);
-    }
-    heroSentence.style.minHeight = tallest + 'px';
-    heroSentence.innerHTML = sentenceHtml(0);
-  }
-  updateLoop();
-
-  heroSentence.addEventListener('click', function (e) {
-    var btn = e.target.closest('.kw');
-    if (!btn || isTransitioning || sentences.length < 2) return;
-    /* the last sentence ends the chain: its click word ("work") scrolls to
-       the work section instead of advancing */
-    if (currentIndex === sentences.length - 1) {
-      var workSection = document.getElementById('work');
-      if (workSection) workSection.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
-      return;
-    }
-    var next = currentIndex + 1;
-    if (reduceMotion) {
-      currentIndex = next;
-      heroSentence.innerHTML = sentenceHtml(next);
-      updateLoop();
-    } else {
-      scrambleTo(next);
-    }
+  /* nav punches */
+  var nav = document.getElementById('tkNav');
+  (T.nav || []).forEach(function (item) {
+    var a = document.createElement('a');
+    a.href = item.url || '#';
+    a.appendChild(document.createTextNode(item.label || ''));
+    var i = document.createElement('i');
+    i.textContent = item.num || '';
+    a.appendChild(i);
+    nav.appendChild(a);
   });
 
-  /* ↺ back to the start: the chain's loop. Visible once you've left the
-     first sentence; clicking it glitches back to sentence 1. */
-  var heroLoop = document.getElementById('heroLoop');
-  function updateLoop() {
-    /* the ↺ only appears once the chain is finished — on the last sentence */
-    if (heroLoop) heroLoop.style.visibility = (sentences.length > 1 && currentIndex === sentences.length - 1) ? 'visible' : 'hidden';
-  }
-  if (heroLoop) {
-    heroLoop.addEventListener('click', function () {
-      if (isTransitioning || currentIndex === 0) return;
-      if (reduceMotion) {
-        currentIndex = 0;
-        heroSentence.innerHTML = sentenceHtml(0);
-        updateLoop();
-      } else {
-        scrambleTo(0);
+  /* ---------- scratch panels ----------
+     Gold foil on a canvas; scratching erases it with destination-out.
+     Nothing important is ONLY behind a panel: the win line is repeated
+     on the work page, and the jokes are jokes. */
+  var JOKES = (T.jokes && T.jokes.length) ? T.jokes : ['Not a winner'];
+  var jokeIdx = 0;
+  document.getElementById('jokeText').textContent = JOKES[0];
+
+  function scratchable(panel) {
+    var canvas = panel.querySelector('canvas');
+    var ctx = canvas.getContext('2d', { willReadFrequently: true });
+    var drawing = false, checks = 0, done = false;
+
+    function paint() {
+      var r = panel.getBoundingClientRect();
+      if (!r.width || !r.height) return;
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.round(r.width * dpr);
+      canvas.height = Math.round(r.height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.globalCompositeOperation = 'source-over';
+
+      var gold = getComputedStyle(document.body).getPropertyValue('--gold').trim() || '#E8B33A';
+      var g = ctx.createLinearGradient(0, 0, r.width, r.height);
+      g.addColorStop(0, '#f6dc9b');
+      g.addColorStop(.28, gold);
+      g.addColorStop(.5, '#fbeec2');
+      g.addColorStop(.72, gold);
+      g.addColorStop(1, '#c98f24');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, r.width, r.height);
+
+      ctx.strokeStyle = 'rgba(255,255,255,.22)';
+      ctx.lineWidth = 1;
+      for (var y = 0; y < r.height; y += 3) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(r.width, y + (Math.random() * 2 - 1));
+        ctx.stroke();
       }
-    });
+      ctx.fillStyle = 'rgba(120,80,10,.16)';
+      var n = Math.round(r.width * r.height / 900);
+      for (var i = 0; i < n; i++) ctx.fillRect(Math.random() * r.width, Math.random() * r.height, 1, 1);
+
+      ctx.fillStyle = 'rgba(70,45,5,.6)';
+      ctx.font = '700 12px "Barlow Condensed", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.letterSpacing = '2px';
+      ctx.fillText('SCRATCH HERE', r.width / 2, r.height / 2 + 4);
+
+      done = false;
+      panel.classList.remove('revealed');
+      canvas.style.opacity = '';
+    }
+
+    function at(e) {
+      var r = canvas.getBoundingClientRect();
+      var p = e.touches ? e.touches[0] : e;
+      return [p.clientX - r.left, p.clientY - r.top];
+    }
+    function dig(x, y) {
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.beginPath();
+      ctx.arc(x, y, 22, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    function frac() {
+      var d = ctx.getImageData(0, 0, canvas.width, canvas.height).data, c = 0, t = 0;
+      for (var i = 3; i < d.length; i += 4 * 220) { t++; if (d[i] < 26) c++; }
+      return t ? c / t : 0;
+    }
+    function check() {
+      if (done) return;
+      if (++checks % 6) return;
+      if (frac() > .48) { done = true; panel.classList.add('revealed'); }
+    }
+
+    canvas.addEventListener('mousedown', function (e) { drawing = true; var c = at(e); dig(c[0], c[1]); e.preventDefault(); });
+    canvas.addEventListener('mousemove', function (e) { if (!drawing) return; var c = at(e); dig(c[0], c[1]); check(); e.preventDefault(); });
+    window.addEventListener('mouseup', function () { drawing = false; check(); });
+    canvas.addEventListener('touchstart', function (e) { drawing = true; var c = at(e); dig(c[0], c[1]); e.preventDefault(); }, { passive: false });
+    canvas.addEventListener('touchmove', function (e) { if (!drawing) return; var c = at(e); dig(c[0], c[1]); check(); e.preventDefault(); }, { passive: false });
+    canvas.addEventListener('touchend', function () { drawing = false; check(); });
+    window.addEventListener('resize', function () { if (!done) paint(); });
+
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(paint); else paint();
+    return { repaint: paint };
   }
 
-  /* ---------- dateline under the hero ---------- */
-  var home = C.home || {};
-  document.getElementById('heroDateline').textContent = home.dateline || '';
+  scratchable(document.getElementById('panelWin'));
+  var jokePanel = scratchable(document.getElementById('panelJoke'));
 
-  /* ---------- work cards ---------- */
-  function metaLine(p) { return [p.category, p.year].filter(Boolean).join(' · '); }
-
-  function cardHtml(p, i) {
-    var href = p.slug ? 'work.html?slug=' + encodeURIComponent(p.slug) : '#';
-    var img = p.image
-      ? '<img src="' + esc(window.imgSrc(p.image)) + '" alt="' + esc(p.alt || p.title) + '">'
-      : '';
-    var d = (i % 2 === 0) ? '0.02s' : '0.08s';
-    return '<a class="work-card reveal reveal-stagger" style="--d:' + d + '" href="' + href + '">' +
-      img +
-      '<div class="work-card-body"><div>' +
-      '<span class="work-title">' + esc(p.title) + '</span>' +
-      '<span class="work-meta">' + esc(metaLine(p)) + '</span>' +
-      '</div><span class="work-arrow">↗</span></div></a>';
-  }
-
-  /* draft projects never show; the limits (work.producedLimit /
-     presentedLimit, editable in admin) cap how many cards render — 0 = all */
-  function shown(list, limit) {
-    var v = (list || []).filter(function (p) { return !p.draft; });
-    return (limit > 0) ? v.slice(0, limit) : v;
-  }
-  document.getElementById('grid-produced').innerHTML = shown(C.work.produced, C.work.producedLimit).map(cardHtml).join('');
-  document.getElementById('grid-presented').innerHTML = shown(C.work.presented, C.work.presentedLimit).map(cardHtml).join('');
-
-  /* ---------- work toggle ---------- */
-  var toggleBtns = document.querySelectorAll('.work-toggle-btn');
-  var panels = {
-    produced: document.getElementById('panel-produced'),
-    presented: document.getElementById('panel-presented')
-  };
-  function activateTab(k) {
-    toggleBtns.forEach(function (b) {
-      var on = b.dataset.panel === k;
-      b.classList.toggle('active', on);
-      b.setAttribute('aria-selected', on ? 'true' : 'false');
-    });
-    Object.keys(panels).forEach(function (p) { panels[p].classList.toggle('active', p === k); });
-  }
-  toggleBtns.forEach(function (btn) {
-    btn.addEventListener('click', function () { activateTab(btn.dataset.panel); });
+  document.getElementById('againBtn').addEventListener('click', function (e) {
+    e.stopPropagation();
+    jokeIdx = (jokeIdx + 1) % JOKES.length;
+    document.getElementById('jokeText').textContent = JOKES[jokeIdx];
+    jokePanel.repaint();
   });
-  /* deep link: the PRESENTED/PRODUCED status on a project page opens the matching tab */
-  activateTab(new URLSearchParams(location.search).get('tab') === 'presented' ? 'presented' : 'produced');
-
-  /* cards were injected after site.js ran, so reveal them now */
-  window.observeReveals();
 })();
 </script>
 

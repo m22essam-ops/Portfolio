@@ -6,9 +6,39 @@
 
 window.SITE_CONTENT = {
   nav: {
-    logo: "mohammed essam.",
-    tagline: "(all caps)",
-    badge: "available for work copywriter"
+    logo: "mohamed essam.",
+    tagline: "",
+    badge: "available for work"
+  },
+
+  /* ---- THE TICKET (home page) ----
+     Every line here is yours to rewrite. This is where the concept lives. */
+  ticket: {
+    band: "★ The National Award Lottery ★",
+    game: "Instant win · Game no. 07 · Price: free",
+    serial: "No. 0000000 · Exp. never",
+    titleTop: "Award-losing",
+    titleBottom: "copywriter",
+    sub: "Mohamed Essam · Cairo → Dubai → Madrid · 2 languages",
+    badge: "0 awards so far",
+    /* big panel: scratches to reveal your strongest real fact */
+    winLine: "Rivan Tower sold out in a week.",
+    winSub: "One line did that. It's the first thing in the work.",
+    /* small panel: the running gag, re-scratchable */
+    jokes: [
+      "Not a winner",
+      "Try again",
+      "Still not a winner",
+      "Nearly",
+      "No.",
+      "Almost"
+    ],
+    nav: [
+      { label: "The work", num: "01", url: "work.html" },
+      { label: "Who I am", num: "02", url: "about.html" },
+      { label: "Hire me", num: "03", url: "mailto:m22essam@gmail.com" }
+    ],
+    terms: "Odds of winning: historically poor. Ticket has no cash value and neither did the awards. Keep this as proof of participation."
   },
   hero: {
     sentences: [
@@ -24,9 +54,10 @@ window.SITE_CONTENT = {
     dateline: "Creative copywriter · Cairo → Dubai → Madrid → your city?"
   },
   work: {
-    heading: "A handpicked selection of my projects.",
-    producedLabel: "Produced",
-    presentedLabel: "Spec",
+    heading: "The work.",
+    note: "WINNER = it ran. NOT A WINNER = it didn't. Both are here.",
+    producedLabel: "Winner",
+    presentedLabel: "Not a winner",
     producedLimit: 8,
     presentedLimit: 6,
     produced: [

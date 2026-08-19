@@ -3,41 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title id="pageTitle">Project · Mohamed Essam</title>
+<title id="pageTitle">The work · Mohamed Essam</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;1,9..144,400;1,9..144,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-
-<nav id="siteNav">
+<nav class="page-nav">
   <div class="wrap">
-    <div class="brand">
-      <a class="logo" href="index.html" aria-label="Mohamed Essam — home"></a>
-      <span class="tagline"></span>
+    <a class="logo" href="index.html">mohamed essam<em>.</em></a>
+    <div class="links">
+      <a href="work.html" class="on">The work</a>
+      <a href="about.html">Who I am</a>
+      <a href="mailto:m22essam@gmail.com">Hire me</a>
     </div>
-    <div class="nav-links">
-      <a href="index.html#work">WORK</a>
-      <a href="about.html">ABOUT</a>
-      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light mode" title="Toggle theme">☀️</button>
-    </div>
-    <div class="badge"><span class="badge-dot"></span><span class="badge-text"></span></div>
   </div>
 </nav>
 
-<section class="project">
-  <div class="wrap">
-    <a class="back-link" href="index.html#work">&larr; ALL WORK</a>
-    <div id="projectContent"></div>
-  </div>
-</section>
+<div id="page"></div>
 
-<footer>
+<footer class="page-foot">
   <div class="wrap">
-    <p class="footer-line"></p>
+    <p class="big">Someone has to win eventually. <a href="mailto:m22essam@gmail.com">Go on.</a></p>
+    <p class="terms" id="footTerms"></p>
   </div>
-  <div class="mega-mark" aria-hidden="true"></div>
 </footer>
 
 <script src="content.js"></script>
@@ -45,237 +36,158 @@
 <script src="auto-refresh.js"></script>
 <script>
 (function () {
-  var C = window.SITE_CONTENT;
+  var C = window.SITE_CONTENT || {};
+  var W = C.work || {};
+  var produced = W.produced || [];
+  var presented = W.presented || [];
+  var page = document.getElementById('page');
+
+  var termsEl = document.getElementById('footTerms');
+  if (termsEl && C.ticket) termsEl.textContent = C.ticket.terms || '';
 
   function esc(s) {
-    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+  function live(list) { return list.filter(function (p) { return !p.draft && p.title && String(p.title).trim(); }); }
+
+  /* every project, one flow, in the order they sit in content.js */
+  function allWork() {
+    return live(produced).map(function (p) { return { p: p, ran: true }; })
+      .concat(live(presented).map(function (p) { return { p: p, ran: false }; }));
   }
 
   var slug = new URLSearchParams(location.search).get('slug');
-  var produced = C.work.produced || [];
-  var presented = C.work.presented || [];
-  var proj = produced.concat(presented).find(function (p) { return p.slug === slug; });
-  var box = document.getElementById('projectContent');
 
-  if (!proj) {
-    box.innerHTML = '<h1 class="project-title">Project coming soon</h1>' +
-      '<div class="project-body"><p>This one is still in the drafts folder. Pick another from the home page.</p></div>';
-    return;
-  }
+  /* ============ WORK INDEX ============ */
+  function renderIndex() {
+    document.getElementById('pageTitle').textContent = 'The work · Mohamed Essam';
+    var items = allWork();
+    /* sizes cycle so the page never reads as a tidy catalogue */
+    var pattern = ['size-full', 'pair', 'size-off', 'size-full', 'pair', 'size-small'];
 
-  var isProduced = produced.indexOf(proj) !== -1;
-  document.getElementById('pageTitle').textContent = proj.title + ' · Mohamed Essam';
+    var html = '<header class="page-head"><div class="wrap">' +
+      '<h1>' + esc(W.heading || 'The work.') + '</h1>' +
+      (W.note ? '<p class="note">' + esc(W.note) + '</p>' : '') +
+      '</div></header><div class="wrap"><div class="work-list" id="workList"></div></div>';
+    page.innerHTML = html;
 
-  var html = '';
-  html += '<p class="project-meta">' + esc([proj.client, proj.category, proj.year].filter(Boolean).join(' · ')) +
-    ' · <a class="status-link ' + (isProduced ? 'status-produced' : 'status-pitched') + '" href="index.html?tab=' +
-    (isProduced ? 'produced' : 'presented') + '#work" title="See all ' +    (isProduced ? 'produced' : 'spec') + '">' +
-    (isProduced ? 'PRODUCED' : 'SPEC') + '</a></p>';
-  html += '<h1 class="project-title">' + esc(proj.title) + '</h1>';
+    var list = document.getElementById('workList');
+    var i = 0, n = 1, pIdx = 0;
 
-  if (proj.story && proj.story.length) {
-    html += '<div class="project-body">' + proj.story.map(function (t) { return '<p>' + esc(t) + '</p>'; }).join('') + '</div>';
-  }
-
-  /* the cover image only appears on cards (home + you may also like) —
-     inside the project itself the grid below leads */
-
-  /* images go in an adaptive grid where horizontal images get priority; videos render full-width outside the grid */
-  var media = proj.media || [];
-  var used = media.filter(function (m) { return m.src && String(m.src).trim(); });
-  var imgs = used.filter(function (m) { return m.type !== 'video'; });
-  var vids = used.filter(function (m) { return m.type === 'video'; });
-
-  function videoFrame(m) {
-    var src = String(m.src || '').trim();
-    var cap = m.caption ? '<figcaption>' + esc(m.caption) + '</figcaption>' : '';
-    /* a local file name (no http(s) prefix, no embed code) is a real uploaded
-       video — it plays from images/ (same place as images) in the same 16:9
-       frame as embeds */
-    if (src && !/^https?:\/\//i.test(src) && !/<iframe/i.test(src)) {
-      return '<figure class="project-media"><div class="video-wrap"><video src="' + esc(window.imgSrc(src)) + '" controls preload="metadata" playsinline></video></div>' + cap + '</figure>';
+    function card(entry, sizeClass) {
+      var p = entry.p;
+      var img = p.image
+        ? '<div class="frame"><img src="' + esc(window.imgSrc(p.image)) + '" alt="' + esc(p.alt || p.title) + '">' + stamp(entry) + '</div>'
+        : '<div class="frame empty">' + stamp(entry) + '</div>';
+      var meta = [p.client, p.year].filter(Boolean).join(' · ');
+      return '<a class="piece reveal ' + sizeClass + '" href="work.html?slug=' + encodeURIComponent(p.slug) + '">' +
+        img +
+        '<span class="serial">NO. ' + String(n++).padStart(2, '0') + (meta ? ' · ' + esc(meta.toUpperCase()) : '') + '</span>' +
+        '<h2>' + esc(p.title) + '</h2>' +
+        (p.tagline ? '<p>' + esc(p.tagline) + '</p>' : '') +
+        '</a>';
     }
-    /* otherwise: plain link or full Vimeo/YouTube embed code */
-    if (!/^https?:\/\//i.test(src)) {
-      var em = /<iframe[^>]*\bsrc=["']([^"']+)["']/i.exec(src);
-      if (em) src = em[1];
+    function stamp(entry) {
+      var label = entry.ran ? (W.producedLabel || 'Winner') : (W.presentedLabel || 'Not a winner');
+      return '<span class="stamp' + (entry.ran ? '' : ' lose') + '">' + esc(label) + '</span>';
     }
-    return '<figure class="project-media"><div class="video-wrap"><iframe src="' + esc(src) + '" title="' + esc(m.caption || proj.title) + '" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>' + cap + '</figure>';
-  }
-  function imageFrame(m) {
-    return '<figure class="project-media" data-layout="' + esc(m.layout || '') + '"><img src="' + esc(window.imgSrc(m.src)) + '" alt="' + esc(m.caption || proj.alt || proj.title) + '">' +
-      (m.caption ? '<figcaption>' + esc(m.caption) + '</figcaption>' : '') + '</figure>';
-  }
 
-  if (imgs.length) html += '<div class="media-grid">' + imgs.map(imageFrame).join('') + '</div>';
-  if (vids.length) html += vids.map(videoFrame).join('');
-
-  var credits = (proj.credits || []).filter(function (c) {
-    return (c.role && String(c.role).trim()) || (c.name && String(c.name).trim());
-  });
-  if (credits.length) {
-    html += '<div class="credits"><h2 class="credits-head">Credits</h2><ul class="credits-list">' +
-      credits.map(function (c) {
-        return '<li><span>' + esc(c.role) + '</span>' + esc(c.name) + '</li>';
-      }).join('') +
-      '</ul></div>';
-  }
-
-  /* you may also like: same category first, then same tab, then anything else */
-  var allOthers = produced.concat(presented).filter(function (p) { return p.slug !== proj.slug && !p.draft; });
-  function relScore(p) {
-    var s = 0;
-    if ((p.category || '') === (proj.category || '')) s += 2;
-    if (p.client === proj.client) s += 1;
-    if ((produced.indexOf(p) !== -1) === isProduced) s += 1;
-    return s;
-  }
-  allOthers.sort(function (a, b) { return relScore(b) - relScore(a); });
-  var related = allOthers.slice(0, 2);
-  if (related.length) {
-    html += '<div class="related">' +
-      '<h2 class="related-head">You may also like</h2>' +
-      '<div class="related-grid">' +
-      related.map(function (p) {
-        var img = p.image ? '<img src="' + esc(window.imgSrc(p.image)) + '" alt="' + esc(p.alt || p.title) + '">' : '';
-        return '<a class="related-card" href="work.html?slug=' + encodeURIComponent(p.slug) + '">' + img +
-          '<span class="related-title">' + esc(p.title) + '</span>' +
-          '<span class="related-meta">' + esc([p.client, p.category, p.year].filter(Boolean).join(' · ')) + '</span></a>';
-      }).join('') +
-      '</div></div>';
-  }
-
-  /* next project: find the actual next project in the full list */
-  var allProjects = produced.concat(presented).filter(function (p) { return !p.draft; });
-  var currentIdx = -1;
-  for (var ni = 0; ni < allProjects.length; ni++) {
-    if (allProjects[ni].slug === proj.slug) { currentIdx = ni; break; }
-  }
-  var nextProj = (currentIdx >= 0 && currentIdx < allProjects.length - 1) ? allProjects[currentIdx + 1] : null;
-  if (nextProj) {
-    html += '<a class="next-project" href="work.html?slug=' + encodeURIComponent(nextProj.slug) + '">' +
-      '<span class="next-label">NEXT</span><span class="next-title">' + esc(nextProj.title) + '</span>' +
-      '<span class="next-arrow">&rarr;</span></a>';
-  } else {
-    html += '<a class="next-project" href="index.html#work">' +
-      '<span class="next-label">BACK TO</span><span class="next-title">All Work</span>' +
-      '<span class="next-arrow">&rarr;</span></a>';
-  }
-
-  box.innerHTML = html;
-
-  /* adaptive grid: a curated mosaic that gives horizontal images priority —
-     the widest landscape leads as a full-width hero row (unless the solo
-     cover already plays that role above), then rows mix a portrait with a
-     landscape so the landscape takes the wide share, and leftover portraits
-     pair up side by side. Width is proportional to each image's real aspect
-     ratio, so nothing is cropped and heights align within a row. */
-  (function () {
-    var figures = Array.prototype.slice.call(box.querySelectorAll('.media-grid .project-media'));
-    if (!figures.length) return;
-    var ratioOf = function (fig) {
-      var img = fig.querySelector('img');
-      return (img && img.naturalWidth && img.naturalHeight) ? img.naturalWidth / img.naturalHeight : 1;
-    };
-    function layout() {
-      var ratios = figures.map(ratioOf);
-      var grid = box.querySelector('.media-grid');
-      grid.innerHTML = '';
-      function addRow(list, opts) {
-        if (!list.length) return;
-        var wrap = document.createElement('div');
-        wrap.className = 'media-row';
-        list.forEach(function (idx) {
-          if (opts && opts.flex) figures[idx].style.flex = opts.flex;
-          else figures[idx].style.flex = ratios[idx] + ' 1 0';
-          if (opts && opts.restrained) {
-            figures[idx].style.margin = '0 auto';
-          }
-          wrap.appendChild(figures[idx]);
-        });
-        grid.appendChild(wrap);
-      }
-
-      /* explicit blocks first: "full" spans the whole row, "half" items pair
-         up 50/50 (a lone half stays centered at half width). Everything else
-         falls through to the automatic ratio layout below. */
-      var fulls = [], halves = [], autos = [];
-      figures.forEach(function (fig, i) {
-        var ly = (fig.getAttribute('data-layout') || '').trim();
-        if (ly === 'full') fulls.push(i);
-        else if (ly === 'half') halves.push(i);
-        else autos.push(i);
-      });
-      fulls.forEach(function (i) { addRow([i], { flex: '1 1 100%' }); });
-      for (var h = 0; h < halves.length; h += 2) {
-        var hp = halves.slice(h, h + 2);
-        if (hp.length === 1) {
-          addRow(hp, { flex: '0 1 50%', restrained: true });
-        } else {
-          addRow(hp, { flex: '1 1 0' });
-          /* same-size pair: both boxes get the same width AND height (the
-             average of the two natural ratios), images crop to fill — so two
-             posters of different shapes still read as one matching set */
-          var pr = (ratios[hp[0]] + ratios[hp[1]]) / 2;
-          hp.forEach(function (i) {
-            figures[i].classList.add('pair-box');
-            figures[i].style.aspectRatio = pr + '';
-          });
-        }
-      }
-      if (!autos.length) return;
-
-      /* automatic ratio layout for the rest */
-      var portraits = [], landscapes = [];
-      autos.forEach(function (i) {
-        if (ratios[i] < 1) portraits.push(i); else landscapes.push(i);
-      });
-      /* hero row: the widest landscape full-width, unless the cover already
-         sits above the grid as the top wide block */
-      var hasSolo = !!box.querySelector('.solo-media img');
-      var lead = null;
-      if (!hasSolo && landscapes.length && autos.length > 1) {
-        lead = landscapes[0];
-        landscapes.forEach(function (i) { if (ratios[i] > ratios[lead]) lead = i; });
-        addRow([lead]);
-        landscapes = landscapes.filter(function (i) { return i !== lead; });
-      }
-      /* mixed rows: portrait + landscape, portrait left / landscape right,
-         so the horizontal image takes the wide share */
-      var mixed = [];
-      var pp = 0, lp = 0;
-      while (pp < portraits.length && lp < landscapes.length) {
-        mixed.push([portraits[pp], landscapes[lp]]);
-        pp++; lp++;
-      }
-      mixed.forEach(addRow);
-      /* leftovers: remaining portraits pair up; a lone portrait sits at a
-         restrained width (centered) so it doesn't tower over the rows, and a
-         lone landscape spans the full width */
-      var rest = portraits.slice(pp).concat(landscapes.slice(lp));
-      for (var k = 0; k < rest.length; k += 2) {
-        var pair = rest.slice(k, k + 2);
-        addRow(pair);
-        if (pair.length === 1 && ratios[pair[0]] < 1) {
-          figures[pair[0]].style.flex = '0 1 64%';
-          figures[pair[0]].style.margin = '0 auto';
-        }
-      }
-    }
-    var pending = figures.length;
-    figures.forEach(function (fig) {
-      var img = fig.querySelector('img');
-      if (!img) { pending--; return; }
-      if (img.complete && img.naturalWidth) {
-        pending--;
-        if (pending === 0) layout();
+    var out = '';
+    while (i < items.length) {
+      var kind = pattern[pIdx++ % pattern.length];
+      if (kind === 'pair' && items.length - i >= 2) {
+        out += '<div class="size-pair">' + card(items[i], '') + card(items[i + 1], '') + '</div>';
+        i += 2;
       } else {
-        img.addEventListener('load', function () { pending--; if (pending === 0) layout(); });
-        img.addEventListener('error', function () { pending--; if (pending === 0) layout(); });
+        out += card(items[i], kind === 'pair' ? 'size-full' : kind);
+        i += 1;
       }
+    }
+    list.innerHTML = out;
+    if (window.observeReveals) window.observeReveals();
+  }
+
+  /* ============ PROJECT DETAIL ============ */
+  function renderProject(entry) {
+    var p = entry.p;
+    document.getElementById('pageTitle').textContent = p.title + ' · Mohamed Essam';
+
+    var html = '<section class="project"><div class="wrap">' +
+      '<a class="back-link" href="work.html">← All work</a>' +
+      '<p class="project-meta">' + esc([p.client, p.category, p.year].filter(Boolean).join(' · ')) +
+      ' · <span class="' + (entry.ran ? 'status-produced' : 'status-pitched') + '">' +
+      esc(entry.ran ? (W.producedLabel || 'Winner') : (W.presentedLabel || 'Not a winner')) + '</span></p>' +
+      '<h1 class="project-title">' + esc(p.title) + '</h1>';
+
+    var story = (p.story || []).filter(function (t) { return t && String(t).trim(); });
+    if (story.length) {
+      html += '<div class="project-body">' + story.map(function (t) { return '<p>' + esc(t) + '</p>'; }).join('') + '</div>';
+    }
+
+    var media = (p.media || []).filter(function (m) { return m.src && String(m.src).trim(); });
+    if (media.length) {
+      html += '<div class="media-grid">' + media.map(function (m) {
+        var cap = m.caption ? '<figcaption>' + esc(m.caption) + '</figcaption>' : '';
+        if (m.type === 'video') {
+          var src = String(m.src).trim();
+          if (!/^https?:\/\//i.test(src) && !/<iframe/i.test(src)) {
+            return '<figure class="project-media"><div class="video-wrap"><video src="' +
+              esc(window.imgSrc(src)) + '" controls preload="metadata" playsinline></video></div>' + cap + '</figure>';
+          }
+          var em = /<iframe[^>]*\bsrc=["']([^"']+)["']/i.exec(src);
+          if (em) src = em[1];
+          return '<figure class="project-media"><div class="video-wrap"><iframe src="' + esc(src) +
+            '" title="' + esc(m.caption || p.title) + '" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>' + cap + '</figure>';
+        }
+        return '<figure class="project-media" data-layout="' + esc(m.layout || '') + '"><img src="' +
+          esc(window.imgSrc(m.src)) + '" alt="' + esc(m.caption || p.alt || p.title) + '">' + cap + '</figure>';
+      }).join('') + '</div>';
+    }
+
+    var credits = (p.credits || []).filter(function (c) {
+      return (c.role && String(c.role).trim()) || (c.name && String(c.name).trim());
     });
-    if (pending === 0) layout();
-  })();
+    if (credits.length) {
+      html += '<div class="credits"><h2 class="credits-head">Credits</h2><ul class="credits-list">' +
+        credits.map(function (c) {
+          return '<li><span>' + esc(c.role) + '</span>' + esc(c.name) + '</li>';
+        }).join('') + '</ul></div>';
+    }
+
+    /* one next-project link, never a grid of ten */
+    var all = allWork();
+    var idx = -1;
+    for (var k = 0; k < all.length; k++) if (all[k].p.slug === p.slug) { idx = k; break; }
+    var next = (idx > -1 && idx < all.length - 1) ? all[idx + 1] : null;
+    if (next) {
+      html += '<a class="next-project" href="work.html?slug=' + encodeURIComponent(next.p.slug) + '">' +
+        '<span class="next-label">Next</span><span class="next-title">' + esc(next.p.title) + '</span>' +
+        '<span class="next-arrow">→</span></a>';
+    } else {
+      html += '<a class="next-project" href="work.html">' +
+        '<span class="next-label">Back to</span><span class="next-title">All work</span>' +
+        '<span class="next-arrow">→</span></a>';
+    }
+
+    html += '</div></section>';
+    page.innerHTML = html;
+  }
+
+  if (slug) {
+    var found = allWork().filter(function (e) { return e.p.slug === slug; })[0];
+    if (found) { renderProject(found); }
+    else {
+      page.innerHTML = '<section class="project"><div class="wrap">' +
+        '<a class="back-link" href="work.html">← All work</a>' +
+        '<h1 class="project-title">Still in the drafts</h1>' +
+        '<div class="project-body"><p>That one has not made it out of the folder yet. Pick another.</p></div>' +
+        '</div></section>';
+    }
+  } else {
+    renderIndex();
+  }
 })();
 </script>
 
