@@ -47,7 +47,7 @@ window.SITE_CONTENT = {
   },
   jokes: {
     tabAway: "Fine, go. I'll wait.",
-    footer: "No copywriters were harmed. Two were ignored.",
+    footer: "No copywriters reserved. ",
     console: "You opened the console on a copywriter's site. Nothing here but words.",
     notFound: "This page did not get produced either.",
     emptyWork: "Nothing here yet. Give it a minute.",
