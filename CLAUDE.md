@@ -1,4 +1,4 @@
-# Mohamed Essam — Copywriter Portfolio
+# Mohammed Essam — Copywriter Portfolio
 
 Personal portfolio site for Mohamed Essameldeen, a senior creative copywriter
 (7+ yrs: Social Nuts Cairo → We Are Social Dubai → Yango MENA, now Miami Ad
@@ -13,49 +13,60 @@ server or bundler breaks his workflow. Do not suggest React/Tailwind/Vite.
 
 ## Files
 
-- `index.html` — nav, hero (bio sentence mechanic), work columns, footer
-- `about.html` — bio, skills, work experience
-- `contact.html` — contact links
-- `styles.css` — all styling, shared by every page
-- `project-template.html` — pattern to duplicate for each project page
-- `grain-bg.png` — real background texture photo (must sit beside the HTML)
-- `about-photo.jpg` — real childhood photo used as About portrait
-- `PROJECT-NOTES.md` — longer handoff notes
+- `index.html` — the ticket. Full screen, no scroll, no nav bar.
+- `work.html` — dual mode: work index, or one project page when given `?slug=`.
+- `about.html` — bio, skills, work experience.
+- `content.js` — all site content. Single source of truth.
+- `admin.html` — the editor. Covers the ticket, jokes, stickers and projects.
+- `site.js` — shared helpers (`imgSrc`, scroll reveals).
+- `auto-refresh.js` — reloads the page when content.js changes. Local only.
+- `local-server.py` — serves the folder on :8888 and gives admin its save endpoint.
+- `styles.css` — all styling, shared by every page.
+- `about-photo.jpg` — real childhood photo used as the About portrait.
+- `images/` — the owner's own uploads.
+- `images/live/` — 84 files crawled from mohammedessam.com (Aug 2026), resized
+  to max 1800px. Referenced from content.js as `live/name.jpg`.
+- `PROJECT-NOTES.md` — longer handoff notes.
+
+Retired and not in use: `contact.html`, `project-template.html`,
+`work/yango-wedding-rush.html`, `grain-bg.png`, the `preview-*.html`
+exploration files, `ticket-mockup.html`.
 
 ## The core concept
 
 "**Award-losing copywriter (so far)**". Self-deprecating, dry, anti-life-coach,
 anti-hustle-culture. Never earnest, never corporate, never motivational.
+The line is the owner's own, taken from his live site's About page.
 
-### Hero mechanic (REPLACES the slot machine AND the three-version shuffle)
+Known risk, raised and overruled by the owner (Aug 2026): awards are hiring
+currency in adland, so leading with "I have none" announces a deficit nobody
+was going to check, and "lottery" sells luck when the product is craft. The
+owner chose to keep it. Do not re-litigate it; do not quietly soften it either.
 
-The hero is a **word chain**: six short sentences (`hero.sentences` in
-content.js), one shown at a time. Each sentence ends with its clickable word
-— the LAST word, detected automatically (trailing punctuation stripped, no
-brackets needed). Clicking it glitch-transitions to the next sentence, which
-begins with that same word. The **last sentence ends the chain**: clicking
-its word ("work") smooth-scrolls to the work section instead of advancing.
-A small mono **"↺ back to the start"** control sits under the hero — it
-only appears on the **last sentence**, clicking it glitches back to the
-first sentence, so the chain loops by choice. The echoed opening word (the previous sentence's
-click word) renders dimmed in italic. Owner-approved copy, Aug 2026.
+### The ticket (home page) — REPLACES the word chain, the slot machine, and the shuffle
 
-The chain rule the owner must keep while editing: sentence N+1 opens with
-sentence N's last word; the last sentence's last word is the "go to work"
-word, so it should read naturally as leading into the work below.
+The home page is one full-screen lottery ticket. No scroll. Nav lives inside
+it as three punch boxes. Every line of it reads from `ticket` in content.js.
 
-The hero reserves the height of its longest sentence once on load, so the
-page below never jumps when a shorter sentence shows.
+**The scratch panels are gone** (Aug 2026). A scratch panel demands labour and
+pays a joke, it fails on mobile, and it was hiding the best fact on the site.
+Do not reinstate them. The proof line ("Rivan Tower sold out in a week") is now
+printed in the open where people can read it.
 
-Transition: character scramble ("glitch") that resolves left-to-right over
-~1000ms, with an RGB-split text-shadow using the two accent colors, plus a
-small shake. Resolving left-to-right matters: it reads as *recovering from
-corruption*, not as randomizing. The site must never look like it generates
-its own copy.
+**The awards switch.** `ticket.awards` is an array. Empty, the site runs the
+"award-losing" version. Add an award and the home page flips itself to a
+correction-notice state (`wonBand` / `wonBadge` / `wonTitleTop` /
+`wonTitleBottom` / `wonLine`) and prints what was won. This exists because the
+concept is otherwise destroyed by the thing the owner is working toward.
+Verified working both ways.
 
-**The slot machine and the three-version keyword shuffle are retired.** Don't
-reinstate them. Light mode is gone too: the site is dark-only, the nav toggle
-was removed.
+### The quiet jokes
+
+`jokes` in content.js holds six optional slots: browser tab title when the
+visitor switches away, footer small print, the next-project label, the 404
+line, the empty-grid line, and one console line. Any slot left empty goes
+silent. The current text is Claude's draft and is waiting on the owner.
+
 
 ## Copy rules
 
@@ -70,55 +81,50 @@ was removed.
 
 ## Art direction
 
-Warm editorial (owner-approved Aug 2026). Deep espresso `#12100D` background,
-warm cream `#F1E9DE` text, caramel `#C97B2E`/`#E8A35A` primary accent, soft
-sage `#6E8468`/`#8FA87E` secondary (the produced/presented tab colors). Real
-grain photo as the single atmosphere layer at 0.10 opacity — the scratches,
-vignette, curtain, and feature-band layers were removed (A+ decision).
-Mood reference: old cinema poster, warm film, editorial coffee-shop.
+**Red, flat, loud** (owner-approved Aug 2026). Two registers only:
 
-Type pairing (redesigned Aug 2026, owner-approved): **Fraunces** is the
-display voice — hero (weight 400, "Quiet" treatment), section headings,
-card titles, project titles, contact line, next-project link, footer
-wordmark. **Space Mono** is the system voice — logo, nav, labels, meta,
-index numbers, toggles, footer line. **Inter** is body copy. Architects
-Daughter was removed (it was loaded but never used). Fraunces is loaded
-on all four pages from Google Fonts.
+- **Home**: flat red field `#E3261A`, off-white ticket `#F6F3EE`, black type.
+- **Everything else**: near-black `#0B0A09` gallery so the work carries the colour.
 
-The slot machine is drawn in the style of a minimal New Yorker cartoon: thin
-1.5px uniform ink line, no fills, no distress, no wobble, plus one small
-cross-hatch shading accent bottom-right. The lever is pure CSS (a rotated
-line + a round accent knob), no icon, no SVG.
+Accent red `#E3261A`, hot red `#FF3B2B` for hover.
 
-History worth knowing: earlier passes tried a green-felt casino look ("too
-2009"), a warm-paper editorial look, and a heavily distressed stamp-print
-look. All rejected. Don't reintroduce them.
+**No halftone, no sunburst, no gold, no hard drop shadows, no grain, no
+texture of any kind.** Those were tried and rejected: they are 1970s pastiche,
+and pastiche reads as old. That was the owner's exact complaint, twice. Modern
+loud is a single high-chroma accent, enormous type, a tight grid and a lot of
+empty space. Keep it that way.
 
-## Home page layout (per owner's wireframe)
+Type: **Bricolage Grotesque** is display (headline, titles, nav punches).
+**Barlow Condensed** is the system voice (labels, serials, small print, stickers).
+**Hanken Grotesk** is body copy.
 
-Top to bottom:
-1. Nav: logo left ("mohamed essam." lowercase), WORK + ABOUT centre,
-   "AVAILABLE FOR WORK" + green pulsing dot right
-2. Hero: the word chain — six short sentences, click the last word to advance (above)
-3. Full-width horizontal band (divider / image strip)
-4. Section heading: "A handpicked selection."
-5. **Two tab buttons** (pill toggle):
-   - "Produced" tab: work **that got produced** (real, made, shipped)
-   - "Work" tab: work **that got pitched** (spec / school / unsold)
-   Default tab is "Produced". Cards show no index numbers (removed).
-6. Project cards in each tab, captioned "Client — Project title".
-   Counts are capped by `work.producedLimit` / `work.presentedLimit`
-   (0 = show all), editable in admin. Projects with `draft: true` never
-   render on the site (admin checkbox "Keep in drafts").
-7. Footer: giant MOHAMED ESSAM wordmark
+History worth knowing: earlier passes tried green-felt casino ("too 2009"),
+warm-paper editorial, a distressed stamp-print look, and a warm espresso and
+caramel palette with a grain photo. All rejected. Don't reintroduce them.
 
-The produced/pitched split replaces the old CLIENTS / SPEC CLIENTS tabs.
-Keeping them visually parallel (both columns visible at once) is deliberate:
-nothing is hidden behind a tab, and the contrast between the two columns is
-itself the joke.
 
-On mobile the two columns stack; label each stack clearly so the distinction
-survives.
+## Site layout
+
+**index.html** — the ticket, full screen, no scroll:
+band → game/serial microtype → badge → two-line headline → sub-line → tear
+rule → the proof line → three nav punch boxes → barcode + small print.
+
+**work.html** — dual mode. No `?slug=` renders the work index; with a slug it
+renders that project's page.
+
+The work index is **ONE uniform grid**, two columns, 4:3, best first. The
+produced/spec split was killed as a visitor-facing idea (Aug 2026): it made
+people sort work by a criterion they don't care about and put the school work
+in a labelled ghetto. `work.produced[]` and `work.presented[]` still exist as
+the data shape, because "did it run" is a real fact and admin is built around
+them, but the site concatenates them into one flow and the visitor never sees
+a split.
+
+**The sticker carries the status instead.** Every project has a `sticker`
+field: "Sold out in a week", "Never left the deck", "Won nothing". Short and
+true. This was the owner's idea and it is better than the tabs were, because
+it carries real information instead of a category.
+
 
 ## Project detail pages
 
@@ -142,28 +148,56 @@ Rules for project copy:
 - The strongest real result the owner has: Rivan Tower sold out in a week.
   That belongs high on the site, not buried.
 
-## Project inventory (ported from mohammedessam.com, in content.js)
+## Project inventory (crawled from mohammedessam.com Aug 2026, in content.js)
 
-All 18 live-site projects are ported and split into produced/presented.
-Sort rule: a project credited "Miami Ad School / Teacher" on its live page
-is presented; agency-era work is produced. Flags for the owner:
-Wedding Rush (not on live site), Tuborg (inferred school), Pringles
-Champions of Fun / Modon / Song for the Cashless (inferred produced),
-Red Expo (unknown, conservative pick). See PROJECT-NOTES.md.
+**18 projects: 10 produced, 8 spec.** All copy, credits, years, images and
+video links were pulled from the live Adobe Portfolio site and normalised.
+
+Sort rule: credited to an agency (Social Nuts, Socialize, We Are Social,
+Yango) is produced; credited to Miami Ad School or a teacher is spec.
+
+Resolved in the crawl: three projects existed twice in content.js, once as an
+empty picsum stub in `produced` and once filled in under `presented` (Tuborg,
+Domino's, Babyshop). The filled-in versions were correct and the stubs are
+gone. Oumph and Red Expo were added from the live site. A Middle Finger to the
+Death was deliberately left out (a short story, not an ad) at the owner's call.
+Babyshop is marked spec at the owner's call. All picsum placeholders are gone.
+
+Where the owner had already uploaded his own images for a project (Tuborg,
+Domino's, Canesten, Babyshop, Nothing), those were kept: they are better and
+newer than the live site's versions. Only agency-era work uses `images/live/`.
 
 ## Known open items
 
-- Work thumbnails are all picsum placeholders. Needs real campaign screenshots
-  (owner drops files in `images/` and names them in admin.html).
-- Project stories/credits are empty except the Wedding Rush placeholders.
-- `work/yango-wedding-rush.html` and `project-template.html` are retired.
-- All content is edited via admin.html or by hand in content.js.
+- **All ticket copy, all stickers and all six jokes are Claude's drafts.**
+  The owner writes the lines. These are placeholders awaiting his pass.
+- Two facts flagged and unanswered: The Quarantine Games is dated **2020**
+  here (it is a COVID lockdown fundraiser) but the live site says 2023; and the
+  About bio says "**Four years** writing for people who skip the ads" while the
+  experience list under it runs Feb 2019 to Aug 2025. Do not change his own
+  copy to fix this. Ask.
+- `content.js` also disagrees with the live site on Social Nuts: Feb 2019 here,
+  Feb 2018 there.
+- **22 of 25 videos are Adobe CCV embeds** tied to the owner's Adobe Portfolio
+  account. Verified playing cross-origin. They die if he cancels that account.
+  Re-hosting to Vimeo is the fix, not urgent.
+- Liquid Death ("murder-your-thirst") is an empty stub with no image or story.
+- The Quarantine Games has 4 animated GIFs totalling 47MB. No ffmpeg on the
+  owner's machine, so they cannot be converted here.
+- Adobe Portfolio content problems found in the Aug 2026 crawl and NOT copied
+  across: keyboard-mash credits on Babyshop, "the results are awesome",
+  "Babysop", "CANESTEEN" (brand is Canesten), "live in Iitt", "facedthe",
+  and a Nivea credit reading "Art: Google images".
 
 ## Standing corrections (from the live site audit)
 
-The owner's old site spells his name **8 different ways**. On this site it is
-always and only "**Mohamed Essam**" in body/nav (lowercase "mohamed essam." in
-the logo). Never introduce a variant. Same rule for any colleague name.
+The owner's old site spells his name **8 different ways**, including
+"Mohammed Esam" in the page title of all 19 pages. On this site it is always
+and only "**Mohammed Essam**" (double M), lowercase "mohammed essam." in the
+logo. This matches his domain, mohammedessam.com. **Owner's explicit decision,
+Aug 2026 — it reverses an earlier instruction in this file that said single-M,
+so do not "correct" it back.** Colleague names are spelled as the agency
+credited them, fixed only for obvious typos.
 
 Don't write vague result claims ("the results were awesome", "it really
 resonated"). Either a concrete result or nothing.
@@ -172,8 +206,9 @@ resonated"). Either a concrete result or nothing.
 
 - Don't add a build step or framework.
 - Don't use em dashes in user-facing copy.
-- Don't auto-cycle the bio sentence; it changes on click only.
-- Don't reinstate the slot machine.
+- Don't reinstate the slot machine, the word chain, or the scratch panels.
+- Don't reintroduce halftone, sunburst, gold, grain or drop shadows.
+- Don't split the work grid into produced/spec tabs again. Stickers do that job.
 - Don't replace rejected copy with substitutes without flagging it.
 - Don't reintroduce stock photos as background atmosphere (the owner wants
   only his own supplied images; project thumbnails are the exception).

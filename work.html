@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title id="pageTitle">The work · Mohamed Essam</title>
+<title id="pageTitle">The work · Mohammed Essam</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -13,7 +13,7 @@
 
 <nav class="page-nav">
   <div class="wrap">
-    <a class="logo" href="index.html">mohamed essam<em>.</em></a>
+    <a class="logo" href="index.html">mohammed essam<em>.</em></a>
     <div class="links">
       <a href="work.html" class="on">The work</a>
       <a href="about.html">Who I am</a>
@@ -28,6 +28,7 @@
   <div class="wrap">
     <p class="big">Someone has to win eventually. <a href="mailto:m22essam@gmail.com">Go on.</a></p>
     <p class="terms" id="footTerms"></p>
+    <p class="joke" id="footJoke"></p>
   </div>
 </footer>
 
@@ -38,92 +39,88 @@
 (function () {
   var C = window.SITE_CONTENT || {};
   var W = C.work || {};
-  var produced = W.produced || [];
-  var presented = W.presented || [];
+  var J = C.jokes || {};
   var page = document.getElementById('page');
-
-  var termsEl = document.getElementById('footTerms');
-  if (termsEl && C.ticket) termsEl.textContent = C.ticket.terms || '';
 
   function esc(s) {
     return String(s == null ? '' : s)
       .replace(/&/g, '&amp;').replace(/</g, '&lt;')
       .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
-  function live(list) { return list.filter(function (p) { return !p.draft && p.title && String(p.title).trim(); }); }
+  function live(list) {
+    return (list || []).filter(function (p) {
+      return !p.draft && p.title && String(p.title).trim();
+    });
+  }
 
-  /* every project, one flow, in the order they sit in content.js */
+  /* One flow. The produced/spec arrays still hold the fact of what ran,
+     but the visitor never sees two lists: the sticker says it instead. */
   function allWork() {
-    return live(produced).map(function (p) { return { p: p, ran: true }; })
-      .concat(live(presented).map(function (p) { return { p: p, ran: false }; }));
+    return live(W.produced).map(function (p) { return { p: p, ran: true }; })
+      .concat(live(W.presented).map(function (p) { return { p: p, ran: false }; }));
   }
 
   var slug = new URLSearchParams(location.search).get('slug');
 
   /* ============ WORK INDEX ============ */
   function renderIndex() {
-    document.getElementById('pageTitle').textContent = 'The work · Mohamed Essam';
+    document.getElementById('pageTitle').textContent = 'The work · Mohammed Essam';
     var items = allWork();
-    /* sizes cycle so the page never reads as a tidy catalogue */
-    var pattern = ['size-full', 'pair', 'size-off', 'size-full', 'pair', 'size-small'];
 
-    var html = '<header class="page-head"><div class="wrap">' +
-      '<h1>' + esc(W.heading || 'The work.') + '</h1>' +
-      (W.note ? '<p class="note">' + esc(W.note) + '</p>' : '') +
-      '</div></header><div class="wrap"><div class="work-list" id="workList"></div></div>';
-    page.innerHTML = html;
+    page.innerHTML =
+      '<header class="page-head"><div class="wrap">' +
+        '<h1>' + esc(W.heading || 'The work.') + '</h1>' +
+        (W.note ? '<p class="note">' + esc(W.note) + '</p>' : '') +
+      '</div></header>' +
+      '<div class="wrap"><div class="work-list" id="workList"></div></div>';
 
     var list = document.getElementById('workList');
-    var i = 0, n = 1, pIdx = 0;
 
-    function card(entry, sizeClass) {
+    if (!items.length) {
+      list.innerHTML = '<p class="note">' + esc(J.emptyWork || 'Nothing here yet.') + '</p>';
+      return;
+    }
+
+    list.innerHTML = items.map(function (entry, i) {
       var p = entry.p;
+      var sticker = p.sticker && String(p.sticker).trim()
+        ? '<span class="sticker' + (entry.ran ? '' : ' spec') + '">' + esc(p.sticker) + '</span>'
+        : '';
       var img = p.image
-        ? '<div class="frame"><img src="' + esc(window.imgSrc(p.image)) + '" alt="' + esc(p.alt || p.title) + '">' + stamp(entry) + '</div>'
-        : '<div class="frame empty">' + stamp(entry) + '</div>';
+        ? '<div class="frame">' + sticker + '<img src="' + esc(window.imgSrc(p.image)) +
+          '" alt="' + esc(p.alt || p.title) + '" loading="lazy"></div>'
+        : '<div class="frame empty">' + sticker + '</div>';
       var meta = [p.client, p.year].filter(Boolean).join(' · ');
-      return '<a class="piece reveal ' + sizeClass + '" href="work.html?slug=' + encodeURIComponent(p.slug) + '">' +
+
+      return '<a class="piece reveal" href="work.html?slug=' + encodeURIComponent(p.slug) + '">' +
         img +
-        '<span class="serial">NO. ' + String(n++).padStart(2, '0') + (meta ? ' · ' + esc(meta.toUpperCase()) : '') + '</span>' +
+        '<span class="serial">NO. ' + String(i + 1).padStart(2, '0') +
+          (meta ? ' · ' + esc(meta.toUpperCase()) : '') + '</span>' +
         '<h2>' + esc(p.title) + '</h2>' +
         (p.tagline ? '<p>' + esc(p.tagline) + '</p>' : '') +
         '</a>';
-    }
-    function stamp(entry) {
-      var label = entry.ran ? (W.producedLabel || 'Winner') : (W.presentedLabel || 'Not a winner');
-      return '<span class="stamp' + (entry.ran ? '' : ' lose') + '">' + esc(label) + '</span>';
-    }
+    }).join('');
 
-    var out = '';
-    while (i < items.length) {
-      var kind = pattern[pIdx++ % pattern.length];
-      if (kind === 'pair' && items.length - i >= 2) {
-        out += '<div class="size-pair">' + card(items[i], '') + card(items[i + 1], '') + '</div>';
-        i += 2;
-      } else {
-        out += card(items[i], kind === 'pair' ? 'size-full' : kind);
-        i += 1;
-      }
-    }
-    list.innerHTML = out;
     if (window.observeReveals) window.observeReveals();
   }
 
   /* ============ PROJECT DETAIL ============ */
   function renderProject(entry) {
     var p = entry.p;
-    document.getElementById('pageTitle').textContent = p.title + ' · Mohamed Essam';
+    document.getElementById('pageTitle').textContent = p.title + ' · Mohammed Essam';
 
+    var status = entry.ran ? (W.producedLabel || 'Produced') : (W.presentedLabel || 'Spec');
     var html = '<section class="project"><div class="wrap">' +
       '<a class="back-link" href="work.html">← All work</a>' +
       '<p class="project-meta">' + esc([p.client, p.category, p.year].filter(Boolean).join(' · ')) +
-      ' · <span class="' + (entry.ran ? 'status-produced' : 'status-pitched') + '">' +
-      esc(entry.ran ? (W.producedLabel || 'Winner') : (W.presentedLabel || 'Not a winner')) + '</span></p>' +
+      ' · <span class="' + (entry.ran ? 'status-produced' : 'status-pitched') + '">' + esc(status) + '</span>' +
+      (p.sticker ? ' · ' + esc(p.sticker) : '') + '</p>' +
       '<h1 class="project-title">' + esc(p.title) + '</h1>';
 
     var story = (p.story || []).filter(function (t) { return t && String(t).trim(); });
     if (story.length) {
-      html += '<div class="project-body">' + story.map(function (t) { return '<p>' + esc(t) + '</p>'; }).join('') + '</div>';
+      html += '<div class="project-body">' +
+        story.map(function (t) { return '<p>' + esc(t) + '</p>'; }).join('') + '</div>';
     }
 
     var media = (p.media || []).filter(function (m) { return m.src && String(m.src).trim(); });
@@ -132,17 +129,21 @@
         var cap = m.caption ? '<figcaption>' + esc(m.caption) + '</figcaption>' : '';
         if (m.type === 'video') {
           var src = String(m.src).trim();
+          /* a local file in images/ */
           if (!/^https?:\/\//i.test(src) && !/<iframe/i.test(src)) {
             return '<figure class="project-media"><div class="video-wrap"><video src="' +
               esc(window.imgSrc(src)) + '" controls preload="metadata" playsinline></video></div>' + cap + '</figure>';
           }
+          /* a pasted embed: dig the src out of it */
           var em = /<iframe[^>]*\bsrc=["']([^"']+)["']/i.exec(src);
           if (em) src = em[1];
           return '<figure class="project-media"><div class="video-wrap"><iframe src="' + esc(src) +
-            '" title="' + esc(m.caption || p.title) + '" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>' + cap + '</figure>';
+            '" title="' + esc(m.caption || p.title) + '" frameborder="0" loading="lazy"' +
+            ' allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>' + cap + '</figure>';
         }
         return '<figure class="project-media" data-layout="' + esc(m.layout || '') + '"><img src="' +
-          esc(window.imgSrc(m.src)) + '" alt="' + esc(m.caption || p.alt || p.title) + '">' + cap + '</figure>';
+          esc(window.imgSrc(m.src)) + '" alt="' + esc(m.caption || p.alt || p.title) +
+          '" loading="lazy">' + cap + '</figure>';
       }).join('') + '</div>';
     }
 
@@ -156,14 +157,16 @@
         }).join('') + '</ul></div>';
     }
 
-    /* one next-project link, never a grid of ten */
+    /* ONE next-project link. Never a grid of ten. */
     var all = allWork();
     var idx = -1;
     for (var k = 0; k < all.length; k++) if (all[k].p.slug === p.slug) { idx = k; break; }
     var next = (idx > -1 && idx < all.length - 1) ? all[idx + 1] : null;
+    var label = J.nextLabel || 'Next';
     if (next) {
       html += '<a class="next-project" href="work.html?slug=' + encodeURIComponent(next.p.slug) + '">' +
-        '<span class="next-label">Next</span><span class="next-title">' + esc(next.p.title) + '</span>' +
+        '<span class="next-label">' + esc(label) + '</span>' +
+        '<span class="next-title">' + esc(next.p.title) + '</span>' +
         '<span class="next-arrow">→</span></a>';
     } else {
       html += '<a class="next-project" href="work.html">' +
@@ -177,17 +180,32 @@
 
   if (slug) {
     var found = allWork().filter(function (e) { return e.p.slug === slug; })[0];
-    if (found) { renderProject(found); }
-    else {
+    if (found) {
+      renderProject(found);
+    } else {
       page.innerHTML = '<section class="project"><div class="wrap">' +
         '<a class="back-link" href="work.html">← All work</a>' +
-        '<h1 class="project-title">Still in the drafts</h1>' +
-        '<div class="project-body"><p>That one has not made it out of the folder yet. Pick another.</p></div>' +
+        '<h1 class="project-title">Not found</h1>' +
+        '<div class="project-body"><p>' + esc(J.notFound || 'That one is not here.') + '</p></div>' +
         '</div></section>';
     }
   } else {
     renderIndex();
   }
+
+  /* footer small print + the quiet jokes */
+  var t = document.getElementById('footTerms');
+  if (t && C.ticket) t.textContent = C.ticket.terms || '';
+  var fj = document.getElementById('footJoke');
+  if (fj) fj.textContent = J.footer || '';
+
+  if (J.tabAway) {
+    var realTitle = document.title;
+    document.addEventListener('visibilitychange', function () {
+      document.title = document.hidden ? J.tabAway : realTitle;
+    });
+  }
+  if (J.console && window.console) console.log('%c' + J.console, 'color:#E3261A;font-size:13px');
 })();
 </script>
 

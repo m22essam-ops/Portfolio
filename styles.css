@@ -1,305 +1,355 @@
 /* ============================================================
-   MOHAMED ESSAM — "AWARD-LOSING COPYWRITER"
-   Art direction: a lottery scratch ticket, interpreted.
-   Red ground, cream stock, gold foil, near-black ink.
-   Type: Bricolage Grotesque (display) / Barlow Condensed
-   (ticket furniture) / Hanken Grotesk (body).
+   Mohammed Essam — portfolio
+   Red, flat, loud. No halftone, no sunburst, no gold, no drop
+   shadows: those read as 1970s pastiche, which reads as old.
+   Two registers only:
+     home  = flat red field, white ticket, black type
+     rest  = near-black gallery so the work carries the colour
    ============================================================ */
 
 :root{
-  --ground:#D91E18;        /* lottery red */
-  --ground-deep:#A81410;
-  --stock:#FFF6E2;         /* ticket paper */
-  --page:#F4EFE2;          /* inner pages */
-  --gold:#E8B33A;
-  --ink:#12100C;
-  --ink-70:#12100cb3;
-  --ink-40:#12100c66;
-  --ink-15:#12100c26;
+  --red:#E3261A;
+  --red-deep:#B7150B;
+  --red-hot:#FF3B2B;
+  --ink:#0B0A09;
+  --paper:#F6F3EE;
+  --paper-dim:#F6F3EEa6;
+  --paper-faint:#F6F3EE40;
+  --ink-60:#0B0A0999;
+  --ink-30:#0B0A094d;
+  --ink-12:#0B0A091f;
   --ease:cubic-bezier(.2,.8,.2,1);
-  --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  --wrap:1240px;
 }
 
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-::selection{background:var(--ground);color:var(--stock)}
-
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
 body{
-  background:var(--page);
-  color:var(--ink);
-  font-family:'Hanken Grotesk',sans-serif;
-  line-height:1.55;
+  margin:0;
+  background:var(--ink);
+  color:var(--paper);
+  font-family:"Hanken Grotesk",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:17px;
+  line-height:1.6;
   -webkit-font-smoothing:antialiased;
-  overflow-x:hidden;
 }
-a{color:inherit;text-decoration:none}
 img{max-width:100%;display:block}
-.wrap{max-width:1180px;margin:0 auto;padding:0 32px}
-.cond{font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.05em}
+a{color:inherit}
 
-/* ============================================================
-   HOME — the ticket. Fills the screen, does not scroll.
-   ============================================================ */
+.wrap{width:min(100% - 44px,var(--wrap));margin-inline:auto}
+
+/* mono voice: labels, serials, small print */
+.mono,.serial,.tk-top,.tk-terms,.page-nav,.sticker,.project-meta,
+.next-label,.exp-time,.skill-tag,.terms,.note,.tk-band,.tk-badge{
+  font-family:"Barlow Condensed","Hanken Grotesk",sans-serif;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  font-weight:600;
+}
+
+/* display voice */
+h1,h2,h3,.tk-title,.big{
+  font-family:"Bricolage Grotesque","Hanken Grotesk",sans-serif;
+  font-weight:800;
+  letter-spacing:-.03em;
+  line-height:.95;
+  margin:0;
+}
+
+/* ============================ HOME: THE TICKET ============================ */
+
 body.is-home{
-  background:var(--ground-deep);
+  background:var(--red);
   min-height:100vh;min-height:100svh;
   display:flex;align-items:center;justify-content:center;
-  padding:38px 22px;
+  padding:40px 22px;
 }
 
 .ticket{
-  position:relative;width:min(1020px,100%);background:var(--stock);
-  box-shadow:0 40px 90px -34px rgba(0,0,0,.7);
-  transform:rotate(-.4deg);
+  width:min(100%,940px);
+  background:var(--paper);
+  color:var(--ink);
+  position:relative;
+  border-radius:4px;
 }
-.perf{
-  position:absolute;left:0;right:0;height:14px;z-index:2;
-  background-image:radial-gradient(circle at 7px 7px, var(--ground-deep) 6.5px, transparent 7px);
-  background-size:18px 14px;background-repeat:repeat-x;
+/* perforated edges, drawn as plain dots. no texture, no shadow. */
+.perf{height:14px;position:relative;background:var(--paper);border-radius:4px 4px 0 0}
+.perf.bot{border-radius:0 0 4px 4px}
+.perf::before{
+  content:"";position:absolute;left:0;right:0;height:14px;
+  background-image:radial-gradient(circle at 7px 7px,var(--red) 5px,transparent 5.5px);
+  background-size:22px 14px;
 }
-.perf.top{top:-7px}
-.perf.bot{bottom:-7px}
-
-/* cheap-print halftone over the stock */
-.ticket::after{
-  content:'';position:absolute;inset:0;pointer-events:none;z-index:4;opacity:.14;
-  background-image:radial-gradient(var(--ink) 1px, transparent 1.4px);
-  background-size:5px 5px;mix-blend-mode:multiply;
-}
+.perf.top::before{top:-7px}
+.perf.bot::before{bottom:-7px}
 
 .tk-band{
-  background:var(--ground);color:var(--stock);padding:10px 22px;position:relative;z-index:3;
-  display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;
-  font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;
-  letter-spacing:.05em;font-weight:700;font-size:15px;
+  background:var(--ink);color:var(--paper);
+  padding:11px 30px;font-size:12px;
+  display:flex;justify-content:space-between;align-items:center;gap:16px;
 }
-.tk-band .stars{letter-spacing:.3em;color:var(--gold);font-size:13px}
+.tk-band .stars{letter-spacing:.3em;opacity:.5}
 
-.tk-body{position:relative;z-index:3;padding:30px 30px 24px}
-
-/* sunburst rays behind the title */
-.burst{
-  position:absolute;left:50%;top:-40px;width:min(900px,120%);aspect-ratio:1;
-  transform:translateX(-50%);pointer-events:none;z-index:0;opacity:.16;
-  background:repeating-conic-gradient(from 0deg at 50% 50%,
-    var(--ground) 0deg 7deg, transparent 7deg 14deg);
-  -webkit-mask-image:radial-gradient(circle at 50% 45%, #000 12%, transparent 62%);
-  mask-image:radial-gradient(circle at 50% 45%, #000 12%, transparent 62%);
-}
+.tk-body{padding:44px 46px 34px}
 
 .tk-top{
-  position:relative;z-index:2;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
-  font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.12em;
-  font-size:13px;font-weight:600;color:var(--ink-40);
+  display:flex;justify-content:space-between;gap:16px;
+  font-size:11px;color:var(--ink-60);margin-bottom:36px;
+}
+
+.tk-badge{
+  display:inline-block;
+  background:var(--red);color:var(--paper);
+  font-size:11.5px;padding:6px 13px;border-radius:100px;
+  margin-bottom:20px;
 }
 
 .tk-title{
-  position:relative;z-index:2;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
-  font-size:clamp(38px,7.4vw,104px);line-height:.86;letter-spacing:-.05em;
-  text-transform:uppercase;margin:16px 0 6px;
-  color:var(--ground);text-shadow:4px 4px 0 var(--ink);
+  font-size:clamp(52px,10.5vw,124px);
+  color:var(--ink);
+  margin-bottom:18px;
 }
-.tk-title span{display:block;color:var(--ink);text-shadow:4px 4px 0 var(--gold)}
+.tk-title span{display:block}
+.tk-title span:last-child{color:var(--red)}
 
 .tk-sub{
-  position:relative;z-index:2;font-family:'Barlow Condensed',sans-serif;
-  text-transform:uppercase;letter-spacing:.14em;font-weight:600;
-  font-size:clamp(13px,1.6vw,17px);color:var(--ink-70);
+  font-size:16px;color:var(--ink-60);
+  margin:0 0 30px;max-width:52ch;
 }
 
-/* starburst badge */
-.tk-badge{
-  position:absolute;right:26px;top:96px;z-index:5;width:clamp(96px,13vw,140px);aspect-ratio:1;
-  background:var(--ink);color:var(--stock);display:flex;align-items:center;justify-content:center;
-  text-align:center;padding:14px;transform:rotate(11deg);
-  clip-path:polygon(50% 0%,61% 12%,76% 6%,80% 22%,96% 24%,90% 39%,100% 50%,90% 61%,96% 76%,80% 78%,76% 94%,61% 88%,50% 100%,39% 88%,24% 94%,20% 78%,4% 76%,10% 61%,0% 50%,10% 39%,4% 24%,20% 22%,24% 6%,39% 12%);
-  font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;font-weight:700;
-  font-size:clamp(11px,1.3vw,14px);line-height:1.05;letter-spacing:.04em;
+.tear{
+  border:0;border-top:2px dashed var(--ink-12);
+  margin:0 0 28px;
 }
 
-.tear{border:0;border-top:2px dashed var(--ink-40);margin:24px 0;position:relative;z-index:2}
+/* the proof, printed in the open. it used to be hidden under a
+   scratch panel, which is a strange place to keep your best fact. */
+.proof{margin-bottom:34px}
+.proof .win-line{
+  font-family:"Bricolage Grotesque",sans-serif;
+  font-weight:800;letter-spacing:-.025em;line-height:1.05;
+  font-size:clamp(23px,3.4vw,34px);
+  margin:0 0 8px;color:var(--ink);
+}
+.proof .win-sub{margin:0;font-size:15px;color:var(--ink-60)}
 
-/* scratch panels — gold foil */
-.panels{position:relative;z-index:2;display:grid;grid-template-columns:1.3fr 1fr;gap:18px}
-.panel{position:relative;border:2.5px solid var(--ink);min-height:130px;overflow:hidden;background:var(--stock)}
-.panel .beneath{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
-  gap:7px;padding:16px 18px}
-.panel canvas{position:absolute;inset:0;width:100%;height:100%;cursor:crosshair;
-  touch-action:none;transition:opacity .45s var(--ease)}
-.panel.revealed canvas{opacity:0;pointer-events:none}
-.win-line{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
-  font-size:clamp(18px,2.4vw,28px);line-height:1.03;letter-spacing:-.03em}
-.win-sub{font-size:14px;color:var(--ink-70)}
-.joke{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;text-transform:uppercase;
-  font-size:clamp(17px,2.1vw,25px);line-height:1.03;letter-spacing:-.03em;color:var(--ground)}
-.again{margin-top:8px;background:none;border:1.5px solid var(--ink-40);color:var(--ink-70);
-  font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.08em;
-  font-weight:600;font-size:12px;padding:4px 10px;cursor:pointer;align-self:flex-start}
-.again:hover{border-color:var(--ink);color:var(--ink)}
-
-/* nav punches — the only navigation on the home page */
-.tk-nav{position:relative;z-index:2;display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+/* nav as punch boxes */
+.tk-nav{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:34px}
 .tk-nav a{
-  flex:1;min-width:140px;border:2.5px solid var(--ink);background:var(--stock);
-  padding:12px 15px;font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;
-  letter-spacing:.1em;font-weight:700;font-size:16px;
-  display:flex;justify-content:space-between;align-items:center;
-  box-shadow:3px 3px 0 var(--ink);
-  transition:transform .16s ease,box-shadow .16s ease,background .16s ease,color .16s ease;
+  border:2px solid var(--ink);border-radius:3px;
+  padding:17px 16px;text-decoration:none;color:var(--ink);
+  display:flex;justify-content:space-between;align-items:baseline;gap:10px;
+  font-family:"Bricolage Grotesque",sans-serif;font-weight:800;
+  letter-spacing:-.02em;font-size:19px;
+  transition:background .16s var(--ease),color .16s var(--ease);
 }
-.tk-nav a:hover{background:var(--ground);color:var(--stock);transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
-.tk-nav a i{font-style:normal;font-size:11px;opacity:.6}
+.tk-nav a i{
+  font-style:normal;font-family:"Barlow Condensed",sans-serif;
+  font-size:12px;letter-spacing:.14em;opacity:.45;
+}
+.tk-nav a:hover{background:var(--red);border-color:var(--red);color:var(--paper)}
+.tk-nav a:hover i{opacity:.8}
 
-.tk-foot{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:flex-end;
-  gap:18px;margin-top:22px;flex-wrap:wrap}
-.barcode{height:42px;width:min(240px,52vw);
-  background:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 4px,
-    var(--ink) 4px 5px,transparent 5px 9px,var(--ink) 9px 12px,transparent 12px 14px)}
-.tk-terms{font-family:var(--mono);font-size:10px;line-height:1.6;color:var(--ink-40);
-  max-width:44ch;text-align:right}
+.tk-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:26px}
+/* explicit box: in the stacked layout the flex axis turns vertical,
+   so a flex-basis here would size the height and collapse the width */
+.barcode{
+  flex:0 0 auto;width:132px;height:44px;
+  background-image:repeating-linear-gradient(90deg,
+    var(--ink) 0 2px,transparent 2px 4px,var(--ink) 4px 5px,transparent 5px 9px,
+    var(--ink) 9px 12px,transparent 12px 14px);
+}
+.tk-terms{font-size:10.5px;line-height:1.55;color:var(--ink-30);letter-spacing:.09em;margin:0;text-align:right}
 
-/* ============================================================
-   INNER PAGES — work + about. Cream, calm, work is the loudest thing.
-   ============================================================ */
-.page-nav{padding:24px 0;position:sticky;top:0;background:var(--page);z-index:40;
-  border-bottom:2px solid var(--ink)}
-.page-nav .wrap{display:flex;justify-content:space-between;align-items:center;gap:20px}
-.page-nav .logo{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
-  font-size:18px;letter-spacing:-.03em;text-transform:lowercase}
-.page-nav .logo em{font-style:normal;color:var(--ground)}
-.page-nav .links{display:flex;gap:22px;font-family:'Barlow Condensed',sans-serif;
-  text-transform:uppercase;letter-spacing:.1em;font-weight:700;font-size:14px}
-.page-nav .links a:hover{color:var(--ground)}
-.page-nav .links a.on{color:var(--ground)}
+/* the awards switch: when he finally wins something */
+body.has-won .tk-badge{background:var(--ink)}
+body.has-won .tk-title span:last-child{color:var(--red)}
+.won-list{margin:0 0 30px;padding:0;list-style:none}
+.won-list li{
+  font-family:"Barlow Condensed",sans-serif;text-transform:uppercase;
+  letter-spacing:.14em;font-size:13px;font-weight:600;
+  padding:9px 0;border-bottom:1px solid var(--ink-12);
+}
 
-.page-head{padding:min(9vw,80px) 0 0}
-.page-head h1{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
-  font-size:clamp(34px,6.4vw,86px);letter-spacing:-.05em;line-height:.9;text-transform:uppercase}
-.page-head .note{font-family:var(--mono);font-size:12px;color:var(--ink-40);margin-top:14px}
+/* ============================ SHARED PAGE CHROME ============================ */
 
-/* ---- work index ---- */
-.work-list{padding:min(7vw,60px) 0 0;display:flex;flex-direction:column;gap:min(8vw,84px)}
-.piece{display:block;position:relative}
-.piece .frame{position:relative;overflow:hidden;background:#E4DFD1;
-  transition:transform .5s var(--ease)}
-.piece:hover .frame{transform:translateY(-6px)}
-.piece .frame img{width:100%;height:100%;object-fit:cover;display:block}
-.piece .frame.empty::after{content:'IMAGE';position:absolute;inset:0;display:flex;
-  align-items:center;justify-content:center;font-size:12px;letter-spacing:.2em;
-  color:#B0AAA0;font-weight:700}
-.piece .serial{font-family:var(--mono);font-size:11px;color:var(--ink-40);margin-top:12px;display:block}
-.piece h2{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
-  font-size:clamp(22px,3.2vw,40px);letter-spacing:-.03em;line-height:1.03;margin-top:3px}
-.piece p{font-size:15.5px;color:var(--ink-70);margin-top:5px;max-width:40ch}
+.page-nav{
+  position:sticky;top:0;z-index:50;
+  background:#0B0A09f2;backdrop-filter:blur(9px);
+  border-bottom:1px solid #F6F3EE1f;
+  font-size:12px;
+}
+.page-nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;height:62px}
+.page-nav .logo{
+  text-decoration:none;font-family:"Bricolage Grotesque",sans-serif;
+  font-weight:800;letter-spacing:-.03em;text-transform:none;font-size:19px;
+}
+.page-nav .logo em{color:var(--red);font-style:normal}
+.page-nav .links{display:flex;gap:24px}
+.page-nav .links a{text-decoration:none;opacity:.6;transition:opacity .16s}
+.page-nav .links a:hover,.page-nav .links a.on{opacity:1;color:var(--red-hot)}
 
-.size-full .frame{aspect-ratio:16/8}
-.size-pair{display:grid;grid-template-columns:1.3fr .95fr;gap:32px;align-items:end}
-.size-pair .frame{aspect-ratio:4/3}
-.size-off{width:min(72%,760px);margin-left:auto}
-.size-off .frame{aspect-ratio:5/4}
+.page-head{padding:88px 0 44px}
+.page-head h1{font-size:clamp(52px,11vw,138px)}
+.page-head .note{
+  margin:22px 0 0;font-size:12px;color:var(--paper-dim);
+  max-width:60ch;letter-spacing:.12em;
+}
 
-/* WINNER / NOT A WINNER stamps */
-.stamp{position:absolute;top:14px;right:14px;z-index:3;
-  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;
-  letter-spacing:.14em;text-transform:uppercase;padding:6px 12px;line-height:1;
-  border:2.5px solid var(--ground);color:var(--ground);background:rgba(255,246,226,.94);
-  transform:rotate(-8deg)}
-.stamp.lose{border-color:var(--ink-40);color:var(--ink-40);transform:rotate(6deg)}
+.page-foot{margin-top:120px;border-top:1px solid #F6F3EE1f;padding:64px 0 54px}
+.page-foot .big{font-size:clamp(30px,5.4vw,60px);margin-bottom:26px}
+.page-foot .big a{color:var(--red-hot);text-decoration:none;border-bottom:3px solid currentColor}
+.page-foot .terms{font-size:10.5px;color:var(--paper-faint);letter-spacing:.09em;max-width:70ch;margin:0}
+.page-foot .joke{font-size:11px;color:var(--paper-faint);letter-spacing:.1em;margin:16px 0 0}
 
-/* ---- project detail ---- */
-.project{padding:min(7vw,60px) 0 0}
-.project .wrap{max-width:900px}
-.back-link{font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;
-  letter-spacing:.12em;font-weight:700;font-size:13px;color:var(--ink-40);display:inline-block;margin-bottom:30px}
-.back-link:hover{color:var(--ground)}
-.project-meta{font-family:var(--mono);font-size:11px;letter-spacing:.06em;
-  text-transform:uppercase;color:var(--ink-40);margin-bottom:10px}
-.status-produced{color:var(--ground);font-weight:700}
-.status-pitched{color:var(--ink-40);font-weight:700}
-.project-title{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
-  font-size:clamp(28px,5.2vw,66px);line-height:.94;letter-spacing:-.04em;
-  text-transform:uppercase;margin-bottom:26px}
-.project-body{max-width:62ch;margin-bottom:44px}
-.project-body p{font-size:17px;line-height:1.65;color:var(--ink-70);margin-bottom:15px}
-.project-body p:first-child{color:var(--ink);font-size:19px}
-.media-grid{display:flex;flex-direction:column;gap:26px}
-.project-media{margin:0}
-.project-media img{width:100%;display:block}
-.project-media[data-layout="half"]{width:100%}
-.video-wrap{position:relative;width:100%;padding-top:56.25%;overflow:hidden}
-.video-wrap iframe,.video-wrap video{position:absolute;inset:0;width:100%;height:100%}
-.project-media figcaption{font-family:var(--mono);font-size:10px;letter-spacing:.05em;
-  color:var(--ink-40);margin-top:8px}
-.credits{margin-top:50px;padding-top:24px;border-top:2px solid var(--ink)}
-.credits-head{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;
-  letter-spacing:.14em;text-transform:uppercase;color:var(--ground);margin-bottom:14px}
-.credits-list{list-style:none}
-.credits-list li{font-size:14px;padding:6px 0;display:flex;gap:14px;flex-wrap:wrap}
-.credits-list li span{color:var(--ink-40);min-width:160px;flex-shrink:0}
-.next-project{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-top:50px;
-  padding-top:22px;border-top:2px solid var(--ink)}
-.next-label{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--ink-40)}
-.next-title{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
-  font-size:clamp(18px,2.6vw,28px);letter-spacing:-.03em}
-.next-arrow{color:var(--ground)}
+/* ============================ WORK GRID ============================ */
+/* one uniform grid. no alternating sizes, no two lists, no tabs.
+   the sticker carries the status instead. */
 
-/* ---- about ---- */
-.about-grid{display:grid;grid-template-columns:minmax(260px,380px) 1fr;gap:44px;
-  align-items:start;padding:min(7vw,60px) 0 0}
-.about-portrait{width:100%;aspect-ratio:1;object-fit:cover;border:8px solid #fff;
-  box-shadow:0 20px 44px -18px rgba(0,0,0,.4);transform:rotate(-2deg)}
-.about-text{font-size:17px;line-height:1.62;color:var(--ink-70);margin-bottom:16px}
-.about-text:first-child{color:var(--ink);font-size:19px}
-.skills-list{margin-top:26px;display:flex;flex-wrap:wrap;gap:9px}
-.skill-tag{font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;
-  letter-spacing:.08em;font-weight:600;font-size:13px;padding:6px 12px;
-  border:2px solid var(--ink);background:var(--stock)}
-.exp-list{margin-top:min(8vw,70px);border-top:2px solid var(--ink)}
-.exp-row{display:flex;justify-content:space-between;align-items:baseline;gap:16px;
-  padding:15px 0;border-bottom:1px solid var(--ink-15);flex-wrap:wrap}
-.exp-role{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:18px;letter-spacing:-.02em}
-.exp-org{font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;
-  letter-spacing:.08em;font-size:14px;color:var(--ground);margin-left:9px}
-.exp-time{font-family:var(--mono);font-size:11px;color:var(--ink-40);white-space:nowrap}
+.work-list{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:56px 40px;
+}
+.piece{text-decoration:none;display:block;color:inherit}
 
-/* ---- shared page footer ---- */
-.page-foot{margin-top:min(14vw,130px);border-top:2px solid var(--ink);padding:26px 0 60px}
-.page-foot .wrap{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;align-items:flex-end}
-.page-foot .big{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
-  font-size:clamp(22px,3.4vw,42px);letter-spacing:-.035em;line-height:1}
-.page-foot .big a{color:var(--ground)}
-.page-foot .terms{font-family:var(--mono);font-size:10px;line-height:1.6;
-  color:var(--ink-40);max-width:46ch}
+.frame{
+  position:relative;overflow:hidden;border-radius:3px;
+  aspect-ratio:4/3;background:#17150F;
+  border:1px solid #F6F3EE14;
+}
+.frame img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.piece:hover .frame img{transform:scale(1.035)}
+.frame.empty::after{
+  content:"NO IMAGE YET";position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:"Barlow Condensed",sans-serif;letter-spacing:.2em;
+  font-size:12px;color:var(--paper-faint);
+}
 
-/* reveals */
-.reveal{opacity:0;transform:translateY(18px);
-  transition:opacity .7s var(--ease),transform .7s var(--ease)}
+/* THE STICKER — what actually happened to this piece */
+.sticker{
+  position:absolute;top:14px;right:14px;z-index:2;
+  background:var(--red);color:var(--paper);
+  font-size:11px;padding:7px 12px;border-radius:100px;
+  transform:rotate(-3deg);
+  max-width:calc(100% - 28px);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.sticker.spec{background:var(--paper);color:var(--ink);transform:rotate(2.5deg)}
+
+.piece .serial{
+  display:block;margin:16px 0 7px;
+  font-size:11px;color:var(--paper-faint);
+}
+.piece h2{font-size:clamp(21px,2.3vw,29px);margin-bottom:6px}
+.piece:hover h2{color:var(--red-hot)}
+.piece p{margin:0;font-size:15px;color:var(--paper-dim);max-width:44ch}
+
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
 .reveal.is-visible{opacity:1;transform:none}
 
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
-@media(max-width:860px){
-  .panels{grid-template-columns:1fr}
-  .tk-badge{position:static;margin:14px 0 0;transform:rotate(-4deg)}
-  .tk-terms{text-align:left}
-  .ticket{transform:none}
-  .size-pair{grid-template-columns:1fr;gap:24px}
-  .size-off{width:100%;margin-left:0}
-  .about-grid{grid-template-columns:1fr;gap:30px}
-  .about-portrait{max-width:300px}
-  body.is-home{padding:26px 16px}
+/* ============================ PROJECT PAGE ============================ */
+
+.project{padding:56px 0 0}
+.back-link{
+  display:inline-block;text-decoration:none;margin-bottom:44px;
+  font-family:"Barlow Condensed",sans-serif;text-transform:uppercase;
+  letter-spacing:.16em;font-size:12px;font-weight:600;color:var(--paper-dim);
 }
-@media(max-width:560px){
-  .wrap{padding:0 20px}
-  .page-nav .links{gap:14px;font-size:13px}
-  .credits-list li span{min-width:0}
-  .credits-list li{flex-direction:column;gap:2px}
+.back-link:hover{color:var(--red-hot)}
+
+.project-meta{font-size:11.5px;color:var(--paper-faint);margin:0 0 16px}
+.status-produced{color:var(--red-hot)}
+.status-pitched{color:var(--paper-dim)}
+.project-title{font-size:clamp(42px,8vw,104px);margin-bottom:40px}
+
+.project-body{max-width:62ch;margin-bottom:60px}
+.project-body p{font-size:19px;line-height:1.62;margin:0 0 22px;color:#F6F3EEd9}
+
+.media-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:28px;margin-bottom:70px}
+.project-media{margin:0;grid-column:1/-1}
+.project-media[data-layout="half"]{grid-column:auto}
+.project-media img{width:100%;border-radius:3px}
+.project-media figcaption{
+  margin-top:11px;font-size:12px;color:var(--paper-faint);
+  font-family:"Barlow Condensed",sans-serif;letter-spacing:.1em;text-transform:uppercase;
 }
-@media(prefers-reduced-motion:reduce){
-  .reveal{opacity:1;transform:none;transition:none}
-  .piece:hover .frame{transform:none}
+.video-wrap{position:relative;padding-top:56.25%;border-radius:3px;overflow:hidden;background:#000}
+.video-wrap iframe,.video-wrap video{position:absolute;inset:0;width:100%;height:100%;border:0}
+
+.credits{margin-bottom:70px}
+.credits-head{
+  font-family:"Barlow Condensed",sans-serif;text-transform:uppercase;
+  letter-spacing:.18em;font-size:12px;font-weight:600;
+  color:var(--paper-faint);margin-bottom:18px;
+}
+.credits-list{list-style:none;padding:0;margin:0;max-width:640px}
+.credits-list li{
+  display:flex;gap:20px;padding:11px 0;border-top:1px solid #F6F3EE14;
+  font-size:15px;
+}
+.credits-list li span{
+  flex:0 0 40%;color:var(--paper-faint);
+  font-family:"Barlow Condensed",sans-serif;text-transform:uppercase;letter-spacing:.1em;
 }
 
-a:focus-visible,button:focus-visible{outline:3px solid var(--ground);outline-offset:3px}
+.next-project{
+  display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;
+  text-decoration:none;border-top:2px solid var(--red);padding:34px 0 0;
+}
+.next-label{font-size:11.5px;color:var(--paper-faint)}
+.next-title{
+  font-family:"Bricolage Grotesque",sans-serif;font-weight:800;
+  letter-spacing:-.03em;font-size:clamp(28px,5vw,58px);
+}
+.next-project:hover .next-title{color:var(--red-hot)}
+.next-arrow{margin-left:auto;font-size:30px;color:var(--red)}
+
+/* ============================ ABOUT ============================ */
+
+.about-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:56px;align-items:start;margin-bottom:96px}
+.about-portrait{
+  width:100%;border-radius:3px;
+  border:9px solid var(--paper);transform:rotate(-1.6deg);
+}
+.about-text{font-size:19px;line-height:1.62;margin:0 0 22px;color:#F6F3EEd9}
+.skills-list{display:flex;flex-wrap:wrap;gap:9px;margin-top:32px}
+.skill-tag{
+  border:1px solid #F6F3EE38;border-radius:100px;
+  padding:6px 13px;font-size:11px;color:var(--paper-dim);
+}
+.exp-list{margin-bottom:40px}
+.exp-row{
+  display:flex;justify-content:space-between;align-items:baseline;gap:20px;
+  padding:19px 0;border-top:1px solid #F6F3EE14;
+}
+.exp-role{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;letter-spacing:-.02em;font-size:21px;display:block}
+.exp-org{font-size:15px;color:var(--paper-dim)}
+.exp-time{font-size:11.5px;color:var(--paper-faint);white-space:nowrap}
+
+/* ============================ RESPONSIVE ============================ */
+
+@media (max-width:900px){
+  .work-list{grid-template-columns:1fr;gap:44px}
+  .about-grid{grid-template-columns:1fr;gap:34px}
+  .media-grid{grid-template-columns:1fr}
+  .project-media[data-layout="half"]{grid-column:1/-1}
+  .tk-body{padding:34px 26px 26px}
+  .tk-nav{grid-template-columns:1fr;gap:9px}
+  .tk-foot{flex-direction:column;align-items:flex-start;gap:16px}
+  .tk-terms{text-align:left}
+  .page-nav .links{gap:16px}
+  body.is-home{padding:22px 14px}
+}
+@media (max-width:520px){
+  .credits-list li{flex-direction:column;gap:3px}
+  .credits-list li span{flex:none}
+  .page-nav .logo{font-size:16px}
+  .tk-band{padding:9px 18px;font-size:10.5px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
+  .reveal{opacity:1;transform:none}
+}

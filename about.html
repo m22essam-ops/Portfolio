@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Who I am · Mohamed Essam</title>
+<title>Who I am · Mohammed Essam</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -13,7 +13,7 @@
 
 <nav class="page-nav">
   <div class="wrap">
-    <a class="logo" href="index.html">mohamed essam<em>.</em></a>
+    <a class="logo" href="index.html">mohammed essam<em>.</em></a>
     <div class="links">
       <a href="work.html">The work</a>
       <a href="about.html" class="on">Who I am</a>
@@ -38,6 +38,7 @@
   <div class="wrap">
     <p class="big">Someone has to win eventually. <a href="mailto:m22essam@gmail.com">Go on.</a></p>
     <p class="terms" id="footTerms"></p>
+    <p class="joke" id="footJoke"></p>
   </div>
 </footer>
 
@@ -59,7 +60,7 @@
   var portrait = document.getElementById('aboutPortrait');
   if (A.portrait) {
     portrait.src = window.imgSrc(A.portrait);
-    portrait.alt = A.portraitAlt || 'Mohamed Essam';
+    portrait.alt = A.portraitAlt || 'Mohammed Essam';
   } else {
     portrait.style.display = 'none';
   }
@@ -84,6 +85,18 @@
 
   var termsEl = document.getElementById('footTerms');
   if (termsEl && C.ticket) termsEl.textContent = C.ticket.terms || '';
+
+  /* the quiet jokes */
+  var J = C.jokes || {};
+  var fj = document.getElementById('footJoke');
+  if (fj) fj.textContent = J.footer || '';
+  if (J.tabAway) {
+    var realTitle = document.title;
+    document.addEventListener('visibilitychange', function () {
+      document.title = document.hidden ? J.tabAway : realTitle;
+    });
+  }
+  if (J.console && window.console) console.log('%c' + J.console, 'color:#E3261A;font-size:13px');
 })();
 </script>
 

@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mohamed Essam — Award-losing copywriter</title>
-<meta name="description" content="Mohamed Essam, copywriter. Cairo, Dubai, Madrid. Work that ran, and work that didn't.">
+<title>Mohammed Essam — Award-losing copywriter</title>
+<meta name="description" content="Mohammed Essam, copywriter. Cairo, Dubai, Madrid. Work that ran, and work that didn't.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -12,7 +12,7 @@
 </head>
 <body class="is-home">
 
-<main class="ticket" id="ticket">
+<main class="ticket">
   <div class="perf top" aria-hidden="true"></div>
 
   <div class="tk-band">
@@ -21,8 +21,6 @@
   </div>
 
   <div class="tk-body">
-    <div class="burst" aria-hidden="true"></div>
-
     <div class="tk-top">
       <span id="tkGame"></span>
       <span id="tkSerial"></span>
@@ -35,22 +33,13 @@
 
     <hr class="tear">
 
-    <div class="panels">
-      <div class="panel" id="panelWin">
-        <div class="beneath">
-          <p class="win-line" id="winLine"></p>
-          <p class="win-sub" id="winSub"></p>
-        </div>
-        <canvas></canvas>
-      </div>
-      <div class="panel" id="panelJoke">
-        <div class="beneath">
-          <p class="joke" id="jokeText"></p>
-          <button class="again" id="againBtn" type="button">Scratch again</button>
-        </div>
-        <canvas></canvas>
-      </div>
+    <!-- the best fact on the site, printed where people can read it -->
+    <div class="proof">
+      <p class="win-line" id="winLine"></p>
+      <p class="win-sub" id="winSub"></p>
     </div>
+
+    <ul class="won-list" id="wonList" hidden></ul>
 
     <nav class="tk-nav" id="tkNav"></nav>
 
@@ -67,23 +56,40 @@
 <script src="auto-refresh.js"></script>
 <script>
 (function () {
-  var T = (window.SITE_CONTENT && window.SITE_CONTENT.ticket) || {};
+  var C = window.SITE_CONTENT || {};
+  var T = C.ticket || {};
+  var J = C.jokes || {};
+
+  /* Has he won something yet? The whole home page hangs off this. */
+  var won = (T.awards || []).filter(function (a) { return a && String(a).trim(); });
+  var hasWon = won.length > 0;
+  if (hasWon) document.body.classList.add('has-won');
 
   function set(id, val) {
     var el = document.getElementById(id);
-    if (el) el.textContent = val || '';
+    if (el) el.textContent = val == null ? '' : val;
   }
 
-  set('tkBand', T.band);
+  set('tkBand',        hasWon ? (T.wonBand      || T.band)      : T.band);
+  set('tkBadge',       hasWon ? (T.wonBadge     || T.badge)     : T.badge);
+  set('tkTitleTop',    hasWon ? (T.wonTitleTop  || T.titleTop)  : T.titleTop);
+  set('tkTitleBottom', hasWon ? (T.wonTitleBottom || T.titleBottom) : T.titleBottom);
+  set('winLine',       hasWon ? (T.wonLine      || T.winLine)   : T.winLine);
+  set('winSub',        hasWon ? '' : T.winSub);
   set('tkGame', T.game);
   set('tkSerial', T.serial);
-  set('tkBadge', T.badge);
-  set('tkTitleTop', T.titleTop);
-  set('tkTitleBottom', T.titleBottom);
   set('tkSub', T.sub);
-  set('winLine', T.winLine);
-  set('winSub', T.winSub);
   set('tkTerms', T.terms);
+
+  if (hasWon) {
+    var ul = document.getElementById('wonList');
+    ul.hidden = false;
+    won.forEach(function (a) {
+      var li = document.createElement('li');
+      li.textContent = a;
+      ul.appendChild(li);
+    });
+  }
 
   /* nav punches */
   var nav = document.getElementById('tkNav');
@@ -97,104 +103,15 @@
     nav.appendChild(a);
   });
 
-  /* ---------- scratch panels ----------
-     Gold foil on a canvas; scratching erases it with destination-out.
-     Nothing important is ONLY behind a panel: the win line is repeated
-     on the work page, and the jokes are jokes. */
-  var JOKES = (T.jokes && T.jokes.length) ? T.jokes : ['Not a winner'];
-  var jokeIdx = 0;
-  document.getElementById('jokeText').textContent = JOKES[0];
-
-  function scratchable(panel) {
-    var canvas = panel.querySelector('canvas');
-    var ctx = canvas.getContext('2d', { willReadFrequently: true });
-    var drawing = false, checks = 0, done = false;
-
-    function paint() {
-      var r = panel.getBoundingClientRect();
-      if (!r.width || !r.height) return;
-      var dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = Math.round(r.width * dpr);
-      canvas.height = Math.round(r.height * dpr);
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.globalCompositeOperation = 'source-over';
-
-      var gold = getComputedStyle(document.body).getPropertyValue('--gold').trim() || '#E8B33A';
-      var g = ctx.createLinearGradient(0, 0, r.width, r.height);
-      g.addColorStop(0, '#f6dc9b');
-      g.addColorStop(.28, gold);
-      g.addColorStop(.5, '#fbeec2');
-      g.addColorStop(.72, gold);
-      g.addColorStop(1, '#c98f24');
-      ctx.fillStyle = g;
-      ctx.fillRect(0, 0, r.width, r.height);
-
-      ctx.strokeStyle = 'rgba(255,255,255,.22)';
-      ctx.lineWidth = 1;
-      for (var y = 0; y < r.height; y += 3) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(r.width, y + (Math.random() * 2 - 1));
-        ctx.stroke();
-      }
-      ctx.fillStyle = 'rgba(120,80,10,.16)';
-      var n = Math.round(r.width * r.height / 900);
-      for (var i = 0; i < n; i++) ctx.fillRect(Math.random() * r.width, Math.random() * r.height, 1, 1);
-
-      ctx.fillStyle = 'rgba(70,45,5,.6)';
-      ctx.font = '700 12px "Barlow Condensed", sans-serif';
-      ctx.textAlign = 'center';
-      ctx.letterSpacing = '2px';
-      ctx.fillText('SCRATCH HERE', r.width / 2, r.height / 2 + 4);
-
-      done = false;
-      panel.classList.remove('revealed');
-      canvas.style.opacity = '';
-    }
-
-    function at(e) {
-      var r = canvas.getBoundingClientRect();
-      var p = e.touches ? e.touches[0] : e;
-      return [p.clientX - r.left, p.clientY - r.top];
-    }
-    function dig(x, y) {
-      ctx.globalCompositeOperation = 'destination-out';
-      ctx.beginPath();
-      ctx.arc(x, y, 22, 0, Math.PI * 2);
-      ctx.fill();
-    }
-    function frac() {
-      var d = ctx.getImageData(0, 0, canvas.width, canvas.height).data, c = 0, t = 0;
-      for (var i = 3; i < d.length; i += 4 * 220) { t++; if (d[i] < 26) c++; }
-      return t ? c / t : 0;
-    }
-    function check() {
-      if (done) return;
-      if (++checks % 6) return;
-      if (frac() > .48) { done = true; panel.classList.add('revealed'); }
-    }
-
-    canvas.addEventListener('mousedown', function (e) { drawing = true; var c = at(e); dig(c[0], c[1]); e.preventDefault(); });
-    canvas.addEventListener('mousemove', function (e) { if (!drawing) return; var c = at(e); dig(c[0], c[1]); check(); e.preventDefault(); });
-    window.addEventListener('mouseup', function () { drawing = false; check(); });
-    canvas.addEventListener('touchstart', function (e) { drawing = true; var c = at(e); dig(c[0], c[1]); e.preventDefault(); }, { passive: false });
-    canvas.addEventListener('touchmove', function (e) { if (!drawing) return; var c = at(e); dig(c[0], c[1]); check(); e.preventDefault(); }, { passive: false });
-    canvas.addEventListener('touchend', function () { drawing = false; check(); });
-    window.addEventListener('resize', function () { if (!done) paint(); });
-
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(paint); else paint();
-    return { repaint: paint };
+  /* ---- the quiet jokes. each one is optional: blank it in
+          content.js and the slot simply goes silent. ---- */
+  if (J.tabAway) {
+    var realTitle = document.title;
+    document.addEventListener('visibilitychange', function () {
+      document.title = document.hidden ? J.tabAway : realTitle;
+    });
   }
-
-  scratchable(document.getElementById('panelWin'));
-  var jokePanel = scratchable(document.getElementById('panelJoke'));
-
-  document.getElementById('againBtn').addEventListener('click', function (e) {
-    e.stopPropagation();
-    jokeIdx = (jokeIdx + 1) % JOKES.length;
-    document.getElementById('jokeText').textContent = JOKES[jokeIdx];
-    jokePanel.repaint();
-  });
+  if (J.console && window.console) console.log('%c' + J.console, 'color:#E3261A;font-size:13px');
 })();
 </script>
 

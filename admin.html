@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portfolio editor — Mohamed Essam</title>
+<title>Portfolio editor — Mohammed Essam</title>
 <style>
 :root {
   --bg: #0A0A0A;
@@ -314,44 +314,85 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
   <!-- ================= PROJECTS ================= -->
   <section class="admin-section">
     <h2>1. Projects</h2>
-    <p class="hint">These fill the home page grid and each project's own page. The two groups below match the two tabs on the home page. Tip: a project needs a "slug" (link address) to be clickable, a story to have text on its page, and a cover image to look right.</p>
+    <p class="hint"><strong>The site shows these as one single grid</strong>, in the order below: everything in the first group, then everything in the second. Visitors never see a split or a tab. The two groups are only here so you can keep track of what actually ran, and each project's <em>sticker</em> is what tells a visitor its status. Best work first. A project needs a "slug" to be clickable, a story to have text on its page, and a cover image to look right.</p>
 
-    <div class="group-head produced">Presented and produced</div>
+    <div class="group-head produced">It ran (produced)</div>
     <div id="produced-list"></div>
-    <button class="add-btn" data-act="add-project" data-group="produced" type="button">+ Add project (produced)</button>
+    <button class="add-btn" data-act="add-project" data-group="produced" type="button">+ Add project (it ran)</button>
 
-    <div class="group-head presented">Just presented</div>
+    <div class="group-head presented">It didn't run (spec, school, unsold)</div>
     <div id="presented-list"></div>
-    <button class="add-btn" data-act="add-project" data-group="presented" type="button">+ Add project (presented)</button>
+    <button class="add-btn" data-act="add-project" data-group="presented" type="button">+ Add project (didn't run)</button>
   </section>
 
-  <!-- ================= HERO ================= -->
+  <!-- ================= THE TICKET (home page) ================= -->
   <section class="admin-section">
-    <h2>2. Hero — the word chain</h2>
-    <p class="hint">Six short sentences, one shown at a time. The <b>last word</b> of each line becomes the clickable amber word — clicking it glitches to the next sentence. Each sentence should <b>start with the previous sentence's last word</b> (sentence 2 opens with sentence 1's last word, and so on). Sentence 6 ends the chain: clicking its last word (<b>"work"</b>) scrolls down to the work section. No brackets needed — the clickable word is detected automatically.</p>
-    <label class="field"><span>Sentence 1 — ends with the word that starts sentence 2</span><textarea data-path="hero.sentences.0" rows="2"></textarea></label>
-    <label class="field"><span>Sentence 2 — ends with the word that starts sentence 3</span><textarea data-path="hero.sentences.1" rows="2"></textarea></label>
-    <label class="field"><span>Sentence 3 — ends with the word that starts sentence 4</span><textarea data-path="hero.sentences.2" rows="2"></textarea></label>
-    <label class="field"><span>Sentence 4 — ends with the word that starts sentence 5</span><textarea data-path="hero.sentences.3" rows="2"></textarea></label>
-    <label class="field"><span>Sentence 5 — ends with the word that starts sentence 6</span><textarea data-path="hero.sentences.4" rows="2"></textarea></label>
-    <label class="field"><span>Sentence 6 — ends with the word that scrolls to the work section (currently "work")</span><textarea data-path="hero.sentences.5" rows="2"></textarea></label>
+    <h2>2. The ticket (home page)</h2>
+    <p class="hint">The whole home page is one lottery ticket, and every line of it is here. Nothing is hidden behind a scratch panel any more, so whatever you write gets read.</p>
+
+    <div class="grid2">
+      <label class="field"><span>Top band</span><input data-path="ticket.band" placeholder="The National Award Lottery"></label>
+      <label class="field"><span>Badge (the red pill)</span><input data-path="ticket.badge" placeholder="0 awards so far"></label>
+    </div>
+    <div class="grid2">
+      <label class="field"><span>Game line (small, top left)</span><input data-path="ticket.game"></label>
+      <label class="field"><span>Serial (small, top right)</span><input data-path="ticket.serial"></label>
+    </div>
+    <div class="grid2">
+      <label class="field"><span>Headline, first line</span><input data-path="ticket.titleTop" placeholder="Award-losing"></label>
+      <label class="field"><span>Headline, second line (in red)</span><input data-path="ticket.titleBottom" placeholder="copywriter"></label>
+    </div>
+    <label class="field"><span>Sub-line under the headline</span><input data-path="ticket.sub"></label>
+
+    <div class="subhead">The proof — your best fact, printed in the open</div>
+    <label class="field"><span>The line</span><input data-path="ticket.winLine" placeholder="Rivan Tower sold out in a week."><small>Make it a real number. If there is no number, write nothing.</small></label>
+    <label class="field"><span>The line under it</span><input data-path="ticket.winSub"></label>
+
+    <label class="field"><span>Small print along the bottom</span><textarea data-path="ticket.terms" rows="3"></textarea></label>
+
+    <div class="subhead">The three buttons</div>
+    <div class="grid2">
+      <label class="field"><span>Button 1 label</span><input data-path="ticket.nav.0.label"></label>
+      <label class="field"><span>Button 1 link</span><input data-path="ticket.nav.0.url"></label>
+      <label class="field"><span>Button 2 label</span><input data-path="ticket.nav.1.label"></label>
+      <label class="field"><span>Button 2 link</span><input data-path="ticket.nav.1.url"></label>
+      <label class="field"><span>Button 3 label</span><input data-path="ticket.nav.2.label"></label>
+      <label class="field"><span>Button 3 link</span><input data-path="ticket.nav.2.url"></label>
+    </div>
+
+    <div class="subhead">When you finally win something</div>
+    <p class="hint">Leave the box below empty and the site runs the "award-losing" version. Type an award into it (one per line) and the home page <strong>flips itself</strong> to the correction-notice version and prints what you won. That is the whole switch, nothing else to change.</p>
+    <label class="field"><span>Awards won (one per line)</span><textarea data-path="ticket.awards" data-type="textlist" rows="3" placeholder="e.g. D&amp;AD Wood Pencil, 2027"></textarea></label>
+    <div class="grid2">
+      <label class="field"><span>Won: top band</span><input data-path="ticket.wonBand"></label>
+      <label class="field"><span>Won: badge</span><input data-path="ticket.wonBadge"></label>
+      <label class="field"><span>Won: headline, first line</span><input data-path="ticket.wonTitleTop"></label>
+      <label class="field"><span>Won: headline, second line</span><input data-path="ticket.wonTitleBottom"></label>
+    </div>
+    <label class="field"><span>Won: the line</span><input data-path="ticket.wonLine"></label>
   </section>
 
-  <!-- ================= HOME EXTRAS ================= -->
+  <!-- ================= SUBTLE JOKES ================= -->
   <section class="admin-section">
-    <h2>3. Home extras — dateline</h2>
-    <p class="hint">The small positioning line under the hero sentence.</p>
-    <label class="field"><span>Dateline (under the hero)</span><input data-path="home.dateline" placeholder="e.g. Senior copywriter · Cairo → Dubai → Madrid"></label>
+    <h2>3. The quiet jokes</h2>
+    <p class="hint">Small places a joke can hide, where finding one feels like a reward instead of a demand. <strong>Empty any of them and that slot just goes silent.</strong> These are Claude's drafts, so rewrite them in your voice or delete them.</p>
+    <label class="field"><span>Browser tab, when someone switches away from your site</span><input data-path="jokes.tabAway" placeholder="Fine, go. I'll wait."></label>
+    <label class="field"><span>Footer small print</span><input data-path="jokes.footer"></label>
+    <label class="field"><span>The "next project" label</span><input data-path="jokes.nextLabel" placeholder="Keep going"></label>
+    <label class="field"><span>When a project link is broken</span><input data-path="jokes.notFound"></label>
+    <label class="field"><span>When the work grid is empty</span><input data-path="jokes.emptyWork"></label>
+    <label class="field"><span>One line in the browser console (for the developers who look)</span><input data-path="jokes.console"></label>
   </section>
 
   <!-- ================= WORK SECTION ================= -->
   <section class="admin-section">
-    <h2>4. Work section labels</h2>
-    <p class="hint">The heading and the two tab names on the home page.</p>
-    <label class="field"><span>Section heading</span><input data-path="work.heading"></label>
+    <h2>4. Work page labels</h2>
+    <p class="hint">The heading at the top of the work page, and the two status words that appear on an individual project's page (not on the grid — the grid uses stickers).</p>
+    <label class="field"><span>Page heading</span><input data-path="work.heading"></label>
+    <label class="field"><span>Line under the heading</span><input data-path="work.note"></label>
     <div class="grid2">
-      <label class="field"><span>First tab (produced)</span><input data-path="work.producedLabel"></label>
-      <label class="field"><span>Second tab (presented)</span><input data-path="work.presentedLabel"></label>
+      <label class="field"><span>Status word for work that ran</span><input data-path="work.producedLabel" placeholder="Produced"></label>
+      <label class="field"><span>Status word for work that didn't</span><input data-path="work.presentedLabel" placeholder="Spec"></label>
     </div>
     <div class="grid2">
       <label class="field"><span>Show this many produced projects (0 = show all)</span><input data-path="work.producedLimit" type="number" min="0" placeholder="8"></label>
@@ -440,9 +481,12 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
 
   function ensureStructure() {
     M.nav = M.nav || {};
-    M.hero = M.hero || {};
-    if (!Array.isArray(M.hero.sentences)) M.hero.sentences = ['', '', '', '', '', ''];
-    M.home = M.home || {};
+    M.ticket = M.ticket || {};
+    if (!Array.isArray(M.ticket.awards)) M.ticket.awards = [];
+    if (!Array.isArray(M.ticket.nav)) M.ticket.nav = [];
+    while (M.ticket.nav.length < 3) M.ticket.nav.push({ label: '', url: '', num: '' });
+    M.ticket.nav.forEach(function (n, i) { if (!n.num) n.num = '0' + (i + 1); });
+    M.jokes = M.jokes || {};
     M.work = M.work || {};
     if (!Array.isArray(M.work.produced)) M.work.produced = [];
     if (!Array.isArray(M.work.presented)) M.work.presented = [];
@@ -460,7 +504,7 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
 
   /* ---------------- rendering ---------------- */
   function emptyProject() {
-    return { slug: '', title: '', client: '', category: '', year: '', image: '', alt: '', story: [], media: [], credits: [], draft: false, next: {} };
+    return { slug: '', title: '', client: '', category: '', year: '', sticker: '', tagline: '', image: '', alt: '', story: [], media: [], credits: [], draft: false, next: {} };
   }
 
   function projectCardHtml(p, group, idx) {
@@ -522,6 +566,11 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
           '<label class="field"><span>Category</span><input data-path="' + base + '.category" value="' + esc(p.category) + '"></label>' +
           '<label class="field"><span>Year</span><input data-path="' + base + '.year" value="' + esc(p.year) + '"></label>' +
         '</div>' +
+        '<label class="field"><span>Sticker — what actually happened to this one</span>' +
+          '<input data-path="' + base + '.sticker" placeholder="e.g. Sold out in a week · Never left the deck · Won nothing" value="' + esc(p.sticker) + '">' +
+          '<small>Sits on the corner of the card. Keep it short and true. This is what replaced the produced/spec tabs, so it is doing real work. Leave blank for no sticker.</small></label>' +
+        '<label class="field"><span>One-line summary (under the title on the grid)</span>' +
+          '<input data-path="' + base + '.tagline" placeholder="e.g. Own the room, do not rent it." value="' + esc(p.tagline) + '"></label>' +
         '<label class="field check"><input data-path="' + base + '.draft" type="checkbox"' + (p.draft ? ' checked' : '') + '> Keep in drafts (hidden from the site)</label>' +
         '<label class="field"><span>Link address (slug)</span><input data-path="' + base + '.slug" placeholder="lowercase-no-spaces, e.g. yango-wedding-rush" value="' + esc(p.slug) + '"><small>Leave empty and the card will not link anywhere.</small></label>' +
         '<label class="field"><span>Cover image</span>' +
