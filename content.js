@@ -39,7 +39,7 @@ window.SITE_CONTENT = {
         url: "about.html"
       },
       {
-        label: "Hire me",
+        label: "Say hi",
         num: "03",
         url: "mailto:m22essam@gmail.com"
       }
