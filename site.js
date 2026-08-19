@@ -116,4 +116,26 @@
     if (/^https?:\/\//i.test(src)) return src;
     return 'images/' + String(src).replace(/^images\//, '');
   };
+
+  /* ----- theme toggle (dark ↔ light) ----- */
+  var toggle = document.getElementById('themeToggle');
+  if (toggle) {
+    var saved = localStorage.getItem('theme');
+    if (saved === 'light') {
+      document.documentElement.setAttribute('data-theme', 'light');
+      toggle.textContent = '🌙';
+    }
+    toggle.addEventListener('click', function () {
+      var isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      if (isLight) {
+        document.documentElement.removeAttribute('data-theme');
+        toggle.textContent = '☀️';
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        toggle.textContent = '🌙';
+        localStorage.setItem('theme', 'light');
+      }
+    });
+  }
 })();

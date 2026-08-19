@@ -20,6 +20,7 @@
     <div class="nav-links">
       <a href="index.html#work">WORK</a>
       <a href="about.html">ABOUT</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light mode" title="Toggle theme">☀️</button>
     </div>
     <div class="badge"><span class="badge-dot"></span>AVAILABLE FOR WORK</div>
   </div>
@@ -94,6 +95,28 @@
   var onScroll = function () { nav.classList.toggle('is-scrolled', window.scrollY > 12); };
   document.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
+
+  /* theme toggle */
+  var toggle = document.getElementById('themeToggle');
+  if (toggle) {
+    var saved = localStorage.getItem('theme');
+    if (saved === 'light') {
+      document.documentElement.setAttribute('data-theme', 'light');
+      toggle.textContent = '🌙';
+    }
+    toggle.addEventListener('click', function () {
+      var isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      if (isLight) {
+        document.documentElement.removeAttribute('data-theme');
+        toggle.textContent = '☀️';
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        toggle.textContent = '🌙';
+        localStorage.setItem('theme', 'light');
+      }
+    });
+  }
 })();
 </script>
 

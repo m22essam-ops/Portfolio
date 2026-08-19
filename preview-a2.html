@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preview A2 — Editorial Loud + personality</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FAF9F7;
+  --ink:#111110;
+  --ink-soft:#6B6862;
+  --line:#E2DFD8;
+  --accent:#E63329;
+  --block:#E6E3DD;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--paper);color:var(--ink);
+  font-family:'Hanken Grotesk',sans-serif;-webkit-font-smoothing:antialiased;
+  /* DEVICE 2 — typographic cursor: a text caret instead of the arrow */
+  cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='30'><rect x='7' y='2' width='3' height='26' fill='%23111110'/><rect x='2' y='2' width='13' height='2.5' fill='%23111110'/><rect x='2' y='25.5' width='13' height='2.5' fill='%23111110'/></svg>") 8 15, text;
+}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1320px;margin:0 auto;padding:0 40px}
+
+/* NAV */
+nav{padding:26px 0;position:sticky;top:0;background:var(--paper);z-index:30}
+nav .wrap{display:flex;justify-content:space-between;align-items:baseline;gap:24px}
+.logo{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:19px;letter-spacing:-.02em}
+.logo span{color:var(--accent)}
+.nav-links{display:flex;gap:26px;font-size:15px;font-weight:500}
+.nav-links a{position:relative}
+.nav-links a:hover{color:var(--accent)}
+.nav-avail{color:var(--accent);font-weight:700}
+
+/* HERO — type is the image */
+header{padding:64px 0 40px;position:relative}
+.hero-line{
+  font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
+  font-size:clamp(40px,7.6vw,108px);line-height:.96;letter-spacing:-.045em;
+  max-width:15ch;position:relative;
+}
+.hero-line em{font-style:normal;color:var(--accent)}
+
+/* DEVICE 4 — red-pen editing marks over the hero */
+.pen{position:absolute;pointer-events:none;overflow:visible}
+.pen path,.pen ellipse{fill:none;stroke:var(--accent);stroke-width:3;
+  stroke-linecap:round;stroke-linejoin:round;opacity:.92}
+.pen-note{
+  font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:15px;
+  color:var(--accent);transform:rotate(-6deg);white-space:nowrap;
+}
+.circle-wrap{position:relative;display:inline-block}
+.circle-wrap .pen{left:-14px;top:-12px;width:calc(100% + 28px);height:calc(100% + 24px)}
+
+.hero-meta{display:flex;gap:26px;flex-wrap:wrap;margin-top:38px;padding-top:20px;
+  border-top:2px solid var(--ink);font-size:15px;font-weight:500;color:var(--ink-soft)}
+.hero-meta strong{color:var(--ink);font-weight:700}
+
+/* DEVICE 3 — marquee strip */
+.marquee{background:var(--accent);color:var(--paper);padding:15px 0;overflow:hidden;
+  margin:16px 0 76px;transform:rotate(-.6deg) scale(1.02)}
+.marquee-track{display:flex;gap:42px;white-space:nowrap;width:max-content;
+  animation:slide 26s linear infinite;font-family:'Bricolage Grotesque',sans-serif;
+  font-weight:700;font-size:19px;letter-spacing:-.01em}
+.marquee-track span{display:flex;gap:42px;align-items:center}
+.dot{opacity:.6}
+@keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* WORK */
+.section-top{display:flex;justify-content:space-between;align-items:baseline;
+  border-bottom:2px solid var(--ink);padding-bottom:13px;margin-bottom:38px}
+.section-top h2{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:22px;letter-spacing:-.02em}
+.filters{display:flex;gap:8px}
+.filters button{font:inherit;font-weight:700;font-size:13px;cursor:pointer;
+  border:2px solid var(--ink);background:none;color:var(--ink);padding:7px 15px;border-radius:999px}
+.filters button.on{background:var(--accent);border-color:var(--accent);color:var(--paper)}
+
+.feature{display:block;margin-bottom:66px;position:relative}
+.feature .block{aspect-ratio:16/7}
+.feature .ft-row{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-top:18px}
+.feature h3{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;
+  font-size:clamp(26px,3.6vw,48px);letter-spacing:-.03em;line-height:1.03;max-width:16ch}
+.feature .idea{font-size:16px;color:var(--ink-soft);max-width:32ch;line-height:1.5}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:58px 40px}
+.card{position:relative;display:block}
+.card .block{aspect-ratio:4/3}
+.card h3{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:26px;
+  letter-spacing:-.025em;margin-top:15px;line-height:1.14}
+.card .idea{font-size:15px;color:var(--ink-soft);margin-top:5px;line-height:1.5}
+.num{font-size:13px;font-weight:700;color:var(--accent);letter-spacing:.1em;display:block;margin-bottom:8px}
+
+.block{background:var(--block);position:relative;overflow:hidden;transition:background .25s}
+.block::after{content:'IMAGE';position:absolute;inset:0;display:flex;align-items:center;
+  justify-content:center;font-size:12px;letter-spacing:.18em;color:#B4AFA6;font-weight:700}
+a:hover>.block,a:hover .block{background:#DBD7CF}
+
+/* DEVICE 1 — sticker stamps */
+.stamp{
+  position:absolute;top:14px;right:14px;z-index:3;
+  font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
+  font-size:12px;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--accent);background:rgba(250,249,247,.94);
+  border:2.5px solid var(--accent);border-radius:4px;padding:7px 11px;
+  transform:rotate(-7deg);line-height:1;
+}
+.stamp.alt{transform:rotate(5deg)}
+.stamp.big{font-size:14px;padding:9px 14px;top:18px;right:18px}
+
+/* CTA + FOOTER */
+.cta{padding:96px 0 30px}
+.cta p{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
+  font-size:clamp(32px,5.8vw,78px);letter-spacing:-.04em;line-height:.99;max-width:17ch}
+.cta a{color:var(--accent);text-decoration:underline;text-underline-offset:9px;text-decoration-thickness:4px}
+footer{padding:34px 0 56px;border-top:2px solid var(--ink);margin-top:54px}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:14px;color:var(--ink-soft)}
+
+/* DEVICE 2b — READ → follower over cards */
+#follower{
+  position:fixed;top:0;left:0;z-index:60;pointer-events:none;opacity:0;
+  transform:translate(-50%,-50%) scale(.85);transition:opacity .18s,transform .18s;
+  background:var(--accent);color:var(--paper);font-family:'Bricolage Grotesque',sans-serif;
+  font-weight:800;font-size:13px;letter-spacing:.08em;padding:10px 15px;border-radius:999px;
+}
+#follower.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
+
+@media(max-width:820px){
+  .grid{grid-template-columns:1fr;gap:46px}
+  .wrap{padding:0 22px}
+  .nav-links{gap:16px;font-size:14px}
+  .feature .ft-row{flex-direction:column;align-items:flex-start;gap:10px}
+  #follower{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .marquee-track{animation:none}
+}
+</style>
+</head>
+<body>
+
+<div id="follower">READ →</div>
+
+<nav>
+  <div class="wrap">
+    <div class="logo">mohamed essam<span>.</span></div>
+    <div class="nav-links">
+      <a href="#work">The work</a>
+      <a href="#">Get to know me</a>
+      <a href="#" class="nav-avail">Available →</a>
+    </div>
+  </div>
+</nav>
+
+<header>
+  <div class="wrap">
+    <h1 class="hero-line">
+      Nobody finishes a copywriter's intro. So: I write
+      <span class="circle-wrap">
+        <em>ads</em>
+        <svg class="pen" viewBox="0 0 240 120" preserveAspectRatio="none" aria-hidden="true">
+          <ellipse cx="120" cy="60" rx="112" ry="50"
+            transform="rotate(-3 120 60)"
+            style="stroke-dasharray:none"/>
+          <path d="M8 62 C 40 96, 200 92, 232 54" style="opacity:.5"/>
+        </svg>
+      </span>.
+      They're below.
+    </h1>
+
+    <div class="hero-meta">
+      <span><strong>Creative copywriter</strong></span>
+      <span>Cairo → Dubai → Madrid</span>
+      <span>Arabic &amp; English</span>
+      <span style="color:var(--accent);font-weight:700">Available for work</span>
+    </div>
+  </div>
+</header>
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>YANGO <b class="dot">·</b> DOMINO'S <b class="dot">·</b> NIVEA <b class="dot">·</b> TUBORG <b class="dot">·</b> PRINGLES <b class="dot">·</b> BABYSHOP <b class="dot">·</b> RIVAN TOWER <b class="dot">·</b> MODON <b class="dot">·</b> LIQUID DEATH <b class="dot">·</b> CANESTEN <b class="dot">·</b> </span>
+    <span>YANGO <b class="dot">·</b> DOMINO'S <b class="dot">·</b> NIVEA <b class="dot">·</b> TUBORG <b class="dot">·</b> PRINGLES <b class="dot">·</b> BABYSHOP <b class="dot">·</b> RIVAN TOWER <b class="dot">·</b> MODON <b class="dot">·</b> LIQUID DEATH <b class="dot">·</b> CANESTEN <b class="dot">·</b> </span>
+  </div>
+</div>
+
+<section id="work">
+  <div class="wrap">
+    <div class="section-top">
+      <h2>Selected work</h2>
+      <div class="filters">
+        <button class="on" type="button">Produced</button>
+        <button type="button">Spec</button>
+      </div>
+    </div>
+
+    <a class="feature card-link" href="#">
+      <div class="block"><span class="stamp big">Sold out in a week</span></div>
+      <div class="ft-row">
+        <div>
+          <span class="num">01 — RIVAN TOWER</span>
+          <h3>The hotel is yours</h3>
+        </div>
+        <p class="idea">One line moved an entire building. Here's the line, and everything around it.</p>
+      </div>
+    </a>
+
+    <div class="grid">
+      <a class="card card-link" href="#">
+        <div class="block"><span class="stamp">Ran in 4 markets</span></div>
+        <h3>Yango — Unstoppable Rides</h3>
+        <p class="idea">The city is never on your side. The app is.</p>
+      </a>
+      <a class="card card-link" href="#">
+        <div class="block"><span class="stamp alt">Client said no</span></div>
+        <h3>Tuborg — The Pressure Party</h3>
+        <p class="idea">Pop the pressure, not the mood.</p>
+      </a>
+      <a class="card card-link" href="#">
+        <div class="block"><span class="stamp">Never ran</span></div>
+        <h3>Domino's — The True Colors</h3>
+        <p class="idea">What the box says when nobody's watching.</p>
+      </a>
+      <a class="card card-link" href="#">
+        <div class="block"><span class="stamp alt">Won nothing</span></div>
+        <h3>Nivea — I Might Never See the Sun Again</h3>
+        <p class="idea">A goodbye letter to the sun, in three films.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="wrap">
+    <p>Got a brief that scares you? <a href="#">m22essam@gmail.com</a></p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Mohamed Essam — copywriter</span>
+    <span>Madrid</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var f = document.getElementById('follower');
+  var cards = document.querySelectorAll('.card-link');
+  var on = false;
+  document.addEventListener('mousemove', function(e){
+    f.style.left = e.clientX + 'px';
+    f.style.top  = e.clientY + 'px';
+  }, {passive:true});
+  cards.forEach(function(c){
+    c.addEventListener('mouseenter', function(){ f.classList.add('on'); });
+    c.addEventListener('mouseleave', function(){ f.classList.remove('on'); });
+  });
+})();
+</script>
+
+</body>
+</html>

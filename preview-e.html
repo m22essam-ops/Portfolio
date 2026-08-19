@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preview E — ticket, with colour</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ---------- COLOURWAYS ---------- */
+:root,
+[data-way="red"]{
+  --ground:#D91E18;  --ground-deep:#A81410;
+  --stock:#FFF6E2;   --gold:#E8B33A;  --gold-deep:#B7842165;
+  --ink:#12100C;     --ink-70:#12100cb3; --ink-40:#12100c66;
+  --pop:#12100C;
+}
+[data-way="green"]{
+  --ground:#1B7A4B; --ground-deep:#125836;
+  --stock:#FFF8E7;  --gold:#E8B33A; --gold-deep:#B7842165;
+  --ink:#0E1410;    --ink-70:#0e1410b3; --ink-40:#0e141066;
+  --pop:#D91E18;
+}
+[data-way="purple"]{
+  --ground:#5B2BC4; --ground-deep:#3F1C8C;
+  --stock:#FFF3F8;  --gold:#F2C744; --gold-deep:#B7842165;
+  --ink:#140E1C;    --ink-70:#140e1cb3; --ink-40:#140e1c66;
+  --pop:#FF2E88;
+}
+[data-way="black"]{
+  --ground:#141210; --ground-deep:#000;
+  --stock:#F6EFDD;  --gold:#E0AE33; --gold-deep:#8a641a65;
+  --ink:#141210;    --ink-70:#141210b3; --ink-40:#14121066;
+  --pop:#E0AE33;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--ground-deep);color:var(--ink);
+  font-family:'Hanken Grotesk',sans-serif;-webkit-font-smoothing:antialiased;
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  padding:70px 22px 40px;transition:background .3s ease}
+a{color:inherit;text-decoration:none}
+.cond{font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.05em}
+
+/* preview-only control */
+.ways{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:99;
+  display:flex;gap:6px;background:rgba(0,0,0,.55);padding:6px;border-radius:99px;backdrop-filter:blur(6px)}
+.ways button{font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.1em;
+  font-weight:700;font-size:12px;color:#fff;background:none;border:1.5px solid rgba(255,255,255,.3);
+  padding:6px 13px;border-radius:99px;cursor:pointer}
+.ways button.on{background:#fff;color:#000;border-color:#fff}
+
+/* ---------- TICKET ---------- */
+.ticket{position:relative;width:min(1020px,100%);background:var(--stock);
+  box-shadow:0 40px 90px -34px rgba(0,0,0,.7);transform:rotate(-.4deg)}
+.perf{position:absolute;left:0;right:0;height:14px;z-index:2;
+  background-image:radial-gradient(circle at 7px 7px, var(--ground-deep) 6.5px, transparent 7px);
+  background-size:18px 14px;background-repeat:repeat-x}
+.perf.top{top:-7px} .perf.bot{bottom:-7px}
+
+/* halftone print texture over the whole stock */
+.ticket::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:4;opacity:.14;
+  background-image:radial-gradient(var(--ink) 1px, transparent 1.4px);
+  background-size:5px 5px;mix-blend-mode:multiply}
+
+.band{background:var(--ground);color:var(--stock);padding:10px 22px;position:relative;z-index:3;
+  display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.band .cond{font-weight:700;font-size:15px}
+.band .stars{letter-spacing:.3em;color:var(--gold);font-size:13px}
+
+.body{position:relative;z-index:3;padding:30px 30px 24px}
+
+/* sunburst rays behind the title */
+.burst{position:absolute;left:50%;top:-40px;width:min(900px,120%);aspect-ratio:1;
+  transform:translateX(-50%);pointer-events:none;z-index:0;opacity:.16;
+  background:repeating-conic-gradient(from 0deg at 50% 50%,
+    var(--ground) 0deg 7deg, transparent 7deg 14deg);
+  -webkit-mask-image:radial-gradient(circle at 50% 45%, #000 12%, transparent 62%);
+  mask-image:radial-gradient(circle at 50% 45%, #000 12%, transparent 62%)}
+
+.top-row{position:relative;z-index:2;display:flex;justify-content:space-between;
+  gap:16px;flex-wrap:wrap;font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;
+  letter-spacing:.12em;font-size:13px;font-weight:600;color:var(--ink-40)}
+
+.title{position:relative;z-index:2;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
+  font-size:clamp(38px,7.4vw,104px);line-height:.86;letter-spacing:-.05em;
+  text-transform:uppercase;margin:16px 0 6px;
+  color:var(--ground);
+  text-shadow:4px 4px 0 var(--ink);
+}
+[data-way="black"] .title{color:var(--gold);text-shadow:4px 4px 0 var(--ink)}
+.title .b{display:block;color:var(--ink);text-shadow:4px 4px 0 var(--gold)}
+
+.sub{position:relative;z-index:2;font-family:'Barlow Condensed',sans-serif;
+  text-transform:uppercase;letter-spacing:.14em;font-weight:600;
+  font-size:clamp(13px,1.6vw,17px);color:var(--ink-70)}
+
+/* starburst badge */
+.badge{position:absolute;right:26px;top:96px;z-index:5;width:clamp(96px,13vw,140px);aspect-ratio:1;
+  background:var(--pop);color:var(--stock);display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:14px;transform:rotate(11deg);
+  clip-path:polygon(50% 0%,61% 12%,76% 6%,80% 22%,96% 24%,90% 39%,100% 50%,90% 61%,96% 76%,80% 78%,76% 94%,61% 88%,50% 100%,39% 88%,24% 94%,20% 78%,4% 76%,10% 61%,0% 50%,10% 39%,4% 24%,20% 22%,24% 6%,39% 12%);
+  font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;font-weight:700;
+  font-size:clamp(11px,1.3vw,14px);line-height:1.05;letter-spacing:.04em}
+[data-way="black"] .badge{color:var(--ink)}
+
+.tear{border:0;border-top:2px dashed var(--ink-40);margin:24px 0;position:relative;z-index:2}
+
+/* scratch panels — gold foil */
+.panels{position:relative;z-index:2;display:grid;grid-template-columns:1.3fr 1fr;gap:18px}
+.panel{position:relative;border:2.5px solid var(--ink);min-height:130px;overflow:hidden;background:var(--stock)}
+.panel .beneath{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+  gap:7px;padding:16px 18px}
+.panel canvas{position:absolute;inset:0;width:100%;height:100%;cursor:crosshair;
+  touch-action:none;transition:opacity .45s cubic-bezier(.2,.8,.2,1)}
+.panel.revealed canvas{opacity:0;pointer-events:none}
+.win-line{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
+  font-size:clamp(18px,2.4vw,28px);line-height:1.03;letter-spacing:-.03em}
+.win-sub{font-size:14px;color:var(--ink-70)}
+.joke{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;text-transform:uppercase;
+  font-size:clamp(17px,2.1vw,25px);line-height:1.03;letter-spacing:-.03em;color:var(--ground)}
+.again{margin-top:8px;background:none;border:1.5px solid var(--ink-40);color:var(--ink-70);
+  font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.08em;
+  font-weight:600;font-size:12px;padding:4px 10px;cursor:pointer;align-self:flex-start}
+
+/* nav punches */
+.nav{position:relative;z-index:2;display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+.nav a{flex:1;min-width:140px;border:2.5px solid var(--ink);background:var(--stock);
+  padding:12px 15px;font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;
+  letter-spacing:.1em;font-weight:700;font-size:16px;display:flex;justify-content:space-between;
+  align-items:center;box-shadow:3px 3px 0 var(--ink);
+  transition:transform .16s ease,box-shadow .16s ease,background .16s ease,color .16s ease}
+.nav a:hover{background:var(--ground);color:var(--stock);transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.nav a i{font-style:normal;font-size:11px;opacity:.6}
+
+.foot{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:flex-end;
+  gap:18px;margin-top:22px;flex-wrap:wrap}
+.barcode{height:42px;width:min(240px,52vw);
+  background:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 4px,
+    var(--ink) 4px 5px,transparent 5px 9px,var(--ink) 9px 12px,transparent 12px 14px)}
+.tc{font-family:ui-monospace,Menlo,monospace;font-size:10px;line-height:1.6;
+  color:var(--ink-40);max-width:44ch;text-align:right}
+
+@media(max-width:800px){
+  .panels{grid-template-columns:1fr}
+  .badge{position:static;margin:14px 0 0;transform:rotate(-4deg)}
+  .tc{text-align:left}
+  .ticket{transform:none}
+}
+</style>
+</head>
+<body data-way="red">
+
+<div class="ways">
+  <button data-set="red" class="on">Red</button>
+  <button data-set="green">Green</button>
+  <button data-set="purple">Purple</button>
+  <button data-set="black">Black&nbsp;/&nbsp;Gold</button>
+</div>
+
+<div class="ticket">
+  <div class="perf top"></div>
+
+  <div class="band">
+    <span class="cond">★ The National Award Lottery ★</span>
+    <span class="stars">★★★★★</span>
+  </div>
+
+  <div class="body">
+    <div class="burst"></div>
+
+    <div class="top-row">
+      <span>Instant win · Game no. 07 · Price: free</span>
+      <span>No. 0000000 · Exp. never</span>
+    </div>
+
+    <div class="badge">0 awards<br>so far</div>
+
+    <h1 class="title">Award-losing<span class="b">copywriter</span></h1>
+    <p class="sub">Mohamed Essam · Cairo → Dubai → Madrid · 2 languages</p>
+
+    <hr class="tear">
+
+    <div class="panels">
+      <div class="panel" id="p1">
+        <div class="beneath">
+          <p class="win-line">Rivan Tower sold out in a week.</p>
+          <p class="win-sub">One line did that. It's the first thing in the work.</p>
+        </div>
+        <canvas></canvas>
+      </div>
+      <div class="panel" id="p2">
+        <div class="beneath">
+          <p class="joke" id="jokeText">Not a winner</p>
+          <button class="again" id="againBtn" type="button">Scratch again</button>
+        </div>
+        <canvas></canvas>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <a href="#">The work <i>01</i></a>
+      <a href="#">Who I am <i>02</i></a>
+      <a href="#">Hire me <i>03</i></a>
+    </nav>
+
+    <div class="foot">
+      <div class="barcode"></div>
+      <p class="tc">Odds of winning: historically poor. Ticket has no cash value and neither
+        did the awards. Keep this as proof of participation.</p>
+    </div>
+  </div>
+
+  <div class="perf bot"></div>
+</div>
+
+<script>
+(function(){
+  var JOKES=['Not a winner','Try again','Still not a winner','Nearly','No.','Almost'];
+  var ji=0;
+
+  function scratchable(panel){
+    var canvas=panel.querySelector('canvas');
+    var ctx=canvas.getContext('2d',{willReadFrequently:true});
+    var drawing=false,checks=0,done=false;
+
+    function css(v){return getComputedStyle(document.body).getPropertyValue(v).trim();}
+
+    function paint(){
+      var r=panel.getBoundingClientRect();
+      if(!r.width||!r.height)return;
+      var dpr=Math.min(window.devicePixelRatio||1,2);
+      canvas.width=Math.round(r.width*dpr); canvas.height=Math.round(r.height*dpr);
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      ctx.globalCompositeOperation='source-over';
+
+      /* gold foil */
+      var gold=css('--gold')||'#E8B33A';
+      var g=ctx.createLinearGradient(0,0,r.width,r.height);
+      g.addColorStop(0,'#f6dc9b'); g.addColorStop(.28,gold);
+      g.addColorStop(.5,'#fbeec2'); g.addColorStop(.72,gold);
+      g.addColorStop(1,'#c98f24');
+      ctx.fillStyle=g; ctx.fillRect(0,0,r.width,r.height);
+
+      /* brushed streaks + speckle */
+      ctx.strokeStyle='rgba(255,255,255,.22)'; ctx.lineWidth=1;
+      for(var i=0;i<r.height;i+=3){ctx.beginPath();ctx.moveTo(0,i);ctx.lineTo(r.width,i+ (Math.random()*2-1));ctx.stroke();}
+      ctx.fillStyle='rgba(120,80,10,.16)';
+      var n=Math.round(r.width*r.height/900);
+      for(var k=0;k<n;k++)ctx.fillRect(Math.random()*r.width,Math.random()*r.height,1,1);
+
+      ctx.fillStyle='rgba(70,45,5,.6)';
+      ctx.font='700 12px "Barlow Condensed", sans-serif';
+      ctx.textAlign='center'; ctx.letterSpacing='2px';
+      ctx.fillText('SCRATCH HERE',r.width/2,r.height/2+4);
+
+      done=false; panel.classList.remove('revealed'); canvas.style.opacity='';
+    }
+    function at(e){var r=canvas.getBoundingClientRect();var p=e.touches?e.touches[0]:e;
+      return[p.clientX-r.left,p.clientY-r.top];}
+    function dig(x,y){ctx.globalCompositeOperation='destination-out';
+      ctx.beginPath();ctx.arc(x,y,22,0,Math.PI*2);ctx.fill();}
+    function frac(){var d=ctx.getImageData(0,0,canvas.width,canvas.height).data,c=0,t=0;
+      for(var i=3;i<d.length;i+=4*220){t++;if(d[i]<26)c++;}return t?c/t:0;}
+    function check(){if(done)return;if(++checks%6)return;
+      if(frac()>.48){done=true;panel.classList.add('revealed');}}
+
+    canvas.addEventListener('mousedown',function(e){drawing=true;var c=at(e);dig(c[0],c[1]);e.preventDefault();});
+    canvas.addEventListener('mousemove',function(e){if(!drawing)return;var c=at(e);dig(c[0],c[1]);check();e.preventDefault();});
+    window.addEventListener('mouseup',function(){drawing=false;check();});
+    canvas.addEventListener('touchstart',function(e){drawing=true;var c=at(e);dig(c[0],c[1]);e.preventDefault();},{passive:false});
+    canvas.addEventListener('touchmove',function(e){if(!drawing)return;var c=at(e);dig(c[0],c[1]);check();e.preventDefault();},{passive:false});
+    canvas.addEventListener('touchend',function(){drawing=false;check();});
+    window.addEventListener('resize',function(){if(!done)paint();});
+
+    if(document.fonts&&document.fonts.ready)document.fonts.ready.then(paint);else paint();
+    return{repaint:paint};
+  }
+
+  scratchable(document.getElementById('p1'));
+  var p2=scratchable(document.getElementById('p2'));
+  document.getElementById('againBtn').addEventListener('click',function(e){
+    e.stopPropagation();
+    ji=(ji+1)%JOKES.length;
+    document.getElementById('jokeText').textContent=JOKES[ji];
+    p2.repaint();
+  });
+
+  /* colourway switcher (preview only) */
+  document.querySelectorAll('.ways button').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('.ways button').forEach(function(x){x.classList.remove('on');});
+      b.classList.add('on');
+      document.body.setAttribute('data-way',b.dataset.set);
+      setTimeout(function(){window.dispatchEvent(new Event('resize'));},60);
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preview C — grad energy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F7F5EF;
+  --ink:#0B0B0A;
+  --ink-70:#0b0b0ab3;
+  --accent:#E63329;
+  --block:#E4E1D9;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:'Hanken Grotesk',sans-serif;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1280px;margin:0 auto;padding:0 36px}
+
+/* ============ HERO ============
+   no nav bar, no rules, no dateline row. the page opens on a person
+   and a 3D object. */
+.hero{position:relative;padding:44px 0 0;min-height:96vh}
+.hero-top{display:flex;justify-content:space-between;align-items:baseline;
+  font-size:15px;font-weight:600;margin-bottom:min(6vw,70px)}
+.hero-top .who{font-weight:700}
+.hero-top a{color:var(--accent)}
+
+.stage{position:relative}
+
+/* the 3D object — PLACEHOLDER. swap for a Spline scene or your own render. */
+.orb{
+  position:absolute;right:-4%;top:-6%;
+  width:clamp(230px,34vw,460px);aspect-ratio:1;border-radius:50%;
+  overflow:hidden;z-index:1;
+  box-shadow:0 50px 90px -30px rgba(11,11,10,.45), 0 8px 20px rgba(11,11,10,.12);
+}
+.orb .chrome{position:absolute;inset:-25%;
+  background:conic-gradient(from 200deg,#cfc9bd,#7e7a71,#f5f2ea,#5f5c55,#e8e4db,#9c968b,#ded9cd,#6b6760,#cfc9bd);
+  animation:spin 22s linear infinite}
+.orb .gloss{position:absolute;inset:0;
+  background:
+    radial-gradient(circle at 30% 24%, rgba(255,255,255,.95), rgba(255,255,255,0) 46%),
+    radial-gradient(circle at 72% 84%, rgba(11,11,10,.42), rgba(11,11,10,0) 52%),
+    radial-gradient(circle at 50% 50%, rgba(230,51,41,.16), transparent 60%)}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.big{
+  position:relative;z-index:2;
+  font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
+  font-size:clamp(52px,13vw,190px);line-height:.86;letter-spacing:-.055em;
+  text-transform:lowercase;
+}
+.big .red{color:var(--accent)}
+
+.blurb{position:relative;z-index:2;margin-top:34px;max-width:34ch;
+  font-size:clamp(17px,2vw,22px);line-height:1.45;font-weight:500}
+.blurb b{font-weight:700}
+
+/* blurb and portrait share the bottom row so they never collide */
+.under{position:relative;z-index:2;display:flex;justify-content:space-between;
+  align-items:flex-end;gap:40px;margin-top:38px;flex-wrap:wrap}
+.under .blurb{margin-top:0}
+
+/* the person: photo sits IN the composition, not in a box on an about page */
+.me{display:flex;align-items:flex-end;gap:18px}
+.me img{width:clamp(120px,15vw,190px);aspect-ratio:1;object-fit:cover;
+  transform:rotate(-3deg);box-shadow:0 18px 40px -14px rgba(11,11,10,.4);
+  border:7px solid #fff}
+.me .caption{font-size:14px;line-height:1.4;color:var(--ink-70);max-width:20ch;padding-bottom:6px}
+.me .caption b{color:var(--ink)}
+
+/* ============ FACTS — personal, not a badge row ============ */
+.facts{padding:min(14vw,130px) 0 0}
+.facts ul{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:30px 26px}
+.facts li{font-size:17px;line-height:1.35;font-weight:500}
+.facts li b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
+  font-size:clamp(34px,4.6vw,58px);letter-spacing:-.04em;line-height:1;margin-bottom:7px}
+.facts li:nth-child(2n) b{color:var(--accent)}
+
+/* ============ WORK — irregular, no tidy catalogue ============ */
+.work{padding:min(14vw,130px) 0 0}
+.work h2{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
+  font-size:clamp(30px,5vw,64px);letter-spacing:-.04em;margin-bottom:44px;line-height:1}
+.stack{display:flex;flex-direction:column;gap:min(9vw,90px)}
+.piece{display:block;position:relative}
+.piece .frame{position:relative;overflow:hidden;background:var(--block)}
+.piece .frame::after{content:'IMAGE';position:absolute;inset:0;display:flex;
+  align-items:center;justify-content:center;font-size:12px;letter-spacing:.2em;
+  color:#B4AFA6;font-weight:700}
+.piece img{width:100%;display:block}
+.piece h3{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
+  font-size:clamp(24px,3.4vw,44px);letter-spacing:-.03em;line-height:1.02;margin-top:16px}
+.piece p{font-size:16px;color:var(--ink-70);margin-top:6px;max-width:38ch}
+.piece .frame{transition:transform .5s var(--ease)}
+.piece:hover .frame{transform:translateY(-6px)}
+
+.w-full .frame{aspect-ratio:16/8}
+.w-pair{display:grid;grid-template-columns:1.35fr .9fr;gap:34px;align-items:end}
+.w-pair .frame{aspect-ratio:4/3}
+.w-off{width:min(70%,760px);margin-left:auto}
+.w-off .frame{aspect-ratio:5/4}
+.w-small{width:min(52%,540px)}
+.w-small .frame{aspect-ratio:1}
+
+.stamp{position:absolute;top:14px;right:14px;z-index:3;
+  font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:12px;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--accent);
+  background:rgba(247,245,239,.94);border:2.5px solid var(--accent);
+  border-radius:4px;padding:7px 11px;transform:rotate(-7deg);line-height:1}
+.stamp.alt{transform:rotate(5deg)}
+
+/* ============ END ============ */
+.end{padding:min(16vw,150px) 0 90px}
+.end p{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
+  font-size:clamp(34px,7vw,104px);letter-spacing:-.05em;line-height:.92}
+.end a{color:var(--accent)}
+.end .small{font-family:'Hanken Grotesk',sans-serif;font-weight:500;font-size:16px;
+  letter-spacing:0;margin-top:26px;color:var(--ink-70)}
+
+@media(max-width:860px){
+  .orb{position:relative;right:auto;top:auto;margin:0 0 26px auto;width:min(58vw,260px)}
+  .me{position:static;margin-top:40px}
+  .w-pair{grid-template-columns:1fr;gap:24px}
+  .w-off,.w-small{width:100%;margin-left:0}
+  .hero{min-height:0;padding-bottom:20px}
+}
+@media(prefers-reduced-motion:reduce){ .orb .chrome{animation:none} }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-top">
+      <span class="who">Mohamed Essam</span>
+      <a href="mailto:m22essam@gmail.com">m22essam@gmail.com</a>
+    </div>
+
+    <div class="stage">
+      <div class="orb" aria-hidden="true">
+        <div class="chrome"></div>
+        <div class="gloss"></div>
+      </div>
+
+      <h1 class="big">copywriter,<br>currently <span class="red">unhired</span></h1>
+
+      <div class="under">
+        <p class="blurb">I write ads in <b>Arabic and English</b>. Seven years of it, three countries,
+          and a folder of the ones that never made it out of the meeting.</p>
+
+        <div class="me">
+          <img src="images/about-photo.jpg" alt="Mohamed Essam as a kid">
+          <p class="caption"><b>Me, before the deadlines.</b> Cairo → Dubai → Madrid, currently at Miami Ad School.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="facts">
+  <div class="wrap">
+    <ul>
+      <li><b>7</b>years writing for people who skip ads</li>
+      <li><b>2</b>languages, neither of them corporate</li>
+      <li><b>1</b>tower in Cairo that sold out in a week</li>
+      <li><b>0</b>awards, so far</li>
+    </ul>
+  </div>
+</section>
+
+<section class="work">
+  <div class="wrap">
+    <h2>The work.</h2>
+
+    <div class="stack">
+
+      <a class="piece w-full" href="#">
+        <div class="frame"><span class="stamp">Sold out in a week</span></div>
+        <h3>Rivan Tower — The Hotel Is Yours</h3>
+        <p>One line moved an entire building.</p>
+      </a>
+
+      <div class="w-pair">
+        <a class="piece" href="#">
+          <div class="frame"><span class="stamp alt">Ran in 4 markets</span></div>
+          <h3>Yango — Unstoppable Rides</h3>
+          <p>The city is never on your side. The app is.</p>
+        </a>
+        <a class="piece" href="#">
+          <div class="frame"><span class="stamp">Client said no</span></div>
+          <h3>Tuborg — Pop The Pressure</h3>
+          <p>Pop the pressure, not the mood.</p>
+        </a>
+      </div>
+
+      <a class="piece w-off" href="#">
+        <div class="frame"><span class="stamp alt">Never ran</span></div>
+        <h3>Domino's — The True Colors</h3>
+        <p>What the box says when nobody is watching.</p>
+      </a>
+
+      <a class="piece w-small" href="#">
+        <div class="frame"><span class="stamp">Won nothing</span></div>
+        <h3>Nivea — I Might Never See the Sun Again</h3>
+        <p>A goodbye letter to the sun, in three films.</p>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<section class="end">
+  <div class="wrap">
+    <p>Hire me before<br>someone smarter<br><a href="mailto:m22essam@gmail.com">does.</a></p>
+    <p class="small">m22essam@gmail.com · Madrid · available now</p>
+  </div>
+</section>
+
+</body>
+</html>

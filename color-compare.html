@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Color Options Comparison</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #12100D; color: #F1E9DE; font-family: 'Space Mono', monospace; }
+.container { max-width: 1200px; margin: 0 auto; padding: 40px 32px; }
+h1 { font-family: 'Fraunces', serif; font-size: 32px; text-align: center; margin-bottom: 12px; color: #F1E9DE; }
+.subtitle { font-size: 12px; text-align: center; color: #A29584; letter-spacing: 0.08em; margin-bottom: 60px; }
+.options-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 24px; }
+.option-card { background: #1A1510; border: 1px solid rgba(241,233,222,0.14); border-radius: 12px; padding: 28px 20px; text-align: center; }
+.option-card.recommended { border-color: #C97B2E; box-shadow: 0 0 0 2px #C97B2E; }
+.option-name { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+.option-hex { font-size: 11px; color: #A29584; letter-spacing: 0.08em; margin-bottom: 24px; }
+.option-recommended { font-size: 10px; color: #C97B2E; letter-spacing: 0.1em; margin-bottom: 16px; text-transform: uppercase; }
+/* Simulate elements */
+.sim-hero { font-family: 'Fraunces', serif; font-size: 15px; line-height: 1.4; text-align: center; padding: 20px 10px; margin-bottom: 20px; color: #F1E9DE; min-height: 100px; }
+.sim-hero .kw { display: inline; font-weight: 700; }
+.sim-tab-row { display: flex; justify-content: center; gap: 6px; margin-bottom: 16px; }
+.sim-tab { font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; padding: 8px 14px; border-radius: 999px; font-weight: 700; }
+.sim-tab.active-produced { background: #C97B2E; color: #171007; }
+.sim-tab.active-presented { color: #F1E9DE; }
+.sim-card { background: #211B15; border-radius: 8px; padding: 12px; margin-bottom: 8px; text-align: left; display: flex; justify-content: space-between; align-items: center; }
+.sim-card-title { font-family: 'Fraunces', serif; font-size: 12px; font-weight: 700; }
+.sim-card-status { font-size: 9px; letter-spacing: 0.06em; }
+.sim-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+.sim-glitch-text { font-family: 'Space Mono', monospace; font-size: 10px; color: #A29584; text-align: center; margin-top: 12px; }
+.sim-glitch-text .glitch-highlight { font-weight: 700; }
+/* Legend */
+.legend { margin-top: 60px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 24px; text-align: center; }
+.legend-item h3 { font-size: 14px; margin-bottom: 4px; }
+.legend-item p { font-size: 11px; color: #A29584; line-height: 1.5; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Choose Your Accent2</h1>
+  <p class="subtitle">Each option replaces the sage green — same palette position, new personality</p>
+  
+  <div class="options-grid" id="optionsGrid"></div>
+  
+  <div class="legend">
+    <div class="legend-item">
+      <h3>🟠 Hero accent</h3>
+      <p>Glitch shadow color<br>Click keyword color</p>
+    </div>
+    <div class="legend-item">
+      <h3>🟢 Spec tab</h3>
+      <p>Tab label + active bg<br>"Spec" status text</p>
+    </div>
+    <div class="legend-item">
+      <h3>🔮 Availability dot</h3>
+      <p>Nav green dot<br>Could also warm up</p>
+    </div>
+    <div class="legend-item">
+      <h3>🃏 Glitch shake</h3>
+      <p>RGB split shadow<br>Accent2-bright</p>
+    </div>
+    <div class="legend-item">
+      <h3>✨ All warm?</h3>
+      <p>Every color lives in<br>the same family</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const options = [
+  {
+    name: 'Sage Green',
+    hex: '#6E8468 / #8FA87E',
+    accent2: '#6E8468',
+    accent2Bright: '#8FA87E',
+    label: 'CURRENT',
+    recommended: false,
+    description: 'Cool-toned, clashes with warm palette'
+  },
+  {
+    name: 'Terracotta',
+    hex: '#B8735A / #D4916E',
+    accent2: '#B8735A',
+    accent2Bright: '#D4916E',
+    label: '★ RECOMMENDED',
+    recommended: true,
+    description: 'Warm, earthy, creative'
+  },
+  {
+    name: 'Copper',
+    hex: '#9E7C5E / #BFA07A',
+    accent2: '#9E7C5E',
+    accent2Bright: '#BFA07A',
+    label: 'SAFE PICK',
+    recommended: false,
+    description: 'Muted, sophisticated'
+  },
+  {
+    name: 'Dusty Rose',
+    hex: '#A67B6B / #C49A8A',
+    accent2: '#A67B6B',
+    accent2Bright: '#C49A8A',
+    label: 'BOLD',
+    recommended: false,
+    description: 'Soft, editorial, unexpected'
+  },
+  {
+    name: 'Burnt Sienna',
+    hex: '#A0522D / #C06830',
+    accent2: '#A0522D',
+    accent2Bright: '#C06830',
+    label: 'LOUD',
+    recommended: false,
+    description: 'Rich, bold, confident'
+  }
+];
+
+const grid = document.getElementById('optionsGrid');
+
+options.forEach((opt, i) => {
+  const card = document.createElement('div');
+  card.className = `option-card ${opt.recommended ? 'recommended' : ''}`;
+  card.innerHTML = `
+    <div class="option-name" style="color: ${opt.accent2Bright}">${opt.name}</div>
+    <div class="option-hex">${opt.hex}</div>
+    ${opt.recommended ? '<div class="option-recommended">★ Recommended</div>' : ''}
+    <div class="sim-hero">
+      Nobody has ever finished reading a copywriter's intro, so here's the short version: I write ads, they're below, and they're better than this <span class="kw" style="color: ${opt.accent2Bright}">sentence</span>.
+    </div>
+    <div class="sim-tab-row">
+      <div class="sim-tab active-produced">Produced</div>
+      <div class="sim-tab active-presented" style="background: ${opt.accent2}; color: #F1E9DE;">Spec</div>
+    </div>
+    <div class="sim-card">
+      <div class="sim-card-title" style="color: #F1E9DE;">Tuborg</div>
+      <div class="sim-card-status" style="color: ${opt.accent2Bright};">SPEC</div>
+    </div>
+    <div class="sim-card">
+      <div class="sim-card-title" style="color: #F1E9DE;">Yango</div>
+      <div class="sim-card-status" style="color: #E8A35A;">PRODUCED</div>
+    </div>
+    <div class="sim-glitch-text">
+      <span class="glitch-highlight" style="color: ${opt.accent2Bright}; text-shadow: 2px 0 #E8A35A, -2px 0 ${opt.accent2Bright};">glitch</span>
+      <span class="sim-dot" style="background: #3ED66B; box-shadow: 0 0 0 2px rgba(62,214,107,0.3);"></span>
+    </div>
+    <div style="margin-top: 16px; font-size: 10px; color: #A29584; line-height: 1.5;">${opt.description}</div>
+  `;
+  grid.appendChild(card);
+});
+</script>
+</body>
+</html>

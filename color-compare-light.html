@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Color Options — Light Mode</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #F5F0EA; color: #12100F; font-family: 'Space Mono', monospace; }
+.container { max-width: 1200px; margin: 0 auto; padding: 40px 32px; }
+h1 { font-family: 'Fraunces', serif; font-size: 32px; text-align: center; margin-bottom: 6px; color: #12100F; }
+.subtitle { font-size: 12px; text-align: center; color: #8A7A68; letter-spacing: 0.08em; margin-bottom: 48px; }
+.options-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; }
+.option-card { background: #FFFFFF; border: 1px solid rgba(18,16,15,0.08); border-radius: 12px; padding: 24px 16px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+.option-card.recommended { border-color: #C97B2E; box-shadow: 0 0 0 2px #C97B2E, 0 2px 12px rgba(201,123,46,0.15); }
+.option-name { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+.option-hex { font-size: 10px; color: #8A7A68; letter-spacing: 0.08em; margin-bottom: 20px; }
+.option-recommended { font-size: 10px; color: #C97B2E; letter-spacing: 0.1em; margin-bottom: 12px; text-transform: uppercase; font-weight: 700; }
+.sim-hero { font-family: 'Fraunces', serif; font-size: 14px; line-height: 1.45; text-align: center; padding: 18px 8px; margin-bottom: 16px; color: #12100F; min-height: 90px; }
+.sim-hero .kw { display: inline; font-weight: 700; }
+.sim-tab-row { display: flex; justify-content: center; gap: 5px; margin-bottom: 14px; }
+.sim-tab { font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; padding: 7px 12px; border-radius: 999px; font-weight: 700; }
+.sim-tab.active-produced { background: #C97B2E; color: #FFFFFF; }
+.sim-tab.active-presented { color: #12100F; }
+.sim-card { background: #F5F0EA; border-radius: 6px; padding: 10px 12px; margin-bottom: 6px; text-align: left; display: flex; justify-content: space-between; align-items: center; }
+.sim-card-title { font-family: 'Fraunces', serif; font-size: 11px; font-weight: 700; color: #12100F; }
+.sim-card-status { font-size: 8px; letter-spacing: 0.06em; font-weight: 700; }
+.sim-glitch-text { font-family: 'Space Mono', monospace; font-size: 9px; color: #8A7A68; text-align: center; margin-top: 10px; }
+.sim-glitch-text .glitch-highlight { font-weight: 700; }
+.option-desc { margin-top: 14px; font-size: 10px; color: #8A7A68; line-height: 1.5; }
+.divider { margin: 56px 0 40px; text-align: center; position: relative; }
+.divider::before { content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: rgba(18,16,15,0.08); }
+.divider span { background: #F5F0EA; padding: 0 20px; position: relative; font-size: 11px; letter-spacing: 0.1em; color: #8A7A68; text-transform: uppercase; }
+.full-preview { margin-bottom: 40px; border-radius: 12px; overflow: hidden; border: 1px solid rgba(18,16,15,0.08); }
+.full-preview-header { padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
+.full-preview-name { font-family: 'Fraunces', serif; font-weight: 700; font-size: 16px; }
+.full-preview-hex { font-size: 10px; color: #8A7A68; letter-spacing: 0.06em; }
+.full-preview-body { padding: 32px 24px; text-align: center; }
+.full-hero { font-family: 'Fraunces', serif; font-size: 22px; line-height: 1.4; max-width: 600px; margin: 0 auto 24px; color: #12100F; }
+.full-tab-row { display: inline-flex; gap: 4px; padding: 3px; background: #EDE7DF; border-radius: 999px; margin-bottom: 20px; }
+.full-tab { font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; padding: 9px 20px; border-radius: 999px; font-weight: 700; }
+.full-tab.prod { background: #C97B2E; color: #FFFFFF; }
+.full-tab.spec { color: #12100F; }
+.full-cards { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.full-card { background: #EDE7DF; border-radius: 8px; padding: 14px 18px; text-align: left; min-width: 180px; }
+.full-card-title { font-family: 'Fraunces', serif; font-size: 14px; font-weight: 700; color: #12100F; margin-bottom: 4px; }
+.full-card-status { font-size: 9px; letter-spacing: 0.06em; font-weight: 700; }
+@media (max-width: 900px) { .options-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .options-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Accent2 on White</h1>
+  <p class="subtitle">Same 5 options — how they read against a light background</p>
+  
+  <div class="options-grid" id="optionsGrid"></div>
+
+  <div class="divider"><span>Full-width preview</span></div>
+  <div id="fullPreviews"></div>
+</div>
+
+<script>
+const options = [
+  { name: 'Sage Green', hex: '#6E8468 / #8FA87E', accent2: '#6E8468', accent2Bright: '#8FA87E', recommended: false, description: 'Cool-toned — clashes with warm palette' },
+  { name: 'Terracotta', hex: '#B8735A / #D4916E', accent2: '#B8735A', accent2Bright: '#D4916E', recommended: true, description: 'Warm, earthy — "I have taste"' },
+  { name: 'Copper', hex: '#9E7C5E / #BFA07A', accent2: '#9E7C5E', accent2Bright: '#BFA07A', recommended: false, description: 'Muted, sophisticated — safest pick' },
+  { name: 'Dusty Rose', hex: '#A67B6B / #C49A8A', accent2: '#A67B6B', accent2Bright: '#C49A8A', recommended: false, description: 'Soft, editorial — most unexpected' },
+  { name: 'Burnt Sienna', hex: '#A0522D / #C06830', accent2: '#A0522D', accent2Bright: '#C06830', recommended: false, description: 'Rich, bold — loudest option' }
+];
+
+const grid = document.getElementById('optionsGrid');
+const fullDiv = document.getElementById('fullPreviews');
+
+const heroSentence = "Nobody has ever finished reading a copywriter's intro, so here's the short version: I write ads, they're below, and they're better than this <span class='kw'>sentence</span>.";
+
+options.forEach(opt => {
+  const card = document.createElement('div');
+  card.className = `option-card ${opt.recommended ? 'recommended' : ''}`;
+  card.innerHTML = `
+    <div class="option-name" style="color: ${opt.accent2}">${opt.name}</div>
+    <div class="option-hex">${opt.hex}</div>
+    ${opt.recommended ? '<div class="option-recommended">★ Recommended</div>' : ''}
+    <div class="sim-hero">
+      ${heroSentence.replace(/class='kw'/g, `class='kw' style='color: ${opt.accent2}'`)}
+    </div>
+    <div class="sim-tab-row">
+      <div class="sim-tab active-produced">Produced</div>
+      <div class="sim-tab active-presented" style="background: ${opt.accent2}; color: #FFFFFF;">Spec</div>
+    </div>
+    <div class="sim-card">
+      <div class="sim-card-title">Tuborg</div>
+      <div class="sim-card-status" style="color: ${opt.accent2};">SPEC</div>
+    </div>
+    <div class="sim-card">
+      <div class="sim-card-title">Yango</div>
+      <div class="sim-card-status" style="color: #C97B2E;">PRODUCED</div>
+    </div>
+    <div class="sim-glitch-text">
+      <span class="glitch-highlight" style="color: ${opt.accent2}; text-shadow: 1px 0 #C97B2E, -1px 0 ${opt.accent2};">glitch</span>
+    </div>
+    <div class="option-desc">${opt.description}</div>
+  `;
+  grid.appendChild(card);
+
+  const full = document.createElement('div');
+  full.className = 'full-preview';
+  full.style.background = '#FFFFFF';
+  full.innerHTML = `
+    <div class="full-preview-header" style="background: #F5F0EA; border-bottom: 1px solid rgba(18,16,15,0.08);">
+      <div class="full-preview-name" style="color: ${opt.accent2}">${opt.name} ${opt.recommended ? '★' : ''}</div>
+      <div class="full-preview-hex">${opt.hex}</div>
+    </div>
+    <div class="full-preview-body">
+      <div class="full-hero">
+        ${heroSentence.replace(/class='kw'/g, `class='kw' style='color: ${opt.accent2}'`)}
+      </div>
+      <div class="full-tab-row">
+        <div class="full-tab prod">Produced</div>
+        <div class="full-tab spec" style="background: ${opt.accent2}; color: #FFFFFF;">Spec</div>
+      </div>
+      <div class="full-cards">
+        <div class="full-card">
+          <div class="full-card-title">Tuborg · Beverage</div>
+          <div class="full-card-status" style="color: ${opt.accent2};">SPEC</div>
+        </div>
+        <div class="full-card">
+          <div class="full-card-title">Yango · Tech</div>
+          <div class="full-card-status" style="color: #C97B2E;">PRODUCED</div>
+        </div>
+        <div class="full-card">
+          <div class="full-card-title">Domino's · F&B</div>
+          <div class="full-card-status" style="color: ${opt.accent2};">SPEC</div>
+        </div>
+      </div>
+    </div>
+  `;
+  fullDiv.appendChild(full);
+});
+</script>
+</body>
+</html>
