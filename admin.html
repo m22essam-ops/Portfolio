@@ -291,6 +291,8 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
     <h2>Publish to GitHub (optional)</h2>
     <p class="hint">Saves your content straight to the repository, on the branch your GitHub Pages site serves from, then waits and confirms when the live site is actually updated. It also pushes this admin editor itself, so the live admin.html always matches the version you're using — no downloading files. The token stays in your browser only (this page's storage). Treat it like a password; revoke it anytime at github.com/settings/tokens.</p>
 
+    <div id="fileWarn" hidden></div>
+
     <div id="ghConnect">
       <div class="gh-connect-row">
         <label class="field"><span>GitHub token</span>
@@ -1254,10 +1256,42 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
         });
       })
       .catch(function (err) {
-        ghStatus(err.message || 'Save failed.', true);
+        /* a TypeError here is the browser refusing the request (blocked,
+           offline, or a file:// origin), not GitHub saying no. Say which. */
+        var msg = err && err.message ? err.message : 'Save failed.';
+        if (err && err.name === 'TypeError') {
+          msg = 'The browser blocked the request to GitHub' +
+            (location.protocol === 'file:'
+              ? ', because this page was opened as a file. Open http://127.0.0.1:8888/admin.html instead.'
+              : '. Check your connection, then try again.') +
+            ' (' + msg + ')';
+        }
+        ghStatus(msg, true);
         btnGithub.disabled = false;
       });
   });
+
+  /* ---- opened by double-clicking the file? say so, loudly. ----
+     On a file:// page the browser gives this document its own private
+     origin, so the GitHub token saved at http://127.0.0.1:8888 is not
+     visible here and the Save button never enables. Safari also refuses
+     fetch('admin.html'), which is how the editor pushes a copy of itself.
+     Both were confirmed in Safari on 2026-08-20. */
+  if (location.protocol === 'file:') {
+    var warn = document.getElementById('fileWarn');
+    warn.hidden = false;
+    warn.className = 'gh-status err';
+    warn.style.cssText = 'padding:14px 16px;border-radius:8px;margin-bottom:16px;line-height:1.6';
+    warn.innerHTML =
+      '<strong>You opened this editor by double-clicking the file.</strong><br>' +
+      'Saving to GitHub will not work this way: a <code>file://</code> page gets its own ' +
+      'private storage, so a token you connected on the local server is invisible here, ' +
+      'and Safari blocks this page from reading its own source to publish it.<br><br>' +
+      'Open <a href="http://127.0.0.1:8888/admin.html" style="color:inherit;font-weight:700">' +
+      'http://127.0.0.1:8888/admin.html</a> instead (start the server with ' +
+      '<code>Start Site.command</code> or <code>python3 local-server.py</code>). ' +
+      'Everything else on this page still works.';
+  }
 
   /* restore a saved connection on load */
   if (gh.token && gh.owner && gh.repo) {
