@@ -11,15 +11,15 @@ window.SITE_CONTENT = {
     badge: "available for work"
   },
   ticket: {
-    band: "Luck is not as random as you think.",
+    band: "If I play, I play to win",
     game: "Instant win · Game no. 13 · Price: free",
     serial: "No. 0000000 · Exp. never",
     titleTop: "Award-losing",
     titleBottom: "copywriter",
     sub: "Sometimes winning is not as cool as losing ",
     badge: "0 awards so far",
-    winLine: "Rivan Tower sold out in a week.",
-    winSub: "I wrote the film. It is the first thing in the work.",
+    winLine: "Luck is not as random as you think.",
+    winSub: "That for a ticket to win, had to bought first",
     terms: "Odds of winning: historically poor. Ticket has no cash value and neither did the awards. Keep this as proof of participation.",
     awards: [],
     wonBand: "The National Award Lottery",
