@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Syne:wght@400..800&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -34,13 +35,8 @@
   <div class="exp-list" id="expList"></div>
 </div>
 
-<footer class="page-foot">
-  <div class="wrap">
-    <p class="big">Someone has to win eventually. <a href="mailto:m22essam@gmail.com">Go on.</a></p>
-    <p class="terms" id="footTerms"></p>
-    <p class="joke" id="footJoke"></p>
-  </div>
-</footer>
+<!-- the tear-off stub. site.js fills it. -->
+<footer class="stub" id="siteFoot"></footer>
 
 <script src="content.js"></script>
 <script src="site.js"></script>
@@ -83,13 +79,10 @@
       '</div>';
   }).join('');
 
-  var termsEl = document.getElementById('footTerms');
-  if (termsEl && C.ticket) termsEl.textContent = C.ticket.terms || '';
+  /* the footer stub, including its small print, is built by site.js */
 
   /* the quiet jokes */
   var J = C.jokes || {};
-  var fj = document.getElementById('footJoke');
-  if (fj) fj.textContent = J.footer || '';
   if (J.tabAway) {
     var realTitle = document.title;
     document.addEventListener('visibilitychange', function () {

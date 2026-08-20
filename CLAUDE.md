@@ -22,6 +22,7 @@ server or bundler breaks his workflow. Do not suggest React/Tailwind/Vite.
 - `auto-refresh.js` — reloads the page when content.js changes. Local only.
 - `local-server.py` — serves the folder on :8888 and gives admin its save endpoint.
 - `styles.css` — all styling, shared by every page.
+- `favicon.svg` — the game number on the ticket's red. Every page links it.
 - `about-photo.jpg` — real childhood photo used as the About portrait.
 - `images/` — the owner's own uploads.
 - `images/live/` — 84 files crawled from mohammedessam.com (Aug 2026), resized
@@ -132,13 +133,46 @@ caramel palette with a grain photo. All rejected. Don't reintroduce them.
 **index.html** — the ticket, full screen, no scroll (restructured 20 Aug 2026
 for less density):
 black band (owner's line left, red badge right) → game/serial microtype →
-**MOHAMMED ESSAM** on its own big line → two-line headline → sub-line →
-three nav punch boxes, the last under scratch foil with `ticket.scratchNote`
-printed as its caption → barcode + small print.
+**MOHAMMED ESSAM** on its own big line → two-line headline → a row holding the
+sub-line on the left and **the seal** on the right → three nav punch boxes, the
+last under scratch foil with `ticket.scratchNote` printed as its caption →
+barcode + small print.
 
 The name is not decoration: the home page has no nav bar, so it is the only
 thing on that screen identifying whose site it is. Always upper case (the page
 forces it). Do not remove it.
+
+**The headline sizes itself.** `fitTitle()` in index.html measures each line and
+shrinks the type until the longest one fits the ticket. It exists because the
+owner rewrites that line from admin and "copywriter" already ran off the edge on
+a phone. `.tk-title span` is `white-space:nowrap` on purpose: the measurement is
+meaningless if the browser is allowed to wrap. It loops a few times because
+display faces with an optical-size axis change width as the size changes, so one
+pass of arithmetic lands short.
+
+### The seal (added 20 Aug 2026)
+
+The owner asked for one visual element on the home page: "stamp, sticker, an
+image of mine, my face illustrated, something". It is a lottery validation
+stamp, drawn as inline SVG in index.html: two rings, a line of type turning
+slowly round the outside on an SVG `textPath`, and a mark in the middle.
+
+It is vectors and not a picture on purpose. There is no photograph of him in the
+repo except the childhood one on the About page, nothing to download, and it
+stays sharp at any size. It obeys `prefers-reduced-motion` by standing still.
+
+All of it reads from content.js: `sealRing`, `sealTop`, `sealMark`, and the won
+variants `wonSealRing` / `wonSealTop` / `wonSealMark`. **Blank the ring and the
+whole seal removes itself.** The ring text repeats until it nearly closes the
+circle and `textLength` stretches it the rest of the way, so any line he writes
+fits. When an award is added the seal validates itself: the middle fills solid
+red and the mark reverses out.
+
+Content is *provenance*, not another joke: Cairo · Dubai · Madrid round the
+outside, game no. 13 in the middle. The page already says "award-losing",
+"0 awards so far" and "odds historically high"; a fourth way of saying he has
+won nothing would have been a stutter. **If a photo or an illustrated portrait
+ever replaces it, that is the slot it goes in.**
 
 Retired in the same pass: the tear rule, and the `.proof` block with its
 `winLine`/`winSub` fields. `winSub` survives as `ticket.scratchNote`, sitting
@@ -172,6 +206,42 @@ work.html and admin.html fold them into one list on read.
 field: "Sold out in a week", "Never left the deck", "Won nothing". Short and
 true. This was the owner's idea and it is better than the tabs were, because
 it carries real information instead of a category.
+
+### The stub (the footer, rebuilt 20 Aug 2026)
+
+The old footer was a rule, one big line and two lines of grey small print. The
+owner's complaint was that it "still looks like a website not a creative
+portfolio", and he was right: it was the default agency footer.
+
+It is now **the tear-off half of the same ticket the home page is**: a red
+full-bleed block with a scalloped tear along the top, off-white type, and the
+wordmark running the full width and bleeding off the bottom edge. Red on the
+off-white gallery pages is deliberate, it is the one loud moment on them and it
+rhymes with the home screen.
+
+**It is built by `site.js`, not by any page's HTML.** work.html, about.html and
+every project page carry only `<footer class="stub" id="siteFoot"></footer>`.
+Edit it in site.js or it will only change on one page.
+
+It is also where the contact details finally live. Before this the only way to
+reach him from a page was one buried "Go on." mailto. The columns are generated
+from `contact.links` and `contact.resume`, so adding a link in admin section 6
+puts it in the footer. The mailto is pulled out of that list and set large as
+the claim line.
+
+Fields: `footer.keep`, `footer.big`, `footer.place`, `footer.line`,
+`footer.mark`, plus `ticket.serial` and `ticket.terms` reused as the ticket
+furniture. `footer.joke` is now **unused** (it fed the retired PG-13 rating
+label); it is kept in content.js and labelled as unused in admin rather than
+deleted, because it is his copy.
+
+`.stub-mark` is measured and sized by script to run the exact width, for the
+same optical-size reason as the home headline. The `vw` in the CSS is only the
+fallback before that runs.
+
+**Two footer lines say the same thing** and want the owner's pass:
+`footer.line` "Copywriters reserved, I know." and `jokes.footer` "No copywriters
+reserved." Both currently print, at opposite ends of the same row.
 
 
 ## Project detail pages

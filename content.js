@@ -21,12 +21,18 @@ window.SITE_CONTENT = {
     scratchNote: "That for a ticket to win, had to bought first",
     badge: "0 awards so far",
     terms: "Odds of winning: historically High. Ticket has no cash value and neither did the awards. Keep this as proof of participation or share it with your loved ones.",
+    sealRing: "Cairo · Dubai · Madrid · ",
+    sealTop: "Game no.",
+    sealMark: "13",
     awards: [],
     wonBand: "The National Award Lottery",
     wonTitleTop: "Award-winning",
     wonTitleBottom: "copywriter",
     wonBadge: "Correction notice",
     wonLine: "We regret to inform you the joke is over.",
+    wonSealRing: "Validated · Validated · Validated · ",
+    wonSealTop: "Claimed",
+    wonSealMark: "★",
     nav: [
       {
         label: "The work",
@@ -42,7 +48,7 @@ window.SITE_CONTENT = {
         label: "Hire me?",
         num: "03",
         url: "mailto:m22essam@gmail.com",
-        scratch: true,
+        "scratch": true,
         scratchHint: "Scratch to reveal"
       }
     ]
@@ -139,8 +145,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: true
+        "draft": false,
+        "ran": true
       },
       {
         slug: "pringles-champions-of-fun",
@@ -229,8 +235,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: true
+        "draft": false,
+        "ran": true
       },
       {
         slug: "rivan-tower",
@@ -304,8 +310,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: true
+        "draft": false,
+        "ran": true
       },
       {
         slug: "true-colors-of-dominos",
@@ -369,8 +375,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: false
+        "draft": false,
+        "ran": false
       },
       {
         slug: "pop-the-pressure",
@@ -441,8 +447,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: false
+        "draft": false,
+        "ran": false
       },
       {
         slug: "pringles-cheesy-cheese",
@@ -508,8 +514,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: true
+        "draft": false,
+        "ran": true
       },
       {
         slug: "afg-skybridge",
@@ -574,8 +580,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: true
+        "draft": false,
+        "ran": true
       },
       {
         slug: "song-for-the-cashless",
@@ -661,8 +667,91 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: true
+        "draft": false,
+        "ran": true
+      },
+      {
+        slug: "quarantine-games",
+        title: "The Quarantine Games",
+        client: "Social Nuts",
+        category: "Game",
+        year: "2020",
+        image: "live/the-quarantine-game-bnk-alhthr-cover.gif",
+        alt: "Social Nuts, The Quarantine Games",
+        sticker: "Played for charity",
+        tagline: "Monopoly, but the year is 2020.",
+        story: [
+          "We made Bank El Hazr, The Curfew Bank, a wordplay on the Egyptian version of Monopoly that everyone grew up playing.",
+          "It was built to entertain people through lockdown and raise money at the same time. For every person who played, we donated to one of four causes: day-to-day workers, animal shelters taking in pets people gave up out of fear of infection, homeless children, and connecting seniors in care homes with their families."
+        ],
+        media: [
+          {
+            type: "image",
+            src: "live/the-quarantine-game-bnk-alhthr-01.gif",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "live/the-quarantine-game-bnk-alhthr-02.jpg",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "live/the-quarantine-game-bnk-alhthr-03.jpg",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "live/the-quarantine-game-bnk-alhthr-04.jpg",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "live/the-quarantine-game-bnk-alhthr-05.jpg",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "live/the-quarantine-game-bnk-alhthr-06.jpg",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "live/the-quarantine-game-bnk-alhthr-07.gif",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "live/the-quarantine-game-bnk-alhthr-08.jpg",
+            caption: ""
+          },
+          {
+            type: "video",
+            src: "",
+            caption: ""
+          }
+        ],
+        credits: [
+          {
+            role: "Copywriter",
+            name: "Mohammed Essam, Aya Elhaddad"
+          },
+          {
+            role: "Agency",
+            name: "Social Nuts"
+          },
+          {
+            role: "Art Director",
+            name: "Mahmoud Tammam"
+          },
+          {
+            role: "",
+            name: ""
+          }
+        ],
+        next: {},
+        "draft": false,
+        "ran": true
       },
       {
         slug: "momtaz-cement-chronicles",
@@ -770,8 +859,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: true
+        "draft": false,
+        "ran": true
       },
       {
         slug: "modon-actors-too-seriously",
@@ -869,8 +958,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: true
+        "draft": false,
+        "ran": true
       },
       {
         slug: "red-expo-got-the-keys",
@@ -963,91 +1052,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: true
-      },
-      {
-        slug: "quarantine-games",
-        title: "The Quarantine Games",
-        client: "Social Nuts",
-        category: "Game",
-        year: "2020",
-        image: "live/the-quarantine-game-bnk-alhthr-cover.gif",
-        alt: "Social Nuts, The Quarantine Games",
-        sticker: "Played for charity",
-        tagline: "Monopoly, but the year is 2020.",
-        story: [
-          "We made Bank El Hazr, The Curfew Bank, a wordplay on the Egyptian version of Monopoly that everyone grew up playing.",
-          "It was built to entertain people through lockdown and raise money at the same time. For every person who played, we donated to one of four causes: day-to-day workers, animal shelters taking in pets people gave up out of fear of infection, homeless children, and connecting seniors in care homes with their families."
-        ],
-        media: [
-          {
-            type: "image",
-            src: "live/the-quarantine-game-bnk-alhthr-01.gif",
-            caption: ""
-          },
-          {
-            type: "image",
-            src: "live/the-quarantine-game-bnk-alhthr-02.jpg",
-            caption: ""
-          },
-          {
-            type: "image",
-            src: "live/the-quarantine-game-bnk-alhthr-03.jpg",
-            caption: ""
-          },
-          {
-            type: "image",
-            src: "live/the-quarantine-game-bnk-alhthr-04.jpg",
-            caption: ""
-          },
-          {
-            type: "image",
-            src: "live/the-quarantine-game-bnk-alhthr-05.jpg",
-            caption: ""
-          },
-          {
-            type: "image",
-            src: "live/the-quarantine-game-bnk-alhthr-06.jpg",
-            caption: ""
-          },
-          {
-            type: "image",
-            src: "live/the-quarantine-game-bnk-alhthr-07.gif",
-            caption: ""
-          },
-          {
-            type: "image",
-            src: "live/the-quarantine-game-bnk-alhthr-08.jpg",
-            caption: ""
-          },
-          {
-            type: "video",
-            src: "",
-            caption: ""
-          }
-        ],
-        credits: [
-          {
-            role: "Copywriter",
-            name: "Mohammed Essam"
-          },
-          {
-            role: "Agency",
-            name: "Social Nuts"
-          },
-          {
-            role: "",
-            name: ""
-          },
-          {
-            role: "",
-            name: ""
-          }
-        ],
-        next: {},
-        draft: false,
-        ran: true
+        "draft": false,
+        "ran": true
       },
       {
         slug: "canesten-lets-call-it",
@@ -1114,8 +1120,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: false
+        "draft": false,
+        "ran": false
       },
       {
         slug: "nivea-never-see-the-sun",
@@ -1183,8 +1189,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: false
+        "draft": false,
+        "ran": false
       },
       {
         slug: "the-mumbled-code",
@@ -1242,8 +1248,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: false
+        "draft": false,
+        "ran": false
       },
       {
         slug: "oumph-like-any-ad",
@@ -1315,8 +1321,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: false
+        "draft": false,
+        "ran": false
       },
       {
         slug: "nothing-in-my-dreams",
@@ -1372,8 +1378,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: true,
-        ran: false
+        "draft": true,
+        "ran": false
       },
       {
         slug: "murder-your-thirst",
@@ -1427,8 +1433,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: true,
-        ran: false
+        "draft": true,
+        "ran": false
       }
     ]
   },
@@ -1508,6 +1514,9 @@ window.SITE_CONTENT = {
     ]
   },
   footer: {
+    keep: "Keep this stub",
+    big: "Someone has to win eventually.",
+    place: "Madrid, Spain",
     line: "© 2026 · Written by luck. Copywriters reserved, I know.",
     mark: "MOHAMMED ESSAM",
     joke: "for the jokes in this portfolio."

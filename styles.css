@@ -159,12 +159,45 @@ body.is-home{
   font-size:clamp(52px,10.5vw,124px);
   color:var(--ink);
 }
-.tk-title span{display:block}
+/* one line each, always: the script below measures them and shrinks the
+   headline to fit, which only works if the browser is not allowed to wrap */
+.tk-title span{display:block;white-space:nowrap}
 .tk-title span:last-child{color:var(--red)}
 
-.tk-sub{font-size:16px;color:var(--ink-60);margin:0 0 52px;max-width:52ch}
+/* the sub-line and the seal share a row, so the seal can never land on top
+   of the headline no matter how long the words get */
+.tk-mid{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:clamp(20px,4vw,60px);margin:0 0 52px;
+}
+.tk-sub{font-size:16px;color:var(--ink-60);margin:0;max-width:52ch}
 
-
+/* ---- THE SEAL ----
+   the one non-typographic thing on the home page. Two rings, a turning
+   line of type and a mark in the middle. Flat vectors: no texture, no
+   shadow, nothing to load. */
+.seal{flex:0 0 auto;width:clamp(104px,12.5vw,196px)}
+.seal svg{display:block;width:100%;height:auto}
+.seal-o{fill:none;stroke:var(--red);stroke-width:2.5}
+.seal-in{stroke:var(--ink-12)}
+.seal-ring{
+  fill:var(--ink);font-family:var(--mono);font-weight:700;
+  font-size:16px;letter-spacing:.06em;
+}
+.seal-top{
+  fill:var(--ink-60);font-family:var(--mono);font-weight:600;
+  font-size:14px;letter-spacing:.2em;text-anchor:middle;
+}
+.seal-mark{
+  fill:var(--red);font-family:var(--display-home);font-weight:800;
+  font-size:58px;letter-spacing:-.03em;text-anchor:middle;
+}
+.seal-spin{
+  transform-box:view-box;transform-origin:100px 100px;
+  animation:sealturn 26s linear infinite;
+}
+@keyframes sealturn{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.seal-spin{animation:none}}
 
 /* nav as punch boxes */
 .tk-nav{
@@ -223,6 +256,10 @@ body.is-home{
 
 /* the awards switch: when he finally wins something */
 body.has-won .tk-badge{background:var(--ink)}
+/* the seal gets validated too: the middle fills in and the mark reverses */
+body.has-won .seal-in{fill:var(--red);stroke:var(--red)}
+body.has-won .seal-mark{fill:var(--paper)}
+body.has-won .seal-top{fill:#F6F3EEa8}
 .won-list{margin:0 0 30px;padding:0;list-style:none}
 .won-list li{
   font-family:var(--mono);text-transform:uppercase;
@@ -245,7 +282,7 @@ body.has-won .tk-badge{background:var(--ink)}
   .tk-name{font-size:clamp(24px,2.1vw,42px)}
   .tk-nav{max-width:min(100%,1100px)}
   .tk-nav a{font-size:clamp(19px,1.5vw,26px);padding:clamp(16px,2vh,26px) 20px}
-  .tk-top,.tk-sub,.tk-name,.tk-nav{margin-bottom:0}
+  .tk-top,.tk-mid,.tk-name,.tk-nav{margin-bottom:0}
   /* let space-between share the slack across the whole ticket instead of
      the foot's auto margin swallowing it into one gap at the bottom */
   .tk-foot{margin-top:0}
@@ -273,11 +310,96 @@ body.has-won .tk-badge{background:var(--ink)}
 .page-head h1{font-size:clamp(52px,11vw,138px)}
 .page-head .note{margin:22px 0 0;font-size:12px;color:var(--fg-dim);max-width:60ch;letter-spacing:.12em}
 
-.page-foot{margin-top:120px;border-top:1px solid var(--line);padding:64px 0 54px}
-.page-foot .big{font-size:clamp(30px,5.4vw,60px);margin-bottom:26px}
-.page-foot .big a{color:var(--red);text-decoration:none;border-bottom:3px solid currentColor}
-.page-foot .terms{font-size:10.5px;color:var(--fg-faint);letter-spacing:.09em;max-width:70ch;margin:0}
-.page-foot .joke{font-size:11px;color:var(--fg-faint);letter-spacing:.1em;margin:16px 0 0}
+/* ============================ THE STUB (footer) ============================
+   Every page that is not the home page ends on the tear-off half of the same
+   ticket: red field, off-white type, torn edge along the top. It is the one
+   loud moment on the gallery pages, and it is where the contact details are.
+   Built by site.js from content.js, so there is one copy of it.
+   ========================================================================= */
+
+.stub{
+  background:var(--red);color:var(--paper);
+  margin-top:130px;position:relative;overflow:hidden;
+}
+/* the tear: the page colour bites half-circles out of the top edge */
+.stub-perf{
+  height:13px;
+  background-image:radial-gradient(circle at 8px 0,var(--bg) 7px,transparent 7.5px);
+  background-size:20px 13px;
+}
+.stub-in{padding:58px 0 46px}
+
+.stub-head{
+  display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
+  font-family:var(--mono);text-transform:uppercase;font-weight:600;
+  letter-spacing:.2em;font-size:11px;color:#F6F3EEa3;margin-bottom:36px;
+}
+
+.stub-big{
+  font-family:var(--display);font-weight:800;letter-spacing:-.035em;
+  line-height:.96;font-size:clamp(34px,6.4vw,86px);
+  margin:0 0 22px;max-width:15ch;
+}
+
+/* the claim: the email, at the size it deserves */
+.stub-claim{
+  display:inline-flex;align-items:baseline;gap:.42em;
+  font-family:var(--display);font-weight:800;letter-spacing:-.02em;
+  font-size:clamp(21px,3.3vw,44px);
+  color:var(--paper);text-decoration:none;
+  border-bottom:4px solid #F6F3EE5c;padding-bottom:5px;
+  transition:color .16s var(--ease),border-color .16s var(--ease);
+}
+.stub-claim:hover{color:var(--ink);border-color:var(--ink)}
+.stub-claim i{font-style:normal;transition:transform .2s var(--ease)}
+.stub-claim:hover i{transform:translateX(7px)}
+
+.stub-cols{
+  list-style:none;margin:56px 0 0;padding:44px 0 0;
+  border-top:1px solid #F6F3EE3d;
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px 30px;
+}
+.stub-cols li{min-width:0}
+.stub-cols b{
+  display:block;font-family:var(--mono);font-weight:600;
+  text-transform:uppercase;letter-spacing:.2em;font-size:11px;
+  color:#F6F3EE8f;margin-bottom:13px;
+}
+.stub-cols a,.stub-cols span{display:block;font-size:16px;line-height:1.8;color:var(--paper)}
+.stub-cols a{text-decoration:none;width:fit-content;border-bottom:1px solid transparent}
+.stub-cols a:hover{border-color:var(--paper)}
+
+.stub-fine{
+  display:flex;align-items:flex-end;justify-content:space-between;gap:32px;
+  margin-top:54px;padding-top:28px;border-top:1px solid #F6F3EE3d;
+}
+.stub-fine p{
+  margin:0;font-size:10.5px;line-height:1.65;
+  letter-spacing:.09em;color:#F6F3EE8f;max-width:64ch;text-align:right;
+}
+/* the same barcode as the home ticket, inverted to sit on the red */
+.stub-code{
+  flex:0 0 auto;width:132px;height:44px;
+  background-image:repeating-linear-gradient(90deg,
+    var(--paper) 0 2px,transparent 2px 4px,var(--paper) 4px 5px,transparent 5px 9px,
+    var(--paper) 9px 12px,transparent 12px 14px);
+}
+
+.stub-sign{
+  display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
+  margin-top:22px;font-size:10.5px;letter-spacing:.09em;color:#F6F3EE73;
+}
+
+/* the wordmark, filling the width and running off the bottom edge. .stub
+   clips it. site.js measures the word and sets the exact size; the vw here
+   is only the fallback for when that has not run yet. */
+.stub-mark{
+  font-family:var(--display);font-weight:800;
+  letter-spacing:-.045em;line-height:.72;
+  font-size:10.4vw;color:var(--paper);
+  text-align:center;white-space:nowrap;
+  margin:34px 0 -.26em;user-select:none;
+}
 
 /* ============================ WORK GRID ============================ */
 /* one uniform grid. no alternating sizes, no two lists, no tabs.
@@ -399,12 +521,25 @@ body.has-won .tk-badge{background:var(--ink)}
   .tk-terms{text-align:left}
   .page-nav .links{gap:16px}
   body.is-home{padding:22px 14px}
+
+  /* the seal drops under the sub-line rather than squeezing it */
+  .tk-mid{flex-direction:row-reverse;align-items:flex-start;justify-content:flex-end;gap:22px}
+  .tk-mid .tk-sub{padding-top:6px}
+
+  .stub{margin-top:86px}
+  .stub-in{padding:44px 0 36px}
+  .stub-cols{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:44px;padding-top:36px}
+  .stub-fine{flex-direction:column;align-items:flex-start;gap:20px;margin-top:42px}
+  .stub-fine p{text-align:left}
+  .stub-sign{gap:6px}
 }
 @media (max-width:520px){
   .credits-list li{flex-direction:column;gap:3px}
   .credits-list li span{flex:none}
   .page-nav .logo{font-size:16px}
   .tk-band{padding:9px 18px;font-size:10.5px}
+  .stub-cols{grid-template-columns:1fr;gap:24px}
+  .stub-head{font-size:10px;letter-spacing:.16em}
 }
 
 @media (prefers-reduced-motion:reduce){

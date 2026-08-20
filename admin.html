@@ -256,6 +256,7 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
 }
 @media (max-width: 720px) { .media-grid-admin { grid-template-columns: 1fr; } }
 </style>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 </head>
 <body>
 
@@ -343,6 +344,14 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
     </div>
     <label class="field"><span>Sub-line under the headline</span><input data-path="ticket.sub"></label>
 
+    <div class="subhead">The seal</div>
+    <p class="hint">The round stamp on the right of the ticket. It is the only thing on the home page that is not type. <strong>Empty the ring text and the whole seal disappears.</strong></p>
+    <label class="field"><span>Ring (the words going round)</span><input data-path="ticket.sealRing" placeholder="Cairo · Dubai · Madrid · "><small>It repeats itself until it closes the circle, so one lap is enough. Any length fits.</small></label>
+    <div class="grid2">
+      <label class="field"><span>Small label inside</span><input data-path="ticket.sealTop" placeholder="Game no."></label>
+      <label class="field"><span>The big mark in the middle</span><input data-path="ticket.sealMark" placeholder="13"><small>One or two characters. A number, a letter or a symbol like ★.</small></label>
+    </div>
+
     <div class="subhead">The note above the scratch box</div>
     <label class="field"><span>Small line printed over the covered box</span><input data-path="ticket.scratchNote"><small>Sits directly on top of the third button, as its caption. Keep it short: it is set small and in caps.</small></label>
 
@@ -368,6 +377,11 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
       <label class="field"><span>Won: headline, second line</span><input data-path="ticket.wonTitleBottom"></label>
     </div>
     <label class="field"><span>Won: the line (replaces the sub-line)</span><input data-path="ticket.wonLine"></label>
+    <div class="grid2">
+      <label class="field"><span>Won: seal ring</span><input data-path="ticket.wonSealRing" placeholder="Validated · Validated · "></label>
+      <label class="field"><span>Won: seal label</span><input data-path="ticket.wonSealTop" placeholder="Claimed"></label>
+    </div>
+    <label class="field"><span>Won: seal mark</span><input data-path="ticket.wonSealMark" placeholder="★"><small>The seal fills in solid red when you have won something.</small></label>
   </section>
 
   <!-- ================= SUBTLE JOKES ================= -->
@@ -433,15 +447,23 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
 
   <!-- ================= NAV + FOOTER ================= -->
   <section class="admin-section">
-    <h2>7. Top bar and footer</h2>
+    <h2>7. Top bar and the stub</h2>
     <div class="grid2">
       <label class="field"><span>Logo text</span><input data-path="nav.logo"></label>
       <label class="field"><span>Tagline under logo (shown exactly as typed)</span><input data-path="nav.tagline" placeholder="e.g. Just write"></label>
       <label class="field"><span>Badge (top right)</span><input data-path="nav.badge"></label>
     </div>
-    <label class="field"><span>Footer line</span><input data-path="footer.line"></label>
-    <label class="field"><span>Footer wordmark (replaces the ® — write "PG-13" in it to render the MPAA-style rating label)</span><input data-path="footer.mark"></label>
-    <label class="field"><span>PG-13 punchline (the hidden line revealed on hover)</span><input data-path="footer.joke" placeholder="e.g. for the jokes in this portfolio."></label>
+
+    <div class="subhead">The stub (the red footer on every page except the home)</div>
+    <p class="hint">It is the tear-off half of the same ticket the home page is, and it is where your contact details live. The links and the résumé button in it come from section 6 above, so add a link there and it turns up here.</p>
+    <div class="grid2">
+      <label class="field"><span>Small line, top left of the stub</span><input data-path="footer.keep" placeholder="Keep this stub"></label>
+      <label class="field"><span>Where you are</span><input data-path="footer.place" placeholder="Madrid, Spain"></label>
+    </div>
+    <label class="field"><span>The big line</span><input data-path="footer.big" placeholder="Someone has to win eventually."><small>Set large. Around six words reads best.</small></label>
+    <label class="field"><span>Copyright line</span><input data-path="footer.line"></label>
+    <label class="field"><span>The wordmark across the bottom</span><input data-path="footer.mark" placeholder="MOHAMMED ESSAM"><small>Sized automatically to run the full width and bleed off the bottom edge. Empty it and it goes away.</small></label>
+    <label class="field"><span>Unused: old PG-13 punchline</span><input data-path="footer.joke"><small>Nothing reads this any more. Kept so it is not lost.</small></label>
   </section>
 </main>
 
@@ -505,6 +527,24 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
     if (!Array.isArray(M.contact.links)) M.contact.links = [];
     M.contact.resume = M.contact.resume || {};
     M.footer = M.footer || {};
+
+    /* Fields added after this file first shipped. Seeding them means an older
+       content.js, or a save made from a tab that was open before they existed,
+       gets them back the next time this page is loaded and saved, instead of
+       leaving the seal or the stub blank forever. Anything already written
+       is left exactly as it is, including a deliberate empty string. */
+    var seed = function (obj, key, val) {
+      if (obj[key] === undefined) obj[key] = val;
+    };
+    seed(M.ticket, 'sealRing', 'Cairo · Dubai · Madrid · ');
+    seed(M.ticket, 'sealTop', 'Game no.');
+    seed(M.ticket, 'sealMark', '13');
+    seed(M.ticket, 'wonSealRing', 'Validated · Validated · Validated · ');
+    seed(M.ticket, 'wonSealTop', 'Claimed');
+    seed(M.ticket, 'wonSealMark', '★');
+    seed(M.footer, 'keep', 'Keep this stub');
+    seed(M.footer, 'big', 'Someone has to win eventually.');
+    seed(M.footer, 'place', 'Madrid, Spain');
   }
 
   /* ---------------- rendering ---------------- */

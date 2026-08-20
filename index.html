@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Syne:wght@400..800&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body class="is-home">
@@ -31,7 +32,37 @@
     <p class="tk-name" id="tkName"></p>
 
     <h1 class="tk-title"><span id="tkTitleTop"></span><span id="tkTitleBottom"></span></h1>
-    <p class="tk-sub" id="tkSub"></p>
+
+    <div class="tk-mid">
+      <p class="tk-sub" id="tkSub"></p>
+
+      <!-- THE SEAL. A ticket gets stamped when someone checks it; this is that
+           stamp, and it is the only thing on the page that is not type. Drawn
+           as vectors on purpose: nothing to download, no texture, no shadow,
+           and it stays sharp at any size. The ring turns slowly, unless the
+           visitor asked for reduced motion, in which case it just sits there. -->
+      <div class="seal" id="tkSeal" aria-hidden="true">
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"
+             xmlns:xlink="http://www.w3.org/1999/xlink">
+          <defs>
+            <!-- starts at 9 o'clock and runs clockwise, so the letters sit
+                 upright along the top of the circle -->
+            <path id="sealPath" fill="none"
+                  d="M100,100 m-76,0 a76,76 0 1,1 152,0 a76,76 0 1,1 -152,0"/>
+          </defs>
+          <circle class="seal-o" cx="100" cy="100" r="97"/>
+          <circle class="seal-o seal-in" cx="100" cy="100" r="66"/>
+          <g class="seal-spin">
+            <text class="seal-ring">
+              <textPath id="sealRing" href="#sealPath" xlink:href="#sealPath"
+                        startOffset="0" textLength="477" lengthAdjust="spacing"></textPath>
+            </text>
+          </g>
+          <text class="seal-top"  x="100" y="88"  id="sealTop"></text>
+          <text class="seal-mark" x="100" y="134" id="sealMark"></text>
+        </svg>
+      </div>
+    </div>
 
     <ul class="won-list" id="wonList" hidden></ul>
 
@@ -76,6 +107,58 @@
   /* the home page has no nav bar, so this band is the only thing on the
      screen that says whose site this is. Always upper case. */
   set('tkName', (T.name || 'MOHAMMED ESSAM').toUpperCase());
+
+  /* ---- keep the headline inside the ticket ----
+     The headline is his to rewrite from admin, and one long word ("copywriter"
+     already) runs off the edge of a narrow ticket. Rather than tune a font
+     size to one particular sentence, measure the longest line and shrink
+     until it fits. Runs again once the webfont lands and on resize. */
+  function fitTitle() {
+    var h = document.querySelector('.tk-title');
+    if (!h || !h.children.length) return;
+    h.style.fontSize = '';
+    var box = h.clientWidth;
+    if (!box) return;
+    var rng = document.createRange();
+    /* more than one pass: display faces with an optical-size axis change
+       width as the point size changes, so the first sum lands short */
+    for (var i = 0; i < 4; i++) {
+      var fs = parseFloat(getComputedStyle(h).fontSize);
+      var widest = 0;
+      [].forEach.call(h.children, function (sp) {
+        rng.selectNodeContents(sp);
+        widest = Math.max(widest, rng.getBoundingClientRect().width);
+      });
+      if (!widest || widest <= box) break;
+      h.style.fontSize = (fs * box / widest).toFixed(2) + 'px';
+    }
+  }
+  fitTitle();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitTitle);
+  var fitWait;
+  window.addEventListener('resize', function () {
+    clearTimeout(fitWait);
+    fitWait = setTimeout(fitTitle, 120);
+  });
+
+  /* ---- the seal ----
+     The ring text is repeated until it goes most of the way round, then
+     textLength stretches it to close the circle exactly. That way any line
+     he types in admin fits, whether it is three words or ten. Blank the
+     ring in content.js and the whole seal disappears. */
+  (function () {
+    var seal = document.getElementById('tkSeal');
+    if (!seal) return;
+    var ring = String((hasWon ? (T.wonSealRing || T.sealRing) : T.sealRing) || '').trim();
+    if (!ring) { seal.remove(); return; }
+    if (!/[·•|,\/-]\s*$/.test(ring)) ring += ' · ';
+    else if (!/\s$/.test(ring)) ring += ' ';
+    var loop = ring;
+    while (loop.length < 42) loop += ring;
+    set('sealRing', loop.toUpperCase());
+    set('sealTop',  String((hasWon ? (T.wonSealTop  || T.sealTop)  : T.sealTop)  || '').toUpperCase());
+    set('sealMark', (hasWon ? (T.wonSealMark || T.sealMark) : T.sealMark) || '');
+  })();
 
   if (hasWon) {
     var ul = document.getElementById('wonList');
