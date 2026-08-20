@@ -18,8 +18,9 @@ window.SITE_CONTENT = {
     titleTop: "Award-losing",
     titleBottom: "copywriter",
     sub: "I write in English and Arabic. I order coffee in Spanish and French.",
-    scratchNote: "That for a ticket to win, had to bought first",
     badge: "0 awards so far",
+    winLine: "",
+    winSub: "That for a ticket to win, had to bought first",
     terms: "Odds of winning: historically High. Ticket has no cash value and neither did the awards. Keep this as proof of participation or share it with your loved ones.",
     awards: [],
     wonBand: "The National Award Lottery",
@@ -42,7 +43,7 @@ window.SITE_CONTENT = {
         label: "Hire me?",
         num: "03",
         url: "mailto:m22essam@gmail.com",
-        scratch: true,
+        "scratch": true,
         scratchHint: "Scratch to reveal"
       }
     ]
@@ -139,8 +140,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: true
+        "draft": false,
+        "ran": true
       },
       {
         slug: "pringles-champions-of-fun",
@@ -229,8 +230,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: true
+        "draft": false,
+        "ran": true
       },
       {
         slug: "rivan-tower",
@@ -304,8 +305,145 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: true
+        "draft": false,
+        "ran": true
+      },
+      {
+        slug: "true-colors-of-dominos",
+        title: "The True Colors",
+        client: "Domino's",
+        category: "Miami Ad School",
+        year: "2026",
+        image: "Minimalist Elegant Modern Bold  Advertising Poster Design _ Coffee Shop Branding.jpg",
+        alt: "Domino's making the streets safer",
+        sticker: "Never left the deck",
+        tagline: "Billboards that hear you walking home.",
+        story: [
+          "Walking home at night in heels should not be frightening. To help women feel safer on the streets of London, Domino's showed the city its true colors with slicing-edge OOH billboards using audio-recognition technology. The billboards pick up the sound of accelerating high heels and flash intense red and blue, mimicking a police siren to scare off anyone thinking of causing trouble."
+        ],
+        media: [
+          {
+            type: "image",
+            src: "Dominos art board.jpg",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "Dominos art style .jpg",
+            caption: "",
+            layout: "full"
+          },
+          {
+            type: "video",
+            src: "<div style=\"padding:56.25% 0 0 0;position:relative;\"><iframe src=\"https://player.vimeo.com/video/1205222256?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;\" title=\"Dominos - The True Color\"></iframe></div>",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "dominos bus stop poster mockup.jpg",
+            caption: "",
+            layout: "half"
+          },
+          {
+            type: "image",
+            src: "Dominos news.jpg",
+            caption: "",
+            layout: "half"
+          }
+        ],
+        credits: [
+          {
+            role: "Team",
+            name: "Mohammed Essam, Baltazar Lee"
+          },
+          {
+            role: "Tutor",
+            name: "Pranay Suri"
+          },
+          {
+            role: "Client",
+            name: "Domino's, Miami Ad School Madrid"
+          },
+          {
+            role: "",
+            name: ""
+          }
+        ],
+        next: {},
+        "draft": false,
+        "ran": false
+      },
+      {
+        slug: "pop-the-pressure",
+        title: "Pop the Pressure",
+        client: "Tuborg",
+        category: "D&AD brief",
+        year: "2026",
+        image: "poster.png",
+        alt: "Tuborg Pop the Pressure",
+        sticker: "D&AD brief",
+        tagline: "Thousands of balloons, one Glastonbury set.",
+        story: [
+          "Rising depression and anxiety are holding London's youth back.",
+          "To release the pressure, Tuborg ran a symbolic activation at Glastonbury. During a set by Dave, fans popped thousands of balloons standing in for real struggles, to feel lighter, see clearer and party responsibly."
+        ],
+        media: [
+          {
+            type: "image",
+            src: "Tuborg caseboard.jpg",
+            caption: ""
+          },
+          {
+            type: "video",
+            src: "<div style=\"padding:55.21% 0 0 0;position:relative;\"><iframe src=\"https://player.vimeo.com/video/1218494179?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;\" title=\"Tuborg - Pop The Pressure\"></iframe></div>",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "Tuborg Poster Mockup 44.jpg",
+            caption: "",
+            layout: "half"
+          },
+          {
+            type: "image",
+            src: "Tuborg poster on poster.jpg",
+            caption: "",
+            layout: "half"
+          },
+          {
+            type: "image",
+            src: "Tuborg wall  mockup.png",
+            caption: "",
+            layout: "half"
+          },
+          {
+            type: "image",
+            src: "tuborg tote.jpg",
+            caption: "",
+            layout: "half"
+          }
+        ],
+        credits: [
+          {
+            role: "Team",
+            name: "Mohammed Essam, Baltazar Lee, Ana Molinero"
+          },
+          {
+            role: "Tutor",
+            name: "Pranay Suri"
+          },
+          {
+            role: "Client",
+            name: "Tuborg for D&AD, Miami Ad School Madrid"
+          },
+          {
+            role: "",
+            name: ""
+          }
+        ],
+        next: {},
+        "draft": false,
+        "ran": false
       },
       {
         slug: "pringles-cheesy-cheese",
@@ -371,8 +509,161 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: true
+        "draft": false,
+        "ran": true
+      },
+      {
+        slug: "afg-skybridge",
+        title: "5-Star Investment",
+        client: "AFG Skybridge",
+        category: "Film",
+        year: "2023",
+        image: "live/skybridge-cover.jpg",
+        alt: "AFG Skybridge, 5-Star Investment",
+        sticker: "Cairo's first branded residences",
+        tagline: "Have your cake and live in it.",
+        story: [
+          "Skybridge Tower brought Cairo its first branded residences attached to a hotel.",
+          "Our campaign, Have your cake and live in it, was built to get cautious investors comfortable with property. We kept the visuals rich and the tone relaxed, and let the numbers do the arguing."
+        ],
+        media: [
+          {
+            type: "video",
+            src: "https://www-ccv.adobe.io/v1/player/ccv/AD-9zoaBeNQ/embed?bgcolor=%23191919&lazyLoading=true&api_key=BehancePro2View",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          }
+        ],
+        credits: [
+          {
+            role: "Copywriter",
+            name: "Mohammed Essam"
+          },
+          {
+            role: "Creative team",
+            name: "Aya Elhaddad, Mohammed Essam"
+          },
+          {
+            role: "Director",
+            name: "Omar Shawky"
+          },
+          {
+            role: "Account managers",
+            name: "Nancy Nabil, Esraa Moharam"
+          },
+          {
+            role: "Production house",
+            name: "Cameo Productions"
+          },
+          {
+            role: "Agency",
+            name: "Social Nuts"
+          }
+        ],
+        next: {},
+        "draft": false,
+        "ran": true
+      },
+      {
+        slug: "song-for-the-cashless",
+        title: "A Song for the Cashless",
+        client: "Social Nuts",
+        category: "Music",
+        year: "2022",
+        image: "live/cah-less-not-even-a-problem-cover.jpg",
+        alt: "Social Nuts, A Song for the Cashless",
+        sticker: "Mama! I wrote a song",
+        tagline: "Broke, but rich in the head.",
+        story: [
+          "Egypt's unstable currency has put a lot of people under financial stress, and money-saving tips are not much help when there is no money to save.",
+          "So instead of saving, we sold imagination. Feha Cash, with a track by MTM and Abo El-Anwar, made the case that joy does not wait for wealth if you are already living like a millionaire in your head."
+        ],
+        media: [
+          {
+            type: "video",
+            src: "https://www-ccv.adobe.io/v1/player/ccv/2VoVktanSg6/embed?bgcolor=%23191919&lazyLoading=true&api_key=BehancePro2View",
+            caption: ""
+          },
+          {
+            type: "video",
+            src: "https://www-ccv.adobe.io/v1/player/ccv/2SNMDG_q6Ma/embed?bgcolor=%23bebebe&autohide=false&lazyLoading=true&maxframewidth=6400&maxframeheight=75&api_key=BehancePro2View",
+            caption: "Audio only"
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          }
+        ],
+        credits: [
+          {
+            role: "Idea",
+            name: "Mohammed Essam, Aya ElHaddad"
+          },
+          {
+            role: "Lyrics",
+            name: "Mohammed Essam, Abo El-Anwar"
+          },
+          {
+            role: "Featuring",
+            name: "MTM, Abo El-Anwar"
+          },
+          {
+            role: "Music",
+            name: "Ahmed Tarek Yahia"
+          },
+          {
+            role: "Art direction",
+            name: "Hossam Shebl, Mostafa Shokry, Ahmed Mokhtar"
+          },
+          {
+            role: "Art team",
+            name: "Ahmad Zaawel, Zeina ElBakry, Nada Khaled"
+          },
+          {
+            role: "Motion graphics lead",
+            name: "Ahmad Mokhtar"
+          },
+          {
+            role: "Motion graphics",
+            name: "Omar Moneam, Rahma Mahmoud, Mahmoud Gammal"
+          },
+          {
+            role: "Special thanks",
+            name: "Youssef Nagi"
+          },
+          {
+            role: "Client",
+            name: "Social Nuts"
+          }
+        ],
+        next: {},
+        "draft": false,
+        "ran": true
       },
       {
         slug: "momtaz-cement-chronicles",
@@ -480,8 +771,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: true
+        "draft": false,
+        "ran": true
       },
       {
         slug: "modon-actors-too-seriously",
@@ -579,161 +870,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: true
-      },
-      {
-        slug: "song-for-the-cashless",
-        title: "A Song for the Cashless",
-        client: "Social Nuts",
-        category: "Music",
-        year: "2022",
-        image: "live/cah-less-not-even-a-problem-cover.jpg",
-        alt: "Social Nuts, A Song for the Cashless",
-        sticker: "Ft. MTM and Abo El-Anwar",
-        tagline: "Broke, but rich in the head.",
-        story: [
-          "Egypt's unstable currency has put a lot of people under financial stress, and money-saving tips are not much help when there is no money to save.",
-          "So instead of saving, we sold imagination. Feha Cash, with a track by MTM and Abo El-Anwar, made the case that joy does not wait for wealth if you are already living like a millionaire in your head."
-        ],
-        media: [
-          {
-            type: "video",
-            src: "https://www-ccv.adobe.io/v1/player/ccv/2VoVktanSg6/embed?bgcolor=%23191919&lazyLoading=true&api_key=BehancePro2View",
-            caption: ""
-          },
-          {
-            type: "video",
-            src: "https://www-ccv.adobe.io/v1/player/ccv/2SNMDG_q6Ma/embed?bgcolor=%23bebebe&autohide=false&lazyLoading=true&maxframewidth=6400&maxframeheight=75&api_key=BehancePro2View",
-            caption: "Audio only"
-          },
-          {
-            type: "image",
-            src: "",
-            caption: ""
-          },
-          {
-            type: "image",
-            src: "",
-            caption: ""
-          },
-          {
-            type: "image",
-            src: "",
-            caption: ""
-          }
-        ],
-        credits: [
-          {
-            role: "Idea",
-            name: "Mohammed Essam, Aya ElHaddad"
-          },
-          {
-            role: "Lyrics",
-            name: "Mohammed Essam, Abo El-Anwar"
-          },
-          {
-            role: "Featuring",
-            name: "MTM, Abo El-Anwar"
-          },
-          {
-            role: "Music",
-            name: "Ahmed Tarek Yahia"
-          },
-          {
-            role: "Art direction",
-            name: "Hossam Shebl, Mostafa Shokry, Ahmed Mokhtar"
-          },
-          {
-            role: "Art team",
-            name: "Ahmad Zaawel, Zeina ElBakry, Nada Khaled"
-          },
-          {
-            role: "Motion graphics lead",
-            name: "Ahmad Mokhtar"
-          },
-          {
-            role: "Motion graphics",
-            name: "Omar Moneam, Rahma Mahmoud, Mahmoud Gammal"
-          },
-          {
-            role: "Special thanks",
-            name: "Youssef Nagi"
-          },
-          {
-            role: "Client",
-            name: "Social Nuts"
-          }
-        ],
-        next: {},
-        draft: false,
-        ran: true
-      },
-      {
-        slug: "afg-skybridge",
-        title: "5-Star Investment",
-        client: "AFG Skybridge",
-        category: "Film",
-        year: "2023",
-        image: "live/skybridge-cover.jpg",
-        alt: "AFG Skybridge, 5-Star Investment",
-        sticker: "Cairo's first branded residences",
-        tagline: "Have your cake and live in it.",
-        story: [
-          "Skybridge Tower brought Cairo its first branded residences attached to a hotel.",
-          "Our campaign, Have your cake and live in it, was built to get cautious investors comfortable with property. We kept the visuals rich and the tone relaxed, and let the numbers do the arguing."
-        ],
-        media: [
-          {
-            type: "video",
-            src: "https://www-ccv.adobe.io/v1/player/ccv/AD-9zoaBeNQ/embed?bgcolor=%23191919&lazyLoading=true&api_key=BehancePro2View",
-            caption: ""
-          },
-          {
-            type: "image",
-            src: "",
-            caption: ""
-          },
-          {
-            type: "image",
-            src: "",
-            caption: ""
-          },
-          {
-            type: "image",
-            src: "",
-            caption: ""
-          }
-        ],
-        credits: [
-          {
-            role: "Copywriter",
-            name: "Mohammed Essam"
-          },
-          {
-            role: "Creative team",
-            name: "Aya Elhaddad, Mohammed Essam"
-          },
-          {
-            role: "Director",
-            name: "Omar Shawky"
-          },
-          {
-            role: "Account managers",
-            name: "Nancy Nabil, Esraa Moharam"
-          },
-          {
-            role: "Production house",
-            name: "Cameo Productions"
-          },
-          {
-            role: "Agency",
-            name: "Social Nuts"
-          }
-        ],
-        next: {},
-        draft: false,
-        ran: true
+        "draft": false,
+        "ran": true
       },
       {
         slug: "red-expo-got-the-keys",
@@ -826,8 +964,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: true
+        "draft": false,
+        "ran": true
       },
       {
         slug: "quarantine-games",
@@ -909,145 +1047,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: true
-      },
-      {
-        slug: "true-colors-of-dominos",
-        title: "The True Colors",
-        client: "Domino's",
-        category: "Miami Ad School",
-        year: "2026",
-        image: "Minimalist Elegant Modern Bold  Advertising Poster Design _ Coffee Shop Branding.jpg",
-        alt: "Domino's making the streets safer",
-        sticker: "Never left the deck",
-        tagline: "Billboards that hear you walking home.",
-        story: [
-          "Walking home at night in heels should not be frightening. To help women feel safer on the streets of London, Domino's showed the city its true colors with slicing-edge OOH billboards using audio-recognition technology. The billboards pick up the sound of accelerating high heels and flash intense red and blue, mimicking a police siren to scare off anyone thinking of causing trouble."
-        ],
-        media: [
-          {
-            type: "image",
-            src: "Dominos art board.jpg",
-            caption: ""
-          },
-          {
-            type: "image",
-            src: "Dominos art style .jpg",
-            caption: "",
-            layout: "full"
-          },
-          {
-            type: "video",
-            src: "<div style=\"padding:56.25% 0 0 0;position:relative;\"><iframe src=\"https://player.vimeo.com/video/1205222256?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;\" title=\"Dominos - The True Color\"></iframe></div>",
-            caption: ""
-          },
-          {
-            type: "image",
-            src: "dominos bus stop poster mockup.jpg",
-            caption: "",
-            layout: "half"
-          },
-          {
-            type: "image",
-            src: "Dominos news.jpg",
-            caption: "",
-            layout: "half"
-          }
-        ],
-        credits: [
-          {
-            role: "Team",
-            name: "Mohammed Essam, Baltazar Lee"
-          },
-          {
-            role: "Tutor",
-            name: "Pranay Suri"
-          },
-          {
-            role: "Client",
-            name: "Domino's, Miami Ad School Madrid"
-          },
-          {
-            role: "",
-            name: ""
-          }
-        ],
-        next: {},
-        draft: false,
-        ran: false
-      },
-      {
-        slug: "pop-the-pressure",
-        title: "Pop the Pressure",
-        client: "Tuborg",
-        category: "D&AD brief",
-        year: "2026",
-        image: "poster.png",
-        alt: "Tuborg Pop the Pressure",
-        sticker: "D&AD brief",
-        tagline: "Thousands of balloons, one Glastonbury set.",
-        story: [
-          "Rising depression and anxiety are holding London's youth back.",
-          "To release the pressure, Tuborg ran a symbolic activation at Glastonbury. During a set by Dave, fans popped thousands of balloons standing in for real struggles, to feel lighter, see clearer and party responsibly."
-        ],
-        media: [
-          {
-            type: "image",
-            src: "Tuborg caseboard.jpg",
-            caption: ""
-          },
-          {
-            type: "video",
-            src: "<div style=\"padding:55.21% 0 0 0;position:relative;\"><iframe src=\"https://player.vimeo.com/video/1218494179?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;\" title=\"Tuborg - Pop The Pressure\"></iframe></div>",
-            caption: ""
-          },
-          {
-            type: "image",
-            src: "Tuborg Poster Mockup 44.jpg",
-            caption: "",
-            layout: "half"
-          },
-          {
-            type: "image",
-            src: "Tuborg poster on poster.jpg",
-            caption: "",
-            layout: "half"
-          },
-          {
-            type: "image",
-            src: "Tuborg wall  mockup.png",
-            caption: "",
-            layout: "half"
-          },
-          {
-            type: "image",
-            src: "tuborg tote.jpg",
-            caption: "",
-            layout: "half"
-          }
-        ],
-        credits: [
-          {
-            role: "Team",
-            name: "Mohammed Essam, Baltazar Lee, Ana Molinero"
-          },
-          {
-            role: "Tutor",
-            name: "Pranay Suri"
-          },
-          {
-            role: "Client",
-            name: "Tuborg for D&AD, Miami Ad School Madrid"
-          },
-          {
-            role: "",
-            name: ""
-          }
-        ],
-        next: {},
-        draft: false,
-        ran: false
+        "draft": false,
+        "ran": true
       },
       {
         slug: "canesten-lets-call-it",
@@ -1114,8 +1115,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: false
+        "draft": false,
+        "ran": false
       },
       {
         slug: "nivea-never-see-the-sun",
@@ -1183,8 +1184,67 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: false
+        "draft": false,
+        "ran": false
+      },
+      {
+        slug: "the-mumbled-code",
+        title: "Make Their First Words Discount",
+        client: "Babyshop",
+        category: "Digital activation",
+        year: "2025",
+        image: "live/uqwyeuoa-random-8-words-cover.jpg",
+        alt: "Babyshop, Make Their First Words Discount",
+        sticker: "Concept only",
+        tagline: "Every toddler keysmash is a promo code.",
+        story: [
+          "Give a toddler your phone and they will type stringsjksdhsad, or 2m$sdajhad, or kasd@34jksad.",
+          "So why not make the chaos count.",
+          "Babyshop, through their app, turns any 8-letter toddler smash into a promo code. jklmnopa unlocks an extra 15% off. Making their first words discount."
+        ],
+        media: [
+          {
+            type: "video",
+            src: "babyshop.mp4",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          }
+        ],
+        credits: [
+          {
+            role: "Copywriter",
+            name: "Mohammed Essam"
+          },
+          {
+            role: "",
+            name: ""
+          },
+          {
+            role: "",
+            name: ""
+          },
+          {
+            role: "",
+            name: ""
+          }
+        ],
+        next: {},
+        "draft": false,
+        "ran": false
       },
       {
         slug: "oumph-like-any-ad",
@@ -1256,67 +1316,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: false
-      },
-      {
-        slug: "the-mumbled-code",
-        title: "Make Their First Words Discount",
-        client: "Babyshop",
-        category: "Digital activation",
-        year: "2025",
-        image: "live/uqwyeuoa-random-8-words-cover.jpg",
-        alt: "Babyshop, Make Their First Words Discount",
-        sticker: "Concept only",
-        tagline: "Every toddler keysmash is a promo code.",
-        story: [
-          "Give a toddler your phone and they will type stringsjksdhsad, or 2m$sdajhad, or kasd@34jksad.",
-          "So why not make the chaos count.",
-          "Babyshop, through their app, turns any 8-letter toddler smash into a promo code. jklmnopa unlocks an extra 15% off. Making their first words discount."
-        ],
-        media: [
-          {
-            type: "video",
-            src: "babyshop.mp4",
-            caption: ""
-          },
-          {
-            type: "image",
-            src: "",
-            caption: ""
-          },
-          {
-            type: "image",
-            src: "",
-            caption: ""
-          },
-          {
-            type: "image",
-            src: "",
-            caption: ""
-          }
-        ],
-        credits: [
-          {
-            role: "Copywriter",
-            name: "Mohammed Essam"
-          },
-          {
-            role: "",
-            name: ""
-          },
-          {
-            role: "",
-            name: ""
-          },
-          {
-            role: "",
-            name: ""
-          }
-        ],
-        next: {},
-        draft: false,
-        ran: false
+        "draft": false,
+        "ran": false
       },
       {
         slug: "nothing-in-my-dreams",
@@ -1372,8 +1373,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: true,
-        ran: false
+        "draft": true,
+        "ran": false
       },
       {
         slug: "murder-your-thirst",
@@ -1427,8 +1428,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: true,
-        ran: false
+        "draft": true,
+        "ran": false
       }
     ]
   },
