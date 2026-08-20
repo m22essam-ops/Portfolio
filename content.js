@@ -18,9 +18,8 @@ window.SITE_CONTENT = {
     titleTop: "Award-losing",
     titleBottom: "copywriter",
     sub: "I write in English and Arabic. I order coffee in Spanish and French.",
+    scratchNote: "That for a ticket to win, had to bought first",
     badge: "0 awards so far",
-    winLine: "",
-    winSub: "That for a ticket to win, had to bought first",
     terms: "Odds of winning: historically High. Ticket has no cash value and neither did the awards. Keep this as proof of participation or share it with your loved ones.",
     awards: [],
     wonBand: "The National Award Lottery",
@@ -666,6 +665,89 @@ window.SITE_CONTENT = {
         "ran": true
       },
       {
+        slug: "quarantine-games",
+        title: "The Quarantine Games",
+        client: "Social Nuts",
+        category: "Game",
+        year: "2020",
+        image: "live/the-quarantine-game-bnk-alhthr-cover.gif",
+        alt: "Social Nuts, The Quarantine Games",
+        sticker: "Played for charity",
+        tagline: "Monopoly, but the year is 2020.",
+        story: [
+          "We made Bank El Hazr, The Curfew Bank, a wordplay on the Egyptian version of Monopoly that everyone grew up playing.",
+          "It was built to entertain people through lockdown and raise money at the same time. For every person who played, we donated to one of four causes: day-to-day workers, animal shelters taking in pets people gave up out of fear of infection, homeless children, and connecting seniors in care homes with their families."
+        ],
+        media: [
+          {
+            type: "image",
+            src: "live/the-quarantine-game-bnk-alhthr-01.gif",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "live/the-quarantine-game-bnk-alhthr-02.jpg",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "live/the-quarantine-game-bnk-alhthr-03.jpg",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "live/the-quarantine-game-bnk-alhthr-04.jpg",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "live/the-quarantine-game-bnk-alhthr-05.jpg",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "live/the-quarantine-game-bnk-alhthr-06.jpg",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "live/the-quarantine-game-bnk-alhthr-07.gif",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "live/the-quarantine-game-bnk-alhthr-08.jpg",
+            caption: ""
+          },
+          {
+            type: "video",
+            src: "",
+            caption: ""
+          }
+        ],
+        credits: [
+          {
+            role: "Copywriter",
+            name: "Mohammed Essam, Aya Elhaddad"
+          },
+          {
+            role: "Agency",
+            name: "Social Nuts"
+          },
+          {
+            role: "Art Director",
+            name: "Mahmoud Tammam"
+          },
+          {
+            role: "",
+            name: ""
+          }
+        ],
+        next: {},
+        "draft": false,
+        "ran": true
+      },
+      {
         slug: "momtaz-cement-chronicles",
         title: "The Chronicles",
         client: "Momtaz Cement",
@@ -942,89 +1024,6 @@ window.SITE_CONTENT = {
           {
             type: "image",
             src: "live/red-expo-jingle-ad-10.jpg",
-            caption: ""
-          }
-        ],
-        credits: [
-          {
-            role: "Copywriter",
-            name: "Mohammed Essam"
-          },
-          {
-            role: "Agency",
-            name: "Social Nuts"
-          },
-          {
-            role: "",
-            name: ""
-          },
-          {
-            role: "",
-            name: ""
-          }
-        ],
-        next: {},
-        "draft": false,
-        "ran": true
-      },
-      {
-        slug: "quarantine-games",
-        title: "The Quarantine Games",
-        client: "Social Nuts",
-        category: "Game",
-        year: "2020",
-        image: "live/the-quarantine-game-bnk-alhthr-cover.gif",
-        alt: "Social Nuts, The Quarantine Games",
-        sticker: "Played for charity",
-        tagline: "Monopoly, but the year is 2020.",
-        story: [
-          "We made Bank El Hazr, The Curfew Bank, a wordplay on the Egyptian version of Monopoly that everyone grew up playing.",
-          "It was built to entertain people through lockdown and raise money at the same time. For every person who played, we donated to one of four causes: day-to-day workers, animal shelters taking in pets people gave up out of fear of infection, homeless children, and connecting seniors in care homes with their families."
-        ],
-        media: [
-          {
-            type: "image",
-            src: "live/the-quarantine-game-bnk-alhthr-01.gif",
-            caption: ""
-          },
-          {
-            type: "image",
-            src: "live/the-quarantine-game-bnk-alhthr-02.jpg",
-            caption: ""
-          },
-          {
-            type: "image",
-            src: "live/the-quarantine-game-bnk-alhthr-03.jpg",
-            caption: ""
-          },
-          {
-            type: "image",
-            src: "live/the-quarantine-game-bnk-alhthr-04.jpg",
-            caption: ""
-          },
-          {
-            type: "image",
-            src: "live/the-quarantine-game-bnk-alhthr-05.jpg",
-            caption: ""
-          },
-          {
-            type: "image",
-            src: "live/the-quarantine-game-bnk-alhthr-06.jpg",
-            caption: ""
-          },
-          {
-            type: "image",
-            src: "live/the-quarantine-game-bnk-alhthr-07.gif",
-            caption: ""
-          },
-          {
-            type: "image",
-            src: "live/the-quarantine-game-bnk-alhthr-08.jpg",
-            caption: ""
-          },
-          {
-            type: "video",
-            src: "",
             caption: ""
           }
         ],
