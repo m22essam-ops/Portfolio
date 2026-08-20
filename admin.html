@@ -538,13 +538,13 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
     var seed = function (obj, key, val) {
       if (obj[key] === undefined) obj[key] = val;
     };
-    seed(M.ticket, 'stampArc', 'Department of Ideas');
-    seed(M.ticket, 'stampName', 'Mohammed Essam');
-    seed(M.ticket, 'stampValue', '13');
-    seed(M.ticket, 'stampFoot', 'Madrid · One of one');
-    seed(M.ticket, 'stampPhoto', 'about-photo.jpg');
+    seed(M.ticket, 'stampArc', 'Time is a timeless joke');
+    seed(M.ticket, 'stampName', 'Song order matters');
+    seed(M.ticket, 'stampValue', '');
+    seed(M.ticket, 'stampFoot', 'Madrid');
+    seed(M.ticket, 'stampPhoto', 'portrait-rooftop.jpg');
     seed(M.ticket, 'stampUrl', 'about.html');
-    seed(M.ticket, 'wonStampArc', 'Department of Awards');
+    seed(M.ticket, 'wonStampArc', 'Time is a timeless joke');
     /* the round seal this replaced. Nothing reads these any more. */
     ['sealRing','sealTop','sealMark','wonSealRing','wonSealTop','wonSealMark']
       .forEach(function (k) { delete M.ticket[k]; });
@@ -842,6 +842,44 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
   });
 
   /* ---------------- export ---------------- */
+  /* ---- DO NOT CLOBBER WHAT THIS TAB NEVER LOADED ----------------------
+     This page holds the whole of content.js in memory and writes all of it
+     back on save. So a tab that was opened before a new field existed has no
+     idea about that field, and saving from it deletes the field outright.
+     That has now wiped the site's artwork three times over.
+
+     Before every save the file is re-read from disk and anything on disk that
+     this tab has never heard of is carried across. Fields the tab DOES know
+     about still save normally, including ones deliberately emptied, because
+     the check is whether the key exists rather than whether it has a value.
+     Only reachable over http://; from file:// the fetch is blocked and this
+     quietly does nothing, which is another reason not to open it that way.
+     -------------------------------------------------------------------- */
+  function graftUnknown(live, disk) {
+    if (!disk || typeof disk !== 'object' || !live || typeof live !== 'object') return;
+    if (Array.isArray(disk) !== Array.isArray(live)) return;
+    Object.keys(disk).forEach(function (k) {
+      if (!(k in live)) { live[k] = disk[k]; return; }
+      if (disk[k] && typeof disk[k] === 'object') graftUnknown(live[k], disk[k]);
+    });
+  }
+
+  function keepFieldsThisTabNeverSaw() {
+    if (!/^https?:/.test(location.protocol)) return Promise.resolve();
+    return fetch('content.js?cb=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.text() : null; })
+      .then(function (txt) {
+        if (!txt) return;
+        var i = txt.indexOf('{');
+        var disk = JSON.parse(
+          txt.slice(i).replace(/;\s*$/, '')
+             .replace(/^(\s*)([A-Za-z_$][\w$]*)(\s*:)/gm, '$1"$2"$3')
+        );
+        graftUnknown(M, disk);
+      })
+      .catch(function () { /* unreadable or unparseable: save what we have */ });
+  }
+
   function serialize() {
     /* drop the padded empty media / credit slots so the exported file stays clean */
     function cleanProject(p) {
@@ -948,7 +986,7 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
   }
   document.getElementById('btnSaveLocal').addEventListener('click', function () {
     status('Saving to the folder...');
-    readPickedFiles().then(function (files) {
+    keepFieldsThisTabNeverSaw().then(readPickedFiles).then(function (files) {
       return fetch(localSaveUrl(), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -1281,7 +1319,8 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
     if (!gh.token || !gh.owner || !gh.repo) { ghStatus('Connect to GitHub first.', true); return; }
     btnGithub.disabled = true;
     ghStatus('Saving to GitHub...', false);
-    ghUploadImages()
+    keepFieldsThisTabNeverSaw()
+      .then(ghUploadImages)
       .then(function () {
         /* read the current sha on the serving branch — not the default branch,
            or writes to a non-default Pages branch would always 409 */

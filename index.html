@@ -131,9 +131,9 @@
     if (arc) {
       if (!/[·•|,\/-]\s*$/.test(arc)) arc += ' · ';
       else if (!/\s$/.test(arc)) arc += ' ';
-      var loop = arc;
-      while (loop.length < 46) loop += arc;
-      set('stampArc', loop.toUpperCase());
+      /* exactly three laps, his call. textLength then spaces them to close
+         the circle, so the ring stays even however long the line is. */
+      set('stampArc', (arc + arc + arc).toUpperCase());
     }
     var img = document.getElementById('stampImg');
     if (photo) {
@@ -173,12 +173,37 @@
       h.style.fontSize = (fs * box / widest).toFixed(2) + 'px';
     }
   }
-  fitTitle();
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitTitle);
+  /* The sub-line is held to one line on a wide screen. It is his to rewrite,
+     so rather than trust a font size to suit one sentence, measure it against
+     the room left beside the stamp and shrink it if it does not fit. Below the
+     landscape breakpoint it is allowed to wrap and this does nothing. */
+  function fitSub() {
+    var p = document.querySelector('.tk-sub');
+    if (!p) return;
+    p.style.fontSize = '';
+    if (getComputedStyle(p).whiteSpace !== 'nowrap') return;
+    var room = p.parentNode.clientWidth;
+    var stamp = document.getElementById('tkStamp');
+    if (stamp) {
+      room -= stamp.getBoundingClientRect().width;
+      room -= parseFloat(getComputedStyle(p.parentNode).columnGap) || 0;
+    }
+    var rng = document.createRange();
+    for (var i = 0; i < 3; i++) {
+      rng.selectNodeContents(p);
+      var wide = rng.getBoundingClientRect().width;
+      if (!wide || wide <= room) break;
+      p.style.fontSize = (parseFloat(getComputedStyle(p).fontSize) * room / wide).toFixed(2) + 'px';
+    }
+  }
+
+  function fitAll() { fitTitle(); fitSub(); }
+  fitAll();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll);
   var fitWait;
   window.addEventListener('resize', function () {
     clearTimeout(fitWait);
-    fitWait = setTimeout(fitTitle, 120);
+    fitWait = setTimeout(fitAll, 120);
   });
 
   if (hasWon) {
@@ -241,13 +266,13 @@
     var ctx = foil.getContext('2d', { willReadFrequently: true });
     var drawing = false, moved = 0, checks = 0, open = false;
 
-    /* What makes a scratch panel recognisable is not a metal gradient, it is
-       GRAIN: dried latex is granular, mid grey rather than bright silver, and
-       lit by one soft highlight rather than banded like brushed steel. The
-       first attempt was a linear gradient across a short wide box, which is
-       why it came out looking like a strip of brushed aluminium. This one is
-       a flat mid grey, one broad highlight, a vignette so the panel sits on
-       the paper rather than in it, and a lot of visible speckle. */
+    /* Third go. The first was a flat fill, the second a linear gradient that
+       came out as brushed aluminium, the third was mid grey with heavy dark
+       speckle and read as asphalt. The dark speckle was the mistake: real
+       scratch foil is LIGHT silver and its texture is sparkle, which is
+       isolated bright specks catching the light, not dirt. So: a light silver
+       base, a broad soft sheen, bright grain with only a little dark in it to
+       keep it from going flat, and the darkening kept to the very edge. */
     function paint() {
       var r = link.getBoundingClientRect();
       if (!r.width || !r.height) return;
@@ -258,52 +283,53 @@
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.globalCompositeOperation = 'source-over';
 
-      ctx.fillStyle = '#83868a';
+      /* light silver, very slightly cool */
+      ctx.fillStyle = '#b3b7bb';
       ctx.fillRect(0, 0, w, h);
 
-      /* one soft highlight, up and to the left, the way light falls on it */
-      var hi = ctx.createRadialGradient(w * .3, h * .2, 2, w * .3, h * .2, Math.max(w, h) * .85);
-      hi.addColorStop(0, 'rgba(255,255,255,.34)');
-      hi.addColorStop(.4, 'rgba(255,255,255,.10)');
-      hi.addColorStop(1, 'rgba(255,255,255,0)');
-      ctx.fillStyle = hi;
+      /* the sheen: a wide soft band across the middle, brighter than the base */
+      var sh = ctx.createLinearGradient(0, 0, 0, h);
+      sh.addColorStop(0,   'rgba(255,255,255,.10)');
+      sh.addColorStop(.34, 'rgba(255,255,255,.40)');
+      sh.addColorStop(.55, 'rgba(255,255,255,.16)');
+      sh.addColorStop(1,   'rgba(120,124,130,.30)');
+      ctx.fillStyle = sh;
       ctx.fillRect(0, 0, w, h);
 
-      /* darker towards the edges, so the panel reads as sitting on the paper */
-      var vg = ctx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * .18,
-                                        w / 2, h / 2, Math.max(w, h) * .7);
-      vg.addColorStop(0, 'rgba(0,0,0,0)');
-      vg.addColorStop(1, 'rgba(18,18,20,.36)');
-      ctx.fillStyle = vg;
-      ctx.fillRect(0, 0, w, h);
-
-      /* THE GRAIN. This is the whole tell. Coarse enough to see at real size. */
-      var grains = Math.round(w * h / 8);
-      for (var i = 0; i < grains; i++) {
-        var sz = Math.random() < .3 ? 2 : 1;
-        ctx.fillStyle = Math.random() > .48
-          ? 'rgba(255,255,255,' + (.06 + Math.random() * .24).toFixed(3) + ')'
-          : 'rgba(14,14,17,'   + (.06 + Math.random() * .24).toFixed(3) + ')';
-        ctx.fillRect(Math.random() * w | 0, Math.random() * h | 0, sz, sz);
-      }
-
-      /* a few scuffs, the marks a coin already left on it */
+      /* brushed direction, very faint, on the diagonal */
       ctx.lineWidth = 1;
-      for (var k = 0; k < 7; k++) {
-        var sx = Math.random() * w, sy = Math.random() * h;
-        var len = 8 + Math.random() * 26;
-        ctx.strokeStyle = Math.random() > .5
-          ? 'rgba(255,255,255,.13)' : 'rgba(20,20,22,.12)';
+      for (var d = -h; d < w; d += 3) {
+        ctx.strokeStyle = 'rgba(255,255,255,' + (.02 + Math.random() * .05).toFixed(3) + ')';
         ctx.beginPath();
-        ctx.moveTo(sx, sy);
-        ctx.lineTo(sx + len, sy - len * .5);
+        ctx.moveTo(d, h);
+        ctx.lineTo(d + h * .55, 0);
         ctx.stroke();
       }
 
-      ctx.strokeStyle = 'rgba(18,18,20,.3)';
+      /* SPARKLE. Mostly bright, a little dark. This is the tell, and getting
+         the ratio wrong is what made the last one look like tarmac. */
+      var grains = Math.round(w * h / 10);
+      for (var i = 0; i < grains; i++) {
+        var bright = Math.random() < .72;
+        ctx.fillStyle = bright
+          ? 'rgba(255,255,255,' + (.10 + Math.random() * .5).toFixed(3) + ')'
+          : 'rgba(96,100,106,'  + (.06 + Math.random() * .2).toFixed(3) + ')';
+        ctx.fillRect(Math.random() * w | 0, Math.random() * h | 0,
+                     Math.random() < .18 ? 2 : 1, 1);
+      }
+
+      /* only the very edge darkens, so the panel sits on the paper */
+      var eg = ctx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * .42,
+                                        w / 2, h / 2, Math.max(w, h) * .62);
+      eg.addColorStop(0, 'rgba(0,0,0,0)');
+      eg.addColorStop(1, 'rgba(70,73,78,.34)');
+      ctx.fillStyle = eg;
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.strokeStyle = 'rgba(88,92,97,.5)';
       ctx.strokeRect(.5, .5, w - 1, h - 1);
 
-      ctx.fillStyle = 'rgba(250,250,250,.9)';
+      ctx.fillStyle = 'rgba(46,48,52,.85)';
       ctx.font = '700 11px "Barlow Condensed", sans-serif';
       ctx.textAlign = 'center';
       try { ctx.letterSpacing = '2.4px'; } catch (e) {}

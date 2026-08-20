@@ -247,7 +247,7 @@ body.is-home{
 .stamp-arc{position:absolute;inset:1.5% 1.5% auto;width:97%;height:auto;z-index:3}
 .stamp-arc-t{
   fill:var(--paper);font-family:var(--mono);font-weight:700;
-  font-size:13px;letter-spacing:.04em;
+  font-size:10.5px;letter-spacing:.02em;
 }
 
 /* duotone: a flat red fill with the photo screened over it, which is what
@@ -389,7 +389,7 @@ body.has-won .tk-badge{background:var(--ink)}
      gap was not this margin, it was the row centring the short sub-line
      against the tall stamp beside it */
   .tk-title  {margin-bottom:clamp(10px,1.7vh,22px)}
-  .tk-sub{font-size:clamp(17px,1.32vw,22px)}
+  .tk-sub{font-size:clamp(17px,1.32vw,22px);max-width:none;white-space:nowrap}
   .tk-mid    {margin-bottom:clamp(10px,1.6vh,22px)}
   /* height-first so the row is a known size and the page cannot grow */
   .stamp{width:auto;height:min(23.6vh,268px)}
