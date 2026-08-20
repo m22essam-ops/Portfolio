@@ -22,10 +22,10 @@ window.SITE_CONTENT = {
     scratchNote: "That for a ticket to win, had to bought first",
     badge: "Won nothing",
     terms: "Odds of winning: historically High. Ticket has no cash value and neither did the awards. Keep this as proof of participation or share it with your loved ones.",
-    stampArc: "Department of Ideas",
-    stampName: "Mohammed Essam",
-    stampValue: "13",
-    stampFoot: "Madrid · One of one",
+    stampArc: "Time is a timeless joke",
+    stampName: "A place with a chance of rain",
+    stampValue: "",
+    stampFoot: "Madrid",
     stampPhoto: "about-photo.jpg",
     stampUrl: "about.html",
     awards: [],
@@ -34,7 +34,7 @@ window.SITE_CONTENT = {
     wonTitleBottom: "copywriter",
     wonBadge: "Correction notice",
     wonLine: "We regret to inform you the joke is over.",
-    wonStampArc: "Department of Awards",
+    wonStampArc: "Time is a timeless joke",
     nav: [
       {
         label: "The work",

@@ -121,7 +121,7 @@ body.is-home{
    to ride in is gone, which gives the name the whole width of the left. */
 .tk-badge{
   background:var(--red);color:var(--paper);
-  font-size:11px;padding:5px 12px;border-radius:100px;
+  font-size:11px;padding:6px 11px;border-radius:0;
   margin:0;white-space:nowrap;flex:none;
   font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em;font-weight:600;
 }
@@ -187,13 +187,16 @@ body.is-home{
 .tk-title span{display:block;white-space:nowrap}
 .tk-title span:last-child{color:var(--red)}
 
-/* the sub-line on the left, the stamp on the right, so the stamp can never
-   land on top of the headline however long the words get */
+/* The sub-line on the left, the stamp on the right, so the stamp can never
+   land on top of the headline however long the words get.
+   Aligned to the TOP, not the centre: the stamp is three times the height of
+   the sub-line, and centring the row left the copy floating sixty pixels
+   below the headline in a pocket of its own. */
 .tk-mid{
-  display:flex;align-items:center;justify-content:space-between;
+  display:flex;align-items:flex-start;justify-content:space-between;
   gap:clamp(20px,4vw,56px);margin:0 0 40px;
 }
-.tk-sub{font-size:16px;color:var(--ink-60);margin:0;max-width:48ch}
+.tk-sub{font-size:18px;line-height:1.5;color:var(--ink-60);margin:0;max-width:46ch}
 
 /* ============================ THE STAMP ============================
    A postage stamp, not a rubber one. Red field bled to the edge, the
@@ -209,7 +212,7 @@ body.is-home{
   /* sized off the viewport HEIGHT as well as its width. The home page does
      not scroll, and a stamp measured only in vw grows past the bottom of a
      short laptop screen: 1.24 of a too-wide stamp is a very tall one. */
-  width:clamp(118px,min(18vw,16.6vh),224px);
+  width:clamp(130px,min(21vw,19.5vh),268px);
   aspect-ratio:1/1.24;
   /* everything inside is measured against the stamp, not the window, so the
      name cannot outgrow the band it sits in. The px values are the fallback
@@ -235,26 +238,25 @@ body.is-home{
   background-repeat:repeat-x, repeat-x, repeat-y, repeat-y;
 }
 
-/* the field: the coloured block the design sits in, with the name band
-   below it, which is how the reference stamp is built */
+/* the field. The photo is the stamp now and the red is only a frame round it,
+   so the inner rule is gone and the portrait is most of the surface. */
 .stamp-in{
-  position:absolute;inset:8px 8px 28% 8px;z-index:2;
-  border:1px solid #F6F3EE59;
-  display:block;
+  position:absolute;inset:7px 7px 23% 7px;z-index:2;display:block;
 }
 
-.stamp-arc{position:absolute;inset:4% 5% auto;width:90%;height:auto}
+.stamp-arc{position:absolute;inset:1.5% 1.5% auto;width:97%;height:auto;z-index:3}
 .stamp-arc-t{
   fill:var(--paper);font-family:var(--mono);font-weight:700;
-  font-size:14.5px;letter-spacing:.05em;
+  font-size:13px;letter-spacing:.04em;
 }
 
-/* duotone: the red shows through the shadows, the highlights go to paper.
-   One blend mode over a flat fill, which is what two-ink printing is, rather
-   than a filter stack pretending to be ink. */
+/* duotone: a flat red fill with the photo screened over it, which is what
+   two-ink printing is, rather than a filter stack pretending to be ink.
+   Circular, and large enough that the portrait reads as the subject of the
+   stamp rather than a vignette sitting inside a frame. */
 .stamp-photo{
-  position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);
-  width:58%;aspect-ratio:1/1;border-radius:50%;
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:72%;aspect-ratio:1/1;border-radius:50%;
   overflow:hidden;background:var(--red-deep);
 }
 .stamp-photo img{
@@ -263,37 +265,39 @@ body.is-home{
   mix-blend-mode:screen;
 }
 
-/* the band: value on the left, name on the right, reversed out of the field */
+/* the band under the field: the line, and the place under it */
 .stamp-band{
-  position:absolute;left:8px;right:8px;bottom:8px;height:calc(28% - 16px);
-  z-index:2;display:flex;align-items:center;gap:6%;
-  background:var(--paper);color:var(--ink);padding:0 7%;
+  position:absolute;left:7px;right:7px;bottom:7px;height:calc(23% - 14px);
+  z-index:2;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  background:var(--paper);color:var(--ink);padding:0 6%;text-align:center;
 }
 .stamp-value{
-  flex:none;
-  font-family:var(--display-home);font-weight:800;
+  flex:none;font-family:var(--display-home);font-weight:800;
   line-height:1;letter-spacing:-.05em;color:var(--red);
-  font-size:22px;
-  font-size:15cqw;
+  font-size:20px;
+  font-size:14cqw;
 }
-.stamp-names{flex:1;min-width:0;display:block;text-align:right}
+.stamp-value:empty{display:none}
+.stamp-names{display:block;min-width:0;width:100%}
 .stamp-name{
   display:block;
   font-family:var(--display);font-weight:800;
-  text-transform:uppercase;letter-spacing:-.02em;line-height:1.02;
-  font-size:13px;
-  font-size:8.6cqw;
+  text-transform:uppercase;letter-spacing:-.02em;line-height:1.04;
+  font-size:11px;
+  font-size:7.2cqw;
 }
 .stamp-foot{
-  display:block;margin-top:.2em;
+  display:block;margin-top:.25em;
   font-family:var(--mono);text-transform:uppercase;font-weight:600;
-  letter-spacing:.06em;line-height:1.2;color:var(--ink-30);
+  letter-spacing:.14em;line-height:1.2;color:var(--ink-30);
   /* one line, always: it is the last thing in a fixed-height band and a wrap
      pushes it straight out through the bottom of the stamp */
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   font-size:6px;
-  font-size:4.1cqw;
+  font-size:4cqw;
 }
+.stamp-foot:empty{display:none}
 
 /* franked once he wins: the field goes to ink and the value follows */
 body.has-won .stamp{background:var(--ink)}
@@ -327,12 +331,12 @@ body.has-won .stamp-value{color:var(--ink)}
 .tk-nav a:hover i{opacity:.8}
 
 /* the covered box: foil sits over the punch until it is scratched off */
-.tk-nav a.covered{position:relative;overflow:hidden}
+.tk-nav a.covered{position:relative;overflow:hidden;border-color:var(--red)}
 .tk-nav a.covered .foil{
   position:absolute;inset:0;width:100%;height:100%;
   cursor:crosshair;touch-action:none;z-index:2;
 }
-.tk-nav a.covered:hover{background:none;border-color:var(--ink);color:var(--ink)}
+.tk-nav a.covered:hover{background:none;border-color:var(--red-hot);color:var(--ink)}
 .tk-nav a.scratched{
   background:var(--red);border-color:var(--red);color:var(--paper);
   animation:pop .34s var(--ease);
@@ -379,14 +383,18 @@ body.has-won .tk-badge{background:var(--ink)}
      right under the sub-line, and only the barcode and the small print are
      pushed to the bottom edge by the auto margin. All the slack collects in
      one place, between the tabs and the foot, instead of being shared out. */
-  .tk-top    {margin-bottom:clamp(18px,3.2vh,44px)}
-  .tk-namerow{margin-bottom:clamp(12px,2.2vh,28px)}
-  .tk-title  {margin-bottom:clamp(12px,2.2vh,28px)}
+  .tk-top    {margin-bottom:clamp(12px,2.2vh,32px)}
+  .tk-namerow{margin-bottom:clamp(8px,1.5vh,20px)}
+  /* enough to clear the descenders on 'copywriter' and no more: the old
+     gap was not this margin, it was the row centring the short sub-line
+     against the tall stamp beside it */
+  .tk-title  {margin-bottom:clamp(10px,1.7vh,22px)}
+  .tk-sub{font-size:clamp(17px,1.32vw,22px)}
   .tk-mid    {margin-bottom:clamp(10px,1.6vh,22px)}
   /* height-first so the row is a known size and the page cannot grow */
-  .stamp{width:auto;height:min(20vh,224px)}
+  .stamp{width:auto;height:min(23.6vh,268px)}
   .tk-nav    {margin-bottom:0}
-  .tk-foot   {margin-top:auto;padding-top:clamp(16px,2.6vh,44px)}
+  .tk-foot   {margin-top:auto;padding-top:clamp(10px,1.7vh,30px)}
 
   /* width AND height: a headline measured only in vw is far too tall on a
      short wide laptop screen, which is what pushed the page into scrolling */
@@ -589,7 +597,7 @@ body.has-won .tk-badge{background:var(--ink)}
   .tk-name{font-size:clamp(20px,2.4vw,40px)}
   .tk-top{margin-bottom:clamp(10px,1.8vh,24px)}
   .tk-nav a{padding:clamp(11px,1.5vh,18px) 18px;font-size:clamp(16px,1.25vw,21px)}
-  .stamp{height:min(17.5vh,224px)}
+  .stamp{height:min(20.5vh,268px)}
 }
 
 @media (max-width:900px){
@@ -599,7 +607,7 @@ body.has-won .tk-badge{background:var(--ink)}
   .project-media[data-layout="half"]{grid-column:1/-1}
   .tk-body{padding:30px 18px 22px}
   .tk-mid{flex-direction:column;align-items:flex-start;gap:26px}
-  .stamp{width:clamp(140px,42vw,190px)}
+  .stamp{width:clamp(150px,48vw,220px)}
   .tk-nav{grid-template-columns:1fr;grid-template-rows:none;gap:9px}
   .tk-nav > a{grid-row:auto}
   .scratch-cap{grid-column:1;grid-row:auto}

@@ -53,11 +53,11 @@
             <defs>
               <!-- 9 o'clock, clockwise, so the letters sit upright over the top -->
               <path id="stampArcPath" fill="none"
-                    d="M100,104 m-84,0 a84,84 0 1,1 168,0 a84,84 0 1,1 -168,0"/>
+                    d="M100,102 m-91,0 a91,91 0 1,1 182,0 a91,91 0 1,1 -182,0"/>
             </defs>
             <text class="stamp-arc-t">
               <textPath id="stampArc" href="#stampArcPath" xlink:href="#stampArcPath"
-                        startOffset="0" textLength="527" lengthAdjust="spacing"></textPath>
+                        startOffset="0" textLength="571" lengthAdjust="spacing"></textPath>
             </text>
           </svg>
           <span class="stamp-photo"><img id="stampImg" src="" alt=""></span>
@@ -240,6 +240,12 @@
     var ctx = foil.getContext('2d', { willReadFrequently: true });
     var drawing = false, moved = 0, checks = 0, open = false;
 
+    /* The foil has to read as the silvery latex on a real ticket. A flat grey
+       fill reads as a disabled button or an image that failed to load, which
+       is exactly what it was doing. Metal is a gradient that reverses several
+       times across the surface plus a fine speckle, so that is what this is:
+       banded highlights, a couple of brighter sheens across the diagonal, and
+       enough noise to stop it looking like a swatch. */
     function paint() {
       var r = link.getBoundingClientRect();
       if (!r.width || !r.height) return;
@@ -248,20 +254,55 @@
       foil.height = Math.round(r.height * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.globalCompositeOperation = 'source-over';
-      ctx.fillStyle = '#8d8880';
+
+      var g = ctx.createLinearGradient(0, 0, r.width, r.height);
+      [[0, '#cbc6bd'], [.14, '#948f87'], [.29, '#dbd6cd'], [.44, '#8b867e'],
+       [.58, '#c6c1b8'], [.72, '#848078'], [.87, '#bdb8af'], [1, '#8f8a82']]
+        .forEach(function (st) { g.addColorStop(st[0], st[1]); });
+      ctx.fillStyle = g;
       ctx.fillRect(0, 0, r.width, r.height);
-      ctx.strokeStyle = 'rgba(255,255,255,.16)';
-      ctx.lineWidth = 1;
-      for (var y = 0; y < r.height; y += 4) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(r.width, y + (Math.random() * 1.6 - .8));
-        ctx.stroke();
+
+      /* two sheens running the other way, so the metal has a direction */
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
+      [0.26, 0.68].forEach(function (at) {
+        var sh = ctx.createLinearGradient(r.width * (at - .16), 0, r.width * (at + .16), r.height);
+        sh.addColorStop(0, 'rgba(255,255,255,0)');
+        sh.addColorStop(.5, 'rgba(255,255,255,.17)');
+        sh.addColorStop(1, 'rgba(255,255,255,0)');
+        ctx.fillStyle = sh;
+        ctx.fillRect(0, 0, r.width, r.height);
+      });
+      ctx.restore();
+
+      /* the speckle. latex is not smooth, and without this it is a swatch */
+      var grains = Math.round(r.width * r.height / 14);
+      for (var i = 0; i < grains; i++) {
+        ctx.fillStyle = Math.random() > .5
+          ? 'rgba(255,255,255,' + (.05 + Math.random() * .12).toFixed(3) + ')'
+          : 'rgba(28,25,20,'   + (.05 + Math.random() * .12).toFixed(3) + ')';
+        ctx.fillRect(Math.random() * r.width | 0, Math.random() * r.height | 0, 1, 1);
       }
-      ctx.fillStyle = 'rgba(20,18,14,.5)';
-      ctx.font = '600 11px "Barlow Condensed", sans-serif';
+
+      /* a hairline inner edge, the way the panel is printed short of the box */
+      ctx.strokeStyle = 'rgba(28,25,20,.22)';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(.5, .5, r.width - 1, r.height - 1);
+
+      /* a soft light pad under the words, or they wash out on the bright
+         bands of the metal and read as half-erased */
+      if ('filter' in ctx) {
+        ctx.save();
+        ctx.filter = 'blur(7px)';
+        ctx.fillStyle = 'rgba(226,222,214,.85)';
+        ctx.fillRect(r.width * .22, r.height / 2 - 11, r.width * .56, 22);
+        ctx.restore();
+      }
+
+      ctx.fillStyle = 'rgba(20,17,13,.88)';
+      ctx.font = '700 11px "Barlow Condensed", sans-serif';
       ctx.textAlign = 'center';
-      try { ctx.letterSpacing = '2px'; } catch (e) {}
+      try { ctx.letterSpacing = '2.4px'; } catch (e) {}
       ctx.fillText((item.scratchHint || 'Scratch to reveal').toUpperCase(),
         r.width / 2, r.height / 2 + 4);
     }
