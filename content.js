@@ -26,7 +26,7 @@ window.SITE_CONTENT = {
     stampName: "A place with a chance of rain",
     stampValue: "",
     stampFoot: "Madrid",
-    stampPhoto: "about-photo.jpg",
+    stampPhoto: "portrait-rooftop.jpg",
     stampUrl: "about.html",
     awards: [],
     wonBand: "The National Award Lottery",

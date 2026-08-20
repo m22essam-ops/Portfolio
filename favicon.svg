@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- the ticket's game number, on the ticket's red. Legible at 16px,
-       and it is the one mark on the site that is not his name. -->
-  <rect width="64" height="64" rx="10" fill="#E3261A"/>
-  <text x="32" y="47" text-anchor="middle"
-        font-family="'Barlow Condensed','Helvetica Neue',Arial,sans-serif"
-        font-weight="700" font-size="44" fill="#F6F3EE">13</text>
-</svg>
