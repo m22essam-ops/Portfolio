@@ -16,20 +16,25 @@
 <main class="ticket">
   <div class="perf top" aria-hidden="true"></div>
 
-  <div class="tk-band">
-    <span id="tkBand"></span>
-    <span class="tk-badge" id="tkBadge"></span>
-  </div>
-
   <div class="tk-body">
     <div class="tk-top">
       <span id="tkGame"></span>
       <span id="tkSerial"></span>
     </div>
 
-    <!-- the name gets its own line, above the headline: the home page has
-         no nav bar, so this is what says whose site this is -->
-    <p class="tk-name" id="tkName"></p>
+    <!-- The name is the logo here: the home page has no nav bar, so this is
+         the only thing that says whose site this is. Same lockup as the other
+         pages, name in capitals with the job under it and not bold. His line
+         and the award count sit on the opposite side of the same row, which
+         is what the black band used to hold. -->
+    <div class="tk-namerow">
+      <p class="tk-name" id="tkName"></p>
+      <p class="tk-role" id="tkRole"></p>
+      <div class="tk-aside">
+        <span id="tkBand"></span>
+        <span class="tk-badge" id="tkBadge"></span>
+      </div>
+    </div>
 
     <h1 class="tk-title"><span id="tkTitleTop"></span><span id="tkTitleBottom"></span></h1>
 
@@ -107,6 +112,7 @@
   /* the home page has no nav bar, so this band is the only thing on the
      screen that says whose site this is. Always upper case. */
   set('tkName', (T.name || 'MOHAMMED ESSAM').toUpperCase());
+  set('tkRole', (C.nav && C.nav.role) || '');
 
   /* ---- keep the headline inside the ticket ----
      The headline is his to rewrite from admin, and one long word ("copywriter"

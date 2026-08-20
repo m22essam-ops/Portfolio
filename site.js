@@ -4,12 +4,22 @@
 (function () {
   var C = window.SITE_CONTENT || {};
 
-  /* ----- top nav ----- */
-  /* plain text, no red dot: the trailing period used to be wrapped in an
-     <em> and coloured, which is the "red dot" that got removed. */
+  /* ----- top nav -----
+     The logo is a two-line lockup: the name in capitals, the job underneath
+     and deliberately not bold. Plain text, no red dot: the trailing period
+     used to be wrapped in an <em> and coloured, which was the "red dot". */
   var logo = document.querySelector('.logo');
   if (logo && C.nav && C.nav.logo) {
-    logo.textContent = String(C.nav.logo).replace(/\s*\.\s*$/, '');
+    var name = String(C.nav.logo).replace(/\s*\.\s*$/, '');
+    logo.textContent = '';
+    var b = document.createElement('b');
+    b.textContent = name.toUpperCase();
+    logo.appendChild(b);
+    if (C.nav.role) {
+      var role = document.createElement('span');
+      role.textContent = C.nav.role;
+      logo.appendChild(role);
+    }
   }
   var badgeText = document.querySelector('.badge-text');
   if (badgeText && C.nav && C.nav.badge) {
@@ -20,119 +30,41 @@
     tagline.textContent = C.nav.tagline;
   }
 
-  /* ----- THE STUB -----
-     Every page that is not the home page ends on the tear-off half of the
-     same ticket. Built here rather than in each page's HTML so there is one
-     copy of it: work.html, about.html and every project page share it.
-     It is also where the contact details live, which is why it carries the
-     whole of contact.links rather than one buried mailto. */
+  /* ----- THE FOOTER -----
+     One line. The owner killed the stub: no columns, no barcode, no giant
+     wordmark. `footer.line` is the whole sentence and `footer.linkText` is
+     the piece of it that becomes the mailto, so he writes one sentence in
+     admin and the link follows whatever he writes.
+     Built here rather than in each page's HTML so there is one copy of it. */
   var foot = document.getElementById('siteFoot');
   if (foot) {
     var F = C.footer || {};
-    var K = C.contact || {};
-    var T = C.ticket || {};
-    var J = C.jokes || {};
-
     var esc = function (s) {
       return String(s == null ? '' : s)
         .replace(/&/g, '&amp;').replace(/</g, '&lt;')
         .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     };
 
-    /* the email becomes the big claim line, everything else becomes a column */
-    var mail = '', mailLabel = '', others = [];
-    (K.links || []).forEach(function (l) {
-      if (!l || !l.url) return;
-      if (!mail && /^mailto:/i.test(l.url)) {
-        mail = l.url;
-        mailLabel = l.label || l.url.replace(/^mailto:/i, '');
+    var line = String(F.line || '').trim();
+    if (line) {
+      var url = F.linkUrl || (C.contact && C.contact.ctaUrl) || '';
+      var bit = String(F.linkText || '').trim();
+      var at  = bit ? line.toLowerCase().indexOf(bit.toLowerCase()) : -1;
+      var out;
+      if (at > -1 && url) {
+        /* keep his own capitalisation by slicing the sentence, not the needle */
+        out = esc(line.slice(0, at)) +
+              '<a href="' + esc(url) + '">' + esc(line.substr(at, bit.length)) + '</a>' +
+              esc(line.slice(at + bit.length));
+      } else if (url) {
+        out = '<a href="' + esc(url) + '">' + esc(line) + '</a>';
       } else {
-        others.push(l);
+        out = esc(line);
       }
-    });
-    if (!mail && K.ctaUrl) { mail = K.ctaUrl; mailLabel = K.ctaUrl.replace(/^mailto:/i, ''); }
-
-    var cols = [];
-    if (others.length) {
-      cols.push({
-        head: 'Also at',
-        rows: others.map(function (l) {
-          return '<a href="' + esc(l.url) + '" target="_blank" rel="noopener">' +
-                 esc(l.label || l.url) + '</a>';
-        }).join('')
-      });
-    }
-    if (K.resume && K.resume.url) {
-      cols.push({
-        head: 'The file',
-        rows: '<a href="' + esc(K.resume.url) + '" target="_blank" rel="noopener">' +
-              esc(K.resume.label || 'Résumé') + '</a>'
-      });
-    }
-    if (F.place) cols.push({ head: 'Where', rows: '<span>' + esc(F.place) + '</span>' });
-
-    var html =
-      '<div class="stub-perf" aria-hidden="true"></div>' +
-      '<div class="wrap stub-in">' +
-        '<div class="stub-head">' +
-          '<span>' + esc(F.keep || 'Keep this stub') + '</span>' +
-          '<span>' + esc(T.serial || '') + '</span>' +
-        '</div>' +
-        (F.big ? '<p class="stub-big">' + esc(F.big) + '</p>' : '') +
-        (mail
-          ? '<a class="stub-claim" href="' + esc(mail) + '">' +
-            esc(mailLabel) + '<i aria-hidden="true">&#8594;</i></a>'
-          : '') +
-        (cols.length
-          ? '<ul class="stub-cols">' + cols.map(function (c) {
-              return '<li><b>' + esc(c.head) + '</b>' + c.rows + '</li>';
-            }).join('') + '</ul>'
-          : '') +
-        '<div class="stub-fine">' +
-          '<div class="stub-code" aria-hidden="true"></div>' +
-          '<p>' + esc(T.terms || '') + '</p>' +
-        '</div>' +
-        '<div class="stub-sign">' +
-          '<span>' + esc(F.line || '') + '</span>' +
-          '<span>' + esc(J.footer || '') + '</span>' +
-        '</div>' +
-      '</div>' +
-      (F.mark ? '<div class="stub-mark" aria-hidden="true">' + esc(F.mark) + '</div>' : '');
-
-    foot.className = 'stub';
-    foot.innerHTML = html;
-
-    /* The wordmark is meant to run the full width and bleed off the bottom.
-       A vw font-size can only guess at that, and it guesses wrong as soon as
-       he changes the name or the browser picks a fallback font, so measure the
-       word and scale it to the exact width instead.
-       It measures more than once on purpose: Bricolage Grotesque carries an
-       optical-size axis, so its letters change width with the point size and
-       one pass of arithmetic lands short. Two or three passes settle it. */
-    var mark = foot.querySelector('.stub-mark');
-    if (mark) {
-      var fitMark = function () {
-        var box = mark.clientWidth;
-        if (!box) return;
-        mark.style.fontSize = '';
-        var rng = document.createRange();
-        for (var i = 0; i < 5; i++) {
-          var fs = parseFloat(getComputedStyle(mark).fontSize);
-          rng.selectNodeContents(mark);
-          var w = rng.getBoundingClientRect().width;
-          if (!w) return;
-          var next = fs * (box - 6) / w;
-          if (Math.abs(next - fs) < 0.4) break;
-          mark.style.fontSize = next.toFixed(2) + 'px';
-        }
-      };
-      fitMark();
-      if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitMark);
-      var markWait;
-      window.addEventListener('resize', function () {
-        clearTimeout(markWait);
-        markWait = setTimeout(fitMark, 120);
-      });
+      foot.className = 'foot';
+      foot.innerHTML = '<div class="wrap"><p>' + out + '</p></div>';
+    } else {
+      foot.remove();
     }
   }
 

@@ -6,7 +6,8 @@
 
 window.SITE_CONTENT = {
   nav: {
-    logo: "mohammed essam.",
+    logo: "Mohammed Essam",
+    role: "copywriter",
     tagline: "",
     badge: "available for work"
   },
@@ -1514,11 +1515,13 @@ window.SITE_CONTENT = {
     ]
   },
   footer: {
-    keep: "Keep this stub",
-    big: "Someone has to win eventually.",
-    place: "Madrid, Spain",
-    line: "© 2026 · Written by luck. Copywriters reserved, I know.",
-    mark: "MOHAMMED ESSAM",
-    joke: "for the jokes in this portfolio."
+    line: "Someone has to win eventually, do you feel lucky?",
+    linkText: "do you feel lucky?",
+    linkUrl: "mailto:m22essam@gmail.com",
+    keep: "",
+    big: "",
+    place: "",
+    mark: "",
+    joke: ""
   }
 };
