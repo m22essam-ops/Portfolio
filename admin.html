@@ -447,23 +447,23 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
 
   <!-- ================= NAV + FOOTER ================= -->
   <section class="admin-section">
-    <h2>7. Top bar and the stub</h2>
+    <h2>7. Top bar and footer</h2>
     <div class="grid2">
-      <label class="field"><span>Logo text</span><input data-path="nav.logo"></label>
-      <label class="field"><span>Tagline under logo (shown exactly as typed)</span><input data-path="nav.tagline" placeholder="e.g. Just write"></label>
+      <label class="field"><span>Your name (top left of every page)</span><input data-path="nav.logo" placeholder="Mohammed Essam"><small>Always shown in capitals.</small></label>
+      <label class="field"><span>The line under it</span><input data-path="nav.role" placeholder="copywriter"><small>Set small and not bold, under your name. Empty it and it goes away.</small></label>
+    </div>
+    <div class="grid2">
+      <label class="field"><span>Tagline (shown exactly as typed)</span><input data-path="nav.tagline" placeholder="e.g. Just write"></label>
       <label class="field"><span>Badge (top right)</span><input data-path="nav.badge"></label>
     </div>
 
-    <div class="subhead">The stub (the red footer on every page except the home)</div>
-    <p class="hint">It is the tear-off half of the same ticket the home page is, and it is where your contact details live. The links and the résumé button in it come from section 6 above, so add a link there and it turns up here.</p>
+    <div class="subhead">The footer</div>
+    <p class="hint">One line, set large, on every page except the home. Write the whole sentence in the first box, then type the piece of it you want to be the link in the second. <strong>The link follows whatever you write</strong>, so change the sentence and it keeps working. Empty the sentence and the footer disappears.</p>
+    <label class="field"><span>The line</span><input data-path="footer.line" placeholder="Someone has to win eventually, feel lucky today?"></label>
     <div class="grid2">
-      <label class="field"><span>Small line, top left of the stub</span><input data-path="footer.keep" placeholder="Keep this stub"></label>
-      <label class="field"><span>Where you are</span><input data-path="footer.place" placeholder="Madrid, Spain"></label>
+      <label class="field"><span>Which part is the link</span><input data-path="footer.linkText" placeholder="feel lucky today?"><small>Must appear in the sentence above, word for word. Leave empty and the whole line becomes the link.</small></label>
+      <label class="field"><span>Where it goes</span><input data-path="footer.linkUrl" placeholder="mailto:m22essam@gmail.com"></label>
     </div>
-    <label class="field"><span>The big line</span><input data-path="footer.big" placeholder="Someone has to win eventually."><small>Set large. Around six words reads best.</small></label>
-    <label class="field"><span>Copyright line</span><input data-path="footer.line"></label>
-    <label class="field"><span>The wordmark across the bottom</span><input data-path="footer.mark" placeholder="MOHAMMED ESSAM"><small>Sized automatically to run the full width and bleed off the bottom edge. Empty it and it goes away.</small></label>
-    <label class="field"><span>Unused: old PG-13 punchline</span><input data-path="footer.joke"><small>Nothing reads this any more. Kept so it is not lost.</small></label>
   </section>
 </main>
 
@@ -542,9 +542,16 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
     seed(M.ticket, 'wonSealRing', 'Validated · Validated · Validated · ');
     seed(M.ticket, 'wonSealTop', 'Claimed');
     seed(M.ticket, 'wonSealMark', '★');
-    seed(M.footer, 'keep', 'Keep this stub');
-    seed(M.footer, 'big', 'Someone has to win eventually.');
-    seed(M.footer, 'place', 'Madrid, Spain');
+    seed(M.nav, 'role', 'copywriter');
+    seed(M.footer, 'line', 'Someone has to win eventually, feel lucky today?');
+    seed(M.footer, 'linkText', 'feel lucky today?');
+    seed(M.footer, 'linkUrl', 'mailto:m22essam@gmail.com');
+    /* leftovers from the tear-off stub, which was built and then killed.
+       Nothing reads them. Dropped here so they stop riding along in every
+       save, rather than sitting in content.js looking like live fields. */
+    ['keep', 'big', 'place', 'mark', 'joke'].forEach(function (k) {
+      delete M.footer[k];
+    });
   }
 
   /* ---------------- rendering ---------------- */

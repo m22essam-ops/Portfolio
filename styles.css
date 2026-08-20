@@ -467,9 +467,12 @@ body.has-won .seal-top{fill:#F6F3EEa8}
 .skills-list{display:flex;flex-wrap:wrap;gap:9px;margin-top:32px}
 .skill-tag{border:1px solid var(--line);border-radius:100px;padding:6px 13px;font-size:11px;color:var(--fg-dim)}
 .exp-list{margin-bottom:40px}
-.exp-row{display:flex;justify-content:space-between;align-items:baseline;gap:20px;padding:19px 0;border-top:1px solid var(--line)}
-.exp-role{font-family:var(--display);font-weight:800;letter-spacing:-.02em;font-size:21px;display:block}
-.exp-org{font-size:15px;color:var(--fg-dim)}
+/* tight rows: the job title was inheriting the body's 1.6 line-height, which
+   put half a blank line above and below every role and made the list twice
+   as tall as it needed to be */
+.exp-row{display:flex;justify-content:space-between;align-items:baseline;gap:20px;padding:12px 0;border-top:1px solid var(--line)}
+.exp-role{font-family:var(--display);font-weight:800;letter-spacing:-.02em;font-size:21px;line-height:1.15;display:block}
+.exp-org{font-size:15px;line-height:1.35;color:var(--fg-dim);display:block;margin-top:2px}
 .exp-time{font-size:11.5px;color:var(--fg-faint);white-space:nowrap}
 
 /* ============================ RESPONSIVE ============================ */

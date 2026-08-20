@@ -1515,13 +1515,8 @@ window.SITE_CONTENT = {
     ]
   },
   footer: {
-    line: "Someone has to win eventually, do you feel lucky?",
-    linkText: "do you feel lucky?",
-    linkUrl: "mailto:m22essam@gmail.com",
-    keep: "",
-    big: "",
-    place: "",
-    mark: "",
-    joke: ""
+    line: "Someone has to win eventually, feel lucky today?",
+    linkText: "feel lucky today?",
+    linkUrl: "mailto:m22essam@gmail.com"
   }
 };
