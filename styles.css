@@ -355,17 +355,36 @@ body.has-won .seal-top{fill:#F6F3EEa8}
    ============================================================== */
 
 .foot{margin-top:120px;border-top:1px solid var(--line);padding:60px 0 64px}
+.foot-in{display:flex;align-items:flex-end;justify-content:space-between;gap:34px}
 .foot p{
   margin:0;font-family:var(--display);font-weight:800;
   letter-spacing:-.03em;line-height:1.06;
   font-size:clamp(28px,4.6vw,58px);max-width:20ch;
 }
-.foot a{
+.foot p a{
   color:var(--red);text-decoration:none;
   border-bottom:3px solid currentColor;
   transition:color .16s var(--ease);
 }
-.foot a:hover{color:var(--red-hot)}
+.foot p a:hover{color:var(--red-hot)}
+
+/* the social row: quiet, and the same weight as the small print elsewhere */
+.foot-social{display:flex;align-items:center;gap:16px;flex:none;padding-bottom:8px}
+.foot-social a{
+  display:block;color:var(--fg-faint);text-decoration:none;
+  transition:color .16s var(--ease),transform .16s var(--ease);
+}
+.foot-social a:hover{color:var(--red);transform:translateY(-2px)}
+.foot-social svg{
+  width:23px;height:23px;display:block;
+  fill:none;stroke:currentColor;stroke-width:1.7;
+}
+.foot-social svg .fill{fill:currentColor;stroke:none}
+/* a link with no icon still shows, as its name */
+.foot-social a.txt{
+  font-family:var(--mono);text-transform:uppercase;
+  letter-spacing:.14em;font-weight:600;font-size:11px;
+}
 
 /* ============================ WORK GRID ============================ */
 /* one uniform grid. no alternating sizes, no two lists, no tabs.
@@ -488,6 +507,9 @@ body.has-won .seal-top{fill:#F6F3EEa8}
   .scratch-cap{grid-column:1;grid-row:auto}
   .tk-foot{flex-direction:column;align-items:flex-start;gap:16px}
   .tk-terms{text-align:left}
+  .foot{margin-top:86px;padding:44px 0 48px}
+  .foot-in{flex-direction:column;align-items:flex-start;gap:30px}
+  .foot-social{padding-bottom:0}
   .page-nav .links{gap:15px}
   .page-nav{font-size:11px;letter-spacing:.11em}
   body.is-home{padding:22px 14px}
