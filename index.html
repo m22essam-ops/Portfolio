@@ -29,7 +29,6 @@
          is what the black band used to hold. -->
     <div class="tk-namerow">
       <p class="tk-name" id="tkName"></p>
-      <p class="tk-role" id="tkRole"></p>
       <div class="tk-aside">
         <span id="tkBand"></span>
         <span class="tk-badge" id="tkBadge"></span>
@@ -41,6 +40,36 @@
     <div class="tk-mid">
       <p class="tk-sub" id="tkSub"></p>
 
+      <!-- THE STAMP. A postage stamp, not a rubber one: perforated edge, a
+           duotone portrait, the issuing department curved round it, a value
+           and the name along the bottom. It is the only image on the page and
+           the only thing that is not type, and the whole of it is a link to
+           the About page. Every word comes from content.js. -->
+      <a class="stamp" id="tkStamp" href="about.html">
+        <span class="stamp-perf" aria-hidden="true"></span>
+        <span class="stamp-in">
+          <svg class="stamp-arc" viewBox="0 0 200 200" aria-hidden="true"
+               xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <defs>
+              <!-- 9 o'clock, clockwise, so the letters sit upright over the top -->
+              <path id="stampArcPath" fill="none"
+                    d="M100,104 m-84,0 a84,84 0 1,1 168,0 a84,84 0 1,1 -168,0"/>
+            </defs>
+            <text class="stamp-arc-t">
+              <textPath id="stampArc" href="#stampArcPath" xlink:href="#stampArcPath"
+                        startOffset="0" textLength="527" lengthAdjust="spacing"></textPath>
+            </text>
+          </svg>
+          <span class="stamp-photo"><img id="stampImg" src="" alt=""></span>
+        </span>
+        <span class="stamp-band">
+          <span class="stamp-value" id="stampValue"></span>
+          <span class="stamp-names">
+            <span class="stamp-name" id="stampName"></span>
+            <span class="stamp-foot" id="stampFoot"></span>
+          </span>
+        </span>
+      </a>
     </div>
 
     <ul class="won-list" id="wonList" hidden></ul>
@@ -86,7 +115,37 @@
   /* the home page has no nav bar, so this band is the only thing on the
      screen that says whose site this is. Always upper case. */
   set('tkName', (T.name || 'MOHAMMED ESSAM').toUpperCase());
-  set('tkRole', (C.nav && C.nav.role) || '');
+
+  /* ---- the stamp ----
+     The arc text repeats until it nearly closes the circle and textLength
+     stretches it the rest of the way, so any line he writes fits the ring.
+     Blank the arc and the photo and the whole stamp removes itself. */
+  (function () {
+    var st = document.getElementById('tkStamp');
+    if (!st) return;
+    var arc = String((hasWon ? (T.wonStampArc || T.stampArc) : T.stampArc) || '').trim();
+    var photo = String(T.stampPhoto || '').trim();
+    if (!arc && !photo) { st.remove(); return; }
+
+    if (arc) {
+      if (!/[·•|,\/-]\s*$/.test(arc)) arc += ' · ';
+      else if (!/\s$/.test(arc)) arc += ' ';
+      var loop = arc;
+      while (loop.length < 46) loop += arc;
+      set('stampArc', loop.toUpperCase());
+    }
+    var img = document.getElementById('stampImg');
+    if (photo) {
+      img.src = /^https?:\/\//i.test(photo) ? photo : 'images/' + photo.replace(/^images\//, '');
+      img.alt = T.stampName || T.name || '';
+    } else {
+      img.parentNode.remove();
+    }
+    set('stampValue', T.stampValue);
+    set('stampName', (T.stampName || T.name || '').toUpperCase());
+    set('stampFoot', T.stampFoot);
+    if (T.stampUrl) st.href = T.stampUrl;
+  })();
 
   /* ---- keep the headline inside the ticket ----
      The headline is his to rewrite from admin, and one long word ("copywriter"
@@ -164,12 +223,13 @@
        - no canvas support, or reduced motion, and it never covers at all
      -------------------------------------------------------------- */
   function makeScratch(link, item) {
-    var KEY = 'scratched_' + (item.num || '03');
-    var already = false;
-    try { already = localStorage.getItem(KEY) === '1'; } catch (e) {}
+    /* The foil comes back on every visit. It used to remember, through
+       localStorage, that it had already been scratched: he wants the gag
+       fresh every refresh, so nothing is stored any more. The other escape
+       hatches all stay, so it can still never lock anyone out. */
     var canScratch = !!document.createElement('canvas').getContext &&
       !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (already || !canScratch) { link.classList.add('scratched'); return; }
+    if (!canScratch) { link.classList.add('scratched'); return; }
 
     link.classList.add('covered');
     var foil = document.createElement('canvas');
@@ -212,7 +272,6 @@
       link.classList.remove('covered');
       link.classList.add('scratched');
       if (foil.parentNode) foil.parentNode.removeChild(foil);
-      try { localStorage.setItem(KEY, '1'); } catch (e) {}
     }
 
     function at(e) {
