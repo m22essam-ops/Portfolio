@@ -329,22 +329,22 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
     <p class="hint">The whole home page is one lottery ticket, and every line of it is here. Nothing is hidden behind a scratch panel any more, so whatever you write gets read.</p>
 
     <div class="grid2">
-      <label class="field"><span>Top band</span><input data-path="ticket.band" placeholder="The National Award Lottery"></label>
-      <label class="field"><span>Badge (the red pill)</span><input data-path="ticket.badge" placeholder="0 awards so far"></label>
+      <label class="field"><span>Top band (black strip, left)</span><input data-path="ticket.band"></label>
+      <label class="field"><span>Badge (red pill, right of the band)</span><input data-path="ticket.badge" placeholder="0 awards so far"></label>
     </div>
     <div class="grid2">
       <label class="field"><span>Game line (small, top left)</span><input data-path="ticket.game"></label>
       <label class="field"><span>Serial (small, top right)</span><input data-path="ticket.serial"></label>
     </div>
     <div class="grid2">
+      <label class="field"><span>Your name (big, above the headline)</span><input data-path="ticket.name" placeholder="MOHAMMED ESSAM"><small>Always shown in capitals. This is the only thing on the home page that says whose site it is, so leaving it empty is a bad idea.</small></label>
       <label class="field"><span>Headline, first line</span><input data-path="ticket.titleTop" placeholder="Award-losing"></label>
       <label class="field"><span>Headline, second line (in red)</span><input data-path="ticket.titleBottom" placeholder="copywriter"></label>
     </div>
     <label class="field"><span>Sub-line under the headline</span><input data-path="ticket.sub"></label>
 
-    <div class="subhead">The proof — your best fact, printed in the open</div>
-    <label class="field"><span>The line</span><input data-path="ticket.winLine" placeholder="Rivan Tower sold out in a week."><small>Make it a real number. If there is no number, write nothing.</small></label>
-    <label class="field"><span>The line under it</span><input data-path="ticket.winSub"></label>
+    <div class="subhead">The note above the scratch box</div>
+    <label class="field"><span>Small line printed over the covered box</span><input data-path="ticket.scratchNote"><small>Sits directly on top of the third button, as its caption. Keep it short: it is set small and in caps.</small></label>
 
     <label class="field"><span>Small print along the bottom</span><textarea data-path="ticket.terms" rows="3"></textarea></label>
 
@@ -367,7 +367,7 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
       <label class="field"><span>Won: headline, first line</span><input data-path="ticket.wonTitleTop"></label>
       <label class="field"><span>Won: headline, second line</span><input data-path="ticket.wonTitleBottom"></label>
     </div>
-    <label class="field"><span>Won: the line</span><input data-path="ticket.wonLine"></label>
+    <label class="field"><span>Won: the line (replaces the sub-line)</span><input data-path="ticket.wonLine"></label>
   </section>
 
   <!-- ================= SUBTLE JOKES ================= -->

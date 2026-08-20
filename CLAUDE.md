@@ -129,14 +129,25 @@ caramel palette with a grain photo. All rejected. Don't reintroduce them.
 
 ## Site layout
 
-**index.html** — the ticket, full screen, no scroll:
-band (owner's line, plus **MOHAMMED ESSAM** upper case on the right) →
-game/serial microtype → badge → two-line headline → sub-line → tear rule →
-the proof line → three nav punch boxes, the last one under scratch foil →
-barcode + small print.
+**index.html** — the ticket, full screen, no scroll (restructured 20 Aug 2026
+for less density):
+black band (owner's line left, red badge right) → game/serial microtype →
+**MOHAMMED ESSAM** on its own big line → two-line headline → sub-line →
+three nav punch boxes, the last under scratch foil with `ticket.scratchNote`
+printed as its caption → barcode + small print.
 
-The name in the band is not decoration: the home page has no nav bar, so it is
-the only thing on that screen identifying whose site it is. Do not remove it.
+The name is not decoration: the home page has no nav bar, so it is the only
+thing on that screen identifying whose site it is. Always upper case (the page
+forces it). Do not remove it.
+
+Retired in the same pass: the tear rule, and the `.proof` block with its
+`winLine`/`winSub` fields. `winSub` survives as `ticket.scratchNote`, sitting
+on the covered box. `wonLine` now takes over the sub-line when an award is
+added, instead of the removed proof line. Awards switch re-verified after.
+
+**Note the home carries no concrete result any more.** "Rivan Tower sold out
+in a week" was the strongest fact on the site and it is now only on the work
+page. That was the owner's choice, twice over. Do not reinstate it silently.
 
 On landscape screens 900px and wider the ticket fills **95vw by 95vh** and the
 body distributes its blocks down the height.

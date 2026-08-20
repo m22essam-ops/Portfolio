@@ -122,24 +122,31 @@ body.is-home{
   padding:11px 30px;font-size:12px;flex:none;
   display:flex;justify-content:space-between;align-items:center;gap:16px;
 }
+/* the badge now rides in the black band, so the body loses a whole row */
+.tk-band .tk-badge{
+  background:var(--red);color:var(--paper);
+  font-size:11px;padding:5px 12px;border-radius:100px;
+  margin:0;white-space:nowrap;flex:none;
+}
+
+/* the name: its own line above the headline, and the reason anyone
+   knows whose site this is. The home has no nav bar. */
 .tk-name{
   font-family:var(--mono);
-  font-weight:700;letter-spacing:.22em;
-  white-space:nowrap;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.2em;
+  font-size:clamp(20px,2.8vw,38px);
+  line-height:1.1;
+  color:var(--ink);
+  margin:0 0 14px;
 }
 
 .tk-body{padding:44px 46px 34px;flex:1;display:flex;flex-direction:column}
 
 .tk-top{
   display:flex;justify-content:space-between;gap:16px;
-  font-size:11px;color:var(--ink-60);margin-bottom:36px;
-}
-
-.tk-badge{
-  align-self:flex-start;
-  background:var(--red);color:var(--paper);
-  font-size:11.5px;padding:6px 13px;border-radius:100px;
-  margin-bottom:20px;
+  font-size:11px;color:var(--ink-60);margin-bottom:46px;
 }
 
 /* the headline: Syne. */
@@ -148,30 +155,31 @@ body.is-home{
   font-weight:800;
   letter-spacing:-.035em;
   line-height:.92;
-  margin:0 0 18px;
+  margin:0 0 22px;
   font-size:clamp(52px,10.5vw,124px);
   color:var(--ink);
 }
 .tk-title span{display:block}
 .tk-title span:last-child{color:var(--red)}
 
-.tk-sub{font-size:16px;color:var(--ink-60);margin:0 0 30px;max-width:52ch}
+.tk-sub{font-size:16px;color:var(--ink-60);margin:0 0 52px;max-width:52ch}
 
-.tear{border:0;border-top:2px dashed var(--ink-12);margin:0 0 28px}
 
-/* the proof, printed in the open. it used to be hidden under a
-   scratch panel, which is a strange place to keep your best fact. */
-.proof{margin-bottom:34px}
-.proof .win-line{
-  font-family:var(--display-home);
-  font-weight:700;letter-spacing:-.025em;line-height:1.08;
-  font-size:clamp(23px,3.4vw,34px);
-  margin:0 0 8px;color:var(--ink);
-}
-.proof .win-sub{margin:0;font-size:15px;color:var(--ink-60)}
 
 /* nav as punch boxes */
-.tk-nav{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:34px}
+.tk-nav{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  grid-template-rows:auto auto;
+  gap:10px 12px;margin-bottom:34px;
+}
+.tk-nav > a{grid-row:2}
+/* the note sits on top of the covered box, as its caption */
+.scratch-cap{
+  grid-column:3;grid-row:1;align-self:end;
+  font-family:var(--mono);text-transform:uppercase;
+  letter-spacing:.13em;font-weight:600;font-size:10.5px;
+  color:var(--ink-30);line-height:1.4;
+}
 .tk-nav a{
   border:2px solid var(--ink);border-radius:3px;
   padding:17px 16px;text-decoration:none;color:var(--ink);
@@ -234,10 +242,10 @@ body.has-won .tk-badge{background:var(--ink)}
     justify-content:space-between;
   }
   .tk-title{font-size:clamp(64px,8.6vw,190px)}
-  .proof .win-line{font-size:clamp(26px,2.7vw,46px)}
+  .tk-name{font-size:clamp(24px,2.1vw,42px)}
   .tk-nav{max-width:min(100%,1100px)}
   .tk-nav a{font-size:clamp(19px,1.5vw,26px);padding:clamp(16px,2vh,26px) 20px}
-  .tk-top,.tk-sub,.tear,.tk-badge,.proof,.tk-nav{margin-bottom:0}
+  .tk-top,.tk-sub,.tk-name,.tk-nav{margin-bottom:0}
   /* let space-between share the slack across the whole ticket instead of
      the foot's auto margin swallowing it into one gap at the bottom */
   .tk-foot{margin-top:0}
@@ -384,7 +392,9 @@ body.has-won .tk-badge{background:var(--ink)}
   .media-grid{grid-template-columns:1fr}
   .project-media[data-layout="half"]{grid-column:1/-1}
   .tk-body{padding:34px 26px 26px}
-  .tk-nav{grid-template-columns:1fr;gap:9px}
+  .tk-nav{grid-template-columns:1fr;grid-template-rows:none;gap:9px}
+  .tk-nav > a{grid-row:auto}
+  .scratch-cap{grid-column:1;grid-row:auto}
   .tk-foot{flex-direction:column;align-items:flex-start;gap:16px}
   .tk-terms{text-align:left}
   .page-nav .links{gap:16px}

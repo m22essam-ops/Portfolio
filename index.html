@@ -17,7 +17,7 @@
 
   <div class="tk-band">
     <span id="tkBand"></span>
-    <span class="tk-name" id="tkName"></span>
+    <span class="tk-badge" id="tkBadge"></span>
   </div>
 
   <div class="tk-body">
@@ -26,18 +26,12 @@
       <span id="tkSerial"></span>
     </div>
 
-    <div class="tk-badge" id="tkBadge"></div>
+    <!-- the name gets its own line, above the headline: the home page has
+         no nav bar, so this is what says whose site this is -->
+    <p class="tk-name" id="tkName"></p>
 
     <h1 class="tk-title"><span id="tkTitleTop"></span><span id="tkTitleBottom"></span></h1>
     <p class="tk-sub" id="tkSub"></p>
-
-    <hr class="tear">
-
-    <!-- the best fact on the site, printed where people can read it -->
-    <div class="proof">
-      <p class="win-line" id="winLine"></p>
-      <p class="win-sub" id="winSub"></p>
-    </div>
 
     <ul class="won-list" id="wonList" hidden></ul>
 
@@ -74,11 +68,10 @@
   set('tkBadge',       hasWon ? (T.wonBadge     || T.badge)     : T.badge);
   set('tkTitleTop',    hasWon ? (T.wonTitleTop  || T.titleTop)  : T.titleTop);
   set('tkTitleBottom', hasWon ? (T.wonTitleBottom || T.titleBottom) : T.titleBottom);
-  set('winLine',       hasWon ? (T.wonLine      || T.winLine)   : T.winLine);
-  set('winSub',        hasWon ? '' : T.winSub);
   set('tkGame', T.game);
   set('tkSerial', T.serial);
-  set('tkSub', T.sub);
+  /* when he has won something, the retraction line takes over the sub slot */
+  set('tkSub', hasWon ? (T.wonLine || T.sub) : T.sub);
   set('tkTerms', T.terms);
   /* the home page has no nav bar, so this band is the only thing on the
      screen that says whose site this is. Always upper case. */
@@ -94,9 +87,17 @@
     });
   }
 
-  /* nav punches */
+  /* nav punches. The scratch one gets a small note sitting directly above
+     it, so the line reads as the caption on that box rather than as another
+     paragraph competing in the middle of the ticket. */
   var nav = document.getElementById('tkNav');
   (T.nav || []).forEach(function (item) {
+    if (item.scratch && T.scratchNote) {
+      var cap = document.createElement('span');
+      cap.className = 'scratch-cap';
+      cap.textContent = T.scratchNote;
+      nav.appendChild(cap);
+    }
     var a = document.createElement('a');
     a.href = item.url || '#';
     a.appendChild(document.createTextNode(item.label || ''));
