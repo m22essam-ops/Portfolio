@@ -18,8 +18,9 @@ window.SITE_CONTENT = {
     titleTop: "Award-losing",
     titleBottom: "copywriter",
     sub: "I write in English and Arabic. I order coffee in Spanish and French.",
-    scratchNote: "That for a ticket to win, had to bought first",
     badge: "0 awards so far",
+    winLine: "",
+    winSub: "That for a ticket to win, had to bought first",
     terms: "Odds of winning: historically High. Ticket has no cash value and neither did the awards. Keep this as proof of participation or share it with your loved ones.",
     awards: [],
     wonBand: "The National Award Lottery",
@@ -42,7 +43,7 @@ window.SITE_CONTENT = {
         label: "Hire me?",
         num: "03",
         url: "mailto:m22essam@gmail.com",
-        scratch: true,
+        "scratch": true,
         scratchHint: "Scratch to reveal"
       }
     ]
@@ -139,8 +140,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: true
+        "draft": false,
+        "ran": true
       },
       {
         slug: "pringles-champions-of-fun",
@@ -229,8 +230,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: true
+        "draft": false,
+        "ran": true
       },
       {
         slug: "rivan-tower",
@@ -304,8 +305,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: true
+        "draft": false,
+        "ran": true
       },
       {
         slug: "true-colors-of-dominos",
@@ -369,8 +370,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: false
+        "draft": false,
+        "ran": false
       },
       {
         slug: "pop-the-pressure",
@@ -441,8 +442,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: false
+        "draft": false,
+        "ran": false
       },
       {
         slug: "pringles-cheesy-cheese",
@@ -508,8 +509,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: true
+        "draft": false,
+        "ran": true
       },
       {
         slug: "afg-skybridge",
@@ -574,8 +575,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: true
+        "draft": false,
+        "ran": true
       },
       {
         slug: "song-for-the-cashless",
@@ -661,8 +662,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: true
+        "draft": false,
+        "ran": true
       },
       {
         slug: "momtaz-cement-chronicles",
@@ -770,8 +771,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: true
+        "draft": false,
+        "ran": true
       },
       {
         slug: "modon-actors-too-seriously",
@@ -869,8 +870,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: true
+        "draft": false,
+        "ran": true
       },
       {
         slug: "red-expo-got-the-keys",
@@ -963,8 +964,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: true
+        "draft": false,
+        "ran": true
       },
       {
         slug: "quarantine-games",
@@ -1046,8 +1047,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: true
+        "draft": false,
+        "ran": true
       },
       {
         slug: "canesten-lets-call-it",
@@ -1114,8 +1115,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: false
+        "draft": false,
+        "ran": false
       },
       {
         slug: "nivea-never-see-the-sun",
@@ -1183,8 +1184,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: false
+        "draft": false,
+        "ran": false
       },
       {
         slug: "the-mumbled-code",
@@ -1242,8 +1243,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: false
+        "draft": false,
+        "ran": false
       },
       {
         slug: "oumph-like-any-ad",
@@ -1315,8 +1316,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: false,
-        ran: false
+        "draft": false,
+        "ran": false
       },
       {
         slug: "nothing-in-my-dreams",
@@ -1372,8 +1373,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: true,
-        ran: false
+        "draft": true,
+        "ran": false
       },
       {
         slug: "murder-your-thirst",
@@ -1427,8 +1428,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        draft: true,
-        ran: false
+        "draft": true,
+        "ran": false
       }
     ]
   },
