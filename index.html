@@ -240,71 +240,74 @@
     var ctx = foil.getContext('2d', { willReadFrequently: true });
     var drawing = false, moved = 0, checks = 0, open = false;
 
-    /* The foil has to read as the silvery latex on a real ticket. A flat grey
-       fill reads as a disabled button or an image that failed to load, which
-       is exactly what it was doing. Metal is a gradient that reverses several
-       times across the surface plus a fine speckle, so that is what this is:
-       banded highlights, a couple of brighter sheens across the diagonal, and
-       enough noise to stop it looking like a swatch. */
+    /* What makes a scratch panel recognisable is not a metal gradient, it is
+       GRAIN: dried latex is granular, mid grey rather than bright silver, and
+       lit by one soft highlight rather than banded like brushed steel. The
+       first attempt was a linear gradient across a short wide box, which is
+       why it came out looking like a strip of brushed aluminium. This one is
+       a flat mid grey, one broad highlight, a vignette so the panel sits on
+       the paper rather than in it, and a lot of visible speckle. */
     function paint() {
       var r = link.getBoundingClientRect();
       if (!r.width || !r.height) return;
+      var w = r.width, h = r.height;
       var dpr = Math.min(window.devicePixelRatio || 1, 2);
-      foil.width = Math.round(r.width * dpr);
-      foil.height = Math.round(r.height * dpr);
+      foil.width = Math.round(w * dpr);
+      foil.height = Math.round(h * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.globalCompositeOperation = 'source-over';
 
-      var g = ctx.createLinearGradient(0, 0, r.width, r.height);
-      [[0, '#cbc6bd'], [.14, '#948f87'], [.29, '#dbd6cd'], [.44, '#8b867e'],
-       [.58, '#c6c1b8'], [.72, '#848078'], [.87, '#bdb8af'], [1, '#8f8a82']]
-        .forEach(function (st) { g.addColorStop(st[0], st[1]); });
-      ctx.fillStyle = g;
-      ctx.fillRect(0, 0, r.width, r.height);
+      ctx.fillStyle = '#83868a';
+      ctx.fillRect(0, 0, w, h);
 
-      /* two sheens running the other way, so the metal has a direction */
-      ctx.save();
-      ctx.globalCompositeOperation = 'lighter';
-      [0.26, 0.68].forEach(function (at) {
-        var sh = ctx.createLinearGradient(r.width * (at - .16), 0, r.width * (at + .16), r.height);
-        sh.addColorStop(0, 'rgba(255,255,255,0)');
-        sh.addColorStop(.5, 'rgba(255,255,255,.17)');
-        sh.addColorStop(1, 'rgba(255,255,255,0)');
-        ctx.fillStyle = sh;
-        ctx.fillRect(0, 0, r.width, r.height);
-      });
-      ctx.restore();
+      /* one soft highlight, up and to the left, the way light falls on it */
+      var hi = ctx.createRadialGradient(w * .3, h * .2, 2, w * .3, h * .2, Math.max(w, h) * .85);
+      hi.addColorStop(0, 'rgba(255,255,255,.34)');
+      hi.addColorStop(.4, 'rgba(255,255,255,.10)');
+      hi.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = hi;
+      ctx.fillRect(0, 0, w, h);
 
-      /* the speckle. latex is not smooth, and without this it is a swatch */
-      var grains = Math.round(r.width * r.height / 14);
+      /* darker towards the edges, so the panel reads as sitting on the paper */
+      var vg = ctx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * .18,
+                                        w / 2, h / 2, Math.max(w, h) * .7);
+      vg.addColorStop(0, 'rgba(0,0,0,0)');
+      vg.addColorStop(1, 'rgba(18,18,20,.36)');
+      ctx.fillStyle = vg;
+      ctx.fillRect(0, 0, w, h);
+
+      /* THE GRAIN. This is the whole tell. Coarse enough to see at real size. */
+      var grains = Math.round(w * h / 8);
       for (var i = 0; i < grains; i++) {
-        ctx.fillStyle = Math.random() > .5
-          ? 'rgba(255,255,255,' + (.05 + Math.random() * .12).toFixed(3) + ')'
-          : 'rgba(28,25,20,'   + (.05 + Math.random() * .12).toFixed(3) + ')';
-        ctx.fillRect(Math.random() * r.width | 0, Math.random() * r.height | 0, 1, 1);
+        var sz = Math.random() < .3 ? 2 : 1;
+        ctx.fillStyle = Math.random() > .48
+          ? 'rgba(255,255,255,' + (.06 + Math.random() * .24).toFixed(3) + ')'
+          : 'rgba(14,14,17,'   + (.06 + Math.random() * .24).toFixed(3) + ')';
+        ctx.fillRect(Math.random() * w | 0, Math.random() * h | 0, sz, sz);
       }
 
-      /* a hairline inner edge, the way the panel is printed short of the box */
-      ctx.strokeStyle = 'rgba(28,25,20,.22)';
+      /* a few scuffs, the marks a coin already left on it */
       ctx.lineWidth = 1;
-      ctx.strokeRect(.5, .5, r.width - 1, r.height - 1);
-
-      /* a soft light pad under the words, or they wash out on the bright
-         bands of the metal and read as half-erased */
-      if ('filter' in ctx) {
-        ctx.save();
-        ctx.filter = 'blur(7px)';
-        ctx.fillStyle = 'rgba(226,222,214,.85)';
-        ctx.fillRect(r.width * .22, r.height / 2 - 11, r.width * .56, 22);
-        ctx.restore();
+      for (var k = 0; k < 7; k++) {
+        var sx = Math.random() * w, sy = Math.random() * h;
+        var len = 8 + Math.random() * 26;
+        ctx.strokeStyle = Math.random() > .5
+          ? 'rgba(255,255,255,.13)' : 'rgba(20,20,22,.12)';
+        ctx.beginPath();
+        ctx.moveTo(sx, sy);
+        ctx.lineTo(sx + len, sy - len * .5);
+        ctx.stroke();
       }
 
-      ctx.fillStyle = 'rgba(20,17,13,.88)';
+      ctx.strokeStyle = 'rgba(18,18,20,.3)';
+      ctx.strokeRect(.5, .5, w - 1, h - 1);
+
+      ctx.fillStyle = 'rgba(250,250,250,.9)';
       ctx.font = '700 11px "Barlow Condensed", sans-serif';
       ctx.textAlign = 'center';
       try { ctx.letterSpacing = '2.4px'; } catch (e) {}
       ctx.fillText((item.scratchHint || 'Scratch to reveal').toUpperCase(),
-        r.width / 2, r.height / 2 + 4);
+        w / 2, h / 2 + 4);
     }
 
     function reveal() {
