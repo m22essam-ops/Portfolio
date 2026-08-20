@@ -136,14 +136,22 @@ body.is-home{
   column-gap:24px;
   margin:0 0 26px;
 }
+/* The name is set in the condensed voice, not the display one. It used to be
+   the same face and the same weight 800 as the headline, sitting 26px above
+   it, and two heavy blocks that close together read as one mass however far
+   apart their point sizes are. A different register stops the fight without
+   making the name small. */
 .tk-name{
   grid-column:1;
-  font-family:var(--display);
-  font-weight:800;
+  font-family:var(--mono);
+  font-weight:700;
   text-transform:uppercase;
-  letter-spacing:.005em;
-  font-size:clamp(28px,4.6vw,64px);
-  line-height:.94;
+  letter-spacing:.16em;
+  /* scales with the viewport rather than sitting on a floor: on a phone the
+     headline can only be about 30px before "copywriter" runs off the edge,
+     and a name pinned at 24px would be nearly the same size as it */
+  font-size:clamp(15px,4.4vw,44px);
+  line-height:1;
   color:var(--ink);
   margin:0;
 }
@@ -187,40 +195,8 @@ body.is-home{
 .tk-title span{display:block;white-space:nowrap}
 .tk-title span:last-child{color:var(--red)}
 
-/* the sub-line and the seal share a row, so the seal can never land on top
-   of the headline no matter how long the words get */
-.tk-mid{
-  display:flex;align-items:center;justify-content:space-between;
-  gap:clamp(20px,4vw,60px);margin:0 0 52px;
-}
+.tk-mid{margin:0 0 40px}
 .tk-sub{font-size:16px;color:var(--ink-60);margin:0;max-width:52ch}
-
-/* ---- THE SEAL ----
-   the one non-typographic thing on the home page. Two rings, a turning
-   line of type and a mark in the middle. Flat vectors: no texture, no
-   shadow, nothing to load. */
-.seal{flex:0 0 auto;width:clamp(104px,12.5vw,196px)}
-.seal svg{display:block;width:100%;height:auto}
-.seal-o{fill:none;stroke:var(--red);stroke-width:2.5}
-.seal-in{stroke:var(--ink-12)}
-.seal-ring{
-  fill:var(--ink);font-family:var(--mono);font-weight:700;
-  font-size:16px;letter-spacing:.06em;
-}
-.seal-top{
-  fill:var(--ink-60);font-family:var(--mono);font-weight:600;
-  font-size:14px;letter-spacing:.2em;text-anchor:middle;
-}
-.seal-mark{
-  fill:var(--red);font-family:var(--display-home);font-weight:800;
-  font-size:58px;letter-spacing:-.03em;text-anchor:middle;
-}
-.seal-spin{
-  transform-box:view-box;transform-origin:100px 100px;
-  animation:sealturn 26s linear infinite;
-}
-@keyframes sealturn{to{transform:rotate(360deg)}}
-@media (prefers-reduced-motion:reduce){.seal-spin{animation:none}}
 
 /* nav as punch boxes */
 .tk-nav{
@@ -279,10 +255,6 @@ body.is-home{
 
 /* the awards switch: when he finally wins something */
 body.has-won .tk-badge{background:var(--ink)}
-/* the seal gets validated too: the middle fills in and the mark reverses */
-body.has-won .seal-in{fill:var(--red);stroke:var(--red)}
-body.has-won .seal-mark{fill:var(--paper)}
-body.has-won .seal-top{fill:#F6F3EEa8}
 .won-list{margin:0 0 30px;padding:0;list-style:none}
 .won-list li{
   font-family:var(--mono);text-transform:uppercase;
@@ -297,19 +269,25 @@ body.has-won .seal-top{fill:#F6F3EEa8}
 @media (orientation:landscape) and (min-width:900px){
   body.is-home{padding:2.5vh 2.5vw}
   .ticket{width:95vw;max-width:none;min-height:95vh}
-  .tk-body{
-    padding:clamp(30px,3.4vh,58px) clamp(34px,3.6vw,72px) clamp(24px,2.6vh,40px);
-    justify-content:space-between;
-  }
-  .tk-title{font-size:clamp(64px,8.6vw,190px)}
-  .tk-name{font-size:clamp(30px,3.6vw,70px)}
+  .tk-body{padding:clamp(30px,3.4vh,58px) clamp(34px,3.6vw,72px) clamp(24px,2.6vh,40px)}
+
+  /* The blocks used to be spread down the height by space-between, which put
+     an identical gap everywhere and left the tabs floating away from the copy
+     they belong to. Now the top half flows on its own margins, the tabs sit
+     right under the sub-line, and only the barcode and the small print are
+     pushed to the bottom edge by the auto margin. All the slack collects in
+     one place, between the tabs and the foot, instead of being shared out. */
+  .tk-top    {margin-bottom:clamp(18px,3.2vh,44px)}
+  .tk-namerow{margin-bottom:clamp(12px,2.2vh,28px)}
+  .tk-title  {margin-bottom:clamp(12px,2.2vh,28px)}
+  .tk-mid    {margin-bottom:clamp(16px,2.8vh,36px)}
+  .tk-nav    {margin-bottom:0}
+  .tk-foot   {margin-top:auto;padding-top:clamp(24px,4vh,60px)}
+
+  .tk-title{font-size:clamp(64px,9.4vw,208px)}
+  .tk-name{font-size:clamp(26px,2.9vw,56px)}
   .tk-nav{max-width:min(100%,1100px)}
   .tk-nav a{font-size:clamp(19px,1.5vw,26px);padding:clamp(16px,2vh,26px) 20px}
-  .tk-top,.tk-mid,.tk-namerow,.tk-nav{margin-bottom:0}
-  /* let space-between share the slack across the whole ticket instead of
-     the foot's auto margin swallowing it into one gap at the bottom */
-  .tk-foot{margin-top:0}
-  .tk-title{margin-bottom:0}
 }
 
 /* ============================ SHARED PAGE CHROME ============================ */
@@ -501,7 +479,7 @@ body.has-won .seal-top{fill:#F6F3EEa8}
   .about-grid{grid-template-columns:1fr;gap:34px}
   .media-grid{grid-template-columns:1fr}
   .project-media[data-layout="half"]{grid-column:1/-1}
-  .tk-body{padding:34px 26px 26px}
+  .tk-body{padding:30px 18px 22px}
   .tk-nav{grid-template-columns:1fr;grid-template-rows:none;gap:9px}
   .tk-nav > a{grid-row:auto}
   .scratch-cap{grid-column:1;grid-row:auto}
@@ -512,11 +490,8 @@ body.has-won .seal-top{fill:#F6F3EEa8}
   .foot-social{padding-bottom:0}
   .page-nav .links{gap:15px}
   .page-nav{font-size:11px;letter-spacing:.11em}
-  body.is-home{padding:22px 14px}
+  body.is-home{padding:16px 10px}
 
-  /* the seal drops under the sub-line rather than squeezing it */
-  .tk-mid{flex-direction:row-reverse;align-items:flex-start;justify-content:flex-end;gap:22px}
-  .tk-mid .tk-sub{padding-top:6px}
 
 }
 @media (max-width:520px){
