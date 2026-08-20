@@ -7,7 +7,7 @@
 <meta name="description" content="Mohammed Essam, copywriter. Cairo, Dubai, Madrid. Work that ran, and work that didn't.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Bodoni+Moda:opsz,wght@6..96,400..900&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Syne:wght@400..800&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body class="is-home">
@@ -17,7 +17,7 @@
 
   <div class="tk-band">
     <span id="tkBand"></span>
-    <span class="stars" aria-hidden="true">★★★★★</span>
+    <span class="tk-name" id="tkName"></span>
   </div>
 
   <div class="tk-body">
@@ -80,6 +80,9 @@
   set('tkSerial', T.serial);
   set('tkSub', T.sub);
   set('tkTerms', T.terms);
+  /* the home page has no nav bar, so this band is the only thing on the
+     screen that says whose site this is. Always upper case. */
+  set('tkName', (T.name || 'MOHAMMED ESSAM').toUpperCase());
 
   if (hasWon) {
     var ul = document.getElementById('wonList');
@@ -101,7 +104,122 @@
     i.textContent = item.num || '';
     a.appendChild(i);
     nav.appendChild(a);
+    if (item.scratch) makeScratch(a, item);
   });
+
+  /* ---- the covered box ----------------------------------------
+     The last punch is under foil. They scratch it expecting a prize
+     and the prize is the ask. This is the one place a scratch panel
+     earns its keep: it hides a punchline, not information.
+
+     It can never lock anyone out of contacting him:
+       - a plain click (no drag) uncovers it immediately
+       - keyboard focus uncovers it
+       - once uncovered it stays uncovered on later visits
+       - no canvas support, or reduced motion, and it never covers at all
+     -------------------------------------------------------------- */
+  function makeScratch(link, item) {
+    var KEY = 'scratched_' + (item.num || '03');
+    var already = false;
+    try { already = localStorage.getItem(KEY) === '1'; } catch (e) {}
+    var canScratch = !!document.createElement('canvas').getContext &&
+      !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (already || !canScratch) { link.classList.add('scratched'); return; }
+
+    link.classList.add('covered');
+    var foil = document.createElement('canvas');
+    foil.className = 'foil';
+    foil.setAttribute('aria-hidden', 'true');
+    link.appendChild(foil);
+
+    var ctx = foil.getContext('2d', { willReadFrequently: true });
+    var drawing = false, moved = 0, checks = 0, open = false;
+
+    function paint() {
+      var r = link.getBoundingClientRect();
+      if (!r.width || !r.height) return;
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      foil.width = Math.round(r.width * dpr);
+      foil.height = Math.round(r.height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.fillStyle = '#8d8880';
+      ctx.fillRect(0, 0, r.width, r.height);
+      ctx.strokeStyle = 'rgba(255,255,255,.16)';
+      ctx.lineWidth = 1;
+      for (var y = 0; y < r.height; y += 4) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(r.width, y + (Math.random() * 1.6 - .8));
+        ctx.stroke();
+      }
+      ctx.fillStyle = 'rgba(20,18,14,.5)';
+      ctx.font = '600 11px "Barlow Condensed", sans-serif';
+      ctx.textAlign = 'center';
+      try { ctx.letterSpacing = '2px'; } catch (e) {}
+      ctx.fillText((item.scratchHint || 'Scratch to reveal').toUpperCase(),
+        r.width / 2, r.height / 2 + 4);
+    }
+
+    function reveal() {
+      if (open) return;
+      open = true;
+      link.classList.remove('covered');
+      link.classList.add('scratched');
+      if (foil.parentNode) foil.parentNode.removeChild(foil);
+      try { localStorage.setItem(KEY, '1'); } catch (e) {}
+    }
+
+    function at(e) {
+      var r = foil.getBoundingClientRect();
+      var p = e.touches ? e.touches[0] : e;
+      return [p.clientX - r.left, p.clientY - r.top];
+    }
+    function dig(x, y) {
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.beginPath();
+      ctx.arc(x, y, 17, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    function cleared() {
+      var d = ctx.getImageData(0, 0, foil.width, foil.height).data, c = 0, t = 0;
+      for (var i = 3; i < d.length; i += 4 * 160) { t++; if (d[i] < 26) c++; }
+      return t ? c / t : 0;
+    }
+    function check() { if (!open && ++checks % 5 === 0 && cleared() > .45) reveal(); }
+
+    foil.addEventListener('mousedown', function (e) {
+      drawing = true; moved = 0; var c = at(e); dig(c[0], c[1]); e.preventDefault();
+    });
+    foil.addEventListener('mousemove', function (e) {
+      if (!drawing) return; moved++; var c = at(e); dig(c[0], c[1]); check(); e.preventDefault();
+    });
+    window.addEventListener('mouseup', function () {
+      if (!drawing) return;
+      drawing = false;
+      /* a click with no drag: they tapped it, so just open it */
+      if (moved < 3) reveal(); else check();
+    });
+    foil.addEventListener('touchstart', function (e) {
+      drawing = true; moved = 0; var c = at(e); dig(c[0], c[1]); e.preventDefault();
+    }, { passive: false });
+    foil.addEventListener('touchmove', function (e) {
+      if (!drawing) return; moved++; var c = at(e); dig(c[0], c[1]); check(); e.preventDefault();
+    }, { passive: false });
+    foil.addEventListener('touchend', function () {
+      drawing = false;
+      if (moved < 3) reveal(); else check();
+    });
+
+    /* keyboard users never meet the foil */
+    link.addEventListener('focus', reveal);
+    link.addEventListener('click', function (e) {
+      if (!open) { e.preventDefault(); reveal(); }
+    });
+
+    window.addEventListener('resize', function () { if (!open) paint(); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(paint); else paint();
+  }
 
   /* ---- the quiet jokes. each one is optional: blank it in
           content.js and the slot simply goes silent. ---- */

@@ -33,9 +33,10 @@ WHAT TO DROP IN
   If the zip has 162 styles, you only need one: a Regular or a Medium.
   The variable file, if there is one, is the best single choice.
 
-UNTIL THEN
-  The headline falls back to Bodoni Moda, which is the closest free
-  match, so the page never looks broken while the file is missing.
+IF YOU NEVER ADD IT
+  The headline uses Syne, which is now the intended look rather than a
+  placeholder, so you can ignore this whole file if you are happy with it.
+  Adding a Moniqa file will silently override Syne.
 
 ONE NOTE
   .otf and .ttf are heavier than .woff2 (often 5-10x). If the download

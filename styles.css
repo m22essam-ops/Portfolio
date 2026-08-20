@@ -13,8 +13,8 @@
    own page (behance.net/gallery/114431757) and drop whatever you
    download into a "fonts" folder next to this file. Any ONE of the
    names below is enough, the rest are ignored.
-   Until then the page falls back to Bodoni Moda, which is the
-   closest free stand-in, so nothing looks broken while you wait.
+   Until then the page uses Syne, which is the chosen look now,
+   not a placeholder. Moniqa only takes over if you add the file.
    -------------------------------------------------------------- */
 @font-face{
   font-family:"Moniqa";
@@ -47,8 +47,8 @@
   --line:#0B0A091f;
   --well:#E4DFD2;
 
-  /* the home headline. Moniqa first, Bodoni Moda while it is missing. */
-  --display-home:"Moniqa","Bodoni Moda","Bricolage Grotesque",Georgia,serif;
+  /* the home headline. Syne is the look; Moniqa only if you add the file. */
+  --display-home:"Moniqa","Syne","Bricolage Grotesque",sans-serif;
   --display:"Bricolage Grotesque","Hanken Grotesk",sans-serif;
   --mono:"Barlow Condensed","Hanken Grotesk",sans-serif;
 
@@ -122,7 +122,11 @@ body.is-home{
   padding:11px 30px;font-size:12px;flex:none;
   display:flex;justify-content:space-between;align-items:center;gap:16px;
 }
-.tk-band .stars{letter-spacing:.3em;opacity:.5}
+.tk-name{
+  font-family:var(--mono);
+  font-weight:700;letter-spacing:.22em;
+  white-space:nowrap;
+}
 
 .tk-body{padding:44px 46px 34px;flex:1;display:flex;flex-direction:column}
 
@@ -138,11 +142,11 @@ body.is-home{
   margin-bottom:20px;
 }
 
-/* the headline. Moniqa when present, Bodoni Moda until then. */
+/* the headline: Syne. */
 .tk-title{
   font-family:var(--display-home);
-  font-weight:700;
-  letter-spacing:-.02em;
+  font-weight:800;
+  letter-spacing:-.035em;
   line-height:.92;
   margin:0 0 18px;
   font-size:clamp(52px,10.5vw,124px);
@@ -160,7 +164,7 @@ body.is-home{
 .proof{margin-bottom:34px}
 .proof .win-line{
   font-family:var(--display-home);
-  font-weight:700;letter-spacing:-.015em;line-height:1.05;
+  font-weight:700;letter-spacing:-.025em;line-height:1.08;
   font-size:clamp(23px,3.4vw,34px);
   margin:0 0 8px;color:var(--ink);
 }
@@ -179,6 +183,24 @@ body.is-home{
 .tk-nav a i{font-style:normal;font-family:var(--mono);font-size:12px;letter-spacing:.14em;opacity:.45}
 .tk-nav a:hover{background:var(--red);border-color:var(--red);color:var(--paper)}
 .tk-nav a:hover i{opacity:.8}
+
+/* the covered box: foil sits over the punch until it is scratched off */
+.tk-nav a.covered{position:relative;overflow:hidden}
+.tk-nav a.covered .foil{
+  position:absolute;inset:0;width:100%;height:100%;
+  cursor:crosshair;touch-action:none;z-index:2;
+}
+.tk-nav a.covered:hover{background:none;border-color:var(--ink);color:var(--ink)}
+.tk-nav a.scratched{
+  background:var(--red);border-color:var(--red);color:var(--paper);
+  animation:pop .34s var(--ease);
+}
+.tk-nav a.scratched i{opacity:.75}
+@keyframes pop{
+  0%{transform:scale(.97)}
+  55%{transform:scale(1.025)}
+  100%{transform:scale(1)}
+}
 
 .tk-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:26px;margin-top:auto}
 /* explicit box: in the stacked layout the flex axis turns vertical,
@@ -216,6 +238,10 @@ body.has-won .tk-badge{background:var(--ink)}
   .tk-nav{max-width:min(100%,1100px)}
   .tk-nav a{font-size:clamp(19px,1.5vw,26px);padding:clamp(16px,2vh,26px) 20px}
   .tk-top,.tk-sub,.tear,.tk-badge,.proof,.tk-nav{margin-bottom:0}
+  /* let space-between share the slack across the whole ticket instead of
+     the foot's auto margin swallowing it into one gap at the bottom */
+  .tk-foot{margin-top:0}
+  .tk-title{margin-bottom:0}
 }
 
 /* ============================ SHARED PAGE CHROME ============================ */
@@ -231,7 +257,6 @@ body.has-won .tk-badge{background:var(--ink)}
   text-decoration:none;font-family:var(--display);
   font-weight:800;letter-spacing:-.03em;text-transform:none;font-size:19px;
 }
-.page-nav .logo em{color:var(--red);font-style:normal}
 .page-nav .links{display:flex;gap:24px}
 .page-nav .links a{text-decoration:none;opacity:.55;transition:opacity .16s}
 .page-nav .links a:hover,.page-nav .links a.on{opacity:1;color:var(--red)}

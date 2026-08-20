@@ -11,6 +11,7 @@ window.SITE_CONTENT = {
     badge: "available for work"
   },
   ticket: {
+    name: "MOHAMMED ESSAM",
     band: "If I play, I play to win",
     game: "Instant win · Game no. 13 · Price: free",
     serial: "No. 0000000 · Exp. never",
@@ -39,9 +40,11 @@ window.SITE_CONTENT = {
         url: "about.html"
       },
       {
-        label: "Say hi",
+        label: "Hire me?",
         num: "03",
-        url: "mailto:m22essam@gmail.com"
+        url: "mailto:m22essam@gmail.com",
+        "scratch": true,
+        scratchHint: "Scratch to reveal"
       }
     ]
   },
@@ -58,9 +61,8 @@ window.SITE_CONTENT = {
     note: "Some are real. Some are spec. None of them are in Japanese.",
     producedLabel: "Produced",
     presentedLabel: "Spec",
-    producedLimit: 0,
-    presentedLimit: 0,
-    produced: [
+    limit: 0,
+    projects: [
       {
         slug: "yango-unstoppable-rides",
         title: "Unstoppable Rides",
@@ -90,6 +92,21 @@ window.SITE_CONTENT = {
             type: "video",
             src: "https://www-ccv.adobe.io/v1/player/ccv/HU9Uy-NJbzM/embed?bgcolor=%23191919&lazyLoading=true&api_key=BehancePro2View",
             caption: "Pakistan: No-Haggle, No-Worries"
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
           }
         ],
         credits: [
@@ -123,7 +140,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        "draft": false
+        "draft": false,
+        "ran": true
       },
       {
         slug: "pringles-champions-of-fun",
@@ -164,6 +182,21 @@ window.SITE_CONTENT = {
             type: "video",
             src: "https://www-ccv.adobe.io/v1/player/ccv/8g88kBNAEE4/embed?bgcolor=%23191919&lazyLoading=true&api_key=BehancePro2View",
             caption: ""
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
           }
         ],
         credits: [
@@ -197,7 +230,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        "draft": false
+        "draft": false,
+        "ran": true
       },
       {
         slug: "rivan-tower",
@@ -218,6 +252,21 @@ window.SITE_CONTENT = {
           {
             type: "video",
             src: "https://www-ccv.adobe.io/v1/player/ccv/QP3a6A_8ZBQ/embed?bgcolor=%23191919&lazyLoading=true&api_key=BehancePro2View",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
             caption: ""
           }
         ],
@@ -256,7 +305,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        "draft": false
+        "draft": false,
+        "ran": true
       },
       {
         slug: "pringles-cheesy-cheese",
@@ -281,6 +331,21 @@ window.SITE_CONTENT = {
           {
             type: "video",
             src: "https://www-ccv.adobe.io/v1/player/ccv/I2Dv8Adn5NA/embed?bgcolor=%23191919&lazyLoading=true&api_key=BehancePro2View",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
             caption: ""
           }
         ],
@@ -307,7 +372,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        "draft": false
+        "draft": false,
+        "ran": true
       },
       {
         slug: "momtaz-cement-chronicles",
@@ -343,6 +409,16 @@ window.SITE_CONTENT = {
           {
             type: "image",
             src: "live/al-momtaz-chronicals-01.jpg",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
             caption: ""
           }
         ],
@@ -405,7 +481,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        "draft": false
+        "draft": false,
+        "ran": true
       },
       {
         slug: "modon-actors-too-seriously",
@@ -426,6 +503,21 @@ window.SITE_CONTENT = {
           {
             type: "video",
             src: "https://www-ccv.adobe.io/v1/player/ccv/DyYbX8i6f_f/embed?bgcolor=%23191919&lazyLoading=true&api_key=BehancePro2View",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
             caption: ""
           }
         ],
@@ -488,7 +580,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        "draft": false
+        "draft": false,
+        "ran": true
       },
       {
         slug: "song-for-the-cashless",
@@ -514,6 +607,21 @@ window.SITE_CONTENT = {
             type: "video",
             src: "https://www-ccv.adobe.io/v1/player/ccv/2SNMDG_q6Ma/embed?bgcolor=%23bebebe&autohide=false&lazyLoading=true&maxframewidth=6400&maxframeheight=75&api_key=BehancePro2View",
             caption: "Audio only"
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
           }
         ],
         credits: [
@@ -559,7 +667,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        "draft": false
+        "draft": false,
+        "ran": true
       },
       {
         slug: "afg-skybridge",
@@ -579,6 +688,21 @@ window.SITE_CONTENT = {
           {
             type: "video",
             src: "https://www-ccv.adobe.io/v1/player/ccv/AD-9zoaBeNQ/embed?bgcolor=%23191919&lazyLoading=true&api_key=BehancePro2View",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
             caption: ""
           }
         ],
@@ -609,7 +733,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        "draft": false
+        "draft": false,
+        "ran": true
       },
       {
         slug: "red-expo-got-the-keys",
@@ -691,10 +816,19 @@ window.SITE_CONTENT = {
           {
             role: "Agency",
             name: "Social Nuts"
+          },
+          {
+            role: "",
+            name: ""
+          },
+          {
+            role: "",
+            name: ""
           }
         ],
         next: {},
-        "draft": false
+        "draft": false,
+        "ran": true
       },
       {
         slug: "quarantine-games",
@@ -750,6 +884,11 @@ window.SITE_CONTENT = {
             type: "image",
             src: "live/the-quarantine-game-bnk-alhthr-08.jpg",
             caption: ""
+          },
+          {
+            type: "video",
+            src: "",
+            caption: ""
           }
         ],
         credits: [
@@ -760,13 +899,20 @@ window.SITE_CONTENT = {
           {
             role: "Agency",
             name: "Social Nuts"
+          },
+          {
+            role: "",
+            name: ""
+          },
+          {
+            role: "",
+            name: ""
           }
         ],
         next: {},
-        "draft": false
-      }
-    ],
-    presented: [
+        "draft": false,
+        "ran": true
+      },
       {
         slug: "true-colors-of-dominos",
         title: "The True Colors",
@@ -822,10 +968,15 @@ window.SITE_CONTENT = {
           {
             role: "Client",
             name: "Domino's, Miami Ad School Madrid"
+          },
+          {
+            role: "",
+            name: ""
           }
         ],
         next: {},
-        "draft": false
+        "draft": false,
+        "ran": false
       },
       {
         slug: "pop-the-pressure",
@@ -889,10 +1040,15 @@ window.SITE_CONTENT = {
           {
             role: "Client",
             name: "Tuborg for D&AD, Miami Ad School Madrid"
+          },
+          {
+            role: "",
+            name: ""
           }
         ],
         next: {},
-        "draft": false
+        "draft": false,
+        "ran": false
       },
       {
         slug: "canesten-lets-call-it",
@@ -933,6 +1089,11 @@ window.SITE_CONTENT = {
             src: "Window Sign Mockup.jpg",
             caption: "",
             layout: "full"
+          },
+          {
+            type: "video",
+            src: "",
+            caption: ""
           }
         ],
         credits: [
@@ -954,7 +1115,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        "draft": false
+        "draft": false,
+        "ran": false
       },
       {
         slug: "nivea-never-see-the-sun",
@@ -996,6 +1158,11 @@ window.SITE_CONTENT = {
             type: "image",
             src: "live/nivea-i-might-never-see-the-sun-again-05.jpg",
             caption: ""
+          },
+          {
+            type: "video",
+            src: "",
+            caption: ""
           }
         ],
         credits: [
@@ -1017,7 +1184,8 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        "draft": false
+        "draft": false,
+        "ran": false
       },
       {
         slug: "oumph-like-any-ad",
@@ -1063,6 +1231,11 @@ window.SITE_CONTENT = {
             type: "image",
             src: "live/oumph-like-any-ad-06.jpg",
             caption: ""
+          },
+          {
+            type: "video",
+            src: "",
+            caption: ""
           }
         ],
         credits: [
@@ -1077,10 +1250,15 @@ window.SITE_CONTENT = {
           {
             role: "Client",
             name: "Oumph!, Miami Ad School"
+          },
+          {
+            role: "",
+            name: ""
           }
         ],
         next: {},
-        "draft": false
+        "draft": false,
+        "ran": false
       },
       {
         slug: "the-mumbled-code",
@@ -1102,16 +1280,44 @@ window.SITE_CONTENT = {
             type: "video",
             src: "babyshop.mp4",
             caption: ""
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
           }
         ],
         credits: [
           {
             role: "Copywriter",
             name: "Mohammed Essam"
+          },
+          {
+            role: "",
+            name: ""
+          },
+          {
+            role: "",
+            name: ""
+          },
+          {
+            role: "",
+            name: ""
           }
         ],
         next: {},
-        "draft": false
+        "draft": false,
+        "ran": false
       },
       {
         slug: "nothing-in-my-dreams",
@@ -1126,15 +1332,49 @@ window.SITE_CONTENT = {
         story: [
           "Everyone on earth sleeps, and nearly everyone has had the dream where you are running from something and your legs turn to jelly. That is what dreams are actually like. So why do brands keep polishing products and selling them as dream products? Nothing Phone 3 launched #NOTHINGINMYDREAMS, a protest against almost everything."
         ],
-        media: [],
+        media: [
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          },
+          {
+            type: "video",
+            src: "",
+            caption: ""
+          }
+        ],
         credits: [
           {
             role: "Copywriter",
             name: "Mohammed Essam"
+          },
+          {
+            role: "",
+            name: ""
+          },
+          {
+            role: "",
+            name: ""
+          },
+          {
+            role: "",
+            name: ""
           }
         ],
         next: {},
-        "draft": true
+        "draft": true,
+        "ran": false
       },
       {
         slug: "murder-your-thirst",
@@ -1147,10 +1387,49 @@ window.SITE_CONTENT = {
         sticker: "Concept only",
         tagline: "",
         story: [],
-        media: [],
-        credits: [],
+        media: [
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          },
+          {
+            type: "video",
+            src: "",
+            caption: ""
+          }
+        ],
+        credits: [
+          {
+            role: "",
+            name: ""
+          },
+          {
+            role: "",
+            name: ""
+          },
+          {
+            role: "",
+            name: ""
+          },
+          {
+            role: "",
+            name: ""
+          }
+        ],
         next: {},
-        "draft": true
+        "draft": true,
+        "ran": false
       }
     ]
   },

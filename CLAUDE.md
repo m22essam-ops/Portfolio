@@ -48,10 +48,18 @@ owner chose to keep it. Do not re-litigate it; do not quietly soften it either.
 The home page is one full-screen lottery ticket. No scroll. Nav lives inside
 it as three punch boxes. Every line of it reads from `ticket` in content.js.
 
-**The scratch panels are gone** (Aug 2026). A scratch panel demands labour and
-pays a joke, it fails on mobile, and it was hiding the best fact on the site.
-Do not reinstate them. The proof line ("Rivan Tower sold out in a week") is now
-printed in the open where people can read it.
+**The full-width scratch panels are gone** (Aug 2026). They demanded labour and
+paid a joke, they failed on mobile, and they hid the best fact on the site. The
+proof line is printed in the open now. Do not bring those back.
+
+**ONE scratch survives, and it is the exception that proves the rule** (owner's
+idea, Aug 2026): the third nav punch is under foil. A CD scratches it expecting
+a prize and it says "Hire me?". This one works because it hides a *punchline*,
+not information, and the punchline is the call to action. It can never lock
+anyone out: a click without dragging opens it, keyboard focus opens it, it stays
+open on later visits via localStorage, and it never covers at all when the
+browser lacks canvas or the visitor asked for reduced motion. Keep every one of
+those escape hatches if you touch it.
 
 **The awards switch.** `ticket.awards` is an array. Empty, the site runs the
 "award-losing" version. Add an award and the home page flips itself to a
@@ -94,9 +102,25 @@ and pastiche reads as old. That was the owner's exact complaint, twice. Modern
 loud is a single high-chroma accent, enormous type, a tight grid and a lot of
 empty space. Keep it that way.
 
-Type: **Bricolage Grotesque** is display (headline, titles, nav punches).
-**Barlow Condensed** is the system voice (labels, serials, small print, stickers).
-**Hanken Grotesk** is body copy.
+Pages other than the home are an **off-white gallery** (`--bg #F2EEE5`), not
+dark: the campaign stills sit better on it and it reads more editorial. The
+page palette is tokenised (`--bg/--fg/--line/--well`) so it flips in one place.
+
+Type: **Syne** is the home headline and the proof line. **Bricolage Grotesque**
+is display elsewhere (section headings, card titles, nav punches). **Barlow
+Condensed** is the system voice (labels, serials, small print, stickers, and the
+name in the ticket band). **Hanken Grotesk** is body copy.
+
+Moniqa (Rajesh Rajput, SIL OFL 1.1) is first in the home headline stack and will
+silently take over if anyone drops a font file into `fonts/`. It is deliberately
+not committed: the download is script-gated and the mirrors repackage fonts.
+The owner rejected Bodoni Moda as the stand-in; Syne replaced it and is the
+intended look, not a placeholder.
+
+The logo is plain text with **no red dot**. The trailing period used to be
+wrapped in an `<em>` by site.js and coloured red. Removed 20 Aug 2026. Note
+site.js rewrites `.logo` from `nav.logo` on every page, so editing the HTML
+alone will not change it.
 
 History worth knowing: earlier passes tried green-felt casino ("too 2009"),
 warm-paper editorial, a distressed stamp-print look, and a warm espresso and
@@ -106,8 +130,16 @@ caramel palette with a grain photo. All rejected. Don't reintroduce them.
 ## Site layout
 
 **index.html** — the ticket, full screen, no scroll:
-band → game/serial microtype → badge → two-line headline → sub-line → tear
-rule → the proof line → three nav punch boxes → barcode + small print.
+band (owner's line, plus **MOHAMMED ESSAM** upper case on the right) →
+game/serial microtype → badge → two-line headline → sub-line → tear rule →
+the proof line → three nav punch boxes, the last one under scratch foil →
+barcode + small print.
+
+The name in the band is not decoration: the home page has no nav bar, so it is
+the only thing on that screen identifying whose site it is. Do not remove it.
+
+On landscape screens 900px and wider the ticket fills **95vw by 95vh** and the
+body distributes its blocks down the height.
 
 **work.html** — dual mode. No `?slug=` renders the work index; with a slug it
 renders that project's page.
@@ -115,10 +147,15 @@ renders that project's page.
 The work index is **ONE uniform grid**, two columns, 4:3, best first. The
 produced/spec split was killed as a visitor-facing idea (Aug 2026): it made
 people sort work by a criterion they don't care about and put the school work
-in a labelled ghetto. `work.produced[]` and `work.presented[]` still exist as
-the data shape, because "did it run" is a real fact and admin is built around
-them, but the site concatenates them into one flow and the visitor never sees
-a split.
+in a labelled ghetto.
+
+As of 20 Aug 2026 it is also gone from the **data**: there is one
+`work.projects[]` array in site order, and each project carries `ran: true`
+(produced) or `ran: false` (spec, school, unsold). The owner asked for this so
+he could rank a spec piece above a produced one. `work.limit` caps how many
+render, 0 = all. Admin shows a single list with Move up / Move down across the
+whole thing and a tickbox for `ran`. Old two-array files still load: both
+work.html and admin.html fold them into one list on read.
 
 **The sticker carries the status instead.** Every project has a `sticker`
 field: "Sold out in a week", "Never left the deck", "Won nothing". Short and

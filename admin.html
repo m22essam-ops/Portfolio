@@ -316,15 +316,11 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
   <!-- ================= PROJECTS ================= -->
   <section class="admin-section">
     <h2>1. Projects</h2>
-    <p class="hint"><strong>The site shows these as one single grid</strong>, in the order below: everything in the first group, then everything in the second. Visitors never see a split or a tab. The two groups are only here so you can keep track of what actually ran, and each project's <em>sticker</em> is what tells a visitor its status. Best work first. A project needs a "slug" to be clickable, a story to have text on its page, and a cover image to look right.</p>
+    <p class="hint"><strong>One list, in the exact order the site shows them.</strong> Use Move up / Move down to rearrange anything against anything, produced or spec. Whether a piece ran is now a tickbox inside each project, not a separate list. Best work first. A project needs a "slug" to be clickable, a story to have text on its page, and a cover image to look right.</p>
 
-    <div class="group-head produced">It ran (produced)</div>
-    <div id="produced-list"></div>
-    <button class="add-btn" data-act="add-project" data-group="produced" type="button">+ Add project (it ran)</button>
-
-    <div class="group-head presented">It didn't run (spec, school, unsold)</div>
-    <div id="presented-list"></div>
-    <button class="add-btn" data-act="add-project" data-group="presented" type="button">+ Add project (didn't run)</button>
+    <div class="group-head produced">All projects, in the order they appear on the site</div>
+    <div id="projects-list"></div>
+    <button class="add-btn" data-act="add-project" data-group="projects" type="button">+ Add project</button>
   </section>
 
   <!-- ================= THE TICKET (home page) ================= -->
@@ -396,11 +392,8 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
       <label class="field"><span>Status word for work that ran</span><input data-path="work.producedLabel" placeholder="Produced"></label>
       <label class="field"><span>Status word for work that didn't</span><input data-path="work.presentedLabel" placeholder="Spec"></label>
     </div>
-    <div class="grid2">
-      <label class="field"><span>Show this many produced projects (0 = show all)</span><input data-path="work.producedLimit" type="number" min="0" placeholder="8"></label>
-      <label class="field"><span>Show this many presented projects (0 = show all)</span><input data-path="work.presentedLimit" type="number" min="0" placeholder="0"></label>
-    </div>
-    <p class="hint" style="margin-bottom:0">Only the first N projects in each list are shown on the site. Reorder projects to choose <em>which</em> ones appear. To hide a single project entirely, tick <strong>Keep in drafts</strong> inside it — it stays in the editor but never renders.</p>
+    <label class="field"><span>Show only the first N projects (0 = show all)</span><input data-path="work.limit" type="number" min="0" placeholder="0"></label>
+    <p class="hint" style="margin-bottom:0">Reorder projects in the list above to choose <em>which</em> ones appear. To hide a single project entirely, tick <strong>Keep in drafts</strong> inside it — it stays in the editor but never renders.</p>
   </section>
 
   <!-- ================= ABOUT ================= -->
@@ -490,10 +483,20 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
     M.ticket.nav.forEach(function (n, i) { if (!n.num) n.num = '0' + (i + 1); });
     M.jokes = M.jokes || {};
     M.work = M.work || {};
-    if (!Array.isArray(M.work.produced)) M.work.produced = [];
-    if (!Array.isArray(M.work.presented)) M.work.presented = [];
-    if (typeof M.work.producedLimit !== 'number') M.work.producedLimit = 8;
-    if (typeof M.work.presentedLimit !== 'number') M.work.presentedLimit = 0;
+    /* one list. an older file with produced[]/presented[] is folded into it
+       once, keeping produced first, and the two arrays are dropped. */
+    if (!Array.isArray(M.work.projects)) {
+      var merged = [];
+      (M.work.produced || []).forEach(function (p) { p.ran = true; merged.push(p); });
+      (M.work.presented || []).forEach(function (p) { p.ran = false; merged.push(p); });
+      M.work.projects = merged;
+    }
+    delete M.work.produced;
+    delete M.work.presented;
+    delete M.work.producedLimit;
+    delete M.work.presentedLimit;
+    M.work.projects.forEach(function (p) { if (typeof p.ran !== 'boolean') p.ran = true; });
+    if (typeof M.work.limit !== 'number') M.work.limit = 0;
     M.about = M.about || {};
     if (!Array.isArray(M.about.paragraphs)) M.about.paragraphs = [];
     if (!Array.isArray(M.about.skills)) M.about.skills = [];
@@ -506,7 +509,7 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
 
   /* ---------------- rendering ---------------- */
   function emptyProject() {
-    return { slug: '', title: '', client: '', category: '', year: '', sticker: '', tagline: '', image: '', alt: '', story: [], media: [], credits: [], draft: false, next: {} };
+    return { slug: '', title: '', client: '', category: '', year: '', sticker: '', tagline: '', ran: true, image: '', alt: '', story: [], media: [], credits: [], draft: false, next: {} };
   }
 
   function projectCardHtml(p, group, idx) {
@@ -573,6 +576,7 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
           '<small>Sits on the corner of the card. Keep it short and true. This is what replaced the produced/spec tabs, so it is doing real work. Leave blank for no sticker.</small></label>' +
         '<label class="field"><span>One-line summary (under the title on the grid)</span>' +
           '<input data-path="' + base + '.tagline" placeholder="e.g. Own the room, do not rent it." value="' + esc(p.tagline) + '"></label>' +
+        '<label class="field check"><input data-path="' + base + '.ran" type="checkbox"' + (p.ran !== false ? ' checked' : '') + '> It got produced (untick for spec, school or unsold work)</label>' +
         '<label class="field check"><input data-path="' + base + '.draft" type="checkbox"' + (p.draft ? ' checked' : '') + '> Keep in drafts (hidden from the site)</label>' +
         '<label class="field"><span>Link address (slug)</span><input data-path="' + base + '.slug" placeholder="lowercase-no-spaces, e.g. yango-wedding-rush" value="' + esc(p.slug) + '"><small>Leave empty and the card will not link anywhere.</small></label>' +
         '<label class="field"><span>Cover image</span>' +
@@ -667,8 +671,7 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
         ? (Array.isArray(v) ? v : []).join('\n')
         : (v == null ? '' : v);
     });
-    renderProjects('produced');
-    renderProjects('presented');
+    renderProjects('projects');
     renderExperience();
     renderLinks();
   }

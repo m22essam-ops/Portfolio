@@ -6,14 +6,14 @@
 <title id="pageTitle">The work · Mohammed Essam</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Bodoni+Moda:opsz,wght@6..96,400..900&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Syne:wght@400..800&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
 <nav class="page-nav">
   <div class="wrap">
-    <a class="logo" href="index.html">mohammed essam<em>.</em></a>
+    <a class="logo" href="index.html">mohammed essam</a>
     <div class="links">
       <a href="work.html" class="on">The work</a>
       <a href="about.html">Who I am</a>
@@ -53,9 +53,15 @@
     });
   }
 
-  /* One flow. The produced/spec arrays still hold the fact of what ran,
-     but the visitor never sees two lists: the sticker says it instead. */
+  /* ONE list, in the order it sits in content.js. Whether a piece ran is
+     a flag on the project (ran), not a separate array, so everything can
+     be reordered against everything else. Old two-array files still load. */
   function allWork() {
+    if (Array.isArray(W.projects)) {
+      var out = live(W.projects).map(function (p) { return { p: p, ran: p.ran !== false }; });
+      var lim = parseInt(W.limit, 10);
+      return (lim > 0) ? out.slice(0, lim) : out;
+    }
     return live(W.produced).map(function (p) { return { p: p, ran: true }; })
       .concat(live(W.presented).map(function (p) { return { p: p, ran: false }; }));
   }
@@ -183,10 +189,18 @@
     if (found) {
       renderProject(found);
     } else {
+      /* "go home" in the broken-link line should actually go home, so the
+         last word of it gets wired to the home page. If the line doesn't
+         say "home", a link is added after it instead. */
+      var line = esc(J.notFound || 'That one is not here.');
+      var linked = /home/i.test(line)
+        ? line.replace(/home(?![\s\S]*home)/i, '<a href="index.html">home</a>')
+        : line + ' <a href="index.html">Home</a>';
+
       page.innerHTML = '<section class="project"><div class="wrap">' +
         '<a class="back-link" href="work.html">← All work</a>' +
         '<h1 class="project-title">Not found</h1>' +
-        '<div class="project-body"><p>' + esc(J.notFound || 'That one is not here.') + '</p></div>' +
+        '<div class="project-body"><p>' + linked + '</p></div>' +
         '</div></section>';
     }
   } else {

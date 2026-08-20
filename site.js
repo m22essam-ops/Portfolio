@@ -5,10 +5,11 @@
   var C = window.SITE_CONTENT || {};
 
   /* ----- top nav ----- */
+  /* plain text, no red dot: the trailing period used to be wrapped in an
+     <em> and coloured, which is the "red dot" that got removed. */
   var logo = document.querySelector('.logo');
   if (logo && C.nav && C.nav.logo) {
-    var t = C.nav.logo;
-    logo.innerHTML = t.replace(/\.$/, '<em>.</em>');
+    logo.textContent = String(C.nav.logo).replace(/\s*\.\s*$/, '');
   }
   var badgeText = document.querySelector('.badge-text');
   if (badgeText && C.nav && C.nav.badge) {
