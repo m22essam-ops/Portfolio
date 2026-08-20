@@ -330,15 +330,17 @@ body.has-won .seal-top{fill:#F6F3EEa8}
 .page-nav .logo b{
   display:block;font-weight:800;letter-spacing:.01em;
   font-size:19px;text-transform:uppercase;
+  white-space:nowrap;      /* the name is one line or it is not a lockup */
 }
 .page-nav .logo span{
   display:block;margin-top:3px;
   font-family:var(--mono);font-weight:500;
   text-transform:lowercase;letter-spacing:.16em;
   font-size:11.5px;color:var(--fg-faint);
+  white-space:nowrap;
 }
-.page-nav .links{display:flex;gap:24px}
-.page-nav .links a{text-decoration:none;opacity:.55;transition:opacity .16s}
+.page-nav .links{display:flex;gap:24px;flex:none}
+.page-nav .links a{text-decoration:none;opacity:.55;transition:opacity .16s;white-space:nowrap}
 .page-nav .links a:hover,.page-nav .links a.on{opacity:1;color:var(--red)}
 
 .page-head{padding:88px 0 44px}
@@ -483,7 +485,8 @@ body.has-won .seal-top{fill:#F6F3EEa8}
   .scratch-cap{grid-column:1;grid-row:auto}
   .tk-foot{flex-direction:column;align-items:flex-start;gap:16px}
   .tk-terms{text-align:left}
-  .page-nav .links{gap:16px}
+  .page-nav .links{gap:15px}
+  .page-nav{font-size:11px;letter-spacing:.11em}
   body.is-home{padding:22px 14px}
 
   /* the seal drops under the sub-line rather than squeezing it */
@@ -496,6 +499,8 @@ body.has-won .seal-top{fill:#F6F3EEa8}
   .credits-list li span{flex:none}
   .page-nav .logo b{font-size:16px}
   .page-nav .logo span{font-size:10.5px}
+  .page-nav .links{gap:13px}
+  .page-nav{font-size:10.5px;letter-spacing:.1em}
   .tk-band{padding:9px 18px;font-size:10.5px}
 }
 
