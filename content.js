@@ -19,7 +19,7 @@ window.SITE_CONTENT = {
     titleBottom: "copywriter",
     sub: "I write in English and Arabic. I order coffee in Spanish and French.",
     badge: "0 awards so far",
-    winLine: "Luck is not as random as you think.",
+    winLine: "",
     winSub: "That for a ticket to win, had to bought first",
     terms: "Odds of winning: historically High. Ticket has no cash value and neither did the awards. Keep this as proof of participation or share it with your loved ones.",
     awards: [],
