@@ -20,7 +20,7 @@ window.SITE_CONTENT = {
     titleBottom: "copywriter",
     sub: "I write in English and Arabic. I order coffee in Spanish and French.",
     scratchNote: "That for a ticket to win, had to bought first",
-    badge: "0 awards so far",
+    badge: "Won nothing",
     terms: "Odds of winning: historically High. Ticket has no cash value and neither did the awards. Keep this as proof of participation or share it with your loved ones.",
     sealRing: "Cairo · Dubai · Madrid · ",
     sealTop: "Game no.",
