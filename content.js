@@ -1519,5 +1519,83 @@ window.SITE_CONTENT = {
     line: "Someone has to win eventually, feel lucky today?",
     linkText: "feel lucky today?",
     linkUrl: "mailto:m22essam@gmail.com"
+  },
+  layout: {
+    desktop: {
+      items: [
+        {
+          slot: "top",
+          x: 3.79,
+          y: 4.29,
+          w: 92.42,
+          h: 3.36,
+          size: 2.054
+        },
+        {
+          slot: "name",
+          x: 3.79,
+          y: 10.76,
+          w: 76.63,
+          h: 5.34,
+          size: 5.046
+        },
+        {
+          slot: "aside",
+          x: 81.52,
+          y: 10.76,
+          w: 15.42,
+          h: 12.07,
+          size: 3.174
+        },
+        {
+          slot: "title",
+          x: 3.79,
+          y: 23.94,
+          w: 92.42,
+          h: 30.88,
+          size: 16.028
+        },
+        {
+          slot: "sub",
+          x: 3.79,
+          y: 54.82,
+          w: 76.61,
+          h: 4.95,
+          size: 3.174,
+          weight: "600"
+        },
+        {
+          slot: "nav",
+          x: 3.79,
+          y: 64.39,
+          w: 77.73,
+          h: 19.22
+        },
+        {
+          slot: "stamp",
+          x: 88.04,
+          y: 67.11,
+          w: 7.03,
+          h: 16.5,
+          rotate: -10
+        },
+        {
+          slot: "barcode",
+          x: 3.79,
+          y: 87.3,
+          w: 12.34,
+          h: 8.22
+        },
+        {
+          slot: "terms",
+          x: 22.02,
+          y: 91.41,
+          w: 74.19,
+          h: 3.17,
+          size: 1.9,
+          color: "deep"
+        }
+      ]
+    }
   }
 };
