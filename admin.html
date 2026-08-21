@@ -985,9 +985,16 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
     });
     return chain.then(function () { return files; });
   }
-  document.getElementById('btnSaveLocal').addEventListener('click', function () {
-    status('Saving to the folder...');
-    keepFieldsThisTabNeverSaw().then(readPickedFiles).then(function (files) {
+  /* Writes content.js and any picked files into the folder on this machine.
+     Shared by BOTH save buttons: Save to GitHub calls it too, so the copy on
+     disk and the copy on the live site can never drift apart.
+     They did drift, 21 Aug 2026: a GitHub save landed correctly but the
+     folder still held the old line, so the local preview showed no change
+     and the save looked broken when it had in fact worked.
+     Resolves with the server's JSON reply, or null when the local server is
+     not running. It never rejects: the caller decides how loud that is. */
+  function saveToFolder(clearPicks) {
+    return readPickedFiles().then(function (files) {
       return fetch(localSaveUrl(), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -995,15 +1002,24 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
       });
     }).then(function (r) { return r.json(); })
       .then(function (d) {
-        if (d && d.ok) {
-          pickedFiles = {};
-          status('Saved to the folder \u2713 — the site tab refreshes itself (\u2318R still works if it ever doesn\u2019t).');
-        } else {
-          status('Save failed: ' + ((d && d.error) || 'unknown error') + '.', true);
-        }
+        if (d && d.ok && clearPicks) pickedFiles = {};
+        return d;
       })
-      .catch(function () {
-        status('Could not reach the local server. Double-click \u201CStart Site.command\u201D in the portfolio folder, then open admin from the address it shows.', true);
+      .catch(function () { return null; });
+  }
+
+  document.getElementById('btnSaveLocal').addEventListener('click', function () {
+    status('Saving to the folder...');
+    keepFieldsThisTabNeverSaw()
+      .then(function () { return saveToFolder(true); })
+      .then(function (d) {
+        if (d && d.ok) {
+          status('Saved to the folder ✓ — this machine only. Press Save to GitHub to put it on the live site.');
+        } else if (d) {
+          status('Save failed: ' + (d.error || 'unknown error') + '.', true);
+        } else {
+          status('Could not reach the local server. Double-click “Start Site.command” in the portfolio folder, then open admin from the address it shows.', true);
+        }
       });
   });
 
@@ -1265,28 +1281,29 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
   }
 
   /* after a save, poll GitHub Pages builds until the live site is rebuilt */
+  var folderNote = '';   /* what happened to the copy on this machine */
   function ghPollLive(savedAt, tries) {
     tries = tries || 0;
     ghApi('/repos/' + gh.owner + '/' + gh.repo + '/pages/builds').then(function (res) {
       if (res.status === 403 || res.status === 404) {
-        ghStatus('Saved to GitHub. The live site rebuilds in a minute or two.', false);
+        ghStatus('Saved to GitHub. The live site rebuilds in a minute or two.' + folderNote, false);
         return;
       }
       return res.json().then(function (builds) {
         var latest = Array.isArray(builds) && builds.length ? builds[0] : null;
         var fresh = latest && (new Date(latest.created_at).getTime() >= new Date(savedAt).getTime() - 15000);
         if (latest && fresh && latest.status === 'built') {
-          ghStatus('Saved + deployed \u2713 — the live site is showing the new content.', false);
+          ghStatus('Saved + deployed \u2713 — the live site is showing the new content.' + folderNote, false);
         } else if (latest && fresh && latest.status === 'errored') {
           ghStatus('GitHub accepted the save but the Pages build failed. Check the repo\u2019s Pages tab.', true);
         } else if (tries < 26) {
           setTimeout(function () { ghPollLive(savedAt, tries + 1); }, 8000);
         } else {
-          ghStatus('Saved to GitHub. Deployment is still building \u2014 it usually finishes within a minute or two.', false);
+          ghStatus('Saved to GitHub. Deployment is still building \u2014 it usually finishes within a minute or two.' + folderNote, false);
         }
       });
     }).catch(function () {
-      ghStatus('Saved to GitHub. The live site rebuilds in a minute or two.', false);
+      ghStatus('Saved to GitHub. The live site rebuilds in a minute or two.' + folderNote, false);
     });
   }
 
@@ -1320,7 +1337,18 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
     if (!gh.token || !gh.owner || !gh.repo) { ghStatus('Connect to GitHub first.', true); return; }
     btnGithub.disabled = true;
     ghStatus('Saving to GitHub...', false);
+    folderNote = '';
     keepFieldsThisTabNeverSaw()
+      /* Write this machine's folder first, while the picked files are still
+         in hand: ghUploadImages() empties that list. Doing both here is the
+         whole point of the button now, so the preview you are looking at and
+         the live site always say the same thing. */
+      .then(function () { return saveToFolder(false); })
+      .then(function (d) {
+        folderNote = (d && d.ok)
+          ? ' Your folder is updated too.'
+          : ' (Your folder was NOT updated: the local server is not running.)';
+      })
       .then(ghUploadImages)
       .then(function () {
         /* read the current sha on the serving branch — not the default branch,

@@ -18,6 +18,12 @@ server or bundler breaks his workflow. Do not suggest React/Tailwind/Vite.
 - `about.html` — bio, skills, work experience.
 - `content.js` — all site content. Single source of truth.
 - `admin.html` — the editor. Covers the ticket, jokes, stickers and projects.
+  Two save buttons. **Save locally** writes this folder only. **Save to GitHub**
+  writes GitHub *and* this folder, via the same `saveToFolder()` helper. It did
+  not always: until 21 Aug 2026 it wrote GitHub alone, so a save could land
+  correctly on the live site while the owner's own preview still showed the old
+  text, which reads exactly like a failed save. Keep both destinations on that
+  button. The status line after a save says what happened to each.
 - `site.js` — shared helpers (`imgSrc`, scroll reveals).
 - `auto-refresh.js` — reloads the page when content.js changes. Local only.
 - `local-server.py` — serves the folder on :8888 and gives admin its save endpoint.
