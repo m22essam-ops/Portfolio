@@ -274,29 +274,195 @@ kbd{
   var imageList = [];
 
   var SLOT_NAMES = {
-    top: 'Game line + serial',
+    game: 'Game line',
+    serial: 'Serial',
     name: 'Your name',
-    aside: 'Your line + badge',
-    title: 'Headline',
+    band: 'If I play, I play to win',
+    badge: 'Award badge',
+    titleTop: 'Headline, first line',
+    titleBottom: 'Headline, second line',
     sub: 'Sub-line',
+    scratchNote: 'Note above the covered tab',
     won: 'Awards list',
-    nav: 'The three tabs',
     stamp: 'The stamp',
     barcode: 'Barcode',
     terms: 'Small print'
   };
-  var SLOT_ORDER = ['top', 'name', 'aside', 'title', 'sub', 'won', 'nav', 'stamp', 'barcode', 'terms'];
-  /* slots whose type cannot usefully be restyled from here */
-  var NO_TYPE = { stamp: 1, barcode: 1, nav: 1, won: 1 };
+  /* Which content.js field each box is the words of. A box in this map can be
+     typed into directly on the artboard: double-click it and edit in place.
+     The nav punches are added at run time, so they are resolved separately. */
+  var SLOT_FIELD = {
+    game: 'ticket.game',
+    serial: 'ticket.serial',
+    name: 'ticket.name',
+    band: 'ticket.band',
+    badge: 'ticket.badge',
+    titleTop: 'ticket.titleTop',
+    titleBottom: 'ticket.titleBottom',
+    sub: 'ticket.sub',
+    scratchNote: 'ticket.scratchNote',
+    terms: 'ticket.terms'
+  };
+  function fieldFor(slot) {
+    if (!slot) return null;
+    if (SLOT_FIELD[slot]) return SLOT_FIELD[slot];
+    var m = /^nav(\d+)$/.exec(slot);
+    return m ? 'ticket.nav.' + m[1] + '.label' : null;
+  }
+  function slotName(slot) {
+    if (SLOT_NAMES[slot]) return SLOT_NAMES[slot];
+    var m = /^nav(\d+)$/.exec(slot);
+    if (m) {
+      var lab = readField('ticket.nav.' + m[1] + '.label');
+      return lab ? 'Tab: ' + lab : 'Tab ' + (+m[1] + 1);
+    }
+    return slot;
+  }
+  /* boxes whose type is not a single run of words to restyle */
+  var NO_TYPE = { stamp: 1, barcode: 1, won: 1 };
 
   function items() { return LAYOUT[art].items; }
   function current() { return items()[sel] || null; }
+
+  /* Every box the page actually has, in the order it is written in the
+     markup. Read from the live page rather than kept as a list here,
+     because the three punches are built at run time from `ticket.nav`:
+     add a fourth in admin and it turns up here on its own. */
+  function allSlots() {
+    var d = doc();
+    if (!d) return [];
+    return [].map.call(d.querySelectorAll('[data-slot]'), function (el) {
+      return el.getAttribute('data-slot');
+    });
+  }
   function nameOf(it) {
     if (!it) return '';
-    if (it.slot) return SLOT_NAMES[it.slot] || it.slot;
+    if (it.slot) return slotName(it.slot);
     if (it.type === 'image') return 'Picture';
     if (it.type === 'box') return 'Box';
     return (it.text || 'Text').slice(0, 22);
+  }
+
+  /* ---- moving an older layout on to the split boxes -------------------
+     The game line used to share a box with the serial, his line with the
+     award badge, the two halves of the headline with each other and all
+     three punches with one another. A layout saved before they were split
+     names boxes that no longer exist, and would simply vanish.
+     Rather than drop it, each old block is replaced by its pieces, put
+     where they actually sit inside it: the flow layout is measured once to
+     learn each piece's share of its parent, and that share is mapped into
+     the box he drew. His own choices (a turn, a colour, a weight) come
+     down on to every piece. The composition survives.
+     ---------------------------------------------------------------------- */
+  var SPLIT_PARENT = {
+    top: '.tk-top', aside: '.tk-aside', title: '.tk-title', nav: '.tk-nav'
+  };
+
+  function measureGroups() {
+    var d = doc(), b = bodyEl();
+    if (!d || !b) return {};
+    var C = d.defaultView.SITE_CONTENT;
+    var saved = C.layout;
+    C.layout = {};                     /* measure the stylesheet's own layout */
+    d.defaultView.applyHomeLayout();
+    if (d.defaultView.fitHomeText) d.defaultView.fitHomeText();
+
+    var H = b.getBoundingClientRect().height || 1;
+    var out = {};
+    Object.keys(SPLIT_PARENT).forEach(function (key) {
+      var p = d.querySelector(SPLIT_PARENT[key]);
+      if (!p) return;
+      var pr = p.getBoundingClientRect();
+      var pf = parseFloat(d.defaultView.getComputedStyle(p).fontSize) || 0;
+      var kids = [];
+      [].forEach.call(p.querySelectorAll('[data-slot]'), function (el) {
+        var r = el.getBoundingClientRect();
+        if (!r.width || !r.height) return;
+        var cf = parseFloat(d.defaultView.getComputedStyle(el).fontSize) || 0;
+        kids.push({
+          slot: el.getAttribute('data-slot'),
+          rx: pr.width ? (r.left - pr.left) / pr.width : 0,
+          ry: pr.height ? (r.top - pr.top) / pr.height : 0,
+          rw: pr.width ? r.width / pr.width : 1,
+          rh: pr.height ? r.height / pr.height : 1,
+          sizeRatio: pf ? cf / pf : 1,
+          sizePct: cf / H * 100
+        });
+      });
+      if (kids.length) out[key] = kids;
+    });
+
+    C.layout = saved;
+    d.defaultView.applyHomeLayout();
+    if (d.defaultView.fitHomeText) d.defaultView.fitHomeText();
+    return out;
+  }
+
+  var CARRY = ['rotate', 'opacity', 'z', 'align', 'color', 'font', 'weight', 'tracking', 'upper'];
+
+  function migrateOldGroups() {
+    var groups = measureGroups();
+    if (!Object.keys(groups).length) return false;
+    var moved = false;
+    ['desktop', 'mobile'].forEach(function (k) {
+      var arr = LAYOUT[k] && LAYOUT[k].items;
+      if (!arr || !arr.length) return;
+      var out = [];
+      arr.forEach(function (it) {
+        var kids = it.slot && groups[it.slot];
+        if (!kids) { out.push(it); return; }
+        moved = true;
+        kids.forEach(function (kid) {
+          var n = {
+            slot: kid.slot,
+            x: +(it.x + kid.rx * it.w).toFixed(2),
+            y: +(it.y + kid.ry * it.h).toFixed(2),
+            w: +(it.w * kid.rw).toFixed(2),
+            h: +(it.h * kid.rh).toFixed(2)
+          };
+          CARRY.forEach(function (p) { if (it[p] != null) n[p] = it[p]; });
+          if (it.size) n.size = +(it.size * kid.sizeRatio).toFixed(3);
+          else if (kid.sizePct) n.size = +kid.sizePct.toFixed(3);
+          out.push(n);
+        });
+      });
+      LAYOUT[k] = { items: out };
+    });
+    return moved;
+  }
+
+  /* ---- reading and writing his words --------------------------------
+     The designer edits copy now as well as position, so it can no longer
+     claim to touch only `layout`. It keeps the surgical property a
+     different way: every change is recorded here as a path and a value,
+     and at save time those paths are applied one at a time to a fresh
+     read of content.js. A field this tool never touched is never written,
+     so it still cannot overwrite something admin holds.
+     -------------------------------------------------------------------- */
+  var EDITS = {};
+
+  function liveContent() {
+    var d = doc();
+    return (d && d.defaultView && d.defaultView.SITE_CONTENT) || null;
+  }
+  function atPath(obj, path, val, write) {
+    if (!obj) return undefined;
+    var parts = String(path).split('.');
+    for (var i = 0; i < parts.length - 1; i++) {
+      obj = obj[parts[i]];
+      if (obj == null) return undefined;
+    }
+    var last = parts[parts.length - 1];
+    if (write) { obj[last] = val; return val; }
+    return obj[last];
+  }
+  function readField(path) {
+    var v = atPath(liveContent(), path);
+    return v == null ? '' : String(v);
+  }
+  function writeField(path, val) {
+    EDITS[path] = val;
+    atPath(liveContent(), path, val, true);
   }
 
   function say(msg, kind) {
@@ -474,9 +640,25 @@ kbd{
       if (m.indexOf('s') > -1) it.h = Math.max(1.5, s.h + dy);
       if (m.indexOf('w') > -1) { it.w = Math.max(1.5, s.w - dx); it.x = s.x + (s.w - it.w); }
       if (m.indexOf('n') > -1) { it.h = Math.max(1.5, s.h - dy); it.y = s.y + (s.h - it.h); }
+
+      /* shift keeps the shape. Holding the ratio of the two percentages is
+         enough to hold the real one: the ticket's width and height cancel
+         out of pixH/pixW, so w and h in percent stay in the same proportion
+         as the box on screen. Only deciding which side he pulled harder
+         needs pixels, since one percent across is not one percent down. */
+      if (e.shiftKey && s.w && s.h) {
+        var leadW = Math.abs(it.w - s.w) * drag.br.width >=
+                    Math.abs(it.h - s.h) * drag.br.height;
+        if (leadW) it.h = Math.max(1.5, it.w * s.h / s.w);
+        else       it.w = Math.max(1.5, it.h * s.w / s.h);
+        /* the edge he is not holding is the one that moves */
+        if (m.indexOf('w') > -1) it.x = s.x + (s.w - it.w);
+        if (m.indexOf('n') > -1) it.y = s.y + (s.h - it.h);
+      }
     }
 
-    if (!e.altKey) snapTo(it, m);
+    /* snapping would undo the ratio it just worked out */
+    if (!e.altKey && !(e.shiftKey && m !== 'move')) snapTo(it, m);
     round(it);
     paint();
     syncNumbers();
@@ -488,7 +670,138 @@ kbd{
     board.classList.remove('busy');
     clearGuides();
     paint();
+    /* the foil on the covered punch is a bitmap and would sit there
+       stretched after a resize. Repainting it is slow, so it happens once,
+       here, and never inside the drag. */
+    var d = doc();
+    if (d && d.defaultView.repaintHomeFoil) d.defaultView.repaintHomeFoil();
     renderInspector();
+  });
+
+  /* ---- typing on the artboard --------------------------------------
+     Double-click any box that is made of words and edit it where it sits.
+     The element inside the frame is made editable for as long as he is in
+     it, the handle over the top is stood down so the caret can be reached,
+     and what he types goes back into the content.js field that box is the
+     words of. Escape puts it back, clicking away or enter keeps it.
+     -------------------------------------------------------------------- */
+  var editing = null;
+
+  function editable(it) {
+    if (!it) return null;
+    if (it.slot) return fieldFor(it.slot);
+    return (it.type !== 'image' && it.type !== 'box') ? 'free' : null;
+  }
+
+  function startEdit(i) {
+    var it = items()[i];
+    var path = editable(it);
+    if (!path || editing) return;
+    var el = elFor(it, i);
+    if (!el) return;
+
+    sel = i;
+    editing = { i: i, el: el, path: path, was: path === 'free' ? (it.text || '') : readField(path) };
+    el.setAttribute('contenteditable', 'plaintext-only');
+    if (el.contentEditable !== 'plaintext-only') el.setAttribute('contenteditable', 'true');
+    el.style.outline = '2px solid #FF3B2B';
+    el.style.outlineOffset = '2px';
+    /* the name is forced to capitals on the page; show him what he is
+       actually editing, which is the line as he wrote it */
+    if (it.slot === 'name') el.textContent = editing.was;
+
+    var d = doc();
+    el.focus();
+    var rng = d.createRange();
+    rng.selectNodeContents(el);
+    var selo = d.defaultView.getSelection();
+    selo.removeAllRanges();
+    selo.addRange(rng);
+
+    ov.style.pointerEvents = 'none';
+    el.addEventListener('keydown', editKeys);
+    el.addEventListener('blur', commitEdit);
+    say('Editing “' + nameOf(it) + '”. Enter keeps it, escape puts it back.');
+  }
+
+  function editKeys(e) {
+    if (e.key === 'Escape') { e.preventDefault(); cancelEdit(); }
+    else if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); commitEdit(); }
+    e.stopPropagation();
+  }
+
+  function endEdit() {
+    if (!editing) return null;
+    var E = editing;
+    editing = null;
+    E.el.removeEventListener('keydown', editKeys);
+    E.el.removeEventListener('blur', commitEdit);
+    E.el.removeAttribute('contenteditable');
+    E.el.style.outline = '';
+    E.el.style.outlineOffset = '';
+    ov.style.pointerEvents = '';
+    return E;
+  }
+
+  /* The page sets its words once, at load, from content.js. applyHomeLayout
+     only moves things, so changing a field is not enough on its own: the
+     element on the artboard has to be told too, the same way the page told
+     it in the first place. The name is put into capitals and a punch keeps
+     its label in a <b> beside its number. */
+  function paintSlotText(slot, value) {
+    var d = doc();
+    if (!d) return;
+    var el = d.querySelector('[data-slot="' + slot + '"]');
+    if (!el) return;
+    if (slot === 'name') { el.textContent = String(value).toUpperCase(); return; }
+    if (/^nav\d+$/.test(slot)) {
+      var b = el.querySelector('b');
+      if (b) b.textContent = value;
+      return;
+    }
+    el.textContent = value;
+  }
+  function setSlotText(slot, value) {
+    var f = fieldFor(slot);
+    if (!f) return;
+    writeField(f, value);
+    paintSlotText(slot, value);
+  }
+
+  function commitEdit() {
+    var E = endEdit();
+    if (!E) return;
+    var text = E.el.textContent.replace(/\s+/g, ' ').trim();
+    var it = items()[E.i];
+    if (text !== E.was) {
+      snapshot();
+      if (E.path === 'free') { if (it) it.text = text; }
+      else setSlotText(it.slot, text);
+    } else if (it && it.slot) {
+      paintSlotText(it.slot, E.was);      /* undo the raw form shown while editing */
+    }
+    paint();
+    renderInspector();
+  }
+
+  function cancelEdit() {
+    var E = endEdit();
+    if (!E) return;
+    var it = items()[E.i];
+    if (E.path !== 'free' && it) {
+      /* put the words back without recording it as something he changed */
+      atPath(liveContent(), E.path, E.was, true);
+      paintSlotText(it.slot, E.was);
+    }
+    paint();
+    renderInspector();
+  }
+
+  ov.addEventListener('dblclick', function (e) {
+    var hit = e.target.closest('.hit');
+    if (!hit) return;
+    e.preventDefault();
+    startEdit(+hit.dataset.i);
   });
 
   /* Snapping. Candidate lines are the ticket's own edges and middle plus
@@ -753,12 +1066,25 @@ kbd{
 
     var isText = !it.slot ? it.type !== 'image' && it.type !== 'box' : !NO_TYPE[it.slot];
 
-    if (!it.slot && it.type !== 'image' && it.type !== 'box') {
+    /* The words, for anything made of words: the built-in lines as well as
+       the ones he added. Typing here writes the same content.js field that
+       admin writes, so the two never disagree. Double-clicking the box on
+       the artboard does the same thing in place. */
+    var wordPath = editable(it);
+    if (wordPath) {
       var ta = document.createElement('textarea');
-      ta.value = it.text || '';
-      ta.addEventListener('input', function () { it.text = this.value; paint(); });
+      ta.value = wordPath === 'free' ? (it.text || '') : readField(wordPath);
+      ta.addEventListener('input', function () {
+        if (wordPath === 'free') { it.text = this.value; paint(); }
+        else setSlotText(it.slot, this.value);
+      });
       ta.addEventListener('focus', snapshot);
       insp.appendChild(rows([field('The words', ta)]));
+      var tip2 = document.createElement('p');
+      tip2.className = 'hint';
+      tip2.style.margin = '-3px 0 10px';
+      tip2.textContent = 'Or double-click it on the ticket and type there.';
+      insp.appendChild(tip2);
     }
 
     if (!it.slot && it.type === 'image') {
@@ -848,14 +1174,14 @@ kbd{
     line('Picture', function () { addFree({ type: 'image', src: imageList[0] || '', fit: 'cover', w: 22, h: 26 }); });
     line('Box of colour', function () { addFree({ type: 'box', fill: 'red', w: 20, h: 12 }); });
 
-    var missing = SLOT_ORDER.filter(function (s) {
+    var missing = allSlots().filter(function (s) {
       return !items().some(function (o) { return o.slot === s; });
     });
     if (missing.length) {
       pop.appendChild(document.createElement('hr'));
       head('Put back');
       missing.forEach(function (s) {
-        line(SLOT_NAMES[s], function () {
+        line(slotName(s), function () {
           snapshot();
           items().push({ slot: s, x: 8, y: 40, w: 30, h: 10 });
           sel = items().length - 1;
@@ -903,7 +1229,7 @@ kbd{
     }
     var br = b.getBoundingClientRect();
     var out = [];
-    SLOT_ORDER.forEach(function (slot) {
+    allSlots().forEach(function (slot) {
       var el = d.querySelector('[data-slot="' + slot + '"]');
       if (!el || el.hidden) return;
       var r = el.getBoundingClientRect();
@@ -978,6 +1304,12 @@ kbd{
 
   function buildFile() {
     return fetchModel().then(function (model) {
+      /* His words go in one path at a time, on top of a fresh read of the
+         file. A field this tool never touched is never written, so editing
+         copy here still cannot overwrite something admin is holding. */
+      Object.keys(EDITS).forEach(function (path) {
+        atPath(model, path, EDITS[path], true);
+      });
       var L = layoutForSaving();
       if (Object.keys(L).length) model.layout = L; else delete model.layout;
       return serialize(model);
@@ -1233,9 +1565,16 @@ kbd{
       whenSettled(function () {
         var fresh = !LAYOUT[art].items.length;
         if (fresh) LAYOUT[art] = { items: captureFlow() };
+        var moved = !fresh && migrateOldGroups();
         paint();
-        if (fresh) relax();
+        if (fresh || moved) relax();
         renderInspector();
+        if (moved) {
+          say('Your layout was made when some of these were still joined together. ' +
+              'Each one has been split where its pieces actually sat, so nothing moved. ' +
+              'Save when you are happy with it.');
+          return;
+        }
         var tight = tooSmall();
         if (tight.length) {
           say('Heads up: ' + tight.join(' and ') + ' ' + (tight.length > 1 ? 'have' : 'has') +

@@ -18,9 +18,9 @@
   <div class="perf top" aria-hidden="true"></div>
 
   <div class="tk-body">
-    <div class="tk-top" data-slot="top">
-      <span id="tkGame"></span>
-      <span id="tkSerial"></span>
+    <div class="tk-top">
+      <span id="tkGame" data-slot="game"></span>
+      <span id="tkSerial" data-slot="serial"></span>
     </div>
 
     <!-- The name is the logo here: the home page has no nav bar, so this is
@@ -30,13 +30,13 @@
          is what the black band used to hold. -->
     <div class="tk-namerow">
       <p class="tk-name" id="tkName" data-slot="name"></p>
-      <div class="tk-aside" data-slot="aside">
-        <span id="tkBand"></span>
-        <span class="tk-badge" id="tkBadge"></span>
+      <div class="tk-aside">
+        <span id="tkBand" data-slot="band"></span>
+        <span class="tk-badge" id="tkBadge" data-slot="badge"></span>
       </div>
     </div>
 
-    <h1 class="tk-title" data-slot="title"><span id="tkTitleTop"></span><span id="tkTitleBottom"></span></h1>
+    <h1 class="tk-title"><span id="tkTitleTop" data-slot="titleTop"></span><span id="tkTitleBottom" data-slot="titleBottom"></span></h1>
 
     <!-- The sub-line and the tabs share the left column, the stamp holds the
          right and spans both. Before this the stamp sat in a row of its own
@@ -47,7 +47,7 @@
       <p class="tk-sub" id="tkSub" data-slot="sub"></p>
 
         <ul class="won-list" id="wonList" data-slot="won" hidden></ul>
-        <nav class="tk-nav" id="tkNav" data-slot="nav"></nav>
+        <nav class="tk-nav" id="tkNav"></nav>
       </div>
 
       <!-- THE STAMP. A postage stamp, not a rubber one: perforated edge, a
@@ -283,13 +283,33 @@
     tk.classList.add('is-canvas');
 
     var H = body.clientHeight;
+    var want = 0, got = 0;
     art.items.forEach(function (it) {
       if (!it || it.hidden) return;
+      if (it.slot) want++;
       var el = it.slot ? body.querySelector('[data-slot="' + it.slot + '"]') : makeFree(it, body);
       if (!el) return;
       styleItem(el, it, H);
-      if (it.slot) el.setAttribute('data-placed', '');
+      if (it.slot) { el.setAttribute('data-placed', ''); got++; }
     });
+
+    /* A layout that names boxes this page does not have is a layout from a
+       different version of the page. Placing the half of it that still
+       matches would leave a ticket with most of its words missing, which is
+       far worse than ignoring it: an unplaced box is hidden, and the ones
+       that did match would sit alone on an otherwise empty card. So if much
+       of it fails to land, drop the whole thing and let the stylesheet lay
+       the page out as it always did. Nothing is lost, the file still holds
+       his layout, and the designer migrates it when he next opens it. */
+    if (want && got < want * 0.75) {
+      [].forEach.call(body.querySelectorAll('.tk-free'), function (n) { n.remove(); });
+      [].forEach.call(body.querySelectorAll('[data-slot]'), function (n) {
+        n.removeAttribute('data-placed');
+        n.removeAttribute('style');
+        delete n.dataset.baseSize;
+      });
+      tk.classList.remove('is-canvas');
+    }
   }
   window.applyHomeLayout = applyLayout;   /* the designer re-runs this as he drags */
 
@@ -342,10 +362,56 @@
     }
   }
 
-  function fitAll() { applyLayout(); fitTitle(); fitSub(); }
+  /* ---- fitting type on the canvas ----
+     On an artboard each headline line is its own box, so the flow's fitTitle
+     has nothing left to measure: `.tk-title` is display:contents there. What
+     is wanted instead is per box, and shrink ONLY. The size he set in the
+     designer is the size he gets, unless the words genuinely do not fit the
+     box he drew, in which case the type comes down rather than running off
+     the edge. Anything shrunk is recorded so the designer can say so, rather
+     than quietly making the number he typed a lie. */
+  function shrinkToBox(el) {
+    var base = el.dataset.baseSize;
+    if (base) el.style.fontSize = base;
+    var box = el.clientWidth;
+    if (!box) return false;
+    var rng = document.createRange();
+    var shrunk = false;
+    /* more than one pass: display faces with an optical-size axis change
+       width as the point size changes, so the first sum lands short */
+    for (var i = 0; i < 4; i++) {
+      rng.selectNodeContents(el);
+      var wide = rng.getBoundingClientRect().width;
+      if (!wide || wide <= box) break;
+      el.style.fontSize = (parseFloat(getComputedStyle(el).fontSize) * box / wide).toFixed(2) + 'px';
+      shrunk = true;
+    }
+    return shrunk;
+  }
+
+  function fitCanvas() {
+    var out = [];
+    var els = document.querySelectorAll('.ticket.is-canvas [data-placed], .ticket.is-canvas .tk-free');
+    [].forEach.call(els, function (el) {
+      if (getComputedStyle(el).whiteSpace !== 'nowrap') return;
+      if (shrinkToBox(el)) out.push(el.getAttribute('data-slot') || 'added text');
+    });
+    window.homeShrunk = out;
+    return out;
+  }
+
+  function onCanvas() {
+    var tk = document.querySelector('.ticket');
+    return !!tk && tk.classList.contains('is-canvas');
+  }
+  function fitText() { if (onCanvas()) fitCanvas(); else { fitTitle(); fitSub(); } }
+  function fitAll() { applyLayout(); fitText(); }
   /* the designer moves a box and then asks the page to refit the type in it,
      without re-running the whole layout underneath itself */
-  window.fitHomeText = function () { fitTitle(); fitSub(); };
+  window.fitHomeText = fitText;
+  window.repaintHomeFoil = function () {
+    (window.homeFoils || []).forEach(function (f) { f(); });
+  };
   fitAll();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll);
   var fitWait;
@@ -368,14 +434,18 @@
      it, so the line reads as the caption on that box rather than as another
      paragraph competing in the middle of the ticket. */
   var nav = document.getElementById('tkNav');
-  (T.nav || []).forEach(function (item) {
+  (T.nav || []).forEach(function (item, ix) {
     if (item.scratch && T.scratchNote) {
       var cap = document.createElement('span');
       cap.className = 'scratch-cap';
+      cap.setAttribute('data-slot', 'scratchNote');
       cap.textContent = T.scratchNote;
       nav.appendChild(cap);
     }
     var a = document.createElement('a');
+    /* each punch is addressable on its own, so the designer can move and
+       size them separately instead of shifting all three as one block */
+    a.setAttribute('data-slot', 'nav' + ix);
     a.href = item.url || '#';
     /* the label goes in its own element: as a bare text node it becomes an
        anonymous grid item and cannot be placed in the box */
@@ -545,6 +615,11 @@
     });
 
     window.addEventListener('resize', function () { if (!open) paint(); });
+    /* the designer can resize this punch without the window changing size,
+       and the foil is a bitmap: without a repaint it would sit there
+       stretched. It is only called when a drag finishes, never during one:
+       the sparkle is drawn a pixel at a time and is far too slow per frame. */
+    (window.homeFoils = window.homeFoils || []).push(function () { if (!open) paint(); });
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(paint); else paint();
   }
 

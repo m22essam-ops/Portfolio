@@ -23,7 +23,7 @@ window.SITE_CONTENT = {
     badge: "Won nothing",
     terms: "Odds of winning: historically High. Ticket has no cash value and neither did the awards. Keep this as proof of participation or share it with your loved ones.",
     stampArc: "Time is a timeless joke",
-    stampName: "Song order matters",
+    stampName: "Listen to your gut",
     stampValue: "",
     stampFoot: "",
     stampPhoto: "portrait-rooftop.jpg",
@@ -1519,5 +1519,280 @@ window.SITE_CONTENT = {
     line: "Someone has to win eventually, feel lucky today?",
     linkText: "feel lucky today?",
     linkUrl: "mailto:m22essam@gmail.com"
+  },
+  layout: {
+    desktop: {
+      items: [
+        {
+          slot: "game",
+          x: 3.79,
+          y: 4.29,
+          w: 17.89,
+          h: 6.91,
+          size: 2.054
+        },
+        {
+          slot: "serial",
+          x: 70.7,
+          y: 4.29,
+          w: 12.06,
+          h: 6.91,
+          size: 2.054,
+          "hidden": true
+        },
+        {
+          slot: "name",
+          x: 3.79,
+          y: 9.21,
+          w: 76.63,
+          h: 5.34,
+          size: 5.046
+        },
+        {
+          slot: "band",
+          x: 81.52,
+          y: 4.29,
+          w: 15.42,
+          h: 4.48,
+          size: 2.24
+        },
+        {
+          slot: "badge",
+          x: 83.09,
+          y: 8.77,
+          w: 9.91,
+          h: 5.78,
+          size: 2.054
+        },
+        {
+          slot: "titleTop",
+          x: 3.79,
+          y: 23.94,
+          w: 92.42,
+          h: 17.3,
+          size: 17.028
+        },
+        {
+          slot: "titleBottom",
+          x: 3.79,
+          y: 39.38,
+          w: 92.42,
+          h: 17.3,
+          size: 17.028
+        },
+        {
+          slot: "sub",
+          x: 3.79,
+          y: 57.65,
+          w: 76.61,
+          h: 4.95,
+          size: 3.174,
+          weight: "600"
+        },
+        {
+          slot: "nav0",
+          x: 3.79,
+          y: 69.92,
+          w: 25.2,
+          h: 13.69,
+          size: 2.705
+        },
+        {
+          slot: "nav1",
+          x: 30.1,
+          y: 69.92,
+          w: 25.11,
+          h: 13.69,
+          size: 2.705
+        },
+        {
+          slot: "scratchNote",
+          x: 56.41,
+          y: 64.79,
+          w: 25.11,
+          h: 2.2,
+          size: 1.775,
+          weight: "700",
+          color: "muted"
+        },
+        {
+          slot: "nav2",
+          x: 56.41,
+          y: 69.92,
+          w: 25.11,
+          h: 13.69,
+          size: 2.705
+        },
+        {
+          slot: "stamp",
+          x: 91.44,
+          y: 69.92,
+          w: 7.03,
+          h: 16.5,
+          rotate: 10
+        },
+        {
+          slot: "barcode",
+          x: 3.79,
+          y: 87.3,
+          w: 12.34,
+          h: 8.22
+        },
+        {
+          slot: "terms",
+          x: 22.02,
+          y: 91.41,
+          w: 74.19,
+          h: 6.22,
+          size: 1.9,
+          color: "deep"
+        },
+        {
+          type: "box",
+          fill: "faint",
+          w: 9.55,
+          h: 4.6,
+          x: 90.18,
+          y: 62.39,
+          "hidden": true
+        },
+        {
+          type: "text",
+          text: "Listen to your gut",
+          size: 2.4,
+          color: "ink",
+          font: "display",
+          w: 12.07,
+          h: 3.57,
+          x: 89.23,
+          y: 64.1,
+          "hidden": true
+        }
+      ]
+    },
+    mobile: {
+      items: [
+        {
+          slot: "game",
+          x: 4.86,
+          y: 2.77,
+          w: 49.88,
+          h: 1.66,
+          size: 1.015
+        },
+        {
+          slot: "serial",
+          x: 61.52,
+          y: 2.77,
+          w: 33.62,
+          h: 1.66,
+          size: 1.015
+        },
+        {
+          slot: "name",
+          x: 4.86,
+          y: 8.58,
+          w: 44.62,
+          h: 1.66,
+          size: 1.583
+        },
+        {
+          slot: "band",
+          x: 55.98,
+          y: 8.95,
+          w: 39.16,
+          h: 1.86,
+          size: 1.107
+        },
+        {
+          slot: "badge",
+          x: 69.98,
+          y: 11.53,
+          w: 25.16,
+          h: 2.84,
+          size: 1.015
+        },
+        {
+          slot: "titleTop",
+          x: 4.86,
+          y: 17.79,
+          w: 90.27,
+          h: 2.93,
+          size: 5.101
+        },
+        {
+          slot: "titleBottom",
+          x: 4.86,
+          y: 21.54,
+          w: 90.27,
+          h: 2.93,
+          size: 5.101
+        },
+        {
+          slot: "sub",
+          x: 4.86,
+          y: 26.62,
+          w: 90.27,
+          h: 5.28,
+          size: 1.66
+        },
+        {
+          slot: "nav0",
+          x: 4.86,
+          y: 33.72,
+          w: 90.27,
+          h: 8.9,
+          size: 1.753
+        },
+        {
+          slot: "nav1",
+          x: 4.86,
+          y: 43.62,
+          w: 90.27,
+          h: 8.9,
+          size: 1.753
+        },
+        {
+          slot: "scratchNote",
+          x: 4.86,
+          y: 58.69,
+          w: 90.27,
+          h: 1.37,
+          size: 0.969,
+          weight: "700",
+          color: "muted"
+        },
+        {
+          slot: "nav2",
+          x: 4.86,
+          y: 60.95,
+          w: 90.27,
+          h: 10.67,
+          size: 1.753
+        },
+        {
+          slot: "stamp",
+          x: 61.68,
+          y: 76.5,
+          w: 27.77,
+          h: 13.37
+        },
+        {
+          slot: "barcode",
+          x: 6.75,
+          y: 85.81,
+          w: 35.68,
+          h: 4.06
+        },
+        {
+          slot: "terms",
+          x: 4.86,
+          y: 93.54,
+          w: 90.27,
+          h: 4.69,
+          size: 0.969
+        }
+      ]
+    }
   }
 };

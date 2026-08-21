@@ -682,7 +682,16 @@ body.has-won .tk-badge{background:var(--ink)}
 .ticket.is-canvas .tk-namerow,
 .ticket.is-canvas .tk-mid,
 .ticket.is-canvas .tk-midleft,
-.ticket.is-canvas .tk-foot{display:contents}
+.ticket.is-canvas .tk-foot,
+/* these four used to be single draggable blocks holding two or more separate
+   sentences: the game line with the serial, his line with the award badge,
+   the two halves of the headline, and all three punches. Every one of those
+   is its own piece of writing and he places them separately. Inherited type
+   still passes through a display:contents box, so the voices survive. */
+.ticket.is-canvas .tk-top,
+.ticket.is-canvas .tk-aside,
+.ticket.is-canvas .tk-title,
+.ticket.is-canvas .tk-nav{display:contents}
 
 .ticket.is-canvas [data-slot]{
   position:absolute;margin:0;max-width:none;min-width:0;
