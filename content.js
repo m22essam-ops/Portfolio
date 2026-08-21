@@ -20,14 +20,14 @@ window.SITE_CONTENT = {
     titleBottom: "copywriter",
     sub: "I write in English and Arabic. I order coffee in Spanish and French.",
     scratchNote: "That for a ticket to win, had to bought first",
-    badge: "I Won nothing",
+    badge: "Won nothing",
     terms: "Odds of winning: historically High. Ticket has no cash value and neither did the awards. Keep this as proof of participation or share it with your loved ones.",
     stampArc: "Time is a timeless joke",
-    stampName: "Listen to your gut",
+    stampName: "As seen on TV",
     stampValue: "",
     stampFoot: "",
     stampPhoto: "portrait-rooftop.jpg",
-    stampUrl: "about.html",
+    stampUrl: "https://open.spotify.com/playlist/3LBELz6m3BsYudI8OQar6B",
     awards: [],
     wonBand: "The National Award Lottery",
     wonTitleTop: "Award-winning",
@@ -37,14 +37,14 @@ window.SITE_CONTENT = {
     wonStampArc: "Time is a timeless joke",
     nav: [
       {
-        label: "Work",
+        label: "The work",
         num: "01",
         url: "work.html"
       },
       {
-        label: "Work that worked",
+        label: "Who I am",
         num: "02",
-        url: "work.html?ran=1"
+        url: "about.html"
       },
       {
         label: "Hire me?",
@@ -53,20 +53,7 @@ window.SITE_CONTENT = {
         "scratch": true,
         scratchHint: "Scratch to reveal"
       }
-    ],
-    barcodeUrl: "https://open.spotify.com/playlist/3LBELz6m3BsYudI8OQar6B",
-    barcodeLabel: "The playlist",
-    badgeUrl: "awards.html",
-    cabinet: {
-      empty: "Nothing to show for now.",
-      ask: "Come back in a few",
-      minutes: "Minutes",
-      minutesLine: "Are you mental?",
-      days: "Days",
-      daysLine: "One. Don't spend it all at once.",
-      years: "Years",
-      yearsLine: "Now we're talking."
-    }
+    ]
   },
   jokes: {
     tabAway: "Fine, go. I'll wait.",
@@ -1451,9 +1438,7 @@ window.SITE_CONTENT = {
         "draft": true,
         "ran": false
       }
-    ],
-    ranHeading: "Work that worked.",
-    ranNote: ""
+    ]
   },
   about: {
     label: "Don't take it personally (it seems so)",
@@ -1569,17 +1554,15 @@ window.SITE_CONTENT = {
           y: 4.29,
           w: 15.42,
           h: 4.48,
-          size: 2.24,
-          align: "left"
+          size: 2.24
         },
         {
           slot: "badge",
-          x: 81.52,
+          x: 83.09,
           y: 8.77,
-          w: 13.43,
+          w: 9.91,
           h: 5.78,
-          size: 2.054,
-          align: "center"
+          size: 2.054
         },
         {
           slot: "titleTop",
@@ -1599,8 +1582,8 @@ window.SITE_CONTENT = {
         },
         {
           slot: "sub",
-          x: 3.79,
-          y: 57.65,
+          x: 3.81,
+          y: 63.42,
           w: 76.61,
           h: 4.95,
           size: 3.174,
@@ -1642,10 +1625,10 @@ window.SITE_CONTENT = {
         },
         {
           slot: "stamp",
-          x: 91.44,
-          y: 69.92,
-          w: 7.03,
-          h: 16.5,
+          x: 79.45,
+          y: 47.15,
+          w: 14.42,
+          h: 36.46,
           rotate: 10
         },
         {
@@ -1756,7 +1739,7 @@ window.SITE_CONTENT = {
         {
           slot: "nav0",
           x: 4.86,
-          y: 45.55,
+          y: 33.72,
           w: 90.27,
           h: 8.9,
           size: 1.753
@@ -1764,7 +1747,7 @@ window.SITE_CONTENT = {
         {
           slot: "nav1",
           x: 4.86,
-          y: 55.98,
+          y: 43.62,
           w: 90.27,
           h: 8.9,
           size: 1.753
@@ -1772,7 +1755,7 @@ window.SITE_CONTENT = {
         {
           slot: "scratchNote",
           x: 4.86,
-          y: 68.34,
+          y: 58.69,
           w: 90.27,
           h: 1.37,
           size: 0.969,
@@ -1782,18 +1765,17 @@ window.SITE_CONTENT = {
         {
           slot: "nav2",
           x: 4.86,
-          y: 71.17,
+          y: 60.95,
           w: 90.27,
           h: 10.67,
           size: 1.753
         },
         {
           slot: "stamp",
-          x: 68.71,
-          y: 31.9,
-          w: 20.74,
-          h: 12.69,
-          rotate: -11
+          x: 61.68,
+          y: 76.5,
+          w: 27.77,
+          h: 13.37
         },
         {
           slot: "barcode",
@@ -1808,9 +1790,7 @@ window.SITE_CONTENT = {
           y: 93.54,
           w: 90.27,
           h: 4.69,
-          size: 0.969,
-          weight: "600",
-          color: "deep"
+          size: 0.969
         }
       ]
     }
