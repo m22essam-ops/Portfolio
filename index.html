@@ -327,6 +327,9 @@
   }
 
   function fitAll() { applyLayout(); fitTitle(); fitSub(); }
+  /* the designer moves a box and then asks the page to refit the type in it,
+     without re-running the whole layout underneath itself */
+  window.fitHomeText = function () { fitTitle(); fitSub(); };
   fitAll();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll);
   var fitWait;

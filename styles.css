@@ -710,3 +710,17 @@ body.has-won .tk-badge{background:var(--ink)}
 /* an element switched off in the designer, on this artboard only */
 .ticket.is-canvas [data-slot].slot-off,
 .tk-free.slot-off{display:none}
+
+/* An artboard is a surface, and every child of it is absolutely positioned,
+   so there is no content left to give the ticket a height. On a wide screen
+   the stylesheet already pins it to 95vh and this never showed; below that
+   breakpoint it does not, and the ticket collapsed to a couple of hundred
+   pixels. Type is sized as a percentage of that height, so the headline came
+   out at 1.6px. The artboard has to be told its height at every width. */
+.ticket.is-canvas{min-height:calc(100svh - 80px);min-height:calc(100vh - 80px)}
+@supports (height:100svh){
+  .ticket.is-canvas{min-height:calc(100svh - 80px)}
+}
+@media (orientation:landscape) and (min-width:900px){
+  .ticket.is-canvas{min-height:95vh}
+}

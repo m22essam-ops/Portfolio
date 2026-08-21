@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home designer — Mohammed Essam</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   THE HOME DESIGNER
+   A canvas for the home page: drag, resize, delete, add.
+   The artboard is not a mock-up of the ticket, it IS the ticket:
+   index.html in an iframe, re-laid on every drag. What is on the
+   screen here is what the site will do.
+   Positions are stored as percentages of the ticket, so a
+   composition made on this screen holds together on every other.
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box}
+:root{
+  --red:#E3261A; --hot:#FF3B2B; --ink:#14120F; --paper:#F6F3EE;
+  --panel:#1B1917; --panel-2:#232019; --line:#ffffff1f; --dim:#ffffff8c;
+  --mono:"Barlow Condensed",sans-serif;
+  --body:"Hanken Grotesk",-apple-system,sans-serif;
+  --bar:54px; --insp:270px;
+}
+html,body{height:100%}
+body{
+  margin:0;background:var(--ink);color:var(--paper);
+  font-family:var(--body);font-size:14px;overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+button,input,select{font:inherit;color:inherit}
+
+/* ---------------- top bar ---------------- */
+.bar{
+  height:var(--bar);display:flex;align-items:center;gap:8px;
+  padding:0 12px;background:var(--panel);border-bottom:1px solid var(--line);
+  position:relative;z-index:40;
+}
+.bar h1{
+  font-family:var(--mono);font-size:15px;font-weight:700;letter-spacing:.16em;
+  text-transform:uppercase;margin:0 10px 0 2px;white-space:nowrap;
+}
+.bar .sp{flex:1}
+.btn{
+  background:#ffffff14;border:1px solid var(--line);border-radius:3px;
+  padding:7px 12px;cursor:pointer;white-space:nowrap;
+  font-family:var(--mono);font-size:13px;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;
+}
+.btn:hover{background:#ffffff26}
+.btn:disabled{opacity:.4;cursor:default}
+.btn.go{background:var(--red);border-color:var(--red)}
+.btn.go:hover{background:var(--hot);border-color:var(--hot)}
+.seg{display:flex;border:1px solid var(--line);border-radius:3px;overflow:hidden}
+.seg button{
+  background:none;border:0;padding:7px 13px;cursor:pointer;
+  font-family:var(--mono);font-size:13px;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;
+}
+.seg button.on{background:var(--red)}
+
+/* the Add menu */
+.menu{position:relative}
+.menu .pop{
+  position:absolute;top:calc(100% + 6px);left:0;min-width:190px;
+  background:var(--panel-2);border:1px solid var(--line);border-radius:4px;
+  padding:5px;display:none;z-index:50;
+}
+.menu.open .pop{display:block}
+.menu .pop button{
+  display:block;width:100%;text-align:left;background:none;border:0;
+  padding:8px 10px;border-radius:3px;cursor:pointer;font-size:13.5px;
+}
+.menu .pop button:hover{background:#ffffff1a}
+.menu .pop hr{border:0;border-top:1px solid var(--line);margin:5px 2px}
+.menu .pop .head{
+  font-family:var(--mono);font-size:11px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--dim);padding:7px 10px 3px;
+}
+
+/* ---------------- layout ---------------- */
+.wrap{display:flex;height:calc(100% - var(--bar))}
+.stage{
+  flex:1;min-width:0;position:relative;overflow:auto;
+  display:flex;align-items:center;justify-content:center;padding:22px;
+  background:
+    linear-gradient(45deg,#00000024 25%,transparent 25%,transparent 75%,#00000024 75%),
+    linear-gradient(45deg,#00000024 25%,transparent 25%,transparent 75%,#00000024 75%),
+    #1f1c19;
+  background-size:22px 22px;background-position:0 0,11px 11px;
+}
+.board{position:relative;flex:none;box-shadow:0 0 0 1px #ffffff1f}
+.board iframe{display:block;border:0;background:var(--red)}
+.board.busy::after{
+  content:"";position:absolute;inset:0;cursor:grabbing;z-index:30;
+}
+
+/* ---------------- the handles ---------------- */
+.ov{position:absolute;inset:0;z-index:20;pointer-events:none}
+.hit{
+  position:absolute;pointer-events:auto;cursor:grab;
+  outline:1px dashed #ffffff59;outline-offset:-1px;
+}
+.hit:hover{outline-color:var(--hot);outline-style:solid}
+.hit.sel{outline:2px solid var(--hot);outline-offset:-1px;cursor:move}
+.hit.sel::after{
+  content:attr(data-name);position:absolute;left:0;top:-19px;
+  background:var(--hot);color:#fff;padding:1px 6px;border-radius:2px;
+  font-family:var(--mono);font-size:11px;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;
+}
+.grip{
+  position:absolute;width:11px;height:11px;background:#fff;
+  border:1.5px solid var(--hot);border-radius:2px;pointer-events:auto;z-index:2;
+}
+.grip[data-g="nw"]{left:-6px;top:-6px;cursor:nwse-resize}
+.grip[data-g="n" ]{left:calc(50% - 5.5px);top:-6px;cursor:ns-resize}
+.grip[data-g="ne"]{right:-6px;top:-6px;cursor:nesw-resize}
+.grip[data-g="e" ]{right:-6px;top:calc(50% - 5.5px);cursor:ew-resize}
+.grip[data-g="se"]{right:-6px;bottom:-6px;cursor:nwse-resize}
+.grip[data-g="s" ]{left:calc(50% - 5.5px);bottom:-6px;cursor:ns-resize}
+.grip[data-g="sw"]{left:-6px;bottom:-6px;cursor:nesw-resize}
+.grip[data-g="w" ]{left:-6px;top:calc(50% - 5.5px);cursor:ew-resize}
+
+.guide{position:absolute;background:#00E5FF;z-index:25;pointer-events:none}
+.guide.v{width:1px;top:0;bottom:0}
+.guide.h{height:1px;left:0;right:0}
+
+/* ---------------- inspector ---------------- */
+.insp{
+  width:var(--insp);flex:none;background:var(--panel);
+  border-left:1px solid var(--line);overflow:auto;padding:14px;
+}
+.insp h2{
+  font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--dim);margin:0 0 10px;
+}
+.insp .none{color:var(--dim);line-height:1.5}
+.row{display:flex;gap:7px;margin-bottom:8px}
+.f{flex:1;min-width:0}
+.f label{
+  display:block;font-family:var(--mono);font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--dim);margin-bottom:3px;
+}
+.f input,.f select,.f textarea{
+  width:100%;background:#00000059;border:1px solid var(--line);
+  border-radius:3px;padding:6px 8px;font-size:13.5px;font-family:var(--body);
+}
+.f textarea{resize:vertical;min-height:56px;line-height:1.45}
+.f input:focus,.f select:focus,.f textarea:focus{outline:1px solid var(--hot);border-color:var(--hot)}
+.insp hr{border:0;border-top:1px solid var(--line);margin:14px 0}
+.del{width:100%;background:#4a1512;border-color:#7d2019}
+.del:hover{background:var(--red);border-color:var(--red)}
+
+/* the element list */
+.list{margin:0 0 4px;padding:0;list-style:none}
+.list li{
+  display:flex;align-items:center;gap:7px;padding:5px 7px;border-radius:3px;
+  cursor:pointer;font-size:13px;
+}
+.list li:hover{background:#ffffff14}
+.list li.on{background:var(--red)}
+.list li .k{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--dim);margin-left:auto;
+}
+.list li.on .k{color:#ffffffcc}
+.list li .eye{
+  border:0;background:none;cursor:pointer;padding:0 2px;opacity:.55;font-size:12px;
+}
+.list li .eye:hover{opacity:1}
+.list li.off{opacity:.45}
+
+/* ---------------- messages ---------------- */
+.say{
+  position:fixed;left:50%;bottom:18px;transform:translateX(-50%);
+  background:var(--panel-2);border:1px solid var(--line);border-left:3px solid var(--hot);
+  padding:11px 16px;border-radius:4px;max-width:640px;z-index:60;
+  line-height:1.45;display:none;
+}
+.say.on{display:block}
+.say.bad{border-left-color:#ff5c4d}
+.say.good{border-left-color:#35c26a}
+.hint{color:var(--dim);font-size:12.5px;line-height:1.5;margin:9px 0 0}
+kbd{
+  background:#ffffff1a;border:1px solid var(--line);border-bottom-width:2px;
+  border-radius:3px;padding:0 4px;font-family:var(--mono);font-size:12px;
+}
+.gate{
+  position:fixed;inset:0;background:var(--ink);z-index:99;
+  display:none;align-items:center;justify-content:center;padding:40px;
+}
+.gate.on{display:flex}
+.gate div{max-width:520px;line-height:1.6}
+.gate h2{font-family:var(--mono);letter-spacing:.14em;text-transform:uppercase;margin:0 0 12px}
+.gate code{background:#ffffff14;padding:2px 6px;border-radius:3px}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <h1>Home designer</h1>
+
+  <div class="seg" id="which">
+    <button data-art="desktop" class="on">Desktop</button>
+    <button data-art="mobile">Phone</button>
+  </div>
+
+  <div class="menu" id="addMenu">
+    <button class="btn" id="addBtn">Add +</button>
+    <div class="pop" id="addPop"></div>
+  </div>
+
+  <button class="btn" id="undo" disabled>Undo</button>
+  <button class="btn" id="reset">Reset artboard</button>
+
+  <span class="sp"></span>
+
+  <button class="btn" id="saveLocal">Save to folder</button>
+  <button class="btn go" id="saveGh">Save + publish</button>
+  <a class="btn" href="admin.html">Back to admin</a>
+</header>
+
+<div class="wrap">
+  <div class="stage" id="stage">
+    <div class="board" id="board">
+      <iframe id="frame" src="index.html" title="The home page"></iframe>
+      <div class="ov" id="ov"></div>
+    </div>
+  </div>
+
+  <aside class="insp" id="insp"></aside>
+</div>
+
+<div class="say" id="say"></div>
+
+<div class="gate" id="gate">
+  <div>
+    <h2>Start the server first</h2>
+    <p>The designer has to read and write your files, and a page opened by
+      double-clicking cannot do that. Double-click <code>Start Site.command</code>
+      in the portfolio folder, then open
+      <code>http://127.0.0.1:8888/design.html</code>.</p>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* the designer needs to read content.js off the server and write it back */
+  if (!/^https?:/.test(location.protocol)) {
+    document.getElementById('gate').classList.add('on');
+    return;
+  }
+
+  var $ = function (id) { return document.getElementById(id); };
+  var frame = $('frame'), ov = $('ov'), board = $('board'), insp = $('insp');
+
+  /* ---------------------------------------------------------------
+     STATE
+     LAYOUT is the only thing this tool owns. It is written into
+     content.js as `layout` at save time and nothing else is touched,
+     so this page can never eat a field that admin added.
+     --------------------------------------------------------------- */
+  var LAYOUT = { desktop: { items: [] }, mobile: { items: [] } };
+  var art = 'desktop';        /* which artboard is on screen */
+  var sel = -1;               /* index of the selected item */
+  var undoStack = [];
+  var imageList = [];
+
+  var SLOT_NAMES = {
+    top: 'Game line + serial',
+    name: 'Your name',
+    aside: 'Your line + badge',
+    title: 'Headline',
+    sub: 'Sub-line',
+    won: 'Awards list',
+    nav: 'The three tabs',
+    stamp: 'The stamp',
+    barcode: 'Barcode',
+    terms: 'Small print'
+  };
+  var SLOT_ORDER = ['top', 'name', 'aside', 'title', 'sub', 'won', 'nav', 'stamp', 'barcode', 'terms'];
+  /* slots whose type cannot usefully be restyled from here */
+  var NO_TYPE = { stamp: 1, barcode: 1, nav: 1, won: 1 };
+
+  function items() { return LAYOUT[art].items; }
+  function current() { return items()[sel] || null; }
+  function nameOf(it) {
+    if (!it) return '';
+    if (it.slot) return SLOT_NAMES[it.slot] || it.slot;
+    if (it.type === 'image') return 'Picture';
+    if (it.type === 'box') return 'Box';
+    return (it.text || 'Text').slice(0, 22);
+  }
+
+  function say(msg, kind) {
+    var el = $('say');
+    el.textContent = msg;
+    el.className = 'say on' + (kind ? ' ' + kind : '');
+    clearTimeout(say._t);
+    if (kind !== 'bad') say._t = setTimeout(function () { el.className = 'say'; }, 5200);
+  }
+
+  function snapshot() {
+    undoStack.push(JSON.stringify(LAYOUT));
+    if (undoStack.length > 60) undoStack.shift();
+    $('undo').disabled = false;
+  }
+
+  /* ---------------------------------------------------------------
+     THE ARTBOARD
+     --------------------------------------------------------------- */
+  function doc() {
+    try { return frame.contentDocument; } catch (e) { return null; }
+  }
+  function bodyEl() {
+    var d = doc();
+    return d ? d.querySelector('.tk-body') : null;
+  }
+
+  /* The desktop artboard fills the room available, so he designs at close to
+     the proportions of his own screen. The phone artboard is a fixed 390x844,
+     which is where the site's own breakpoint puts it. */
+  function sizeBoard() {
+    var stage = $('stage');
+    var w, h;
+    if (art === 'mobile') {
+      w = 390; h = 844;
+    } else {
+      w = Math.max(920, stage.clientWidth - 44);
+      h = Math.max(560, Math.round(w * 0.6));
+      var room = stage.clientHeight - 44;
+      if (h > room) { h = Math.max(520, room); }
+      /* the site's own wide layout needs landscape, so never let it go tall */
+      if (h >= w) h = Math.round(w * 0.72);
+    }
+    board.style.width = w + 'px';
+    board.style.height = h + 'px';
+    frame.style.width = w + 'px';
+    frame.style.height = h + 'px';
+  }
+
+  /* push the current artboard into the live page and redraw the handles */
+  function paint() {
+    var d = doc();
+    if (!d || !d.defaultView || !d.defaultView.applyHomeLayout) return;
+    var C = d.defaultView.SITE_CONTENT;
+    if (!C) return;
+    /* only the artboard being edited is handed over, so the page cannot
+       decide to render the other one at this size */
+    C.layout = {};
+    C.layout[art] = { items: items() };
+    d.defaultView.applyHomeLayout();
+    if (d.defaultView.fitHomeText) d.defaultView.fitHomeText();
+    drawHandles();
+  }
+
+  /* the ticket's padding box: percentages resolve against this */
+  function boardRect() {
+    var b = bodyEl();
+    if (!b) return null;
+    var r = b.getBoundingClientRect();
+    var f = frame.getBoundingClientRect();
+    var bd = board.getBoundingClientRect();
+    return {
+      left: f.left - bd.left + r.left,
+      top: f.top - bd.top + r.top,
+      width: r.width,
+      height: r.height
+    };
+  }
+
+  function elFor(it, i) {
+    var d = doc();
+    if (!d) return null;
+    if (it.slot) return d.querySelector('[data-slot="' + it.slot + '"]');
+    /* free items are appended in item order, so count the free ones before it */
+    var n = 0;
+    for (var k = 0; k < i; k++) if (!items()[k].slot && !items()[k].hidden) n++;
+    return d.querySelectorAll('.tk-free')[n] || null;
+  }
+
+  function drawHandles() {
+    ov.innerHTML = '';
+    var br = boardRect();
+    var b = bodyEl();
+    if (!br || !b) return;
+    var f = frame.getBoundingClientRect(), bd = board.getBoundingClientRect();
+    var bRect = b.getBoundingClientRect();
+    var ox = f.left - bd.left + bRect.left;
+    var oy = f.top - bd.top + bRect.top;
+
+    items().forEach(function (it, i) {
+      if (it.hidden) return;
+      var el = elFor(it, i);
+      if (!el) return;
+      /* offsetLeft/Top/Width/Height, not getBoundingClientRect: the rect of a
+         rotated element is the box AROUND the rotation, so a turned stamp
+         would get a handle frame bigger than itself and drifting off centre.
+         The offsets are the box before the turn, which is what to draw and
+         then rotate by the same angle. */
+      if (!el.offsetWidth && !el.offsetHeight) return;
+
+      var hit = document.createElement('div');
+      hit.className = 'hit' + (i === sel ? ' sel' : '');
+      hit.dataset.i = i;
+      hit.dataset.name = nameOf(it);
+      hit.style.left = (ox + el.offsetLeft) + 'px';
+      hit.style.top = (oy + el.offsetTop) + 'px';
+      hit.style.width = el.offsetWidth + 'px';
+      hit.style.height = el.offsetHeight + 'px';
+      if (it.rotate) hit.style.transform = 'rotate(' + it.rotate + 'deg)';
+      if (i === sel) {
+        ['nw', 'n', 'ne', 'e', 'se', 's', 'sw', 'w'].forEach(function (g) {
+          var k = document.createElement('div');
+          k.className = 'grip';
+          k.dataset.g = g;
+          hit.appendChild(k);
+        });
+      }
+      ov.appendChild(hit);
+    });
+  }
+
+  /* ---------------------------------------------------------------
+     DRAG AND RESIZE
+     Everything is converted to a percentage of the ticket the moment
+     it leaves the mouse, so nothing pixel-shaped is ever stored.
+     --------------------------------------------------------------- */
+  var drag = null;
+
+  ov.addEventListener('mousedown', function (e) {
+    var grip = e.target.closest('.grip');
+    var hit = e.target.closest('.hit');
+    if (!hit) return;
+    e.preventDefault();
+
+    var i = +hit.dataset.i;
+    if (i !== sel) { sel = i; renderInspector(); drawHandles(); hit = ov.querySelector('.hit.sel'); }
+
+    var br = boardRect();
+    var it = current();
+    if (!br || !it) return;
+
+    snapshot();
+    drag = {
+      mode: grip ? grip.dataset.g : 'move',
+      x0: e.clientX, y0: e.clientY, br: br,
+      start: { x: it.x || 0, y: it.y || 0, w: it.w || 0, h: it.h || 0 }
+    };
+    board.classList.add('busy');
+  });
+
+  window.addEventListener('mousemove', function (e) {
+    if (!drag) return;
+    var it = current();
+    if (!it) return;
+    var dx = (e.clientX - drag.x0) / drag.br.width * 100;
+    var dy = (e.clientY - drag.y0) / drag.br.height * 100;
+    var s = drag.start, m = drag.mode;
+
+    if (m === 'move') {
+      if (e.shiftKey) { if (Math.abs(dx) > Math.abs(dy)) dy = 0; else dx = 0; }
+      it.x = s.x + dx;
+      it.y = s.y + dy;
+    } else {
+      if (m.indexOf('e') > -1) it.w = Math.max(1.5, s.w + dx);
+      if (m.indexOf('s') > -1) it.h = Math.max(1.5, s.h + dy);
+      if (m.indexOf('w') > -1) { it.w = Math.max(1.5, s.w - dx); it.x = s.x + (s.w - it.w); }
+      if (m.indexOf('n') > -1) { it.h = Math.max(1.5, s.h - dy); it.y = s.y + (s.h - it.h); }
+    }
+
+    if (!e.altKey) snapTo(it, m);
+    round(it);
+    paint();
+    syncNumbers();
+  });
+
+  window.addEventListener('mouseup', function () {
+    if (!drag) return;
+    drag = null;
+    board.classList.remove('busy');
+    clearGuides();
+    paint();
+    renderInspector();
+  });
+
+  /* Snapping. Candidate lines are the ticket's own edges and middle plus
+     every other element's edges and middle, which is what makes a free
+     canvas produce something that still looks set rather than scattered.
+     Hold alt while dragging to ignore it. */
+  var TOL = 0.7;   /* percent */
+  function snapTo(it, mode) {
+    clearGuides();
+    var vx = [0, 50, 100], hy = [0, 50, 100];
+    items().forEach(function (o) {
+      if (o === it || o.hidden) return;
+      if (o.x != null && o.w != null) vx.push(o.x, o.x + o.w / 2, o.x + o.w);
+      if (o.y != null && o.h != null) hy.push(o.y, o.y + o.h / 2, o.y + o.h);
+    });
+
+    var movingX = (mode === 'move') ? [it.x, it.x + (it.w || 0) / 2, it.x + (it.w || 0)]
+                : (mode.indexOf('w') > -1 ? [it.x] : mode.indexOf('e') > -1 ? [it.x + (it.w || 0)] : []);
+    var movingY = (mode === 'move') ? [it.y, it.y + (it.h || 0) / 2, it.y + (it.h || 0)]
+                : (mode.indexOf('n') > -1 ? [it.y] : mode.indexOf('s') > -1 ? [it.y + (it.h || 0)] : []);
+
+    var best = null;
+    movingX.forEach(function (mv, k) {
+      vx.forEach(function (t) {
+        var d = Math.abs(mv - t);
+        if (d < TOL && (!best || d < best.d)) best = { d: d, t: t, k: k, mv: mv };
+      });
+    });
+    if (best) {
+      var shift = best.t - best.mv;
+      if (mode === 'move') it.x += shift;
+      else if (mode.indexOf('w') > -1) { it.w -= shift; it.x += shift; }
+      else it.w += shift;
+      guide('v', best.t);
+    }
+
+    best = null;
+    movingY.forEach(function (mv, k) {
+      hy.forEach(function (t) {
+        var d = Math.abs(mv - t);
+        if (d < TOL && (!best || d < best.d)) best = { d: d, t: t, k: k, mv: mv };
+      });
+    });
+    if (best) {
+      var sh = best.t - best.mv;
+      if (mode === 'move') it.y += sh;
+      else if (mode.indexOf('n') > -1) { it.h -= sh; it.y += sh; }
+      else it.h += sh;
+      guide('h', best.t);
+    }
+  }
+  function guide(axis, pct) {
+    var br = boardRect();
+    if (!br) return;
+    var g = document.createElement('div');
+    g.className = 'guide ' + axis;
+    if (axis === 'v') { g.style.left = (br.left + br.width * pct / 100) + 'px'; }
+    else { g.style.top = (br.top + br.height * pct / 100) + 'px'; }
+    ov.appendChild(g);
+  }
+  function clearGuides() {
+    [].forEach.call(ov.querySelectorAll('.guide'), function (g) { g.remove(); });
+  }
+  function round(it) {
+    ['x', 'y', 'w', 'h'].forEach(function (k) {
+      if (it[k] != null) it[k] = Math.round(it[k] * 100) / 100;
+    });
+  }
+
+  /* ---------------------------------------------------------------
+     KEYBOARD
+     --------------------------------------------------------------- */
+  document.addEventListener('keydown', function (e) {
+    var t = e.target.tagName;
+    if (t === 'INPUT' || t === 'TEXTAREA' || t === 'SELECT') return;
+
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'z') { e.preventDefault(); undo(); return; }
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'd') { e.preventDefault(); duplicate(); return; }
+    if (e.key === 'Escape') { sel = -1; renderInspector(); drawHandles(); return; }
+
+    var it = current();
+    if (!it) return;
+
+    if (e.key === 'Delete' || e.key === 'Backspace') { e.preventDefault(); removeSel(); return; }
+
+    var step = e.shiftKey ? 1 : 0.2;
+    var moved = true;
+    if (e.key === 'ArrowLeft') it.x = (it.x || 0) - step;
+    else if (e.key === 'ArrowRight') it.x = (it.x || 0) + step;
+    else if (e.key === 'ArrowUp') it.y = (it.y || 0) - step;
+    else if (e.key === 'ArrowDown') it.y = (it.y || 0) + step;
+    else moved = false;
+    if (moved) {
+      e.preventDefault();
+      round(it);
+      paint();
+      syncNumbers();
+    }
+  });
+
+  function undo() {
+    if (!undoStack.length) return;
+    LAYOUT = JSON.parse(undoStack.pop());
+    if (!undoStack.length) $('undo').disabled = true;
+    if (sel >= items().length) sel = -1;
+    paint();
+    renderInspector();
+  }
+  $('undo').addEventListener('click', undo);
+
+  function removeSel() {
+    var it = current();
+    if (!it) return;
+    snapshot();
+    items().splice(sel, 1);
+    sel = -1;
+    paint();
+    renderInspector();
+    say('Removed “' + nameOf(it) + '”. Undo brings it back, and anything built in is in the Add menu.');
+  }
+
+  function duplicate() {
+    var it = current();
+    if (!it || it.slot) return;   /* a slot exists once; only added things copy */
+    snapshot();
+    var copy = JSON.parse(JSON.stringify(it));
+    copy.x = (copy.x || 0) + 2;
+    copy.y = (copy.y || 0) + 2;
+    items().push(copy);
+    sel = items().length - 1;
+    paint();
+    renderInspector();
+  }
+
+  /* ---------------------------------------------------------------
+     THE INSPECTOR
+     --------------------------------------------------------------- */
+  var COLOURS = [
+    ['ink', 'Black'], ['red', 'Red'], ['deep', 'Deep red'],
+    ['paper', 'Off-white'], ['muted', 'Grey'], ['faint', 'Faint grey']
+  ];
+  var FONTS = [
+    ['', 'Leave as it is'], ['home', 'Syne (headline)'], ['display', 'Bricolage'],
+    ['mono', 'Barlow Condensed'], ['body', 'Hanken Grotesk']
+  ];
+
+  function field(label, node) {
+    var f = document.createElement('div');
+    f.className = 'f';
+    var l = document.createElement('label');
+    l.textContent = label;
+    f.appendChild(l);
+    f.appendChild(node);
+    return f;
+  }
+  function num(key, step) {
+    var i = document.createElement('input');
+    i.type = 'number';
+    i.step = step || 0.5;
+    i.dataset.k = key;
+    var it = current();
+    i.value = it && it[key] != null ? it[key] : '';
+    i.addEventListener('input', function () {
+      var o = current();
+      if (!o) return;
+      o[key] = this.value === '' ? undefined : parseFloat(this.value);
+      paint();
+    });
+    i.addEventListener('focus', snapshot);
+    return i;
+  }
+  function pick(key, opts, blank) {
+    var s = document.createElement('select');
+    if (blank) s.appendChild(new Option(blank, ''));
+    opts.forEach(function (o) { s.appendChild(new Option(o[1], o[0])); });
+    var it = current();
+    s.value = (it && it[key]) || '';
+    s.addEventListener('change', function () {
+      var o = current();
+      if (!o) return;
+      snapshot();
+      if (this.value === '') delete o[key]; else o[key] = this.value;
+      paint();
+    });
+    return s;
+  }
+  function rows(list) {
+    var r = document.createElement('div');
+    r.className = 'row';
+    list.forEach(function (n) { r.appendChild(n); });
+    return r;
+  }
+
+  function renderInspector() {
+    insp.innerHTML = '';
+    var it = current();
+
+    /* the element list is always there: some things are hard to click */
+    var h = document.createElement('h2');
+    h.textContent = 'Elements';
+    insp.appendChild(h);
+
+    var ul = document.createElement('ul');
+    ul.className = 'list';
+    items().forEach(function (o, i) {
+      var li = document.createElement('li');
+      if (i === sel) li.className = 'on';
+      if (o.hidden) li.className += ' off';
+      var eye = document.createElement('button');
+      eye.className = 'eye';
+      eye.textContent = o.hidden ? '○' : '●';
+      eye.title = o.hidden ? 'Show' : 'Hide';
+      eye.addEventListener('click', function (ev) {
+        ev.stopPropagation();
+        snapshot();
+        if (o.hidden) delete o.hidden; else o.hidden = true;
+        paint();
+        renderInspector();
+      });
+      li.appendChild(eye);
+      var sp = document.createElement('span');
+      sp.textContent = nameOf(o);
+      li.appendChild(sp);
+      var k = document.createElement('span');
+      k.className = 'k';
+      k.textContent = o.slot ? 'built in' : (o.type || 'text');
+      li.appendChild(k);
+      li.addEventListener('click', function () {
+        sel = i;
+        renderInspector();
+        drawHandles();
+      });
+      ul.appendChild(li);
+    });
+    insp.appendChild(ul);
+
+    var hr = document.createElement('hr');
+    insp.appendChild(hr);
+
+    if (!it) {
+      var p = document.createElement('p');
+      p.className = 'none';
+      p.textContent = 'Click anything on the ticket to move it. Drag the corners to resize.';
+      insp.appendChild(p);
+      var tip = document.createElement('p');
+      tip.className = 'hint';
+      tip.innerHTML = 'Arrow keys nudge, <kbd>shift</kbd> nudges further. ' +
+        'Hold <kbd>alt</kbd> while dragging to ignore the snapping. ' +
+        '<kbd>⌘Z</kbd> undo, <kbd>⌘D</kbd> duplicate, <kbd>delete</kbd> removes.';
+      insp.appendChild(tip);
+      return;
+    }
+
+    var h2 = document.createElement('h2');
+    h2.textContent = nameOf(it);
+    insp.appendChild(h2);
+
+    insp.appendChild(rows([field('X %', num('x')), field('Y %', num('y'))]));
+    insp.appendChild(rows([field('Width %', num('w')), field('Height %', num('h'))]));
+    insp.appendChild(rows([field('Turn °', num('rotate', 1)), field('Fade', num('opacity', 0.05))]));
+    insp.appendChild(rows([field('Layer', num('z', 1))]));
+
+    var isText = !it.slot ? it.type !== 'image' && it.type !== 'box' : !NO_TYPE[it.slot];
+
+    if (!it.slot && it.type !== 'image' && it.type !== 'box') {
+      var ta = document.createElement('textarea');
+      ta.value = it.text || '';
+      ta.addEventListener('input', function () { it.text = this.value; paint(); });
+      ta.addEventListener('focus', snapshot);
+      insp.appendChild(rows([field('The words', ta)]));
+    }
+
+    if (!it.slot && it.type === 'image') {
+      var sc = document.createElement('select');
+      sc.appendChild(new Option('Pick a picture...', ''));
+      imageList.forEach(function (n) { sc.appendChild(new Option(n, n)); });
+      sc.value = it.src || '';
+      sc.addEventListener('change', function () { snapshot(); it.src = this.value; paint(); });
+      insp.appendChild(rows([field('Picture', sc)]));
+      insp.appendChild(rows([field('Fill', pick('fit', [['cover', 'Fill the box'], ['contain', 'Fit inside']], ''))]));
+    }
+
+    if (!it.slot && it.type === 'box') {
+      insp.appendChild(rows([field('Colour', pick('fill', COLOURS, ''))]));
+      insp.appendChild(rows([field('Corner', num('radius', 1))]));
+    }
+
+    if (isText) {
+      insp.appendChild(rows([field('Type size %', num('size', 0.2))]));
+      insp.appendChild(rows([
+        field('Align', pick('align', [['left', 'Left'], ['center', 'Centre'], ['right', 'Right']], 'Leave')),
+        field('Colour', pick('color', COLOURS, 'Leave'))
+      ]));
+      insp.appendChild(rows([field('Typeface', pick('font', FONTS.slice(1), 'Leave as it is'))]));
+      insp.appendChild(rows([
+        field('Weight', pick('weight', [['400', 'Light'], ['600', 'Medium'], ['700', 'Bold'], ['800', 'Heavy']], 'Leave')),
+        field('Spacing', num('tracking', 0.01))
+      ]));
+    }
+
+    if (!it.slot) {
+      var u = document.createElement('input');
+      u.type = 'text';
+      u.placeholder = 'work.html, or a full link';
+      u.value = it.url || '';
+      u.addEventListener('input', function () {
+        if (this.value.trim()) it.url = this.value.trim(); else delete it.url;
+        paint();
+      });
+      u.addEventListener('focus', snapshot);
+      insp.appendChild(rows([field('Links to', u)]));
+    }
+
+    insp.appendChild(document.createElement('hr'));
+    var del = document.createElement('button');
+    del.className = 'btn del';
+    del.textContent = it.slot ? 'Remove from the page' : 'Delete';
+    del.addEventListener('click', removeSel);
+    insp.appendChild(del);
+  }
+
+  /* keep the number boxes in step while something is being dragged */
+  function syncNumbers() {
+    var it = current();
+    if (!it) return;
+    [].forEach.call(insp.querySelectorAll('input[data-k]'), function (i) {
+      if (document.activeElement === i) return;
+      i.value = it[i.dataset.k] != null ? it[i.dataset.k] : '';
+    });
+  }
+
+  /* ---------------------------------------------------------------
+     ADD MENU
+     --------------------------------------------------------------- */
+  function buildAddMenu() {
+    var pop = $('addPop');
+    pop.innerHTML = '';
+
+    function head(t) {
+      var d = document.createElement('div');
+      d.className = 'head';
+      d.textContent = t;
+      pop.appendChild(d);
+    }
+    function line(label, fn) {
+      var b = document.createElement('button');
+      b.textContent = label;
+      b.addEventListener('click', function () {
+        $('addMenu').classList.remove('open');
+        fn();
+      });
+      pop.appendChild(b);
+    }
+
+    head('New');
+    line('Text', function () { addFree({ type: 'text', text: 'New line', size: 2.4, color: 'ink', font: 'display', w: 26, h: 6 }); });
+    line('Picture', function () { addFree({ type: 'image', src: imageList[0] || '', fit: 'cover', w: 22, h: 26 }); });
+    line('Box of colour', function () { addFree({ type: 'box', fill: 'red', w: 20, h: 12 }); });
+
+    var missing = SLOT_ORDER.filter(function (s) {
+      return !items().some(function (o) { return o.slot === s; });
+    });
+    if (missing.length) {
+      pop.appendChild(document.createElement('hr'));
+      head('Put back');
+      missing.forEach(function (s) {
+        line(SLOT_NAMES[s], function () {
+          snapshot();
+          items().push({ slot: s, x: 8, y: 40, w: 30, h: 10 });
+          sel = items().length - 1;
+          paint();
+          renderInspector();
+        });
+      });
+    }
+  }
+  function addFree(base) {
+    snapshot();
+    base.x = 34;
+    base.y = 40;
+    items().push(base);
+    sel = items().length - 1;
+    paint();
+    renderInspector();
+    say('Added. Drag it where you want it.');
+  }
+  $('addBtn').addEventListener('click', function (e) {
+    e.stopPropagation();
+    buildAddMenu();
+    $('addMenu').classList.toggle('open');
+  });
+  document.addEventListener('click', function () { $('addMenu').classList.remove('open'); });
+  $('addPop').addEventListener('click', function (e) { e.stopPropagation(); });
+
+  /* ---------------------------------------------------------------
+     BOOTSTRAP: an empty artboard is filled by measuring the real page
+     Whatever the stylesheet lays out becomes the starting composition,
+     so he opens the tool on the page he already has and drags from there
+     rather than from a blank sheet.
+     --------------------------------------------------------------- */
+  function captureFlow() {
+    var d = doc(), b = bodyEl();
+    if (!d || !b) return [];
+    var tk = d.querySelector('.ticket');
+    var had = tk.classList.contains('is-canvas');
+    if (had) {
+      /* measure the stylesheet's own layout, not the artboard's */
+      var C = d.defaultView.SITE_CONTENT;
+      C.layout = {};
+      d.defaultView.applyHomeLayout();
+      if (d.defaultView.fitHomeText) d.defaultView.fitHomeText();
+    }
+    var br = b.getBoundingClientRect();
+    var out = [];
+    SLOT_ORDER.forEach(function (slot) {
+      var el = d.querySelector('[data-slot="' + slot + '"]');
+      if (!el || el.hidden) return;
+      var r = el.getBoundingClientRect();
+      if (!r.width || !r.height) return;
+      /* Height from the ink, not from the box. A paragraph's layout box can
+         be shorter than the type inside it, and a box captured that tight
+         starts spilling on to whatever is under it as soon as the window
+         changes shape. A little air on the text slots costs nothing and
+         keeps the opening composition clean at every size. */
+      var tall = Math.max(r.height, el.scrollHeight);
+      if (!NO_TYPE[slot]) tall *= 1.06;
+
+      var it = {
+        slot: slot,
+        x: +((r.left - br.left) / br.width * 100).toFixed(2),
+        y: +((r.top - br.top) / br.height * 100).toFixed(2),
+        w: +(r.width / br.width * 100).toFixed(2),
+        h: +(tall / br.height * 100).toFixed(2)
+      };
+      if (!NO_TYPE[slot]) {
+        it.size = +(parseFloat(d.defaultView.getComputedStyle(el).fontSize) / br.height * 100).toFixed(3);
+      }
+      out.push(it);
+    });
+    return out;
+  }
+
+  /* ---------------------------------------------------------------
+     LOAD AND SAVE
+     This page only ever writes `layout`. At save time content.js is
+     re-read off disk, `layout` is dropped in and the file is written
+     back, so nothing that admin holds can be overwritten from here.
+     --------------------------------------------------------------- */
+  function fetchModel() {
+    return fetch('content.js?cb=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) {
+        if (!r.ok) throw new Error('content.js could not be read (' + r.status + ')');
+        return r.text();
+      })
+      .then(function (txt) {
+        var sandbox = {};
+        new Function('window', txt)(sandbox);
+        if (!sandbox.SITE_CONTENT) throw new Error('content.js has no SITE_CONTENT in it');
+        return sandbox.SITE_CONTENT;
+      });
+  }
+
+  function serialize(model) {
+    var header = [
+      '/* ============================================================',
+      '   YOUR SITE\'S CONTENT',
+      '   Generated by admin.html. Change the text between quotes,',
+      '   save, refresh the page.',
+      '   ============================================================ */',
+      '',
+      'window.SITE_CONTENT = '
+    ].join('\n');
+    var json = JSON.stringify(model, null, 2)
+      .replace(/^(\s*)"([A-Za-z_][A-Za-z0-9_]*)"(\s*:)(\s*[\[{"\d\-])/gm, '$1$2$3$4');
+    return header + json + ';\n';
+  }
+
+  /* an artboard with nothing on it is stored as nothing, so the page
+     falls back to the stylesheet rather than to an empty ticket */
+  function layoutForSaving() {
+    var out = {};
+    ['desktop', 'mobile'].forEach(function (k) {
+      if (LAYOUT[k] && LAYOUT[k].items && LAYOUT[k].items.length) out[k] = { items: LAYOUT[k].items };
+    });
+    return out;
+  }
+
+  function buildFile() {
+    return fetchModel().then(function (model) {
+      var L = layoutForSaving();
+      if (Object.keys(L).length) model.layout = L; else delete model.layout;
+      return serialize(model);
+    });
+  }
+
+  function saveFolder() {
+    return buildFile().then(function (txt) {
+      return fetch('/api/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: txt, files: {} })
+      }).then(function (r) { return r.json(); });
+    });
+  }
+
+  $('saveLocal').addEventListener('click', function () {
+    say('Saving to the folder...');
+    saveFolder().then(function (d) {
+      if (d && d.ok) say('Saved to the folder. This machine only: press Save + publish to put it on the live site.', 'good');
+      else say('Save failed: ' + ((d && d.error) || 'unknown error'), 'bad');
+    }).catch(function (e) { say(e.message, 'bad'); });
+  });
+
+  /* GitHub, using the same connection admin already holds. The token lives
+     under one key for both pages, so connecting once in admin is enough. */
+  var GH_KEY = 'admin_github_save';
+  function ghRead() {
+    try { return JSON.parse(localStorage.getItem(GH_KEY) || '{}'); } catch (e) { return {}; }
+  }
+  function ghApi(path, opts) {
+    var gh = ghRead();
+    return fetch('https://api.github.com' + path, Object.assign({
+      headers: {
+        Authorization: 'Bearer ' + gh.token,
+        Accept: 'application/vnd.github+json'
+      }
+    }, opts || {}));
+  }
+
+  $('saveGh').addEventListener('click', function () {
+    var gh = ghRead();
+    if (!gh.token || !gh.owner || !gh.repo) {
+      say('Not connected to GitHub yet. Open admin, connect there once, then come back.', 'bad');
+      return;
+    }
+    var btn = this;
+    btn.disabled = true;
+    say('Saving...');
+
+    var folderOk = false;
+    buildFile()
+      .then(function (txt) {
+        /* the folder first, so this machine and the live site stay level */
+        return fetch('/api/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content: txt, files: {} })
+        }).then(function (r) { return r.json(); })
+          .catch(function () { return null; })
+          .then(function (d) { folderOk = !!(d && d.ok); return txt; });
+      })
+      .then(function (txt) {
+        var ref = gh.branch ? '?ref=' + encodeURIComponent(gh.branch) : '';
+        return ghApi('/repos/' + gh.owner + '/' + gh.repo + '/contents/content.js' + ref)
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .then(function (data) {
+            var body = {
+              message: 'Home layout (' + new Date().toLocaleDateString('en-GB',
+                { year: 'numeric', month: 'short', day: 'numeric' }) + ')',
+              content: b64(txt)
+            };
+            if (data && data.sha) body.sha = data.sha;
+            if (gh.branch) body.branch = gh.branch;
+            return ghApi('/repos/' + gh.owner + '/' + gh.repo + '/contents/content.js', {
+              method: 'PUT',
+              body: JSON.stringify(body)
+            });
+          });
+      })
+      .then(function (res) {
+        btn.disabled = false;
+        if (!res.ok) {
+          return res.json().then(function (j) {
+            say('GitHub said no: ' + (j.message || res.status), 'bad');
+          });
+        }
+        say('Saved and published. The live site rebuilds in a minute or two.' +
+          (folderOk ? ' Your folder is updated too.' : ' (Your folder was NOT updated: the local server is not running.)'),
+          'good');
+      })
+      .catch(function (e) {
+        btn.disabled = false;
+        say(e.message || 'Save failed.', 'bad');
+      });
+  });
+
+  function b64(str) {
+    var bytes = new TextEncoder().encode(str);
+    var bin = '';
+    for (var i = 0; i < bytes.length; i += 0x8000) {
+      bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+    }
+    return btoa(bin);
+  }
+
+  $('reset').addEventListener('click', function () {
+    snapshot();
+    LAYOUT[art] = { items: captureFlow() };
+    sel = -1;
+    paint();
+    relax();
+    renderInspector();
+    say('Back to the built-in layout for this artboard. Save to keep it, or undo.');
+  });
+
+  /* ---------------------------------------------------------------
+     the picture list, read straight off the folder
+     --------------------------------------------------------------- */
+  function loadImages() {
+    var got = [];
+    function dir(path, prefix) {
+      return fetch(path).then(function (r) { return r.ok ? r.text() : ''; })
+        .then(function (html) {
+          var d = document.createElement('div');
+          d.innerHTML = html;
+          [].forEach.call(d.querySelectorAll('a'), function (a) {
+            var n = decodeURIComponent(a.getAttribute('href') || '');
+            if (/\.(jpe?g|png|gif|webp|svg)$/i.test(n)) got.push(prefix + n);
+          });
+        }).catch(function () {});
+    }
+    return dir('images/', '').then(function () { return dir('images/live/', 'live/'); })
+      .then(function () { imageList = got.sort(); });
+  }
+
+  /* ---------------------------------------------------------------
+     WIRING
+     --------------------------------------------------------------- */
+  [].forEach.call($('which').children, function (b) {
+    b.addEventListener('click', function () {
+      [].forEach.call($('which').children, function (o) { o.classList.remove('on'); });
+      b.classList.add('on');
+      art = b.dataset.art;
+      sel = -1;
+      sizeBoard();
+      /* the iframe has to re-run its own breakpoint at the new width */
+      frame.contentWindow.location.reload();
+    });
+  });
+
+  /* The saved layout has to be in hand before the frame is measured, or the
+     bootstrap capture would overwrite work he has already done. Both are
+     started at once and the frame waits on the file. */
+  var modelReady = fetchModel().then(function (model) {
+    if (model.layout) {
+      if (model.layout.desktop && model.layout.desktop.items) LAYOUT.desktop = model.layout.desktop;
+      if (model.layout.mobile && model.layout.mobile.items) LAYOUT.mobile = model.layout.mobile;
+    }
+  }).catch(function (e) {
+    say('Could not read content.js: ' + e.message, 'bad');
+  });
+
+  /* Wait until the page inside the frame has actually settled at the artboard
+     size before measuring it. Getting this wrong is not subtle: the ticket's
+     type is sized against the viewport, so a capture taken while the frame is
+     still at the browser's default 300x150 reads the headline as 24px instead
+     of 90px and the whole opening composition comes out miniature.
+     Three things have to be true: the frame is the size we asked for, its
+     webfonts have arrived (they change how wide the headline measures), and
+     the browser has painted at least once since. */
+  function whenSettled(cb, tries) {
+    tries = tries || 0;
+    var d = doc(), b = bodyEl();
+    var want = parseFloat(frame.style.width) || 0;
+    var got = d && d.documentElement ? d.documentElement.clientWidth : 0;
+    if (b && want && Math.abs(got - want) < 2) {
+      var done = false;
+      var run = function () {
+        if (done) return;
+        done = true;
+        if (d.defaultView.fitHomeText) d.defaultView.fitHomeText();
+        cb();
+      };
+      var go = function () {
+        /* a frame to let the page paint, but never only a frame: rAF does not
+           run in a background tab, and opening the designer in one left it
+           sitting on an empty canvas until the tab was looked at */
+        requestAnimationFrame(function () { requestAnimationFrame(run); });
+        setTimeout(run, 140);
+      };
+      if (d.fonts && d.fonts.ready) d.fonts.ready.then(go); else go();
+      return;
+    }
+    if (tries > 60) { cb(); return; }        /* something is wrong; do not hang */
+    setTimeout(function () { whenSettled(cb, tries + 1); }, 50);
+  }
+
+  /* Which boxes hold more than they have room for. A box on this canvas is a
+     hard box, but the type inside it still needs the height it needs, so a
+     box dragged too short does not clip, it spills over whatever is beneath.
+     That is worth saying out loud rather than leaving him to spot it: the
+     phone artboard is one screen and his phone page is currently taller than
+     one, so the opening capture squeezes it and the tabs are the first thing
+     to overflow. */
+  /* Grow any box that turned out too short for what is in it.
+     A capture measures the flow layout, but placing an element absolutely
+     changes the width it gets, which changes where its text wraps, which
+     changes its height. The badge column is the obvious one: two lines in
+     the flow, three once it is placed. Rather than guess a cushion, place it
+     and then measure the real thing and give it the room it asked for. */
+  function relax(passes) {
+    var b = bodyEl();
+    if (!b) return;
+    var H = b.clientHeight;
+    if (!H) return;
+    for (var p = 0; p < (passes || 3); p++) {
+      var changed = false;
+      items().forEach(function (it, i) {
+        if (it.hidden || it.h == null) return;
+        var el = elFor(it, i);
+        if (!el) return;
+        var over = el.scrollHeight - el.offsetHeight;
+        if (over > 2) {
+          it.h = +(it.h + (over + 2) / H * 100).toFixed(2);
+          changed = true;
+        }
+      });
+      if (!changed) return;
+      paint();
+    }
+  }
+
+  function tooSmall() {
+    var out = [];
+    items().forEach(function (it, i) {
+      if (it.hidden) return;
+      var el = elFor(it, i);
+      if (!el) return;
+      if (el.scrollHeight > el.offsetHeight + 3) out.push('“' + nameOf(it) + '”');
+    });
+    return out;
+  }
+
+  var booted = false;
+  function onFrameReady() {
+    var d = doc();
+    if (!d) {
+      say('The designer cannot read the page. Open it from http://127.0.0.1:8888/design.html', 'bad');
+      return;
+    }
+    modelReady.then(function () {
+      whenSettled(function () {
+        var fresh = !LAYOUT[art].items.length;
+        if (fresh) LAYOUT[art] = { items: captureFlow() };
+        paint();
+        if (fresh) relax();
+        renderInspector();
+        var tight = tooSmall();
+        if (tight.length) {
+          say('Heads up: ' + tight.join(' and ') + ' ' + (tight.length > 1 ? 'have' : 'has') +
+            ' more in ' + (tight.length > 1 ? 'them' : 'it') + ' than the box allows, so ' +
+            (tight.length > 1 ? 'they spill' : 'it spills') +
+            ' over what is underneath. Drag the bottom edge down, or make the type smaller.');
+        } else if (!booted) {
+          say('This is your real home page, not a picture of it. Drag anything. Nothing goes live until you save.');
+        }
+        booted = true;
+      });
+    });
+  }
+  sizeBoard();                      /* size the frame before anything measures it */
+  frame.addEventListener('load', onFrameReady);
+  /* the frame can finish loading before this script runs */
+  try {
+    if (frame.contentDocument && frame.contentDocument.readyState === 'complete') onFrameReady();
+  } catch (e) {}
+
+  window.addEventListener('resize', function () {
+    if (art !== 'desktop') return;
+    clearTimeout(window._rz);
+    window._rz = setTimeout(function () { sizeBoard(); setTimeout(paint, 220); }, 160);
+  });
+
+  loadImages();
+})();
+</script>
+
+</body>
+</html>

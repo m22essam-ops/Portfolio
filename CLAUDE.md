@@ -24,6 +24,8 @@ server or bundler breaks his workflow. Do not suggest React/Tailwind/Vite.
   correctly on the live site while the owner's own preview still showed the old
   text, which reads exactly like a failed save. Keep both destinations on that
   button. The status line after a save says what happened to each.
+- `design.html` — the home designer. A canvas for the ticket: drag, resize,
+  delete, add. Writes only `layout` into content.js. Needs the local server.
 - `site.js` — shared helpers (`imgSrc`, scroll reveals).
 - `auto-refresh.js` — reloads the page when content.js changes. Local only.
 - `local-server.py` — serves the folder on :8888 and gives admin its save endpoint.
@@ -74,6 +76,52 @@ correction-notice state (`wonBand` / `wonBadge` / `wonTitleTop` /
 `wonTitleBottom` / `wonLine`) and prints what was won. This exists because the
 concept is otherwise destroyed by the thing the owner is working toward.
 Verified working both ways.
+
+### The home designer (added 21 Aug 2026)
+
+`design.html` is a drag-and-drop canvas for the home page. The owner asked for
+it in those words: boxes he can drag and resize, delete an element, add boxes
+or images. He was told the trade first, that absolute positions describe one
+screen and would need a hand-built phone layout, and **he chose the free canvas
+anyway**. Do not re-litigate it. The compromise is in the units, not the freedom.
+
+**Every position is a percentage of the ticket, never a pixel.** The ticket
+then scales as one piece and a composition made on one screen holds its
+proportions on every other. `layout.desktop` is used on a wide landscape
+screen, `layout.mobile` below 900px.
+
+**An artboard with no items falls through to the hand-built flow layout.** So:
+no `layout` in content.js means the page is exactly what the stylesheet says,
+an untouched phone keeps the layout tested down to 360px, and deleting
+`layout` puts everything back. Verified byte-identical through a full save
+round trip. `applyLayout()` in index.html is the whole engine; the flow
+wrappers are neutralised with `display:contents` so the real elements, and
+their scripts, keep working.
+
+Things that will bite anyone changing this:
+
+- **The artboard must be told its height.** Every child is absolute, so there
+  is no content left to give the ticket a height. Above 900px the stylesheet
+  already pins 95vh and this never shows; below it the ticket collapsed and
+  the headline, sized as a percentage of that height, came out at 1.6px.
+  `.ticket.is-canvas{min-height:...}` at every width is load-bearing.
+- **Measure only after the frame has settled.** The ticket's type is sized
+  against the viewport, so a capture taken while the designer's iframe is
+  still at the browser's default 300x150 reads the headline as 24px instead
+  of 90px. `whenSettled()` waits for the size, the webfonts and a paint.
+- **Handles are drawn from `offsetLeft/Width`, not `getBoundingClientRect`.**
+  The rect of a rotated element is the box *around* the rotation, so a turned
+  stamp gets a frame bigger than itself.
+- The headline's fit-to-box safety net survives: the artboard size is the
+  starting point and `fitTitle()` still shrinks it to fit its own box.
+
+`design.html` only ever writes `layout`: it re-reads content.js off disk at
+save time, drops `layout` in and writes it back, so it cannot eat a field that
+admin holds. It shares admin's GitHub connection (same localStorage key).
+
+A box on the canvas is a hard box, but type inside it still needs the height
+it needs, so a box dragged too short spills rather than clips. The designer
+says which elements are spilling instead of leaving him to spot it.
 
 ### The quiet jokes
 
