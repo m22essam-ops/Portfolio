@@ -18,7 +18,7 @@
   <div class="perf top" aria-hidden="true"></div>
 
   <div class="tk-body">
-    <div class="tk-top">
+    <div class="tk-top" data-slot="top">
       <span id="tkGame"></span>
       <span id="tkSerial"></span>
     </div>
@@ -29,14 +29,14 @@
          and the award count sit on the opposite side of the same row, which
          is what the black band used to hold. -->
     <div class="tk-namerow">
-      <p class="tk-name" id="tkName"></p>
-      <div class="tk-aside">
+      <p class="tk-name" id="tkName" data-slot="name"></p>
+      <div class="tk-aside" data-slot="aside">
         <span id="tkBand"></span>
         <span class="tk-badge" id="tkBadge"></span>
       </div>
     </div>
 
-    <h1 class="tk-title"><span id="tkTitleTop"></span><span id="tkTitleBottom"></span></h1>
+    <h1 class="tk-title" data-slot="title"><span id="tkTitleTop"></span><span id="tkTitleBottom"></span></h1>
 
     <!-- The sub-line and the tabs share the left column, the stamp holds the
          right and spans both. Before this the stamp sat in a row of its own
@@ -44,10 +44,10 @@
          the copy while the stamp floated on the other side of it. -->
     <div class="tk-mid">
       <div class="tk-midleft">
-      <p class="tk-sub" id="tkSub"></p>
+      <p class="tk-sub" id="tkSub" data-slot="sub"></p>
 
-        <ul class="won-list" id="wonList" hidden></ul>
-        <nav class="tk-nav" id="tkNav"></nav>
+        <ul class="won-list" id="wonList" data-slot="won" hidden></ul>
+        <nav class="tk-nav" id="tkNav" data-slot="nav"></nav>
       </div>
 
       <!-- THE STAMP. A postage stamp, not a rubber one: perforated edge, a
@@ -55,7 +55,7 @@
            and the name along the bottom. It is the only image on the page and
            the only thing that is not type, and the whole of it is a link to
            the About page. Every word comes from content.js. -->
-      <a class="stamp" id="tkStamp" href="about.html">
+      <a class="stamp" id="tkStamp" data-slot="stamp" href="about.html">
         <span class="stamp-perf" aria-hidden="true"></span>
         <span class="stamp-in">
           <svg class="stamp-arc" viewBox="0 0 200 200" aria-hidden="true"
@@ -83,8 +83,8 @@
     </div>
 
     <div class="tk-foot">
-      <div class="barcode" aria-hidden="true"></div>
-      <p class="tk-terms" id="tkTerms"></p>
+      <div class="barcode" data-slot="barcode" aria-hidden="true"></div>
+      <p class="tk-terms" id="tkTerms" data-slot="terms"></p>
     </div>
   </div>
 
@@ -162,6 +162,121 @@
     }
   })();
 
+  /* ---- THE HOME CANVAS -------------------------------------------------
+     If he has laid the ticket out in the designer, `content.layout` holds
+     one artboard per shape of screen and every box in it is a PERCENTAGE
+     of the ticket, never a pixel: the ticket then scales as one piece and
+     the composition holds its proportions at any window size.
+
+     `layout.desktop` is used on a wide landscape screen, `layout.mobile`
+     below that. An artboard with no items falls through to the hand-built
+     flow layout in the stylesheet, so an untouched phone keeps the layout
+     that was tested down to 360px, and deleting `layout` puts everything
+     back. With no layout saved, none of this runs.
+     ---------------------------------------------------------------------- */
+  var COLOR = {
+    ink: 'var(--ink)', red: 'var(--red)', deep: 'var(--red-deep)',
+    paper: 'var(--paper)', muted: 'var(--ink-60)', faint: 'var(--ink-30)'
+  };
+  var FONT = {
+    home: 'var(--display-home)', display: 'var(--display)', mono: 'var(--mono)',
+    body: '"Hanken Grotesk",-apple-system,sans-serif'
+  };
+
+  function artboard() {
+    var L = C.layout || {};
+    var wide = window.matchMedia('(orientation:landscape) and (min-width:900px)').matches;
+    var a = wide ? L.desktop : L.mobile;
+    return (a && a.items && a.items.length) ? a : null;
+  }
+
+  function imgPath(src) {
+    src = String(src || '');
+    return /^https?:\/\//i.test(src) ? src : 'images/' + src.replace(/^images\//, '');
+  }
+
+  /* an element he added in the designer: a text box, a picture, or a plain
+     rectangle of colour. The flow layout has no place for these, so they
+     exist only while an artboard is on. */
+  function makeFree(it, body) {
+    var el = document.createElement(it.url ? 'a' : (it.type === 'text' ? 'p' : 'div'));
+    el.className = 'tk-free free-' + (it.type || 'text');
+    if (it.url) {
+      el.href = it.url;
+      if (/^https?:\/\//i.test(it.url) && it.url.indexOf(location.origin) !== 0) {
+        el.target = '_blank';
+        el.rel = 'noopener';
+      }
+    }
+    if (it.type === 'image') {
+      var im = document.createElement('img');
+      im.src = imgPath(it.src);
+      im.alt = it.alt || '';
+      if (it.fit) im.style.objectFit = it.fit;
+      el.appendChild(im);
+    } else if (it.type !== 'box') {
+      el.textContent = it.text || '';
+    }
+    body.appendChild(el);
+    return el;
+  }
+
+  /* H is the ticket's height in pixels: type is stored as a percentage of it
+     so the headline keeps its proportion to the ticket on every screen */
+  function styleItem(el, it, H) {
+    var s = el.style;
+    if (it.x != null) s.left = it.x + '%';
+    if (it.y != null) s.top = it.y + '%';
+    if (it.w != null) s.width = it.w + '%';
+    if (it.h != null) s.height = it.h + '%';
+    if (it.size) {
+      var px = (H * it.size / 100).toFixed(2) + 'px';
+      s.fontSize = px;
+      el.dataset.baseSize = px;   /* fitTitle shrinks from here, never grows past it */
+    }
+    if (it.align) s.textAlign = it.align;
+    if (it.color) s.color = COLOR[it.color] || it.color;
+    if (it.fill) s.background = COLOR[it.fill] || it.fill;
+    if (it.font && FONT[it.font]) s.fontFamily = FONT[it.font];
+    if (it.weight) s.fontWeight = it.weight;
+    if (it.tracking != null) s.letterSpacing = it.tracking + 'em';
+    if (it.leading != null) s.lineHeight = it.leading;
+    if (it.upper) s.textTransform = 'uppercase';
+    if (it.rotate) s.transform = 'rotate(' + it.rotate + 'deg)';
+    if (it.opacity != null && it.opacity !== 1) s.opacity = it.opacity;
+    if (it.z != null) s.zIndex = it.z;
+    if (it.radius) s.borderRadius = it.radius + 'px';
+  }
+
+  function applyLayout() {
+    var tk = document.querySelector('.ticket');
+    var body = document.querySelector('.tk-body');
+    if (!tk || !body) return;
+
+    /* wipe the previous pass first, so a resize across the breakpoint lands
+       cleanly on the other artboard or back in the flow */
+    [].forEach.call(body.querySelectorAll('.tk-free'), function (n) { n.remove(); });
+    [].forEach.call(body.querySelectorAll('[data-slot]'), function (n) {
+      n.removeAttribute('data-placed');
+      n.removeAttribute('style');
+      delete n.dataset.baseSize;
+    });
+
+    var art = artboard();
+    if (!art) { tk.classList.remove('is-canvas'); return; }
+    tk.classList.add('is-canvas');
+
+    var H = body.clientHeight;
+    art.items.forEach(function (it) {
+      if (!it || it.hidden) return;
+      var el = it.slot ? body.querySelector('[data-slot="' + it.slot + '"]') : makeFree(it, body);
+      if (!el) return;
+      styleItem(el, it, H);
+      if (it.slot) el.setAttribute('data-placed', '');
+    });
+  }
+  window.applyHomeLayout = applyLayout;   /* the designer re-runs this as he drags */
+
   /* ---- keep the headline inside the ticket ----
      The headline is his to rewrite from admin, and one long word ("copywriter"
      already) runs off the edge of a narrow ticket. Rather than tune a font
@@ -170,7 +285,7 @@
   function fitTitle() {
     var h = document.querySelector('.tk-title');
     if (!h || !h.children.length) return;
-    h.style.fontSize = '';
+    h.style.fontSize = h.dataset.baseSize || '';
     var box = h.clientWidth;
     if (!box) return;
     var rng = document.createRange();
@@ -211,7 +326,7 @@
     }
   }
 
-  function fitAll() { fitTitle(); fitSub(); }
+  function fitAll() { applyLayout(); fitTitle(); fitSub(); }
   fitAll();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll);
   var fitWait;

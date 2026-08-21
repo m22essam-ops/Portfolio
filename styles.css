@@ -659,3 +659,54 @@ body.has-won .tk-badge{background:var(--ink)}
   *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
   .reveal{opacity:1;transform:none}
 }
+
+/* ============================ THE HOME CANVAS ============================
+   The owner asked for a free canvas: drag anything anywhere, any size, add
+   boxes and images. He was told the trade (absolute positions describe one
+   screen) and chose it anyway, so the compromise is in the units: every
+   position is a PERCENTAGE of the ticket, never a pixel. The ticket then
+   scales as one piece and the composition holds its proportions at any
+   window size. Type is sized as a percentage of the ticket height and set
+   in pixels by applyLayout() on load and on resize.
+
+   Two artboards, `layout.desktop` and `layout.mobile`, chosen at 900px.
+   An artboard with no items falls through to the flow layout below, which
+   is the hand-built one and still the default. So an untouched phone keeps
+   the layout that was tested down to 360px, and deleting `layout` in admin
+   puts everything back. Nothing here applies until he designs something.
+   ------------------------------------------------------------------------ */
+.ticket.is-canvas .tk-body{position:relative}
+
+/* the flow wrappers stop existing so their children can be placed directly.
+   display:contents keeps the elements and their JS, and removes only the box */
+.ticket.is-canvas .tk-namerow,
+.ticket.is-canvas .tk-mid,
+.ticket.is-canvas .tk-midleft,
+.ticket.is-canvas .tk-foot{display:contents}
+
+.ticket.is-canvas [data-slot]{
+  position:absolute;margin:0;max-width:none;min-width:0;
+}
+/* a slot the artboard does not place is a slot he deleted: in canvas mode
+   there is no flow left to fall back into, so it must not land at random */
+.ticket.is-canvas [data-slot]:not([data-placed]){display:none}
+/* the headline and the sub-line measure themselves against their own box now */
+.ticket.is-canvas .tk-title span{white-space:nowrap}
+.ticket.is-canvas .tk-sub{white-space:normal;max-width:none}
+.ticket.is-canvas .tk-nav{max-width:none}
+.ticket.is-canvas .tk-nav a{max-height:none}
+.ticket.is-canvas .stamp{width:100%;height:100%}
+.ticket.is-canvas .barcode{width:100%;height:100%}
+.ticket.is-canvas .tk-aside{align-items:inherit}
+
+/* elements he adds in the designer that the flow layout has no place for */
+.tk-free{position:absolute;margin:0}
+.tk-free.free-box{background:var(--red)}
+.tk-free.free-img{overflow:hidden}
+.tk-free.free-img img{width:100%;height:100%;display:block;object-fit:cover}
+.tk-free.free-text{line-height:1.2;margin:0}
+.tk-free a{color:inherit;text-decoration:none}
+
+/* an element switched off in the designer, on this artboard only */
+.ticket.is-canvas [data-slot].slot-off,
+.tk-free.slot-off{display:none}
