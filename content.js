@@ -37,12 +37,12 @@ window.SITE_CONTENT = {
     wonStampArc: "Time is a timeless joke",
     nav: [
       {
-        label: "The work",
+        label: "WORK",
         num: "01",
         url: "work.html"
       },
       {
-        label: "Who I am",
+        label: "WORK THAT WORKED",
         num: "02",
         url: "about.html"
       },
