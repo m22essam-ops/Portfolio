@@ -1550,7 +1550,7 @@ window.SITE_CONTENT = {
         },
         {
           slot: "band",
-          x: 81.52,
+          x: 79.45,
           y: 4.29,
           w: 15.42,
           h: 4.48,
