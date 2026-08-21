@@ -1576,7 +1576,7 @@ window.SITE_CONTENT = {
           slot: "badge",
           x: 81.52,
           y: 8.77,
-          w: 12.4,
+          w: 13.43,
           h: 5.78,
           size: 2.054,
           align: "center"
