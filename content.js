@@ -27,7 +27,7 @@ window.SITE_CONTENT = {
     stampValue: "",
     stampFoot: "Madrid",
     stampPhoto: "portrait-rooftop.jpg",
-    stampUrl: "about.html",
+    stampUrl: "https://open.spotify.com/playlist/3LBELz6m3BsYudI8OQar6B",
     awards: [],
     wonBand: "The National Award Lottery",
     wonTitleTop: "Award-winning",

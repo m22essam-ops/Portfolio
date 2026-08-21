@@ -269,6 +269,7 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
     <button class="btn" id="btnGithub" type="button" disabled>Save to GitHub</button>
     <button class="btn ghost" id="btnDownload" type="button">Download updated content.js</button>
     <button class="btn ghost" id="btnCopy" type="button">Copy to clipboard</button>
+    <span id="ghReady" class="gh-status"></span>
     <label class="btn ghost">Load a content.js file
       <input type="file" id="fileLoad" accept=".js,text/javascript" hidden>
     </label>
@@ -1365,6 +1366,28 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
         btnGithub.disabled = false;
       });
   });
+
+  /* ---- always say, next to the button, whether the button can work ----
+     Save to GitHub has failed silently more than once. The banner at the top
+     of the page explains the file:// case but it is a long way from the
+     button and easy to scroll past, so the state is repeated right where the
+     click happens and refreshed whenever the connection changes. */
+  function ghReadyLine() {
+    var el = document.getElementById('ghReady');
+    if (!el) return;
+    if (location.protocol === 'file:') {
+      el.className = 'gh-status err';
+      el.textContent = 'Save to GitHub cannot work from file:// — open http://127.0.0.1:8888/admin.html';
+    } else if (!gh.token || !gh.owner || !gh.repo) {
+      el.className = 'gh-status';
+      el.textContent = 'Not connected to GitHub yet — connect below, then this button turns on.';
+    } else {
+      el.className = 'gh-status ok';
+      el.textContent = 'Ready: saving to ' + gh.owner + '/' + gh.repo + ' (' + (gh.branch || 'main') + ').';
+    }
+  }
+  ghReadyLine();
+  setInterval(ghReadyLine, 1500);
 
   /* ---- opened by double-clicking the file? say so, loudly. ----
      On a file:// page the browser gives this document its own private

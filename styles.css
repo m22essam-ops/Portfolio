@@ -187,15 +187,20 @@ body.is-home{
 .tk-title span{display:block;white-space:nowrap}
 .tk-title span:last-child{color:var(--red)}
 
-/* The sub-line on the left, the stamp on the right, so the stamp can never
-   land on top of the headline however long the words get.
-   Aligned to the TOP, not the centre: the stamp is three times the height of
-   the sub-line, and centring the row left the copy floating sixty pixels
-   below the headline in a pocket of its own. */
+/* The sub-line and the tabs share the left column; the stamp holds the right
+   and stands beside both. The stamp used to sit in a row of its own next to a
+   one-line paragraph, which opened 188px of empty paper under the copy while
+   the stamp floated across from it. Stretching the column and pushing the
+   tabs to the bottom of it puts the two blocks on the same baseline and the
+   hole closes. */
 .tk-mid{
-  display:flex;align-items:flex-start;justify-content:space-between;
+  display:flex;align-items:stretch;justify-content:space-between;
   gap:clamp(20px,4vw,56px);margin:0 0 40px;
 }
+.tk-midleft{
+  flex:1;min-width:0;display:flex;flex-direction:column;
+}
+.tk-midleft .tk-nav{flex:1;margin-top:clamp(14px,2.4vh,30px);margin-bottom:0}
 .tk-sub{font-size:18px;line-height:1.5;color:var(--ink-60);margin:0;max-width:46ch}
 
 /* ============================ THE STAMP ============================
@@ -304,10 +309,12 @@ body.has-won .stamp{background:var(--ink)}
 body.has-won .stamp-photo{background:var(--ink)}
 body.has-won .stamp-value{color:var(--ink)}
 
-/* nav as punch boxes */
+/* nav as punch boxes. The link row is 1fr, not auto, so on the home page the
+   punches grow into the height the stamp leaves beside them instead of
+   sitting at a fixed height with empty paper above. */
 .tk-nav{
   display:grid;grid-template-columns:repeat(3,1fr);
-  grid-template-rows:auto auto;
+  grid-template-rows:auto 1fr;
   gap:10px 12px;margin-bottom:34px;
 }
 .tk-nav > a{grid-row:2}
@@ -320,14 +327,24 @@ body.has-won .stamp-value{color:var(--ink)}
 }
 .tk-nav a{
   border:2px solid var(--ink);border-radius:3px;
-  padding:17px 16px;text-decoration:none;color:var(--ink);
-  display:flex;justify-content:space-between;align-items:baseline;gap:10px;
+  padding:15px 17px;text-decoration:none;color:var(--ink);
+  /* number up in the corner, label along the bottom, the way a coupon is set.
+     When these grow tall beside the stamp the height is then doing something
+     rather than leaving the label stranded at the foot of an empty box. */
+  display:grid;grid-template-columns:1fr auto;grid-template-rows:auto 1fr;
+  gap:8px;
   font-family:var(--display);font-weight:800;
   letter-spacing:-.02em;font-size:19px;
   transition:background .16s var(--ease),color .16s var(--ease);
 }
-.tk-nav a i{font-style:normal;font-family:var(--mono);font-size:12px;letter-spacing:.14em;opacity:.45}
+.tk-nav a i{
+  grid-column:2;grid-row:1;justify-self:end;
+  font-style:normal;font-family:var(--mono);font-size:12px;letter-spacing:.14em;opacity:.45;
+}
+.tk-nav a b{grid-column:1/-1;grid-row:2;align-self:end;font-weight:inherit}
 .tk-nav a:hover{background:var(--red);border-color:var(--red);color:var(--paper)}
+/* a sensible ceiling: past this they stop reading as buttons */
+.tk-midleft .tk-nav a{max-height:150px}
 .tk-nav a:hover i{opacity:.8}
 
 /* the covered box: foil sits over the punch until it is scratched off */
@@ -392,7 +409,7 @@ body.has-won .tk-badge{background:var(--ink)}
   .tk-sub{font-size:clamp(17px,1.32vw,22px);max-width:none;white-space:nowrap}
   .tk-mid    {margin-bottom:clamp(10px,1.6vh,22px)}
   /* height-first so the row is a known size and the page cannot grow */
-  .stamp{width:auto;height:min(23.6vh,268px)}
+  .stamp{width:auto;height:min(31vh,320px)}
   .tk-nav    {margin-bottom:0}
   .tk-foot   {margin-top:auto;padding-top:clamp(10px,1.7vh,30px)}
 
@@ -597,7 +614,7 @@ body.has-won .tk-badge{background:var(--ink)}
   .tk-name{font-size:clamp(20px,2.4vw,40px)}
   .tk-top{margin-bottom:clamp(10px,1.8vh,24px)}
   .tk-nav a{padding:clamp(11px,1.5vh,18px) 18px;font-size:clamp(16px,1.25vw,21px)}
-  .stamp{height:min(20.5vh,268px)}
+  .stamp{height:min(26vh,320px)}
 }
 
 @media (max-width:900px){
@@ -607,6 +624,12 @@ body.has-won .tk-badge{background:var(--ink)}
   .project-media[data-layout="half"]{grid-column:1/-1}
   .tk-body{padding:30px 18px 22px}
   .tk-mid{flex-direction:column;align-items:flex-start;gap:26px}
+  /* the tabs only stretch when they are standing next to the stamp; 
+     stacked on a phone they go back to their own height */
+  .tk-midleft{width:100%}
+  .tk-midleft .tk-nav{flex:none;margin-top:26px}
+  .tk-midleft .tk-nav a{max-height:none}
+  .tk-nav{grid-template-rows:auto auto}
   .stamp{width:clamp(150px,48vw,220px)}
   .tk-nav{grid-template-columns:1fr;grid-template-rows:none;gap:9px}
   .tk-nav > a{grid-row:auto}

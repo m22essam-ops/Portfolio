@@ -38,8 +38,17 @@
 
     <h1 class="tk-title"><span id="tkTitleTop"></span><span id="tkTitleBottom"></span></h1>
 
+    <!-- The sub-line and the tabs share the left column, the stamp holds the
+         right and spans both. Before this the stamp sat in a row of its own
+         beside a one-line paragraph, so 188px of empty paper opened up under
+         the copy while the stamp floated on the other side of it. -->
     <div class="tk-mid">
+      <div class="tk-midleft">
       <p class="tk-sub" id="tkSub"></p>
+
+        <ul class="won-list" id="wonList" hidden></ul>
+        <nav class="tk-nav" id="tkNav"></nav>
+      </div>
 
       <!-- THE STAMP. A postage stamp, not a rubber one: perforated edge, a
            duotone portrait, the issuing department curved round it, a value
@@ -72,10 +81,6 @@
         </span>
       </a>
     </div>
-
-    <ul class="won-list" id="wonList" hidden></ul>
-
-    <nav class="tk-nav" id="tkNav"></nav>
 
     <div class="tk-foot">
       <div class="barcode" aria-hidden="true"></div>
@@ -145,7 +150,16 @@
     set('stampValue', T.stampValue);
     set('stampName', (T.stampName || T.name || '').toUpperCase());
     set('stampFoot', T.stampFoot);
-    if (T.stampUrl) st.href = T.stampUrl;
+    if (T.stampUrl) {
+      st.href = T.stampUrl;
+      /* anything off this site opens in its own tab, so a visitor reading the
+         ticket does not lose it to a playlist */
+      if (/^https?:\/\//i.test(T.stampUrl) &&
+          T.stampUrl.indexOf(location.origin) !== 0) {
+        st.target = '_blank';
+        st.rel = 'noopener';
+      }
+    }
   })();
 
   /* ---- keep the headline inside the ticket ----
@@ -229,10 +243,14 @@
     }
     var a = document.createElement('a');
     a.href = item.url || '#';
-    a.appendChild(document.createTextNode(item.label || ''));
+    /* the label goes in its own element: as a bare text node it becomes an
+       anonymous grid item and cannot be placed in the box */
+    var b = document.createElement('b');
+    b.textContent = item.label || '';
     var i = document.createElement('i');
     i.textContent = item.num || '';
     a.appendChild(i);
+    a.appendChild(b);
     nav.appendChild(a);
     if (item.scratch) makeScratch(a, item);
   });
