@@ -1554,15 +1554,17 @@ window.SITE_CONTENT = {
           y: 4.29,
           w: 15.42,
           h: 4.48,
-          size: 2.24
+          size: 2.24,
+          align: "left"
         },
         {
           slot: "badge",
-          x: 83.09,
+          x: 81.52,
           y: 8.77,
-          w: 9.91,
+          w: 13.43,
           h: 5.78,
-          size: 2.054
+          size: 2.054,
+          align: "center"
         },
         {
           slot: "titleTop",
