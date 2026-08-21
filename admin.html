@@ -366,6 +366,39 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
 
     <label class="field"><span>Small print along the bottom</span><textarea data-path="ticket.terms" rows="3"></textarea></label>
 
+    <div class="subhead">What the barcode and the badge open</div>
+    <p class="hint">The barcode is a link now, not a decoration. Empty it and it goes back to being an ornament. The award badge opens the cabinet page; empty it and the badge stops being clickable.</p>
+    <div class="grid2">
+      <label class="field"><span>The barcode opens</span><input data-path="ticket.barcodeUrl" placeholder="https://open.spotify.com/..."><small>Anything off this site opens in its own tab.</small></label>
+      <label class="field"><span>The award badge opens</span><input data-path="ticket.badgeUrl" placeholder="awards.html"></label>
+    </div>
+
+    <div class="subhead">The cabinet (awards.html)</div>
+    <p class="hint">The page behind the award badge: an empty display case that opens, then asks how long you are prepared to wait. Every line of it is here. Empty the first line and the page still works, it just says nothing.</p>
+    <div class="grid2">
+      <label class="field"><span>The line after it opens</span><input data-path="ticket.cabinet.empty" placeholder="Nothing to show for now."><small>Set very large, so keep it to a few words.</small></label>
+      <label class="field"><span>The question above the buttons</span><input data-path="ticket.cabinet.ask" placeholder="Come back in a few"></label>
+    </div>
+    <div class="grid2">
+      <label class="field"><span>Button 1</span><input data-path="ticket.cabinet.minutes" placeholder="Minutes"></label>
+      <label class="field"><span>...answers</span><input data-path="ticket.cabinet.minutesLine" placeholder="Are you mental?"><small>Shelves stay empty and the cabinet shakes its head.</small></label>
+    </div>
+    <div class="grid2">
+      <label class="field"><span>Button 2</span><input data-path="ticket.cabinet.days" placeholder="Days"></label>
+      <label class="field"><span>...answers</span><input data-path="ticket.cabinet.daysLine" placeholder="One. Don't spend it all at once."><small>One thing appears on a shelf.</small></label>
+    </div>
+    <div class="grid2">
+      <label class="field"><span>Button 3</span><input data-path="ticket.cabinet.years" placeholder="Years"></label>
+      <label class="field"><span>...answers</span><input data-path="ticket.cabinet.yearsLine" placeholder="Now we're talking."><small>Twenty appear, filling all three shelves.</small></label>
+    </div>
+
+    <div class="subhead">Work that worked</div>
+    <p class="hint">The second button shows only the work that ran. Which side a project falls on is the <strong>It got produced</strong> tickbox inside that project further down this page, so you move a piece across by ticking a box.</p>
+    <div class="grid2">
+      <label class="field"><span>Heading on that page</span><input data-path="work.ranHeading" placeholder="Work that worked."></label>
+      <label class="field"><span>Line under it</span><input data-path="work.ranNote" placeholder="Optional."></label>
+    </div>
+
     <div class="subhead">The three buttons</div>
     <div class="grid2">
       <label class="field"><span>Button 1 label</span><input data-path="ticket.nav.0.label"></label>
@@ -524,6 +557,10 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
     if (!Array.isArray(M.ticket.nav)) M.ticket.nav = [];
     while (M.ticket.nav.length < 3) M.ticket.nav.push({ label: '', url: '', num: '' });
     M.ticket.nav.forEach(function (n, i) { if (!n.num) n.num = '0' + (i + 1); });
+    /* setPath walks but does not build, so anything nested has to exist
+       before its fields are typed into. The cabinet page's copy lives here. */
+    M.ticket.cabinet = M.ticket.cabinet || {};
+    M.work = M.work || {};
     M.jokes = M.jokes || {};
     M.work = M.work || {};
     /* one list. an older file with produced[]/presented[] is folded into it

@@ -27,7 +27,7 @@ window.SITE_CONTENT = {
     stampValue: "",
     stampFoot: "",
     stampPhoto: "portrait-rooftop.jpg",
-    stampUrl: "https://open.spotify.com/playlist/3LBELz6m3BsYudI8OQar6B",
+    stampUrl: "about.html",
     awards: [],
     wonBand: "The National Award Lottery",
     wonTitleTop: "Award-winning",
@@ -53,7 +53,20 @@ window.SITE_CONTENT = {
         "scratch": true,
         scratchHint: "Scratch to reveal"
       }
-    ]
+    ],
+    cabinet: {
+      empty: "Nothing to show for now.",
+      ask: "Come back in a few",
+      minutes: "Minutes",
+      minutesLine: "Are you mental?",
+      days: "Days",
+      daysLine: "One. Don't spend it all at once.",
+      years: "Years",
+      yearsLine: "Now we're talking."
+    },
+    barcodeUrl: "https://open.spotify.com/playlist/3LBELz6m3BsYudI8OQar6B",
+    barcodeLabel: "The playlist",
+    badgeUrl: "awards.html"
   },
   jokes: {
     tabAway: "Fine, go. I'll wait.",
@@ -1438,7 +1451,9 @@ window.SITE_CONTENT = {
         "draft": true,
         "ran": false
       }
-    ]
+    ],
+    ranHeading: "Work that worked.",
+    ranNote: ""
   },
   about: {
     label: "Don't take it personally (it seems so)",
