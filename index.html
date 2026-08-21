@@ -32,7 +32,7 @@
       <p class="tk-name" id="tkName" data-slot="name"></p>
       <div class="tk-aside">
         <span id="tkBand" data-slot="band"></span>
-        <span class="tk-badge" id="tkBadge" data-slot="badge"></span>
+        <a class="tk-badge" id="tkBadge" data-slot="badge"></a>
       </div>
     </div>
 
@@ -83,7 +83,7 @@
     </div>
 
     <div class="tk-foot">
-      <div class="barcode" data-slot="barcode" aria-hidden="true"></div>
+      <a class="barcode" id="tkBarcode" data-slot="barcode" aria-label="Playlist"></a>
       <p class="tk-terms" id="tkTerms" data-slot="terms"></p>
     </div>
   </div>
@@ -178,6 +178,34 @@
     }
   })();
 
+  /* ---- the award badge ----
+     "Won nothing" is a claim, so it opens the cabinet and shows you. Blank
+     `badgeUrl` and it goes back to being a label that does nothing. */
+  (function () {
+    var bd = document.getElementById('tkBadge');
+    if (!bd) return;
+    var url = String(T.badgeUrl || '').trim();
+    if (url) bd.href = url;
+  })();
+
+  /* ---- the barcode ----
+     It was a decoration. It is a door now: the strip of bars is where the
+     playlist lives, which is a better joke than the stamp holding it,
+     because a barcode is the one part of a ticket nobody expects to do
+     anything. Blank `barcodeUrl` and it goes back to being an ornament. */
+  (function () {
+    var bc = document.getElementById('tkBarcode');
+    if (!bc) return;
+    var url = String(T.barcodeUrl || '').trim();
+    if (!url) { bc.removeAttribute('aria-label'); bc.setAttribute('aria-hidden', 'true'); return; }
+    bc.href = url;
+    bc.setAttribute('aria-label', T.barcodeLabel || 'Playlist');
+    if (/^https?:\/\//i.test(url) && url.indexOf(location.origin) !== 0) {
+      bc.target = '_blank';
+      bc.rel = 'noopener';
+    }
+  })();
+
   /* ---- THE HOME CANVAS -------------------------------------------------
      If he has laid the ticket out in the designer, `content.layout` holds
      one artboard per shape of screen and every box in it is a PERCENTAGE
@@ -237,10 +265,29 @@
     return el;
   }
 
+  /* Which boxes hold their words in the middle. text-align only ever moved
+     type across, never down, so a box dragged taller left its line stuck to
+     the top edge. Text sits in the middle of its box unless he says
+     otherwise. The punches keep their own grid (number in one corner, label
+     in the other) and the stamp and barcode are not type at all. */
+  var VALIGN = { top: 'flex-start', middle: 'center', bottom: 'flex-end' };
+  var NO_VALIGN = { stamp: 1, barcode: 1, won: 1 };
+  function valignFor(it) {
+    if (it.valign) return VALIGN[it.valign] || null;
+    if (it.slot) {
+      if (NO_VALIGN[it.slot] || /^nav\d+$/.test(it.slot)) return null;
+    } else if (it.type === 'image' || it.type === 'box') {
+      return null;
+    }
+    return VALIGN.middle;
+  }
+
   /* H is the ticket's height in pixels: type is stored as a percentage of it
      so the headline keeps its proportion to the ticket on every screen */
   function styleItem(el, it, H) {
     var s = el.style;
+    var va = valignFor(it);
+    if (va) { s.display = 'flex'; s.flexDirection = 'column'; s.justifyContent = va; }
     if (it.x != null) s.left = it.x + '%';
     if (it.y != null) s.top = it.y + '%';
     if (it.w != null) s.width = it.w + '%';

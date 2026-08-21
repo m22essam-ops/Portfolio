@@ -20,14 +20,14 @@ window.SITE_CONTENT = {
     titleBottom: "copywriter",
     sub: "I write in English and Arabic. I order coffee in Spanish and French.",
     scratchNote: "That for a ticket to win, had to bought first",
-    badge: "Won nothing",
+    badge: "I Won nothing",
     terms: "Odds of winning: historically High. Ticket has no cash value and neither did the awards. Keep this as proof of participation or share it with your loved ones.",
     stampArc: "Time is a timeless joke",
     stampName: "Listen to your gut",
     stampValue: "",
     stampFoot: "",
     stampPhoto: "portrait-rooftop.jpg",
-    stampUrl: "https://open.spotify.com/playlist/3LBELz6m3BsYudI8OQar6B",
+    stampUrl: "about.html",
     awards: [],
     wonBand: "The National Award Lottery",
     wonTitleTop: "Award-winning",
@@ -37,14 +37,14 @@ window.SITE_CONTENT = {
     wonStampArc: "Time is a timeless joke",
     nav: [
       {
-        label: "The work",
+        label: "Work",
         num: "01",
         url: "work.html"
       },
       {
-        label: "Who I am",
+        label: "Work that worked",
         num: "02",
-        url: "about.html"
+        url: "work.html?ran=1"
       },
       {
         label: "Hire me?",
@@ -53,7 +53,20 @@ window.SITE_CONTENT = {
         "scratch": true,
         scratchHint: "Scratch to reveal"
       }
-    ]
+    ],
+    barcodeUrl: "https://open.spotify.com/playlist/3LBELz6m3BsYudI8OQar6B",
+    barcodeLabel: "The playlist",
+    badgeUrl: "awards.html",
+    cabinet: {
+      empty: "Nothing to show for now.",
+      ask: "Come back in a few",
+      minutes: "Minutes",
+      minutesLine: "Are you mental?",
+      days: "Days",
+      daysLine: "One. Don't spend it all at once.",
+      years: "Years",
+      yearsLine: "Now we're talking."
+    }
   },
   jokes: {
     tabAway: "Fine, go. I'll wait.",
@@ -1438,7 +1451,9 @@ window.SITE_CONTENT = {
         "draft": true,
         "ran": false
       }
-    ]
+    ],
+    ranHeading: "Work that worked.",
+    ranNote: ""
   },
   about: {
     label: "Don't take it personally (it seems so)",
@@ -1554,15 +1569,17 @@ window.SITE_CONTENT = {
           y: 4.29,
           w: 15.42,
           h: 4.48,
-          size: 2.24
+          size: 2.24,
+          align: "left"
         },
         {
           slot: "badge",
-          x: 83.09,
+          x: 81.52,
           y: 8.77,
-          w: 9.91,
+          w: 12.4,
           h: 5.78,
-          size: 2.054
+          size: 2.054,
+          align: "center"
         },
         {
           slot: "titleTop",
@@ -1739,7 +1756,7 @@ window.SITE_CONTENT = {
         {
           slot: "nav0",
           x: 4.86,
-          y: 33.72,
+          y: 45.55,
           w: 90.27,
           h: 8.9,
           size: 1.753
@@ -1747,7 +1764,7 @@ window.SITE_CONTENT = {
         {
           slot: "nav1",
           x: 4.86,
-          y: 43.62,
+          y: 55.98,
           w: 90.27,
           h: 8.9,
           size: 1.753
@@ -1755,7 +1772,7 @@ window.SITE_CONTENT = {
         {
           slot: "scratchNote",
           x: 4.86,
-          y: 58.69,
+          y: 68.34,
           w: 90.27,
           h: 1.37,
           size: 0.969,
@@ -1765,17 +1782,18 @@ window.SITE_CONTENT = {
         {
           slot: "nav2",
           x: 4.86,
-          y: 60.95,
+          y: 71.17,
           w: 90.27,
           h: 10.67,
           size: 1.753
         },
         {
           slot: "stamp",
-          x: 61.68,
-          y: 76.5,
-          w: 27.77,
-          h: 13.37
+          x: 68.71,
+          y: 31.9,
+          w: 20.74,
+          h: 12.69,
+          rotate: -11
         },
         {
           slot: "barcode",
@@ -1790,7 +1808,9 @@ window.SITE_CONTENT = {
           y: 93.54,
           w: 90.27,
           h: 4.69,
-          size: 0.969
+          size: 0.969,
+          weight: "600",
+          color: "deep"
         }
       ]
     }

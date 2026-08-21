@@ -11,7 +11,7 @@
 <link rel="apple-touch-icon" href="favicon.png">
 <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="page page-work">
 
 <nav class="page-nav">
   <div class="wrap">
@@ -80,17 +80,35 @@
       .concat(live(W.presented).map(function (p) { return { p: p, ran: false }; }));
   }
 
-  var slug = new URLSearchParams(location.search).get('slug');
+  var qs   = new URLSearchParams(location.search);
+  var slug = qs.get('slug');
+  /* ?ran=1 shows only the work that was actually made. It is the second
+     punch on the ticket, "Work that worked". Which side a project falls on
+     is the "It got produced" tickbox inside it in admin, so he moves a piece
+     across by ticking a box, not by moving it between lists.
+     Note this is the produced/spec split coming back as a door rather than
+     as tabs over one grid. It was killed as tabs in Aug 2026 for good
+     reasons; he asked for it back in this form on 21 Aug and that stands.
+     The plain work page is still everything, best first, one grid. */
+  var ranOnly = qs.get('ran') === '1';
 
   /* ============ WORK INDEX ============ */
   function renderIndex() {
-    document.getElementById('pageTitle').textContent = 'The work · Mohammed Essam';
     var items = allWork();
+    if (ranOnly) items = items.filter(function (e) { return e.ran; });
+
+    var heading = ranOnly ? (W.ranHeading || 'Work that worked.') : (W.heading || 'The work.');
+    var note    = ranOnly ? (W.ranNote || '') : (W.note || '');
+    document.getElementById('pageTitle').textContent =
+      (ranOnly ? 'Work that worked' : 'The work') + ' · Mohammed Essam';
 
     page.innerHTML =
       '<header class="page-head"><div class="wrap">' +
-        '<h1>' + esc(W.heading || 'The work.') + '</h1>' +
-        (W.note ? '<p class="note">' + esc(W.note) + '</p>' : '') +
+        '<h1>' + esc(heading) + '</h1>' +
+        (note ? '<p class="note">' + esc(note) + '</p>' : '') +
+        (ranOnly
+          ? '<p class="note"><a class="all-work" href="work.html">See everything, including the work that never ran →</a></p>'
+          : '') +
       '</div></header>' +
       '<div class="wrap"><div class="work-list" id="workList"></div></div>';
 

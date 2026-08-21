@@ -1105,9 +1105,10 @@ kbd{
     if (isText) {
       insp.appendChild(rows([field('Type size %', num('size', 0.2))]));
       insp.appendChild(rows([
-        field('Align', pick('align', [['left', 'Left'], ['center', 'Centre'], ['right', 'Right']], 'Leave')),
-        field('Colour', pick('color', COLOURS, 'Leave'))
+        field('Across', pick('align', [['left', 'Left'], ['center', 'Centre'], ['right', 'Right']], 'Leave')),
+        field('Down', pick('valign', [['top', 'Top'], ['middle', 'Middle'], ['bottom', 'Bottom']], 'Middle'))
       ]));
+      insp.appendChild(rows([field('Colour', pick('color', COLOURS, 'Leave'))]));
       insp.appendChild(rows([field('Typeface', pick('font', FONTS.slice(1), 'Leave as it is'))]));
       insp.appendChild(rows([
         field('Weight', pick('weight', [['400', 'Light'], ['600', 'Medium'], ['700', 'Bold'], ['800', 'Heavy']], 'Leave')),

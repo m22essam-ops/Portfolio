@@ -368,12 +368,16 @@ body.has-won .stamp-value{color:var(--ink)}
 .tk-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:26px;margin-top:auto}
 /* explicit box: in the stacked layout the flex axis turns vertical,
    so a flex-basis here would size the height and collapse the width */
+/* the barcode is a link now, so it needs to say so under the cursor and
+   lift a little on hover. Nothing else about it changes. */
 .barcode{
-  flex:0 0 auto;width:132px;height:44px;
+  flex:0 0 auto;width:132px;height:44px;display:block;
+  transition:opacity .18s var(--ease),transform .18s var(--ease);
   background-image:repeating-linear-gradient(90deg,
     var(--ink) 0 2px,transparent 2px 4px,var(--ink) 4px 5px,transparent 5px 9px,
     var(--ink) 9px 12px,transparent 12px 14px);
 }
+a.barcode:hover,a.barcode:focus-visible{opacity:.62;transform:translateY(-2px)}
 .tk-terms{font-size:10.5px;line-height:1.55;color:var(--ink-30);letter-spacing:.09em;margin:0;text-align:right}
 
 /* the awards switch: when he finally wins something */
@@ -590,7 +594,26 @@ body.has-won .tk-badge{background:var(--ink)}
 /* ============================ ABOUT ============================ */
 
 .about-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:56px;align-items:start;margin-bottom:96px}
-.about-portrait{width:100%;border-radius:2px;border:10px solid var(--ink);transform:rotate(-1.6deg)}
+/* The About portrait is printed the same way the stamp is: a flat red
+   ground with a grey photograph screened over it, so it is two inks rather
+   than a filter pretending to be two inks. Same treatment as .stamp-photo,
+   at a size where the face actually reads. The frame is red rather than
+   black now so the picture belongs to the ticket. */
+.about-portrait{
+  width:100%;border-radius:2px;transform:rotate(-1.6deg);
+  display:block;background:var(--red-deep);
+  /* on a screen blend the DARK greys are what let the red through, so
+     lifting the picture washes it pink. Pull it down and open the contrast
+     and the face gets its form back in two inks. */
+  filter:grayscale(1) contrast(1.42) brightness(.93);
+  mix-blend-mode:screen;
+}
+.about-shot{
+  background:var(--red-deep);border:10px solid var(--ink);
+  border-radius:2px;overflow:hidden;transform:rotate(-1.6deg);
+  line-height:0;
+}
+.about-shot .about-portrait{transform:none;border:0}
 .about-text{font-size:19px;line-height:1.62;margin:0 0 22px;color:var(--fg-dim)}
 .skills-list{display:flex;flex-wrap:wrap;gap:9px;margin-top:32px}
 .skill-tag{border:1px solid var(--line);border-radius:100px;padding:6px 13px;font-size:11px;color:var(--fg-dim)}
@@ -732,4 +755,120 @@ body.has-won .tk-badge{background:var(--ink)}
 }
 @media (orientation:landscape) and (min-width:900px){
   .ticket.is-canvas{min-height:95vh}
+}
+
+/* ============================ PER-PAGE COLOUR ============================
+   Each page sits on its own ground with one small element of its own, so
+   they read as pages of the same thing rather than one page repeated. The
+   red and the type do not change: only the paper and one mark. The tokens
+   are the same ones the gallery already uses, so nothing else needs to know.
+   ------------------------------------------------------------------------ */
+body.page-work  { --bg:#EFE9DC; --well:#E2DACA; }
+body.page-about { --bg:#F1E4DC; --well:#E4D2C6; }
+body.page-awards{ --bg:#E6E7E2; --well:#D6D8D1; }
+
+/* the hint of an element: one quiet mark per page, behind everything,
+   printed in the page's own well colour so it never fights the work */
+body.page-work::before,
+body.page-about::before,
+body.page-awards::before{
+  content:"";position:fixed;pointer-events:none;z-index:0;
+  opacity:.55;
+}
+/* work: a printer's registration cross in the corner */
+body.page-work::before{
+  right:34px;top:96px;width:74px;height:74px;
+  background:
+    linear-gradient(var(--well),var(--well)) center/2px 100% no-repeat,
+    linear-gradient(var(--well),var(--well)) center/100% 2px no-repeat,
+    radial-gradient(circle,transparent 22px,var(--well) 22px,var(--well) 24px,transparent 24px);
+}
+/* about: one perforation run down the left edge, like the ticket's */
+body.page-about::before{
+  left:18px;top:0;bottom:0;width:12px;
+  background-image:radial-gradient(circle at 6px 6px,var(--well) 4px,transparent 4.5px);
+  background-size:12px 20px;
+}
+/* awards: a faint rule at the height of an empty shelf */
+body.page-awards::before{
+  left:0;right:0;top:63%;height:2px;background:var(--well);opacity:.5;
+}
+body.page-work > *,body.page-about > *,body.page-awards > *{position:relative;z-index:1}
+
+/* ============================ THE CABINET ============================ */
+.cab-wrap{padding:clamp(28px,6vh,72px) 0 clamp(40px,8vh,96px);text-align:center}
+.cab-stage{display:flex;justify-content:center}
+.cab{width:min(100%,460px);height:auto;overflow:visible}
+
+.cab .ink-1{fill:var(--well)}
+.cab .ink-2{fill:#0B0A09}
+.cab .ink-3{fill:#1a1815}
+.cab .shelf-top{fill:var(--well);opacity:.85}
+
+/* the doors: glass, so the empty shelves show through before they swing */
+.cab .glass{fill:#ffffff10}
+.cab .frame{fill:none;stroke:var(--well);stroke-width:3}
+.cab .glint{fill:#ffffff14}
+.cab .knob{fill:var(--red)}
+.cab .door{
+  transform-box:fill-box;transform-origin:left center;
+  transition:transform .95s cubic-bezier(.3,.9,.25,1),opacity .95s ease;
+}
+.cab .door-r{transform-origin:right center}
+.cab.is-open .door-l{transform:perspective(900px) rotateY(-104deg)}
+.cab.is-open .door-r{transform:perspective(900px) rotateY(104deg)}
+.cab.is-shrug{animation:cab-shrug .5s var(--ease)}
+@keyframes cab-shrug{
+  0%,100%{transform:none}
+  30%{transform:translateX(-7px) rotate(-.8deg)}
+  65%{transform:translateX(7px) rotate(.8deg)}
+}
+
+.cab .trophy{fill:var(--red)}
+.cab .loot-item{
+  opacity:0;transform:translateY(-14px);
+  transition:opacity .34s ease,transform .34s cubic-bezier(.2,1.4,.4,1);
+}
+.cab .loot-item.in{opacity:1;transform:none}
+
+.cab-say{opacity:0;transform:translateY(10px);transition:opacity .5s ease,transform .5s var(--ease)}
+.cab-say.in{opacity:1;transform:none}
+.cab-line{
+  font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-height:1.02;
+  font-size:clamp(30px,6.4vw,68px);margin:clamp(24px,5vh,54px) 0 0;
+  max-width:20ch;margin-inline:auto;
+}
+.cab-ask{opacity:0;transform:translateY(8px);transition:opacity .45s ease,transform .45s var(--ease)}
+.cab-ask.in{opacity:1;transform:none}
+.cab-sub{
+  font-family:var(--mono);text-transform:uppercase;letter-spacing:.16em;
+  font-weight:600;font-size:13px;color:var(--fg-dim);margin:22px 0 14px;
+}
+.cab-picks{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.cab-pick{
+  font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em;
+  font-weight:700;font-size:clamp(14px,1.5vw,17px);
+  background:none;color:var(--fg);border:2px solid var(--fg);
+  padding:11px 22px;border-radius:0;cursor:pointer;
+  transition:background .16s var(--ease),color .16s var(--ease),transform .16s var(--ease);
+}
+.cab-pick:hover{background:var(--fg);color:var(--bg);transform:translateY(-2px)}
+.cab-pick.on{background:var(--red);border-color:var(--red);color:#fff}
+.cab-back{margin:clamp(30px,6vh,58px) 0 0}
+.cab-back a{
+  font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em;
+  font-weight:600;font-size:13px;color:var(--fg-dim);text-decoration:none;
+}
+.cab-back a:hover{color:var(--red)}
+
+/* the "see everything" way back off the produced-only view */
+.all-work{
+  font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em;
+  font-weight:600;font-size:13px;color:var(--red);text-decoration:none;
+}
+.all-work:hover{text-decoration:underline}
+
+@media (prefers-reduced-motion:reduce){
+  .cab .door,.cab .loot-item,.cab-say,.cab-ask{transition:none}
+  .cab.is-shrug{animation:none}
 }

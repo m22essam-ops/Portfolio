@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitle">The cabinet · Mohammed Essam</title>
+<meta name="description" content="The awards cabinet. Currently empty.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Syne:wght@400..800&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="page page-awards">
+
+<nav class="page-nav" id="siteNav">
+  <div class="wrap">
+    <a class="logo" href="index.html">mohammed essam.</a>
+    <div class="links">
+      <a href="work.html">Work</a>
+      <a href="about.html">Who I am</a>
+      <a href="mailto:m22essam@gmail.com">Hire me?</a>
+    </div>
+  </div>
+</nav>
+
+<main id="page">
+  <div class="wrap cab-wrap">
+
+    <!-- THE CABINET
+         Isometric, drawn as vectors rather than a picture: it has to open,
+         it has to fill, and nothing here should be a download. The two doors
+         swing on their own transforms; the shelves behind them are empty
+         until something is put on them. -->
+    <div class="cab-stage">
+      <svg class="cab" id="cab" viewBox="0 0 520 560" role="img"
+           aria-labelledby="cabTitle" xmlns="http://www.w3.org/2000/svg">
+        <title id="cabTitle">An empty awards cabinet</title>
+
+        <!-- the case, seen from a corner -->
+        <g class="cab-body">
+          <!-- side -->
+          <path class="ink-3" d="M60 118 L60 470 L150 512 L150 160 Z"/>
+          <!-- back panel, the inside -->
+          <path class="ink-2" d="M150 160 L150 512 L470 448 L470 96 Z"/>
+          <!-- top -->
+          <path class="ink-1" d="M60 118 L150 160 L470 96 L380 54 Z"/>
+
+          <!-- shelves. Each one is a slab plus its front edge, and each is
+               a row the trophies stand on. -->
+          <g id="shelves">
+            <g class="shelf" data-row="0">
+              <path class="shelf-top"  d="M150 268 L470 204 L470 214 L150 278 Z"/>
+            </g>
+            <g class="shelf" data-row="1">
+              <path class="shelf-top"  d="M150 356 L470 292 L470 302 L150 366 Z"/>
+            </g>
+            <g class="shelf" data-row="2">
+              <path class="shelf-top"  d="M150 444 L470 380 L470 390 L150 454 Z"/>
+            </g>
+          </g>
+
+          <!-- what gets put on the shelves -->
+          <g id="loot"></g>
+        </g>
+
+        <!-- the doors. Glass, so the empty shelves are visible through them
+             before they open, which is the whole gag. -->
+        <g id="doors">
+          <g class="door door-l" id="doorL">
+            <path class="glass" d="M150 160 L310 128 L310 480 L150 512 Z"/>
+            <path class="frame" d="M150 160 L310 128 L310 480 L150 512 Z"/>
+            <path class="glint" d="M172 190 L214 182 L190 470 L166 476 Z"/>
+            <circle class="knob" cx="298" cy="308" r="6"/>
+          </g>
+          <g class="door door-r" id="doorR">
+            <path class="glass" d="M310 128 L470 96 L470 448 L310 480 Z"/>
+            <path class="frame" d="M310 128 L470 96 L470 448 L310 480 Z"/>
+            <path class="glint" d="M330 160 L372 152 L348 448 L324 454 Z"/>
+            <circle class="knob" cx="322" cy="304" r="6"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <!-- the words, after it opens -->
+    <div class="cab-say" id="say" hidden>
+      <p class="cab-line" id="line"></p>
+
+      <div class="cab-ask" id="ask" hidden>
+        <p class="cab-sub" id="askLine"></p>
+        <div class="cab-picks" id="picks"></div>
+      </div>
+
+      <p class="cab-back"><a href="index.html">Back to the ticket →</a></p>
+    </div>
+
+  </div>
+</main>
+
+<footer class="stub" id="siteFoot"></footer>
+
+<script>
+(function () {
+  var v = /^https?:$/.test(location.protocol) ? '?v=' + Math.floor(Date.now() / 60000) : '';
+  document.write('<scr' + 'ipt src="content.js' + v + '"><\/scr' + 'ipt>');
+})();
+</script>
+<script src="site.js"></script>
+<script src="auto-refresh.js"></script>
+<script>
+(function () {
+  var C = window.SITE_CONTENT || {};
+  var A = (C.ticket && C.ticket.cabinet) || {};
+
+  var cab   = document.getElementById('cab');
+  var say   = document.getElementById('say');
+  var line  = document.getElementById('line');
+  var ask   = document.getElementById('ask');
+  var picks = document.getElementById('picks');
+  var loot  = document.getElementById('loot');
+
+  var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- the shelves ----
+     Three rows. Each row is a line in space between the left and right edge
+     of the shelf, and a thing standing on it is placed along that line and
+     scaled by how far back it sits, so the row reads as going away from you.
+     Isometric enough to be convincing without any 3D. */
+  var ROWS = [
+    { x1: 168, y1: 268, x2: 452, y2: 210 },
+    { x1: 168, y1: 356, x2: 452, y2: 298 },
+    { x1: 168, y1: 444, x2: 452, y2: 386 }
+  ];
+
+  /* Unnamed shapes, on purpose. He has not won these, and putting real
+     award names on them would read as a claim the moment anyone screenshots
+     the page out of its joke. A silhouette is funnier and honest. */
+  var SHAPES = [
+    /* a statuette */
+    'M0, 0 l0,-3 l-4,0 l0,-3 q0,-6 4,-9 q4,3 4,9 l0,3 l-4,0 Z',
+    /* a pencil, on its end */
+    'M-2.6,0 l0,-16 l2.6,-5 l2.6,5 l0,16 Z',
+    /* a cup with handles */
+    'M-4,0 l1,-4 l6,0 l1,4 Z M-3.4,-5 q-4,-1 -4,-6 l1.6,0 q0,3.4 2.4,4.2 Z M3.4,-5 q4,-1 4,-6 l-1.6,0 q0,3.4 -2.4,4.2 Z M-3.6,-5 l0,-9 l7.2,0 l0,9 Z',
+    /* a disc on a stand */
+    'M-3.4,0 l6.8,0 l0,-2.2 l-6.8,0 Z M-0.6,-2.2 l1.2,0 l0,-3 l-1.2,0 Z M0,-11.4 a5.2,5.2 0 1,1 0,0.01 Z',
+    /* a slab */
+    'M-3.6,0 l7.2,0 l0,-14 l-7.2,0 Z'
+  ];
+
+  function trophy(row, t, size) {
+    var r = ROWS[row];
+    var x = r.x1 + (r.x2 - r.x1) * t;
+    var y = r.y1 + (r.y2 - r.y1) * t;
+    /* two groups, not one. The place on the shelf is an SVG transform
+       attribute and the arrival is a CSS transform, and a CSS transform on
+       an element REPLACES its transform attribute rather than adding to it:
+       with both on the same <g> every trophy landed in a heap outside the
+       cabinet. The outer group holds the position, the inner one animates. */
+    var NS = 'http://www.w3.org/2000/svg';
+    var outer = document.createElementNS(NS, 'g');
+    outer.setAttribute('transform',
+      'translate(' + x.toFixed(1) + ',' + y.toFixed(1) + ') scale(' + size.toFixed(2) + ')');
+    var inner = document.createElementNS(NS, 'g');
+    inner.setAttribute('class', 'loot-item');
+    var p = document.createElementNS(NS, 'path');
+    p.setAttribute('d', SHAPES[Math.floor(Math.random() * SHAPES.length)]);
+    p.setAttribute('class', 'trophy');
+    inner.appendChild(p);
+    outer.appendChild(inner);
+    outer.enter = inner;
+    return outer;
+  }
+
+  /* spread n things over the shelves, front row first, and let them arrive
+     one after another rather than all at once */
+  function fill(n) {
+    loot.textContent = '';
+    var made = [];
+    if (n === 1) {
+      made.push(trophy(1, 0.46, 2.5));
+    } else {
+      var perRow = Math.ceil(n / 3);
+      for (var i = 0; i < n; i++) {
+        var row = Math.floor(i / perRow);
+        if (row > 2) row = 2;
+        var inRow = i % perRow;
+        var t = perRow > 1 ? 0.08 + (inRow / (perRow - 1)) * 0.84 : 0.5;
+        made.push(trophy(row, t, 1.5 + (1 - t) * 0.7));
+      }
+    }
+    made.forEach(function (g, i) {
+      loot.appendChild(g);
+      var target = g.enter || g;
+      if (still) { target.classList.add('in'); return; }
+      setTimeout(function () { target.classList.add('in'); }, 40 + i * 55);
+    });
+  }
+
+  /* ---- the sequence ---- */
+  function open() {
+    cab.classList.add('is-open');
+    var wait = still ? 0 : 1150;
+    setTimeout(function () {
+      line.textContent = A.empty || 'Nothing to show for now.';
+      say.hidden = false;
+      say.classList.add('in');
+      setTimeout(function () {
+        document.getElementById('askLine').textContent = A.ask || 'Come back in a few...';
+        ask.hidden = false;
+        ask.classList.add('in');
+      }, still ? 0 : 520);
+    }, wait);
+  }
+
+  var ANSWERS = [
+    { key: 'minutes', label: A.minutes || 'Minutes',
+      reply: A.minutesLine || 'Are you mental?', count: 0 },
+    { key: 'days',    label: A.days    || 'Days',
+      reply: A.daysLine    || 'One. Do not spend it all at once.', count: 1 },
+    { key: 'years',   label: A.years   || 'Years',
+      reply: A.yearsLine   || 'Now we are talking.', count: 20 }
+  ];
+
+  ANSWERS.forEach(function (a) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'cab-pick';
+    b.textContent = a.label;
+    b.addEventListener('click', function () {
+      [].forEach.call(picks.children, function (o) { o.classList.remove('on'); });
+      b.classList.add('on');
+      line.textContent = a.reply;
+      fill(a.count);
+      if (!a.count) cab.classList.add('is-shrug');
+      else cab.classList.remove('is-shrug');
+    });
+    picks.appendChild(b);
+  });
+
+  /* it opens on its own: the visitor came to see whether the cabinet is
+     empty, so make them wait no longer than it takes to swing */
+  if (still) open();
+  else setTimeout(open, 420);
+
+  if (C.jokes && C.jokes.tabAway) {
+    var realTitle = document.title;
+    document.addEventListener('visibilitychange', function () {
+      document.title = document.hidden ? C.jokes.tabAway : realTitle;
+    });
+  }
+})();
+</script>
+
+</body>
+</html>

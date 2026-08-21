@@ -11,7 +11,7 @@
 <link rel="apple-touch-icon" href="favicon.png">
 <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="page page-about">
 
 <nav class="page-nav">
   <div class="wrap">
@@ -30,7 +30,11 @@
 
 <div class="wrap">
   <div class="about-grid">
-    <img class="about-portrait" id="aboutPortrait" src="" alt="">
+    <!-- the picture needs a red ground behind it for the screen blend to
+         print against, so it sits in its own frame -->
+    <div class="about-shot" id="aboutShot">
+      <img class="about-portrait" id="aboutPortrait" src="" alt="">
+    </div>
     <div id="aboutText"></div>
   </div>
   <div class="exp-list" id="expList"></div>
@@ -75,7 +79,8 @@
     portrait.src = window.imgSrc(A.portrait);
     portrait.alt = A.portraitAlt || 'Mohammed Essam';
   } else {
-    portrait.style.display = 'none';
+    var shot = document.getElementById('aboutShot');
+    if (shot) shot.style.display = 'none';
   }
 
   var box = document.getElementById('aboutText');
