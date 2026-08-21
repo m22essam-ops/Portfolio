@@ -18,8 +18,8 @@ window.SITE_CONTENT = {
     serial: "No. 131313 . Exp. never",
     titleTop: "Award-losing",
     titleBottom: "copywriter",
-    sub: "I write in English and Arabic. I order coffee in Spanish and French.",
-    scratchNote: "That for a ticket to win, had to bought first",
+    sub: "Work taught me one thing: I write in English and Arabic. I order coffee in Spanish and French.",
+    scratchNote: "...AND for a ticket to win, had to bought first",
     badge: "Won nothing",
     terms: "Odds of winning: historically High. Ticket has no cash value and neither did the awards. Keep this as proof of participation or share it with your loved ones.",
     stampArc: "Time is a timeless joke",
@@ -1582,12 +1582,13 @@ window.SITE_CONTENT = {
         },
         {
           slot: "sub",
-          x: 3.81,
-          y: 63.42,
-          w: 76.61,
+          x: 3.79,
+          y: 59.31,
+          w: 58.38,
           h: 4.95,
-          size: 3.174,
-          weight: "600"
+          size: 2.375,
+          weight: "700",
+          color: "muted"
         },
         {
           slot: "nav0",
@@ -1608,10 +1609,10 @@ window.SITE_CONTENT = {
         {
           slot: "scratchNote",
           x: 56.41,
-          y: 64.79,
+          y: 66.9,
           w: 25.11,
           h: 2.2,
-          size: 1.775,
+          size: 1.755,
           weight: "700",
           color: "muted"
         },
