@@ -14,7 +14,7 @@ window.SITE_CONTENT = {
   ticket: {
     name: "MOHAMMED ESSAM",
     band: "If I play, I play to win",
-    game: "The one-off lottary",
+    game: "The lottary",
     serial: "No. no matter how · Exp. never",
     titleTop: "Award-losing",
     titleBottom: "copywriter",
