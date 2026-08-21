@@ -171,6 +171,43 @@ A box on the canvas is a hard box, but type inside it still needs the height
 it needs, so a box dragged too short spills rather than clips. The designer
 says which elements are spilling instead of leaving him to spot it.
 
+### The cabinet (awards.html, added 21 Aug 2026)
+
+The "Won nothing" badge on the ticket is a claim, so it opens and shows you.
+`awards.html` is an isometric display case drawn as inline SVG: glass doors
+that swing, three empty shelves. Then "Nothing to show for now" and "come back
+in a few" with three buttons. **Minutes** answers "Are you mental?", **days**
+puts one thing on a shelf, **years** fills it with twenty.
+
+The trophies are **unnamed silhouettes on purpose** (his call). Real award
+names next to his own name would read as a claim the moment anyone screenshots
+the page out of its joke. Do not label them.
+
+Gotcha: a trophy's place on the shelf is an SVG `transform` attribute and its
+arrival is a CSS transform, and **a CSS transform replaces the attribute rather
+than adding to it**. With both on one `<g>` all twenty landed in a heap outside
+the case. Position lives on an outer group, animation on an inner one.
+
+All the copy is in `ticket.cabinet` and is Claude's draft, awaiting his pass.
+
+### Per-page colour
+
+Each page keeps the palette and gets its own paper plus one quiet mark, set by
+a body class: `page-work` (registration cross), `page-about` (a run of
+perforations down the left edge), `page-awards` (a rule at shelf height). The
+marks are drawn in the page's own `--well` so they never fight the work. Only
+`--bg` and `--well` change; the red and the type do not.
+
+### Work that worked
+
+The second punch is `work.html?ran=1`, which filters on the `ran` flag. Which
+side a project falls on is the "It got produced" tickbox inside each project in
+admin, so he moves a piece across by ticking a box. **This is the produced/spec
+split returning as a door rather than as tabs over one grid.** It was killed as
+tabs in Aug 2026 for reasons that still hold; he asked for it back in this form
+on 21 Aug and that decision stands. The plain work page is still everything,
+best first, one grid. There is a link back to it from the filtered view.
+
 ### The quiet jokes
 
 `jokes` in content.js holds six optional slots: browser tab title when the
