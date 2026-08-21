@@ -1739,7 +1739,7 @@ window.SITE_CONTENT = {
         {
           slot: "nav0",
           x: 4.86,
-          y: 33.72,
+          y: 45.55,
           w: 90.27,
           h: 8.9,
           size: 1.753
@@ -1747,7 +1747,7 @@ window.SITE_CONTENT = {
         {
           slot: "nav1",
           x: 4.86,
-          y: 43.62,
+          y: 55.98,
           w: 90.27,
           h: 8.9,
           size: 1.753
@@ -1755,7 +1755,7 @@ window.SITE_CONTENT = {
         {
           slot: "scratchNote",
           x: 4.86,
-          y: 58.69,
+          y: 68.34,
           w: 90.27,
           h: 1.37,
           size: 0.969,
@@ -1765,17 +1765,18 @@ window.SITE_CONTENT = {
         {
           slot: "nav2",
           x: 4.86,
-          y: 60.95,
+          y: 71.17,
           w: 90.27,
           h: 10.67,
           size: 1.753
         },
         {
           slot: "stamp",
-          x: 61.68,
-          y: 76.5,
-          w: 27.77,
-          h: 13.37
+          x: 68.71,
+          y: 31.9,
+          w: 20.74,
+          h: 12.69,
+          rotate: -11
         },
         {
           slot: "barcode",
@@ -1790,7 +1791,9 @@ window.SITE_CONTENT = {
           y: 93.54,
           w: 90.27,
           h: 4.69,
-          size: 0.969
+          size: 0.969,
+          weight: "600",
+          color: "deep"
         }
       ]
     }
