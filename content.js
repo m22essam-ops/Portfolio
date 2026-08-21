@@ -23,7 +23,7 @@ window.SITE_CONTENT = {
     badge: "Won nothing",
     terms: "Odds of winning: historically High. Ticket has no cash value and neither did the awards. Keep this as proof of participation or share it with your loved ones.",
     stampArc: "Time is a timeless joke",
-    stampName: "Song order matters",
+    stampName: "Listen to your gut",
     stampValue: "",
     stampFoot: "",
     stampPhoto: "portrait-rooftop.jpg",
@@ -1524,60 +1524,112 @@ window.SITE_CONTENT = {
     desktop: {
       items: [
         {
-          slot: "top",
+          slot: "game",
           x: 3.79,
           y: 4.29,
-          w: 92.42,
-          h: 3.36,
+          w: 17.89,
+          h: 6.91,
           size: 2.054
+        },
+        {
+          slot: "serial",
+          x: 70.7,
+          y: 4.29,
+          w: 12.06,
+          h: 6.91,
+          size: 2.054,
+          "hidden": true
         },
         {
           slot: "name",
           x: 3.79,
-          y: 10.76,
+          y: 9.21,
           w: 76.63,
           h: 5.34,
           size: 5.046
         },
         {
-          slot: "aside",
+          slot: "band",
           x: 81.52,
-          y: 10.76,
+          y: 4.29,
           w: 15.42,
-          h: 12.07,
-          size: 3.174
+          h: 4.48,
+          size: 2.24
         },
         {
-          slot: "title",
+          slot: "badge",
+          x: 83.09,
+          y: 8.77,
+          w: 9.91,
+          h: 5.78,
+          size: 2.054
+        },
+        {
+          slot: "titleTop",
           x: 3.79,
           y: 23.94,
           w: 92.42,
-          h: 30.88,
-          size: 16.028
+          h: 17.3,
+          size: 17.028
+        },
+        {
+          slot: "titleBottom",
+          x: 3.79,
+          y: 39.38,
+          w: 92.42,
+          h: 17.3,
+          size: 17.028
         },
         {
           slot: "sub",
           x: 3.79,
-          y: 54.82,
+          y: 57.65,
           w: 76.61,
           h: 4.95,
           size: 3.174,
           weight: "600"
         },
         {
-          slot: "nav",
+          slot: "nav0",
           x: 3.79,
-          y: 64.39,
-          w: 77.73,
-          h: 19.22
+          y: 69.92,
+          w: 25.2,
+          h: 13.69,
+          size: 2.705
+        },
+        {
+          slot: "nav1",
+          x: 30.1,
+          y: 69.92,
+          w: 25.11,
+          h: 13.69,
+          size: 2.705
+        },
+        {
+          slot: "scratchNote",
+          x: 56.41,
+          y: 64.79,
+          w: 25.11,
+          h: 2.2,
+          size: 1.775,
+          weight: "700",
+          color: "muted"
+        },
+        {
+          slot: "nav2",
+          x: 56.41,
+          y: 69.92,
+          w: 25.11,
+          h: 13.69,
+          size: 2.705
         },
         {
           slot: "stamp",
-          x: 88.04,
-          y: 67.11,
+          x: 91.44,
+          y: 69.92,
           w: 7.03,
           h: 16.5,
-          rotate: -10
+          rotate: 10
         },
         {
           slot: "barcode",
@@ -1591,9 +1643,30 @@ window.SITE_CONTENT = {
           x: 22.02,
           y: 91.41,
           w: 74.19,
-          h: 3.17,
+          h: 6.22,
           size: 1.9,
           color: "deep"
+        },
+        {
+          type: "box",
+          fill: "faint",
+          w: 9.55,
+          h: 4.6,
+          x: 90.18,
+          y: 62.39,
+          "hidden": true
+        },
+        {
+          type: "text",
+          text: "Listen to your gut",
+          size: 2.4,
+          color: "ink",
+          font: "display",
+          w: 12.07,
+          h: 3.57,
+          x: 89.23,
+          y: 64.1,
+          "hidden": true
         }
       ]
     }
