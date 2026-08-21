@@ -39,7 +39,23 @@
 <!-- the tear-off stub. site.js fills it. -->
 <footer class="stub" id="siteFoot"></footer>
 
-<script src="content.js"></script>
+<!-- content.js is fetched with a stamp that changes every minute.
+     GitHub Pages serves it with cache-control: max-age=600, so for ten
+     minutes after a save the live site kept handing out the previous
+     words and the save looked as though it had done nothing. A plain
+     request was measured returning a fifty-minute-old copy while the
+     same file, asked for with a query, came back current.
+     Only on a real web server: a query string on a file URL is not
+     reliably understood and the owner previews by double-clicking. -->
+<script>
+(function () {
+  /* only on a real web server. Anything else (file://, and the data: URLs
+     some preview panes use) gets exactly the tag this always had, so the
+     double-click workflow cannot regress. */
+  var v = /^https?:$/.test(location.protocol) ? '?v=' + Math.floor(Date.now() / 60000) : '';
+  document.write('<scr' + 'ipt src="content.js' + v + '"><\/scr' + 'ipt>');
+})();
+</script>
 <script src="site.js"></script>
 <script src="auto-refresh.js"></script>
 <script>

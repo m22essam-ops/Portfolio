@@ -24,6 +24,21 @@ server or bundler breaks his workflow. Do not suggest React/Tailwind/Vite.
   correctly on the live site while the owner's own preview still showed the old
   text, which reads exactly like a failed save. Keep both destinations on that
   button. The status line after a save says what happened to each.
+
+### Why a save could look like it did nothing (fixed 21 Aug 2026)
+
+Two separate causes, both reported by the owner as "I press save to GitHub and
+nothing happens". Neither was the save failing. Both are fixed; don't undo them.
+
+1. **The save did not touch his folder** (above). Fixed by one `saveToFolder()`.
+2. **GitHub Pages serves `content.js` with `cache-control: max-age=600`.** For
+   ten minutes after a save the live site kept handing out the previous words.
+   Measured: a plain request returned a fifty-minute-old copy while the same
+   file, asked for with a query string, came back current.
+   All four pages that load content.js now write their own script tag with a
+   stamp that changes every minute (`content.js?v=<minutes>`). **The stamp is
+   added only on http/https** so `file://` gets exactly the tag it always had
+   and the double-click preview cannot regress.
 - `design.html` — the home designer. A canvas for the ticket: drag, resize,
   delete, add. Writes only `layout` into content.js. Needs the local server.
 - `site.js` — shared helpers (`imgSrc`, scroll reveals).
