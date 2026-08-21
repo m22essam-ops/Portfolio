@@ -113,7 +113,40 @@ round trip. `applyLayout()` in index.html is the whole engine; the flow
 wrappers are neutralised with `display:contents` so the real elements, and
 their scripts, keep working.
 
+**One line, one box.** The game line used to share a box with the serial, his
+line with the award badge, the two halves of the headline with each other, and
+all three punches with one another. He asked for them apart, and he was right:
+moving one moved the rest, and the note above the covered tab could not be
+selected at all. The boxes are now `game`, `serial`, `name`, `band`, `badge`,
+`titleTop`, `titleBottom`, `sub`, `scratchNote`, one per punch (`nav0`, `nav1`,
+…, built at run time from `ticket.nav`), `stamp`, `barcode`, `terms`, `won`.
+The four old wrappers are `display:contents` on the canvas; inherited type
+still passes through them, so each voice survives. **Do not put `data-slot` on
+a wrapper** — an unplaced slot is `display:none`, which takes its children
+with it.
+
+**He can type on the canvas.** Double-click a box made of words, or use the
+words field in the inspector. So `design.html` writes copy as well as layout,
+and can no longer claim to touch only `layout`. It keeps the surgical
+property a different way: every change is held as a path and a value in
+`EDITS` and applied one at a time on top of a fresh read of content.js, so a
+field it never touched is never written. Note the page sets its words once at
+load: `applyLayout()` only moves things, so `paintSlotText()` has to update
+the element too.
+
 Things that will bite anyone changing this:
+
+- **A layout naming boxes the page no longer has is ignored, not half-placed.**
+  If under three quarters of the slots find their element, `applyLayout()`
+  drops the whole artboard and lets the stylesheet lay the page out. Half-
+  placing it would leave a ticket with most of its words missing, because an
+  unplaced slot is hidden. The designer migrates such a layout on open, by
+  measuring where each piece actually sat inside its old block and mapping
+  that share into the box he drew, so a composition made before the split
+  survives it. His did.
+- **Shift holds the shape while resizing.** Holding the ratio of the two
+  percentages holds the real one: the ticket's width and height cancel out of
+  pixH/pixW. Only deciding which side he pulled harder needs pixels.
 
 - **The artboard must be told its height.** Every child is absolute, so there
   is no content left to give the ticket a height. Above 900px the stylesheet
