@@ -15,7 +15,7 @@ window.SITE_CONTENT = {
     name: "MOHAMMED ESSAM",
     band: "If I play, I play to win",
     game: "A red-tier ticket to the mind of",
-    serial: "No. no matter how · Exp. never",
+    serial: "No. 131313 . Exp. never",
     titleTop: "Award-losing",
     titleBottom: "copywriter",
     sub: "I write in English and Arabic. I order coffee in Spanish and French.",
