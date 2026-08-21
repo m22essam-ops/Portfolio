@@ -20,7 +20,7 @@ window.SITE_CONTENT = {
     titleBottom: "copywriter",
     sub: "Work taught me one thing: I write in English and Arabic. I order coffee in Spanish and French.",
     scratchNote: "...AND for a ticket to win, had to bought first",
-    badge: "Won nothing",
+    badge: "WON NOTHING",
     terms: "Odds of winning: historically High. Ticket has no cash value and neither did the awards. Keep this as proof of participation or share it with your loved ones.",
     stampArc: "Time is a timeless joke",
     stampName: "As seen on TV",
@@ -1577,7 +1577,11 @@ window.SITE_CONTENT = {
           y: 8.77,
           w: 9.91,
           h: 5.78,
-          size: 2.054
+          size: 2.054,
+          font: "body",
+          tracking: 0.12,
+          valign: "middle",
+          align: "center"
         },
         {
           slot: "titleTop",
@@ -1585,7 +1589,7 @@ window.SITE_CONTENT = {
           y: 23.94,
           w: 92.42,
           h: 17.3,
-          size: 17.028
+          size: 15.328
         },
         {
           slot: "titleBottom",
@@ -1593,7 +1597,7 @@ window.SITE_CONTENT = {
           y: 39.38,
           w: 92.42,
           h: 17.3,
-          size: 17.028
+          size: 15.728
         },
         {
           slot: "sub",
