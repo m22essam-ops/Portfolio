@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Motion preview · pick one</title>
+
+<!-- THROWAWAY. This file is a showroom, not part of the site. Nothing here is
+     wired into index.html / work.html / about.html. Once he picks, the winner
+     gets built properly into the real pages and this file gets deleted. -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Syne:wght@400..800&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+
+<style>
+/* ---------- showroom chrome ---------- */
+body.showroom{background:var(--bg);color:var(--fg);margin:0}
+.sr-head{
+  border-bottom:1px solid var(--line);padding:26px 24px 20px;
+  position:sticky;top:0;background:var(--bg);z-index:40
+}
+.sr-head h1{font-family:var(--display);font-size:clamp(22px,3vw,34px);margin:0 0 4px;letter-spacing:-.02em}
+.sr-head p{margin:0;font-size:14px;color:var(--fg-dim);max-width:70ch}
+.sr-sec{padding:44px 24px 60px;max-width:1240px;margin:0 auto}
+.sr-kicker{
+  font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--fg-faint);margin:0 0 10px
+}
+.sr-sec h2{font-family:var(--display);font-size:clamp(26px,4vw,44px);margin:0 0 8px;letter-spacing:-.025em}
+.sr-sec > p.lede{margin:0 0 26px;font-size:16px;color:var(--fg-dim);max-width:66ch}
+
+/* ---------- the stage: a real-scale ticket the openers land on ---------- */
+/* the proportions of a real laptop window (1440x860), not a tidy 16:10.
+   The ticket sizes its type against the viewport, so a stage of the wrong
+   shape would show him a headline he will never actually see. */
+.stage{
+  position:relative;width:100%;aspect-ratio:1440/860;min-height:380px;
+  background:var(--red);overflow:hidden;border-radius:2px;isolation:isolate
+}
+/* and a real phone's proportions, not a squat 3:4. At 3:4 the ticket was
+   squeezed to about half a phone's height and his nav labels spilled out of
+   their boxes, which is a lie about his layout: at 375x812 they sit inside. */
+@media (max-width:760px){.stage{aspect-ratio:375/812;min-height:0}}
+
+/* the real home page, behind the openers. Nothing here is a drawing of the
+   ticket: it is the ticket, with his canvas layout on it, so an opener that
+   lands cleanly here lands cleanly on the site. */
+.real{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+.stage.no-frame .real{display:none}
+
+/* the fallback, only if the iframe cannot load (some file:// setups) */
+.mock{
+  position:absolute;inset:0;margin:auto;width:95%;height:95%;
+  background:var(--paper);color:var(--ink);display:none;
+  flex-direction:column;padding:clamp(12px,2.2vw,26px);gap:clamp(6px,1vw,12px)
+}
+.stage.no-frame .mock{display:flex}
+.mock .m-band{
+  background:var(--ink);color:var(--paper);display:flex;justify-content:space-between;
+  align-items:center;gap:12px;padding:6px clamp(8px,1.2vw,14px)
+}
+.mock .m-band b{font-family:var(--mono);font-weight:600;letter-spacing:.06em;font-size:clamp(9px,1.15vw,13px);text-transform:uppercase}
+.mock .m-band i{
+  font-style:normal;background:var(--red);color:var(--paper);font-family:var(--mono);
+  font-weight:700;letter-spacing:.1em;font-size:clamp(8px,1vw,11px);padding:3px 8px;text-transform:uppercase
+}
+.mock .m-micro{
+  display:flex;justify-content:space-between;font-family:var(--mono);
+  font-size:clamp(8px,.95vw,11px);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-60)
+}
+.mock .m-name{
+  font-family:var(--mono);font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  font-size:clamp(13px,2.1vw,25px);line-height:1
+}
+.mock .m-title{
+  font-family:var(--display-home);font-weight:700;line-height:.86;letter-spacing:-.035em;
+  font-size:clamp(38px,8.4vw,104px);text-transform:none
+}
+.mock .m-title span{display:block;white-space:nowrap}
+.mock .m-title span:last-child{color:var(--red)}
+.mock .m-sub{font-family:"Hanken Grotesk",sans-serif;font-size:clamp(9px,1.2vw,14px);color:var(--ink-60);max-width:46ch;margin:0}
+.mock .m-nav{display:flex;gap:clamp(6px,1vw,12px);margin-top:auto}
+.mock .m-nav a{
+  flex:1;border:1.5px solid var(--ink);padding:clamp(6px,1.1vw,13px) 8px;text-align:center;
+  font-family:var(--display);font-weight:700;font-size:clamp(9px,1.15vw,14px);
+  text-decoration:none;color:var(--ink);text-transform:uppercase;letter-spacing:.01em
+}
+.mock .m-nav a:last-child{border-color:var(--red);color:var(--red)}
+.mock .m-foot{
+  display:flex;justify-content:space-between;align-items:flex-end;gap:14px;
+  font-family:var(--mono);font-size:clamp(7px,.85vw,10px);letter-spacing:.08em;
+  color:var(--ink-30);text-transform:uppercase
+}
+.mock .m-bars{display:flex;gap:2px;align-items:flex-end;height:clamp(14px,2vw,26px)}
+.mock .m-bars i{display:block;width:2px;height:100%;background:var(--ink)}
+
+/* ---------- OPENER 1 · THE PRINT ----------
+   The ticket is pushed out of a terminal. The overlay ticket is the same box
+   as the real one, so when the overlay leaves nothing jumps. */
+.op{position:absolute;inset:0;z-index:10;pointer-events:none}
+/* while it is running it must catch the click itself: the stage holds an
+   iframe, and an iframe swallows clicks before the stage ever sees them */
+.op.run{pointer-events:auto;cursor:pointer}
+.op[hidden]{display:none}
+/* Two layers, and they matter: the veil is the red that hides the page, the
+   card is the blank paper. If the veil stayed put, wiping the card would just
+   uncover more red. They peel back together, so what appears under the wipe is
+   the real page. */
+.op-print{background:transparent}
+.op-print .veil{position:absolute;inset:0;background:var(--red);clip-path:inset(0 0 0 0)}
+.op-print .slot{
+  position:absolute;left:50%;top:0;transform:translateX(-50%);
+  width:46%;height:clamp(6px,1vw,11px);background:var(--ink);border-radius:0 0 3px 3px;
+  opacity:0;transition:opacity .18s linear
+}
+.op-print.run .slot{opacity:.9}
+.op-print.run .veil{animation:printInk .42s cubic-bezier(.6,.02,.28,1) .82s forwards}
+/* Blank paper, exactly the size and place of the real ticket, fed down out of
+   the slot. A printer feeds at a steady speed and stops hard, so the travel is
+   near linear with a short settle, NOT an ease-out (an ease-out arrives in the
+   first third and you never see it move). */
+.op-print .card{
+  position:absolute;inset:0;margin:auto;width:95%;height:95%;
+  background:var(--paper);transform:translateY(-116%);clip-path:inset(0 0 0 0)
+}
+.op-print.run .card{animation:printOut .8s forwards}
+@keyframes printOut{
+  0%  {transform:translateY(-116%);animation-timing-function:cubic-bezier(.7,0,.8,.3)}
+  16% {transform:translateY(-108%);animation-timing-function:linear}
+  74% {transform:translateY(-7%);  animation-timing-function:cubic-bezier(.3,.7,.4,1)}
+  87% {transform:translateY(2.6%)}
+  95% {transform:translateY(-1%)}
+  100%{transform:translateY(0)}
+}
+/* Then the paper is wiped away downward, so his type develops onto the ticket
+   from the top down the way a thermal print actually appears. This is what
+   makes it read as printing rather than as a white rectangle arriving. */
+.op-print.run .card{
+  animation:printOut .8s forwards, printInk .42s cubic-bezier(.6,.02,.28,1) .82s forwards
+}
+/* Both ends must be a real inset(). Going from the default `none` to an
+   inset() is not interpolatable, so the wipe snapped in one frame instead of
+   travelling. The `from` is what makes it a wipe. */
+@keyframes printInk{
+  from{clip-path:inset(0 0 0 0)}
+  to  {clip-path:inset(100% 0 0 0)}
+}
+
+/* ---------- OPENER 2 · THE WIPE ----------
+   Off-white, his name, then red floods across it and the name reverses out.
+   The red it lands on IS the home page's field, so the overlay just dies. */
+.op-wipe{background:var(--paper);display:grid;place-items:center}
+.op-wipe .word{
+  position:relative;font-family:var(--mono);font-weight:700;text-transform:uppercase;
+  letter-spacing:.14em;font-size:clamp(16px,3.4vw,42px);line-height:1;color:var(--ink);
+  white-space:nowrap
+}
+.op-wipe .flood{
+  position:absolute;inset:0;background:var(--red);
+  clip-path:inset(0 100% 0 0)
+}
+.op-wipe.run .flood{animation:flood .62s cubic-bezier(.62,.02,.2,1) .18s forwards}
+@keyframes flood{to{clip-path:inset(0 0 0 0)}}
+/* the same word again, off-white, clipped to the flood so it reverses out */
+.op-wipe .word .over{
+  position:absolute;left:0;top:0;color:var(--paper);clip-path:inset(0 100% 0 0)
+}
+.op-wipe.run .word .over{animation:flood .62s cubic-bezier(.62,.02,.2,1) .18s forwards}
+
+/* ---------- OPENER 3 · THE TEAR ----------
+   One sheet, perforated across the middle. It tears and the halves leave. */
+.op-tear{background:transparent}
+.op-tear .half{position:absolute;left:0;right:0;background:var(--red);overflow:hidden}
+.op-tear .half.t{top:0;height:50%}
+.op-tear .half.b{bottom:0;height:50%}
+.op-tear .perf{
+  position:absolute;left:0;right:0;height:12px;
+  background-image:radial-gradient(circle at 7px 6px,var(--paper) 4px,transparent 4.6px);
+  background-size:16px 12px;opacity:.9
+}
+.op-tear .half.t .perf{bottom:0}
+.op-tear .half.b .perf{top:0}
+.op-tear .half.t span,.op-tear .half.b span{
+  position:absolute;left:0;right:0;text-align:center;color:var(--paper);
+  font-family:var(--mono);font-weight:700;text-transform:uppercase;letter-spacing:.14em;
+  font-size:clamp(14px,3vw,38px);line-height:1
+}
+.op-tear .half.t span{bottom:26px}
+/* the serial is small print on a real ticket, so it stays small print here */
+.op-tear .half.b span{top:26px;font-size:clamp(9px,1.1vw,13px);opacity:.8;letter-spacing:.2em}
+/* Paper resists, then goes all at once. So: a short press against the tear
+   (easing out into it), then an accelerating rip (easing in, away). A single
+   ease-out here put both halves off screen in the first third and you never
+   saw it tear at all. */
+.op-tear.run .half.t{animation:tearUp .8s .3s forwards}
+.op-tear.run .half.b{animation:tearDown .8s .3s forwards}
+@keyframes tearUp{
+  0%  {transform:translateY(0) rotate(0deg);      animation-timing-function:cubic-bezier(.3,.6,.5,1)}
+  20% {transform:translateY(2.4%) rotate(-.7deg); animation-timing-function:cubic-bezier(.55,0,.9,.45)}
+  100%{transform:translateY(-106%) rotate(-2.2deg)}
+}
+@keyframes tearDown{
+  0%  {transform:translateY(0) rotate(0deg);     animation-timing-function:cubic-bezier(.3,.6,.5,1)}
+  20% {transform:translateY(-2.4%) rotate(.7deg);animation-timing-function:cubic-bezier(.55,0,.9,.45)}
+  100%{transform:translateY(106%) rotate(2deg)}
+}
+
+@keyframes opGo{to{opacity:0}}
+.op.leaving{animation:opGo .3s var(--ease) forwards}
+
+/* ---------- showroom controls ---------- */
+.sr-ctl{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0;align-items:center}
+.sr-btn{
+  font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:-.01em;
+  background:none;border:1.5px solid var(--fg);color:var(--fg);
+  padding:9px 15px;cursor:pointer;border-radius:0;
+  transition:background .15s var(--ease),color .15s var(--ease),border-color .15s var(--ease)
+}
+.sr-btn:hover{background:var(--fg);color:var(--bg)}
+.sr-btn.on{background:var(--red);border-color:var(--red);color:var(--paper)}
+.sr-note{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--fg-faint)}
+.sr-verdict{
+  margin:14px 0 0;font-size:14.5px;color:var(--fg-dim);max-width:68ch;
+  border-left:2px solid var(--red);padding-left:13px;min-height:2.6em
+}
+.sr-verdict b{color:var(--fg)}
+
+/* ---------- section 2: the scroll ---------- */
+.sr-split{display:grid;grid-template-columns:1fr;gap:34px}
+.sr-rail{border-top:1px solid var(--line);padding-top:16px}
+.sr-rail h3{
+  font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+  margin:0 0 3px;color:var(--fg-faint)
+}
+.sr-rail .sub{margin:0 0 20px;font-size:13.5px;color:var(--fg-dim)}
+.demo-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(20px,3vw,44px)}
+@media (max-width:720px){.demo-grid{grid-template-columns:1fr}}
+
+/* ---------- THE NEW CARD REVEAL ----------
+   Not a fade-up. The picture is uncovered, the words rise under it, and the
+   sticker lands last and hard, the way a sticker actually gets stuck on. */
+.piece.rv .frame{clip-path:inset(0 0 100% 0)}
+.piece.rv .frame img{transform:scale(1.09)}
+.piece.rv .serial,.piece.rv h2,.piece.rv p{opacity:0;transform:translateY(11px)}
+.piece.rv .sticker{opacity:0;transform:scale(1.7) rotate(-11deg)}
+
+.piece.rv.go .frame{
+  clip-path:inset(0 0 0 0);
+  transition:clip-path .72s cubic-bezier(.62,.02,.2,1)
+}
+.piece.rv.go .frame img{
+  transform:scale(1);
+  transition:transform 1.15s cubic-bezier(.2,.8,.2,1)
+}
+.piece.rv.go .serial,.piece.rv.go h2,.piece.rv.go p{
+  opacity:1;transform:none;
+  transition:opacity .5s var(--ease),transform .5s var(--ease)
+}
+.piece.rv.go .serial{transition-delay:.30s}
+.piece.rv.go h2     {transition-delay:.37s}
+.piece.rv.go p      {transition-delay:.44s}
+.piece.rv.go .sticker{
+  opacity:1;transform:scale(1) rotate(-3deg);
+  transition:opacity .16s linear .52s,transform .42s cubic-bezier(.2,1.5,.4,1) .52s
+}
+
+/* ---------- THE OLD ONE, for the comparison ---------- */
+.piece.rv-old{opacity:0;transform:translateY(16px)}
+.piece.rv-old.go{
+  opacity:1;transform:none;
+  transition:opacity .6s var(--ease),transform .6s var(--ease)
+}
+
+.spacer{height:58vh;display:grid;place-items:center}
+.spacer p{
+  font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--fg-faint);margin:0
+}
+</style>
+</head>
+
+<body class="showroom">
+
+<header class="sr-head">
+  <h1>Motion preview</h1>
+  <p>Nothing here is in the site yet. Watch them, pick one, and I will build
+     the winner into the real pages. Everything obeys reduced motion and can be
+     skipped with a click or a key.</p>
+</header>
+
+<!-- ============================ 1 · THE COLD OPEN ======================== -->
+<section class="sr-sec">
+  <p class="sr-kicker">One</p>
+  <h2>The cold open</h2>
+  <p class="lede">All three land on the same ticket, so the only thing you are
+     comparing is the movement. It plays once per visit, not on every trip back
+     to the home page.</p>
+
+  <div class="stage" id="stage">
+    <!-- the real home page. Not a drawing of it. -->
+    <iframe class="real" id="real" src="index.html" title="The home page"
+            scrolling="no" tabindex="-1"></iframe>
+
+    <!-- fallback only: drawn from content.js if the iframe will not load -->
+    <div class="mock" id="mock">
+      <div class="m-band"><b id="mBand"></b><i id="mBadge"></i></div>
+      <div class="m-micro"><span id="mGame"></span><span id="mSerial"></span></div>
+      <div class="m-name" id="mName"></div>
+      <div class="m-title"><span id="mT1"></span><span id="mT2"></span></div>
+      <p class="m-sub" id="mSub"></p>
+      <div class="m-nav" id="mNav"></div>
+      <div class="m-foot">
+        <div class="m-bars" id="mBars"></div>
+        <span id="mTerms"></span>
+      </div>
+    </div>
+
+    <!-- opener 1 -->
+    <div class="op op-print" id="opPrint" hidden>
+      <div class="veil"><div class="slot"></div></div>
+      <div class="card"></div>
+    </div>
+
+    <!-- opener 2 -->
+    <div class="op op-wipe" id="opWipe" hidden>
+      <div class="flood"></div>
+      <div class="word"><span id="wipeWord"></span><span class="over" id="wipeWordOver"></span></div>
+    </div>
+
+    <!-- opener 3 -->
+    <div class="op op-tear" id="opTear" hidden>
+      <div class="half t"><span id="tearTop"></span><div class="perf"></div></div>
+      <div class="half b"><span id="tearBot"></span><div class="perf"></div></div>
+    </div>
+  </div>
+
+  <div class="sr-ctl">
+    <button class="sr-btn" data-op="print">▶ The print</button>
+    <button class="sr-btn" data-op="wipe">▶ The wipe</button>
+    <button class="sr-btn" data-op="tear">▶ The tear</button>
+    <span class="sr-note" id="opNote">pick one to play</span>
+  </div>
+  <p class="sr-verdict" id="verdict"></p>
+</section>
+
+<!-- ============================ 2 · THE SCROLL =========================== -->
+<section class="sr-sec">
+  <p class="sr-kicker">Two</p>
+  <h2>The scroll</h2>
+  <p class="lede">Right now every work card does the same 16px fade-up that every
+     portfolio on the internet does. Scroll down and compare. The new one uncovers
+     the picture instead of fading it, and the sticker lands last, the way a sticker
+     actually gets stuck on.</p>
+
+  <div class="sr-ctl">
+    <button class="sr-btn on" data-rail="new">The new one</button>
+    <button class="sr-btn" data-rail="old">What it does now</button>
+    <button class="sr-btn" id="again">↻ Replay</button>
+  </div>
+</section>
+
+<div class="spacer"><p>keep scrolling ↓</p></div>
+
+<section class="sr-sec">
+  <div class="sr-rail">
+    <h3 id="railName">The new one</h3>
+    <p class="sub" id="railSub">Picture uncovered, words under it, sticker last and hard.</p>
+    <div class="demo-grid" id="grid"></div>
+  </div>
+</section>
+
+<div class="spacer"><p>that is the whole preview</p></div>
+
+<script>
+(function () {
+  var v = /^https?:$/.test(location.protocol) ? '?v=' + Math.floor(Date.now() / 60000) : '';
+  document.write('<scr' + 'ipt src="content.js' + v + '"><\/scr' + 'ipt>');
+})();
+</script>
+
+<script>
+(function () {
+  var C  = window.SITE_CONTENT || {};
+  var T  = C.ticket  || {};
+  var W  = C.work    || {};
+  var esc = function (s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  };
+  var set = function (id, txt) {
+    var n = document.getElementById(id);
+    if (n) n.textContent = txt == null ? '' : String(txt);
+  };
+
+  /* ---------- the stage ----------
+     The real index.html sits in the frame. If it will not load (a file://
+     setup that blocks local frames) we fall back to a ticket drawn from
+     content.js, so the openers can still be judged either way. The test is
+     simply whether the frame ever fires load: reading into it is blocked on
+     file:// even when it renders perfectly, so that would lie. */
+  var frame = document.getElementById('real');
+  var framedOk = false;
+  if (frame) {
+    frame.addEventListener('load', function () { framedOk = true; });
+    setTimeout(function () {
+      if (!framedOk) document.getElementById('stage').classList.add('no-frame');
+    }, 1600);
+  } else {
+    document.getElementById('stage').classList.add('no-frame');
+  }
+
+  /* ---------- the fallback ticket, built out of his real words ---------- */
+  set('mBand',   T.band   || 'If I play, I play to win');
+  set('mBadge',  T.badge  || 'available for work');
+  set('mGame',   T.game   || '');
+  set('mSerial', T.serial || '');
+  set('mName',  (C.nav && C.nav.logo ? String(C.nav.logo).replace(/\s*\.\s*$/, '') : 'Mohammed Essam').toUpperCase());
+  set('mT1',     T.titleTop    || 'Award-losing');
+  set('mT2',     T.titleBottom || 'copywriter');
+  set('mSub',    T.sub    || '');
+  set('mTerms',  T.terms  || '');
+
+  var nav = (T.nav || []).slice(0, 3);
+  if (!nav.length) nav = [{ label: 'Work' }, { label: 'Who I am' }, { label: 'Hire me?' }];
+  document.getElementById('mNav').innerHTML = nav.map(function (n) {
+    return '<a href="#" onclick="return false">' + esc(n.label || '') + '</a>';
+  }).join('');
+
+  /* a barcode that is not an image */
+  var bars = '';
+  for (var i = 0; i < 42; i++) {
+    bars += '<i style="width:' + (Math.random() > .68 ? 3 : 1.5) + 'px;opacity:' +
+            (Math.random() > .85 ? .35 : 1) + '"></i>';
+  }
+  document.getElementById('mBars').innerHTML = bars;
+
+  /* the openers need his name too */
+  var nameUp = (C.nav && C.nav.logo ? String(C.nav.logo).replace(/\s*\.\s*$/, '') : 'Mohammed Essam').toUpperCase();
+  set('wipeWord', nameUp);
+  set('wipeWordOver', nameUp);
+  /* The halves carry the ticket's own furniture, not the headline. They used
+     to say "Award-losing / copywriter" and then tear open onto a ticket saying
+     "Award-losing copywriter", which is a stutter. Now the tear uncovers the
+     line instead of repeating it. */
+  set('tearTop', nameUp);
+  set('tearBot', T.serial || '');
+
+  /* ---------- play an opener ---------- */
+  var OPS = {
+    print: {
+      el: document.getElementById('opPrint'), ms: 1270,
+      say: '<b>The print.</b> The ticket is pushed out of the machine and lands where the real one sits, so nothing jumps when the cover leaves. It is the most literal of the three and the only one that says "lottery" without a word. Longest at about 1.2 seconds, which is the argument against it.'
+    },
+    wipe: {
+      el: document.getElementById('opWipe'), ms: 980,
+      say: '<b>The wipe.</b> Your name, then the red floods over it and your name reverses out of it. The red it ends on is the home page’s own field, so the cover does not so much leave as become the page. Flattest, fastest, closest to the art direction already agreed. My pick.'
+    },
+    tear: {
+      el: document.getElementById('opTear'), ms: 1150,
+      say: '<b>The tear.</b> One sheet, perforated across the middle, torn open. It is the most physical and the most fun. The risk is that it is one step from the 1970s pastiche you killed twice, and it is the slowest.'
+    }
+  };
+  var busy = false;
+  var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var cur = null, curTimer = null;
+
+  /* Nobody should ever be held on a loading screen. A click anywhere, or any
+     key, ends it now. On the real site this is the same escape hatch, plus it
+     only ever plays once per visit. */
+  function skip() {
+    if (!busy || !cur) return;
+    clearTimeout(curTimer);
+    finish(cur);
+  }
+  function finish(el) {
+    el.classList.add('leaving');
+    setTimeout(function () {
+      el.hidden = true;
+      el.classList.remove('run', 'leaving');
+      busy = false; cur = null;
+      document.getElementById('opNote').textContent = 'again?';
+    }, 300);
+  }
+  document.getElementById('stage').addEventListener('click', skip);
+  document.addEventListener('keydown', skip);
+  ['opPrint', 'opWipe', 'opTear'].forEach(function (id) {
+    document.getElementById(id).addEventListener('click', skip);
+  });
+
+  function play(key) {
+    if (busy) return;
+    var o = OPS[key];
+    if (!o) return;
+    busy = true;
+    document.getElementById('verdict').innerHTML = o.say;
+    document.getElementById('opNote').textContent = 'playing…';
+    [].forEach.call(document.querySelectorAll('[data-op]'), function (b) {
+      b.classList.toggle('on', b.dataset.op === key);
+    });
+
+    var el = o.el;
+    cur = el;
+    el.hidden = false;
+    el.classList.remove('run', 'leaving');
+    void el.offsetWidth;                    /* restart the animation */
+
+    /* Someone who asked their machine to stop moving things gets the page,
+       not a performance of the page. */
+    if (still) {
+      document.getElementById('opNote').textContent = 'reduced motion: skipped';
+      finish(el);
+      return;
+    }
+
+    el.classList.add('run');
+    curTimer = setTimeout(function () { finish(el); }, o.ms);
+  }
+
+  [].forEach.call(document.querySelectorAll('[data-op]'), function (b) {
+    b.addEventListener('click', function () { play(b.dataset.op); });
+  });
+
+  /* ---------- section two: the cards ---------- */
+  var all = [];
+  (W.projects || []).forEach(function (p) { if (p && p.image) all.push(p); });
+  if (!all.length && W.produced) all = W.produced.filter(function (p) { return p && p.image; });
+  var picks = all.slice(0, 4);
+
+  var mode = 'new';
+  function draw() {
+    var cls = mode === 'new' ? 'rv' : 'rv-old';
+    document.getElementById('railName').textContent =
+      mode === 'new' ? 'The new one' : 'What it does now';
+    document.getElementById('railSub').textContent = mode === 'new'
+      ? 'Picture uncovered, words under it, sticker last and hard.'
+      : 'Everything fades up 16px together. The default.';
+
+    document.getElementById('grid').innerHTML = picks.map(function (p, i) {
+      var sticker = p.sticker
+        ? '<span class="sticker' + (p.ran ? '' : ' spec') + '">' + esc(p.sticker) + '</span>' : '';
+      var meta = [p.client, p.year].filter(Boolean).join(' · ');
+      return '<a class="piece ' + cls + '" href="#" onclick="return false">' +
+        '<div class="frame">' + sticker +
+          '<img src="' + esc(window.imgSrc ? window.imgSrc(p.image) : 'images/' + p.image) +
+          '" alt="' + esc(p.title || '') + '"></div>' +
+        '<span class="serial">NO. ' + String(i + 1).padStart(2, '0') +
+          (meta ? ' · ' + esc(meta.toUpperCase()) : '') + '</span>' +
+        '<h2>' + esc(p.title || '') + '</h2>' +
+        (p.tagline ? '<p>' + esc(p.tagline) + '</p>' : '') +
+      '</a>';
+    }).join('');
+    watch();
+  }
+
+  var io = null;
+  function watch() {
+    if (io) io.disconnect();
+    io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('go'); io.unobserve(e.target); }
+      });
+    }, { threshold: .2, rootMargin: '0px 0px -60px 0px' });
+    [].forEach.call(document.querySelectorAll('.piece'), function (n) { io.observe(n); });
+  }
+
+  [].forEach.call(document.querySelectorAll('[data-rail]'), function (b) {
+    b.addEventListener('click', function () {
+      mode = b.dataset.rail;
+      [].forEach.call(document.querySelectorAll('[data-rail]'), function (o) {
+        o.classList.toggle('on', o === b);
+      });
+      draw();
+    });
+  });
+  document.getElementById('again').addEventListener('click', function () {
+    [].forEach.call(document.querySelectorAll('.piece'), function (n) { n.classList.remove('go'); });
+    void document.body.offsetWidth;
+    watch();
+    document.getElementById('grid').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+
+  draw();
+})();
+</script>
+
+</body>
+</html>
