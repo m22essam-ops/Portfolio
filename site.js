@@ -126,21 +126,16 @@
       workLink.parentNode.insertBefore(item, workLink);
       item.appendChild(workLink);
 
+      /* ONE item. The parent link is already the all-work page, so listing
+         "All work" underneath it only said the same thing twice. The menu
+         exists to offer the thing that is NOT the default. */
       var menu = document.createElement('span');
       menu.className = 'nav-menu';
-      [
-        /* "All work" is a navigation label, not a headline: his heading for
-           that page is "The work", which under a link already reading THE WORK
-           would only say it twice. */
-        { href: 'work.html',       label: 'All work',                              on: onWork && !ran },
-        { href: 'work.html?ran=1', label: strip(W.ranHeading, 'Work that worked'), on: onWork && ran }
-      ].forEach(function (t) {
-        var a = document.createElement('a');
-        a.href = t.href;
-        a.textContent = t.label;          /* his copy, never parsed as markup */
-        if (t.on) { a.className = 'on'; a.setAttribute('aria-current', 'page'); }
-        menu.appendChild(a);
-      });
+      var sub = document.createElement('a');
+      sub.href = 'work.html?ran=1';
+      sub.textContent = strip(W.ranHeading, 'Work that worked');  /* his copy */
+      if (onWork && ran) { sub.className = 'on'; sub.setAttribute('aria-current', 'page'); }
+      menu.appendChild(sub);
       item.appendChild(menu);
 
       /* the parent stays lit while you are anywhere in the section */

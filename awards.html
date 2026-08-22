@@ -86,7 +86,11 @@
          used to sit here is gone: it was three buttons and four more lines of
          copy asking the visitor to play with an empty cupboard, and the joke
          was already over the moment the doors opened on nothing. -->
-    <div class="cab-say" id="say" hidden>
+    <!-- NOT hidden, and the line is written in at load. The column centres
+         itself on its content, so a block that appears at the end changes the
+         height and shoves the cabinet upwards just as the doors finish. It
+         holds its space from the first frame and only fades in. -->
+    <div class="cab-say" id="say">
       <p class="cab-line" id="line"></p>
       <p class="cab-back"><a href="index.html">Back to the ticket →</a></p>
     </div>
@@ -149,10 +153,12 @@
      emptiness is something you watch being built, the doors take up their
      slack and then swing, and the line arrives last. */
   function open() {
+    /* the words are put in straight away so the column's height is settled
+       before anything moves; only their opacity waits */
+    writeLine();
+
     if (still) {
       cab.classList.add('is-in', 'is-drawn', 'is-open');
-      writeLine();
-      say.hidden = false;
       say.classList.add('in');
       return;
     }
@@ -163,11 +169,7 @@
       cab.classList.remove('is-unlatch');
       cab.classList.add('is-open');                   /* and swing */
     }, 1240);
-    setTimeout(function () {
-      writeLine();
-      say.hidden = false;
-      say.classList.add('in');
-    }, 2050);
+    setTimeout(function () { say.classList.add('in'); }, 2050);
   }
 
   open();

@@ -951,7 +951,11 @@ body.is-home.home-locked{overflow:hidden}
    red and the type do not change: only the paper and one mark. The tokens
    are the same ones the gallery already uses, so nothing else needs to know.
    ------------------------------------------------------------------------ */
-body.page-work  { --bg:#EFE9DC; --well:#E2DACA; --nav-bg:#EFE9DCf2; }
+/* Work that worked is blue. It is the produced work, the pages that ran, so
+   it gets the one ground on the site that is unmistakably a colour and not a
+   paper. Muted and grey-leaning rather than a true blue: the stills have to
+   sit on it and the red accent has to stay the loudest thing on the page. */
+body.page-work  { --bg:#B7C6D4; --well:#9DAFC1; --nav-bg:#B7C6D4f2; }
 body.page-about { --bg:#F1E4DC; --well:#E4D2C6; --nav-bg:#F1E4DCf2; }
 body.page-awards{ --bg:#E6E7E2; --well:#D6D8D1; --nav-bg:#E6E7E2f2; }
 /* Everything, including the work that never ran. The ONLY difference from
@@ -994,7 +998,14 @@ body.page-about::before{
 body.page-awards::before{
   left:0;right:0;top:63%;height:2px;background:var(--well);opacity:.5;
 }
-body.page-work > *,body.page-about > *,body.page-awards > *{position:relative;z-index:1}
+/* Everything on the page sits above the mark. NOT the nav: this selector is
+   (0,1,1) and .page-nav is (0,1,0), so it was winning and quietly turning the
+   sticky header into a relative one with z-index 1 on all three of these
+   pages. The header stopped sticking, and page content painted over the work
+   menu, which is why the menu vanished the moment the pointer reached it. */
+body.page-work   > *:not(.page-nav),
+body.page-about  > *:not(.page-nav),
+body.page-awards > *:not(.page-nav){position:relative;z-index:1}
 
 /* ============================ THE CABINET ============================
    One screen, and it does not scroll. The page is a column that fills the
@@ -1062,8 +1073,10 @@ body.page-awards #page{
 /* the reflection dies as the glass turns away from the room */
 .cab.is-open .glint{opacity:0}
 
-.cab-say{opacity:0;transform:translateY(10px);transition:opacity .5s ease,transform .5s var(--ease)}
-.cab-say.in{opacity:1;transform:none}
+/* it holds its space from the first frame: only the opacity waits, so the
+   cabinet is never shoved upwards by the words arriving underneath it */
+.cab-say{opacity:0;transition:opacity .55s ease}
+.cab-say.in{opacity:1}
 /* sized against the HEIGHT as well as the width: this page cannot scroll, so
    a headline measured only in vw runs off the bottom of a short window */
 .cab-line{
