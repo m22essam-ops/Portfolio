@@ -46,6 +46,10 @@
   --fg-faint:#0B0A0961;
   --line:#0B0A091f;
   --well:#E4DFD2;
+  /* the sticky nav's own ground: the same paper, nearly opaque. It was
+     hard-coded to the default #F2EEE5 on every page, so it sat slightly wrong
+     on all three that change their paper. A token means it follows. */
+  --nav-bg:#F2EEE5f2;
 
   /* the home headline. Syne is the look; Moniqa only if you add the file. */
   --display-home:"Moniqa","Syne","Bricolage Grotesque",sans-serif;
@@ -435,7 +439,7 @@ body.has-won .tk-badge{background:var(--ink)}
 
 .page-nav{
   position:sticky;top:0;z-index:50;
-  background:#F2EEE5f2;backdrop-filter:blur(9px);
+  background:var(--nav-bg);backdrop-filter:blur(9px);
   border-bottom:1px solid var(--line);
   /* 12px condensed caps read as fine print rather than as navigation on any
      screen bigger than a laptop. Up enough to be read at a glance, not so far
@@ -878,17 +882,21 @@ body.is-home.home-locked{overflow:hidden}
    red and the type do not change: only the paper and one mark. The tokens
    are the same ones the gallery already uses, so nothing else needs to know.
    ------------------------------------------------------------------------ */
-body.page-work  { --bg:#EFE9DC; --well:#E2DACA; }
-body.page-about { --bg:#F1E4DC; --well:#E4D2C6; }
-body.page-awards{ --bg:#E6E7E2; --well:#D6D8D1; }
+body.page-work  { --bg:#EFE9DC; --well:#E2DACA; --nav-bg:#EFE9DCf2; }
+body.page-about { --bg:#F1E4DC; --well:#E4D2C6; --nav-bg:#F1E4DCf2; }
+body.page-awards{ --bg:#E6E7E2; --well:#D6D8D1; --nav-bg:#E6E7E2f2; }
 /* Everything, including the work that never ran. The ONLY difference from
    Work that worked is the paper: same grid, same mark, same everything else.
    A staggered grid and a centre rule were tried on 22 Aug 2026 and taken back
-   out the same day; he wants the two pages to read as one body of work with
-   a change of ground, not as two different designs. Slightly cooler and a
-   shade lighter, which is enough to feel on arrival and not enough to notice
-   as a decision. */
-body.page-work-all { --bg:#EBE9DE; --well:#DEDACB; }
+   out the same day; the two pages read as one body of work with a change of
+   ground, not as two different designs.
+
+   The ground is a cool grey-green against the warm cream of Work that worked.
+   A near-shade was tried first and he was right that it did nothing: this is
+   a different colour family, so you know which page you are on the moment it
+   loads. Still light, so the campaign stills sit the way they do everywhere
+   else and the gallery stays editorial rather than going dark. */
+body.page-work-all { --bg:#DCDED5; --well:#CACEC0; --nav-bg:#DCDED5f2; }
 
 /* the hint of an element: one quiet mark per page, behind everything,
    printed in the page's own well colour so it never fights the work */
