@@ -1645,11 +1645,11 @@ window.SITE_CONTENT = {
         },
         {
           slot: "stamp",
-          x: 79.45,
+          x: 80.45,
           y: 47.15,
           w: 14.42,
           h: 36.46,
-          rotate: 10
+          rotate: 7
         },
         {
           slot: "barcode",
