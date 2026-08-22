@@ -1578,7 +1578,7 @@ window.SITE_CONTENT = {
         },
         {
           slot: "badge",
-          x: 83.22,
+          x: 80.74,
           y: 8.77,
           w: 13.74,
           h: 5.78,
@@ -1650,8 +1650,8 @@ window.SITE_CONTENT = {
         },
         {
           slot: "stamp",
-          x: 80.45,
-          y: 50.22,
+          x: 80.42,
+          y: 48.03,
           w: 13.2,
           h: 33.39,
           rotate: 7
@@ -1694,7 +1694,7 @@ window.SITE_CONTENT = {
           "hidden": true
         }
       ],
-      aspect: 1.886
+      aspect: 1.8041
     },
     mobile: {
       items: [
