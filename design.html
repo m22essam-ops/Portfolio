@@ -1303,11 +1303,36 @@ kbd{
   }
 
   /* an artboard with nothing on it is stored as nothing, so the page
-     falls back to the stylesheet rather than to an empty ticket */
+     falls back to the stylesheet rather than to an empty ticket
+
+     Each artboard also records the SHAPE it was drawn at. Positions are a
+     percentage of the ticket's width and type is a percentage of its height,
+     so those two only agree while the ticket has the proportions it was
+     composed on. Without this the page stretched to whatever window it was
+     opened in and the composition pulled apart: his own layout needed an
+     aspect of 1.89 and was being shown at 1.18, which wrapped the band, the
+     small print and the tab labels into each other. index.html reads this
+     back and fits the ticket to that shape, so it scales as one piece.
+
+     The phone artboard is a fixed 390x844. The desktop one follows the room
+     his window gives it, which is exactly why it has to be measured rather
+     than assumed. */
+  function boardAspect(k) {
+    if (k === 'mobile') return +(390 / 844).toFixed(4);
+    var w = parseFloat(board.style.width), h = parseFloat(board.style.height);
+    if (!(w > 0 && h > 0)) return 0;
+    return +(w / h).toFixed(4);
+  }
+
   function layoutForSaving() {
     var out = {};
     ['desktop', 'mobile'].forEach(function (k) {
-      if (LAYOUT[k] && LAYOUT[k].items && LAYOUT[k].items.length) out[k] = { items: LAYOUT[k].items };
+      if (!(LAYOUT[k] && LAYOUT[k].items && LAYOUT[k].items.length)) return;
+      out[k] = { items: LAYOUT[k].items };
+      /* the aspect of the board he is looking at right now is only right for
+         the artboard he is on; the other keeps whatever it was saved with */
+      var a = (k === art) ? boardAspect(k) : (LAYOUT[k].aspect || boardAspect(k));
+      if (a > 0) out[k].aspect = a;
     });
     return out;
   }

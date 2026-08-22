@@ -108,27 +108,51 @@
   /* ----- scroll-triggered reveals -----
      Pages that inject content after load (the work cards on index.html)
      call observeReveals() again once the new elements exist. */
+  /* It plays every time, not once. It used to unobserve on the first sighting,
+     so scrolling back up and coming down again showed the cards already
+     landed and nothing moved. Now the class is taken off again, but ONLY once
+     the card is completely out of the viewport: resetting at the 15% mark
+     would make a card visibly un-draw while a sliver of it was still on
+     screen. Two thresholds, because 0 is the one that reports "fully gone". */
   window.observeReveals = function () {
     var els = document.querySelectorAll('.reveal:not(.is-observed)');
     if (!els.length) return;
     if (!('IntersectionObserver' in window)) {
-      els.forEach(function (el) { el.classList.add('is-visible'); });
+      [].forEach.call(els, function (el) { el.classList.add('is-visible'); });
       return;
     }
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
           entry.target.classList.add('is-visible');
-          io.unobserve(entry.target);
+        } else if (entry.intersectionRatio === 0) {
+          entry.target.classList.remove('is-visible');
         }
       });
-    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
-    els.forEach(function (el) {
+    }, { threshold: [0, 0.15], rootMargin: '0px 0px -40px 0px' });
+    [].forEach.call(els, function (el) {
       el.classList.add('is-observed');
       io.observe(el);
     });
   };
   observeReveals();
+
+  /* ----- arriving at the footer -----
+     The footer is built above, so it is watched here rather than carrying a
+     .reveal class in anyone's HTML. It fires earlier than the cards do (a
+     positive rootMargin, so it starts while it is still below the fold) and
+     it resets the same way, so it plays again on every trip back down. */
+  if (foot && foot.classList.contains('foot') && 'IntersectionObserver' in window) {
+    var footIo = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) foot.classList.add('is-near');
+        else if (entry.intersectionRatio === 0) foot.classList.remove('is-near');
+      });
+    }, { threshold: [0, 0.08], rootMargin: '0px 0px 90px 0px' });
+    footIo.observe(foot);
+  } else if (foot) {
+    foot.classList.add('is-near');
+  }
 
   /* ----- image helper: full http(s) links pass through, file names point
          into the images/ folder. ----- */

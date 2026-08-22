@@ -326,8 +326,25 @@
     });
 
     var art = artboard();
-    if (!art) { tk.classList.remove('is-canvas'); return; }
+    if (!art) {
+      tk.classList.remove('is-canvas', 'is-locked');
+      tk.style.removeProperty('--tk-aspect');
+      return;
+    }
     tk.classList.add('is-canvas');
+
+    /* Lock the ticket to the shape the artboard was drawn at, BEFORE anything
+       is measured: H below is read off the laid-out box, so the shape has to
+       be settled first or every type size is computed against the wrong
+       height. An artboard with no aspect keeps the old stretch behaviour. */
+    var ratio = parseFloat(art.aspect);
+    if (ratio > 0) {
+      tk.style.setProperty('--tk-aspect', ratio);
+      tk.classList.add('is-locked');
+    } else {
+      tk.classList.remove('is-locked');
+      tk.style.removeProperty('--tk-aspect');
+    }
 
     var H = body.clientHeight;
     var want = 0, got = 0;
@@ -355,7 +372,8 @@
         n.removeAttribute('style');
         delete n.dataset.baseSize;
       });
-      tk.classList.remove('is-canvas');
+      tk.classList.remove('is-canvas', 'is-locked');
+      tk.style.removeProperty('--tk-aspect');
     }
   }
   window.applyHomeLayout = applyLayout;   /* the designer re-runs this as he drags */

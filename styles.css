@@ -431,7 +431,10 @@ body.has-won .tk-badge{background:var(--ink)}
   position:sticky;top:0;z-index:50;
   background:#F2EEE5f2;backdrop-filter:blur(9px);
   border-bottom:1px solid var(--line);
-  font-size:12px;
+  /* 12px condensed caps read as fine print rather than as navigation on any
+     screen bigger than a laptop. Up enough to be read at a glance, not so far
+     that the header starts competing with the first row of work. */
+  font-size:14.5px;
 }
 .page-nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;height:70px}
 /* the lockup: name in capitals, the job under it and deliberately not bold.
@@ -442,14 +445,14 @@ body.has-won .tk-badge{background:var(--ink)}
 }
 .page-nav .logo b{
   display:block;font-weight:800;letter-spacing:.01em;
-  font-size:19px;text-transform:uppercase;
+  font-size:23px;text-transform:uppercase;
   white-space:nowrap;      /* the name is one line or it is not a lockup */
 }
 .page-nav .logo span{
   display:block;margin-top:3px;
   font-family:var(--mono);font-weight:500;
   text-transform:lowercase;letter-spacing:.16em;
-  font-size:11.5px;color:var(--fg-faint);
+  font-size:13px;color:var(--fg-faint);
   white-space:nowrap;
 }
 .page-nav .links{display:flex;gap:24px;flex:none}
@@ -467,7 +470,36 @@ body.has-won .tk-badge{background:var(--ink)}
    on every page, so nothing is lost by keeping this quiet.
    ============================================================== */
 
-.foot{margin-top:120px;border-top:1px solid var(--line);padding:60px 0 64px}
+.foot{margin-top:120px;border-top:1px solid var(--line);padding:60px 0 64px;position:relative}
+
+/* ---- arriving at the footer ----
+   The footer is the last thing on the page, so reaching it should feel like
+   arriving rather than like running out of content. Three beats, in order:
+   the rule draws itself across, the line is uncovered from below, then the
+   icons land one after another. It resets when the footer leaves the screen,
+   so it plays again every time he scrolls back down to it. */
+.foot::after{
+  content:"";position:absolute;left:0;top:-1px;height:2px;width:100%;
+  background:var(--red);transform:scaleX(0);transform-origin:left center;
+}
+.foot.is-near::after{transition:transform .78s cubic-bezier(.62,.02,.2,1);transform:scaleX(1)}
+.foot .foot-in > p{clip-path:inset(0 0 100% 0);transform:translateY(14px)}
+.foot.is-near .foot-in > p{
+  clip-path:inset(0 0 0 0);transform:none;
+  transition:clip-path .62s cubic-bezier(.62,.02,.2,1) .22s,transform .62s var(--ease) .22s;
+}
+.foot .foot-social a{opacity:0;transform:translateY(10px) scale(.86)}
+.foot.is-near .foot-social a{
+  opacity:1;transform:none;
+  transition:opacity .3s linear,transform .42s cubic-bezier(.2,1.5,.4,1);
+}
+.foot.is-near .foot-social a:nth-child(1){transition-delay:.46s}
+.foot.is-near .foot-social a:nth-child(2){transition-delay:.54s}
+.foot.is-near .foot-social a:nth-child(3){transition-delay:.62s}
+.foot.is-near .foot-social a:nth-child(4){transition-delay:.70s}
+.foot.is-near .foot-social a:nth-child(5){transition-delay:.78s}
+/* the hover lift has to win over the entrance transform once it has landed */
+.foot.is-near .foot-social a:hover{transform:translateY(-2px)}
 .foot-in{display:flex;align-items:flex-end;justify-content:space-between;gap:34px}
 .foot p{
   margin:0;font-family:var(--display);font-weight:800;
@@ -593,14 +625,24 @@ body.has-won .tk-badge{background:var(--ink)}
 
 /* ============================ ABOUT ============================ */
 
-.about-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:56px;align-items:start;margin-bottom:96px}
+/* The picture box is the same height as the text beside it, and it stays that
+   way on its own: the photograph is taken out of flow (absolute), so it
+   contributes nothing to the row's height. The row is therefore measured from
+   the words alone and the frame stretches to whatever that comes to, so
+   rewriting the bio in admin re-sizes the picture with no numbers to update.
+   The floor stops a very short bio from squashing it into a letterbox. */
+.about-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:56px;align-items:stretch;margin-bottom:96px}
 /* The About portrait is printed the same way the stamp is: a flat red
    ground with a grey photograph screened over it, so it is two inks rather
    than a filter pretending to be two inks. Same treatment as .stamp-photo,
    at a size where the face actually reads. The frame is red rather than
    black now so the picture belongs to the ticket. */
 .about-portrait{
-  width:100%;border-radius:2px;transform:rotate(-1.6deg);
+  width:100%;height:100%;object-fit:cover;
+  /* his face sits high in the frame, so crop from the middle upward rather
+     than from the centre, which would take the top of his head off */
+  object-position:50% 32%;
+  border-radius:2px;transform:rotate(-1.6deg);
   display:block;background:var(--red-deep);
   /* on a screen blend the DARK greys are what let the red through, so
      lifting the picture washes it pink. Pull it down and open the contrast
@@ -612,8 +654,12 @@ body.has-won .tk-badge{background:var(--ink)}
   background:var(--red-deep);border:10px solid var(--ink);
   border-radius:2px;overflow:hidden;transform:rotate(-1.6deg);
   line-height:0;
+  position:relative;min-height:340px;
 }
-.about-shot .about-portrait{transform:none;border:0}
+/* out of flow, so the row's height is the text's height and nothing else */
+.about-shot .about-portrait{
+  position:absolute;inset:0;width:100%;height:100%;transform:none;border:0;
+}
 .about-text{font-size:19px;line-height:1.62;margin:0 0 22px;color:var(--fg-dim)}
 .skills-list{display:flex;flex-wrap:wrap;gap:9px;margin-top:32px}
 .skill-tag{border:1px solid var(--line);border-radius:100px;padding:6px 13px;font-size:11px;color:var(--fg-dim)}
@@ -643,6 +689,9 @@ body.has-won .tk-badge{background:var(--ink)}
 @media (max-width:900px){
   .work-list{grid-template-columns:1fr;gap:44px}
   .about-grid{grid-template-columns:1fr;gap:34px}
+  /* stacked, there is no text beside it to match, so the frame carries its
+     own portrait shape instead of stretching to a row it now owns alone */
+  .about-shot{min-height:0;aspect-ratio:4/5}
   .media-grid{grid-template-columns:1fr}
   .project-media[data-layout="half"]{grid-column:1/-1}
   .tk-body{padding:30px 18px 22px}
@@ -662,8 +711,8 @@ body.has-won .tk-badge{background:var(--ink)}
   .foot{margin-top:86px;padding:44px 0 48px}
   .foot-in{flex-direction:column;align-items:flex-start;gap:30px}
   .foot-social{padding-bottom:0}
-  .page-nav .links{gap:15px}
-  .page-nav{font-size:11px;letter-spacing:.11em}
+  .page-nav .links{gap:17px}
+  .page-nav{font-size:12.5px;letter-spacing:.11em}
   body.is-home{padding:16px 10px}
 
 
@@ -671,16 +720,21 @@ body.has-won .tk-badge{background:var(--ink)}
 @media (max-width:520px){
   .credits-list li{flex-direction:column;gap:3px}
   .credits-list li span{flex:none}
-  .page-nav .logo b{font-size:16px}
-  .page-nav .logo span{font-size:10.5px}
-  .page-nav .links{gap:13px}
-  .page-nav{font-size:10.5px;letter-spacing:.1em}
+  .page-nav .logo b{font-size:18.5px}
+  .page-nav .logo span{font-size:11.5px}
+  .page-nav .links{gap:14px}
+  .page-nav{font-size:11.5px;letter-spacing:.1em}
   .tk-band{padding:9px 18px;font-size:10.5px}
 }
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
   .reveal{opacity:1;transform:none}
+  /* the footer's entrance starts from a hidden state, so it has to be handed
+     its finished state outright rather than merely having its timing zeroed */
+  .foot::after{transform:scaleX(1)}
+  .foot .foot-in > p{clip-path:none;transform:none}
+  .foot .foot-social a{opacity:1;transform:none}
 }
 
 /* ============================ THE HOME CANVAS ============================
@@ -727,6 +781,14 @@ body.has-won .tk-badge{background:var(--ink)}
 .ticket.is-canvas .tk-sub{white-space:normal;max-width:none}
 .ticket.is-canvas .tk-nav{max-width:none}
 .ticket.is-canvas .tk-nav a{max-height:none}
+/* On the canvas a punch is sized by the artboard, but its padding, its gap
+   and its little number were all fixed pixel values, so they did not shrink
+   with the rest of the composition: on a small ticket the furniture ate the
+   box and the label spilled out of it. Expressed against the punch's own type
+   they scale with everything else. Same ratios as the flow layout (15/19,
+   17/19, 8/19, 12/19), so a full-size ticket is unchanged. */
+.ticket.is-canvas .tk-nav a{padding:.79em .9em;gap:.42em}
+.ticket.is-canvas .tk-nav a i{font-size:.63em}
 .ticket.is-canvas .stamp{width:100%;height:100%}
 .ticket.is-canvas .barcode{width:100%;height:100%}
 .ticket.is-canvas .tk-aside{align-items:inherit}
@@ -755,6 +817,35 @@ body.has-won .tk-badge{background:var(--ink)}
 }
 @media (orientation:landscape) and (min-width:900px){
   .ticket.is-canvas{min-height:95vh}
+}
+
+/* ---- the composition keeps the shape it was drawn at ----
+   Positions are a percentage of the ticket's WIDTH, type is a percentage of
+   its HEIGHT. While the ticket has the shape it was composed on those two
+   agree. Let the ticket stretch to any window and they pull apart: open the
+   devtools and the ticket gets taller (so the type grows) and narrower (so
+   the boxes shrink), and the band, the small print and the tab labels all
+   wrap and collide at once. Measured on his own layout: it needs an aspect of
+   1.89 for the terms and the band to stay on one line, and it was being shown
+   at 1.18.
+
+   So a layout that records the shape it was drawn at gets that shape back.
+   The ticket is fitted inside the screen like a poster and scales as ONE
+   piece, which makes type and boxes scale by the same number again. The red
+   field is what grows around it, and the ticket already sits on red, so the
+   margin reads as the field rather than as a letterbox.
+
+   A layout with no aspect keeps the old stretch-to-fill behaviour exactly,
+   so nothing that exists regresses. */
+.ticket.is-canvas.is-locked{
+  --tk-fit-w:calc(100vw - 44px);
+  --tk-fit-h:calc(100svh - 80px);
+  width:min(var(--tk-fit-w),calc(var(--tk-fit-h) * var(--tk-aspect)));
+  height:min(var(--tk-fit-h),calc(var(--tk-fit-w) / var(--tk-aspect)));
+  min-height:0;max-width:none;flex:none;
+}
+@media (orientation:landscape) and (min-width:900px){
+  .ticket.is-canvas.is-locked{--tk-fit-w:95vw;--tk-fit-h:95svh}
 }
 
 /* ============================ PER-PAGE COLOUR ============================

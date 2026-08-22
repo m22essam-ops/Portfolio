@@ -44,7 +44,7 @@ window.SITE_CONTENT = {
       {
         label: "WORK THAT WORKED",
         num: "02",
-        url: "about.html"
+        url: "work.html?ran=1"
       },
       {
         label: "Hire me?",
@@ -1565,7 +1565,7 @@ window.SITE_CONTENT = {
         },
         {
           slot: "band",
-          x: 81.52,
+          x: 80.45,
           y: 4.29,
           w: 14.32,
           h: 4.48,
@@ -1573,7 +1573,7 @@ window.SITE_CONTENT = {
         },
         {
           slot: "badge",
-          x: 82.47,
+          x: 83.22,
           y: 8.77,
           w: 13.74,
           h: 5.78,
@@ -1688,7 +1688,8 @@ window.SITE_CONTENT = {
           y: 64.1,
           "hidden": true
         }
-      ]
+      ],
+      aspect: 1.886
     },
     mobile: {
       items: [
@@ -1812,7 +1813,8 @@ window.SITE_CONTENT = {
           h: 4.69,
           size: 0.969
         }
-      ]
+      ],
+      aspect: 0.4621
     }
   }
 };
