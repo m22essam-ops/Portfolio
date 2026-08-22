@@ -1550,7 +1550,7 @@ window.SITE_CONTENT = {
           w: 21.75,
           h: 6.91,
           size: 2.01,
-          tracking: 0.298,
+          tracking: 0.12,
           weight: "400"
         },
         {
@@ -1581,9 +1581,9 @@ window.SITE_CONTENT = {
         },
         {
           slot: "badge",
-          x: 81.52,
-          y: 9.1,
-          w: 13.74,
+          x: 82.23,
+          y: 8.99,
+          w: 12.78,
           h: 5.56,
           size: 2.054,
           font: "body",
@@ -1662,14 +1662,14 @@ window.SITE_CONTENT = {
         {
           slot: "barcode",
           x: 5.13,
-          y: 87.3,
-          w: 13.2,
-          h: 6.16
+          y: 88.48,
+          w: 12.49,
+          h: 4.98
         },
         {
           slot: "terms",
           x: 22.02,
-          y: 92.01,
+          y: 91.93,
           w: 74.19,
           h: 6.22,
           size: 1.9,
@@ -1699,13 +1699,13 @@ window.SITE_CONTENT = {
         {
           type: "text",
           text: "Listen tou your gut",
-          size: 2.2,
+          size: 2.1,
           color: "muted",
           font: "display",
           w: 13.2,
           h: 3.15,
           x: 5.13,
-          y: 93.46,
+          y: 93.47,
           tracking: 0.149
         }
       ],
