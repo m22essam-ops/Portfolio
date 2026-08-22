@@ -1706,7 +1706,7 @@ window.SITE_CONTENT = {
           tracking: 0.149
         }
       ],
-      aspect: 1.8514
+      aspect: 1.9548
     },
     mobile: {
       items: [
