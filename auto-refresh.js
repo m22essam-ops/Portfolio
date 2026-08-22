@@ -5,8 +5,12 @@
  * reloads itself, so you never need Cmd+R. If the tab is in the background,
  * it waits until you switch back, then refreshes.
  *
- * Only runs when served over http (not file://), and only when the little
- * local server is running; otherwise it quietly does nothing.
+ * LOCAL MACHINE ONLY. It used to test the protocol alone, which is true of
+ * the live site as well, so every visitor's browser asked GitHub Pages for
+ * /api/version every 1.5 seconds and was told 404 every 1.5 seconds, forever.
+ * It cost the visitor nothing but it filled the console and it was a request
+ * per second and a half that could never be answered. The host has to be this
+ * machine, not merely a web server.
  *
  * Kill switch (pause auto-refresh):  localStorage.setItem('ar_off', '1')
  * Resume:                            localStorage.removeItem('ar_off')
@@ -14,6 +18,9 @@
 (function () {
   'use strict';
   if (location.protocol !== 'http:' && location.protocol !== 'https:') return;
+  /* the local server, and nothing else. 127.0.0.1, ::1 and the name localhost
+     all reach it; a real domain never does. */
+  if (!/^(localhost|127(\.\d+){3}|\[?::1\]?|0\.0\.0\.0)$/.test(location.hostname)) return;
   try { if (localStorage.getItem('ar_off') === '1') return; } catch (e) { return; }
 
   var INTERVAL = 1500;

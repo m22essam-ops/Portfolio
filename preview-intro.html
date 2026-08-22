@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Four ways in · Mohammed Essam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Syne:wght@400..800&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+/* ============================================================
+   A showroom, not the site. Nothing in here ships. Four ways of
+   opening the home page, each one playable on its own, with the
+   real ticket behind so the hand-off can be judged and not
+   imagined.
+   The brief: "elegant and decent, like the cabinet. Minimal."
+   So: drawn, staged, one idea each, and nothing bounces.
+   ============================================================ */
+body{background:#141210;color:#F6F3EE;margin:0;font-family:var(--mono);}
+
+.head{padding:26px 30px 18px;border-bottom:1px solid #ffffff1f}
+.head h1{font-family:var(--display);font-size:26px;letter-spacing:-.02em;margin:0 0 6px}
+.head p{margin:0;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#F6F3EE8c}
+
+.bar{
+  display:flex;flex-wrap:wrap;gap:10px;padding:18px 30px;
+  border-bottom:1px solid #ffffff1f;align-items:center;
+}
+.bar button{
+  font-family:var(--mono);font-weight:600;font-size:12px;
+  letter-spacing:.14em;text-transform:uppercase;
+  background:none;color:#F6F3EE;border:1px solid #ffffff3d;
+  padding:10px 15px;cursor:pointer;transition:.15s;
+}
+.bar button:hover{border-color:#F6F3EE;background:#F6F3EE;color:#141210}
+.bar button.on{background:var(--red);border-color:var(--red);color:#fff}
+.bar .sp{flex:1}
+.bar label{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#F6F3EE8c;display:flex;gap:7px;align-items:center}
+
+.grid{display:grid;grid-template-columns:1fr;gap:0}
+.stagewrap{position:relative;padding:24px 30px 34px}
+.caption{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:#F6F3EE8c;margin:0 0 12px}
+.caption b{color:#F6F3EE;font-weight:600}
+
+/* the stage. 16:10 so it reads like a laptop, and the ticket iframe fills it.
+   Sized off the HEIGHT so the whole of it is on screen under the controls:
+   a full-width 16:10 runs past the bottom of the window and the reveal, which
+   is the part being judged, happens where it cannot be seen. */
+.stage{
+  position:relative;aspect-ratio:16/10;
+  height:min(60vh,620px);width:auto;max-width:100%;margin-inline:auto;
+  background:var(--red);overflow:hidden;
+  border:1px solid #ffffff1f;
+}
+.stage iframe{position:absolute;inset:0;width:100%;height:100%;border:0;opacity:0;transition:opacity .55s var(--ease)}
+.stage.is-done iframe{opacity:1}
+
+/* ---- the overlay every option is drawn into ---- */
+.ov{position:absolute;inset:0;display:grid;place-items:center;background:var(--red)}
+.ov.gone{opacity:0;pointer-events:none;transition:opacity .5s var(--ease)}
+
+/* =======================================================================
+   1 — THE RULE
+   One hairline, drawn from the middle outwards, and two lines of small
+   type finding it. Nothing else at all. The most minimal of the four.
+   ===================================================================== */
+.r-in{display:grid;justify-items:center;gap:0;width:min(74%,620px)}
+.r-name,.r-sub{
+  font-family:var(--mono);text-transform:uppercase;font-weight:600;
+  color:var(--paper);opacity:0;
+}
+.r-name{font-size:clamp(13px,1.5vw,19px);letter-spacing:.42em;padding-left:.42em;margin-bottom:clamp(14px,2vw,22px)}
+.r-sub {font-size:clamp(9px,1.05vw,12px);letter-spacing:.34em;padding-left:.34em;margin-top:clamp(13px,1.9vw,20px);opacity:0}
+.r-rule{height:1px;width:100%;background:var(--paper);transform:scaleX(0);transform-origin:center}
+
+.play-rule .r-rule{animation:rDraw .72s cubic-bezier(.22,.75,.28,1) .12s both}
+.play-rule .r-name{animation:rUp .62s var(--ease) .52s both}
+.play-rule .r-sub {animation:rUp .62s var(--ease) .70s both}
+@keyframes rDraw{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes rUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* =======================================================================
+   2 — THE TEAR
+   A row of the ticket's own perforations is punched across the field, one
+   after another, left to right. When the row is complete the field tears
+   along it and the two halves travel off. The reveal IS the perforation,
+   which is the one piece of drawing this site already owns.
+   ===================================================================== */
+/* The overlay must NOT carry a red of its own here: the two halves ARE the
+   field, and with a red behind them they part to reveal more red. That is the
+   same trap as the card wipe earlier in this project. */
+.ov.play-tear{background:transparent}
+
+.t-half{position:absolute;left:0;right:0;height:50%;background:var(--red)}
+.t-half.top{top:0}
+.t-half.bot{bottom:0}
+
+/* the punched holes, one strip on each tearing edge so each half carries its
+   own scallop away with it, exactly as the ticket's own perforation does.
+   Revealed left to right by a mask that slides, in steps, so they read as
+   being punched one at a time rather than faded in as a row. */
+.t-perf{
+  position:absolute;left:0;right:0;height:14px;
+  background-image:radial-gradient(circle at 11px 7px,var(--paper) 5px,transparent 5.5px);
+  background-size:22px 14px;
+  -webkit-mask-image:linear-gradient(90deg,#000 0 0);mask-image:linear-gradient(90deg,#000 0 0);
+  -webkit-mask-size:0% 100%;mask-size:0% 100%;
+  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+}
+.t-half.top .t-perf{bottom:-7px}
+.t-half.bot .t-perf{top:-7px}
+.t-line{
+  position:absolute;left:0;top:50%;width:0;height:1px;background:var(--paper);opacity:.45;
+}
+.play-tear .t-perf{animation:tPunch .95s steps(28,end) .15s both}
+.play-tear .t-line{animation:tRun   .95s steps(28,end) .15s both, tFade .34s linear 1.46s both}
+@keyframes tPunch{from{-webkit-mask-size:0% 100%;mask-size:0% 100%}
+                  to  {-webkit-mask-size:100% 100%;mask-size:100% 100%}}
+@keyframes tRun{from{width:0}to{width:100%}}
+@keyframes tFade{to{opacity:0}}
+/* the tear itself. Eased IN, not out: paper gives all at once and then goes. */
+.play-tear .t-half.top{animation:tUp   .82s cubic-bezier(.55,0,.28,1) 1.46s both}
+.play-tear .t-half.bot{animation:tDown .82s cubic-bezier(.55,0,.28,1) 1.46s both}
+@keyframes tUp  {from{transform:translateY(0)}to{transform:translateY(-101%)}}
+@keyframes tDown{from{transform:translateY(0)}to{transform:translateY(101%)}}
+
+/* =======================================================================
+   3 — THE STAMP
+   A validation stamp draws itself: the outer ring strokes round, the inner
+   ring follows it, the line of type comes up round the outside and the
+   number lands in the middle. This is the cabinet's own register, which is
+   the register he asked for, and it is the one option that is a drawing.
+   ===================================================================== */
+.s-svg{width:min(46%,330px);aspect-ratio:1;overflow:visible}
+.s-svg circle,.s-svg path{fill:none;stroke:var(--paper)}
+.s-ring1{stroke-width:2.2}
+.s-ring2{stroke-width:1}
+.s-num{
+  fill:var(--paper);stroke:none;
+  font-family:var(--display-home);font-weight:800;
+  font-size:74px;text-anchor:middle;dominant-baseline:central;
+  opacity:0;
+}
+.s-arc{fill:var(--paper);stroke:none;font-family:var(--mono);font-weight:600;
+       font-size:12.5px;letter-spacing:.34em;opacity:0}
+.s-tick{stroke-width:2;opacity:0}
+
+/* stroke the rings on. 2*pi*r, rounded up so nothing is left un-drawn. */
+.play-stamp .s-ring1{stroke-dasharray:604;stroke-dashoffset:604;animation:sDraw .95s cubic-bezier(.3,.7,.25,1) .1s both}
+.play-stamp .s-ring2{stroke-dasharray:534;stroke-dashoffset:534;animation:sDraw .95s cubic-bezier(.3,.7,.25,1) .26s both}
+@keyframes sDraw{to{stroke-dashoffset:0}}
+.play-stamp .s-arc {animation:sIn .6s var(--ease) .92s both}
+.play-stamp .s-num {animation:sPop .55s cubic-bezier(.24,.72,.3,1) 1.06s both}
+.play-stamp .s-tick{animation:sIn .5s var(--ease) 1.3s both}
+@keyframes sIn{from{opacity:0}to{opacity:1}}
+@keyframes sPop{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+.s-numwrap{transform-box:fill-box;transform-origin:center}
+
+/* =======================================================================
+   4 — THE NUMBER
+   Type and one hairline. The game number set enormous in the home face,
+   the small print under it, and then it goes. The most copywriter answer
+   of the four: no illustration anywhere.
+   ===================================================================== */
+.n-in{display:grid;justify-items:center}
+.n-big{
+  font-family:var(--display-home);font-weight:800;
+  font-size:clamp(90px,20vw,260px);line-height:.86;letter-spacing:-.045em;
+  color:var(--paper);margin:0;
+  /* it arrives from under its own edge, so it reads as being printed */
+  clip-path:inset(0 0 0 0);
+}
+.n-big span{display:block;transform:translateY(102%)}
+.n-rule{height:1px;width:0;background:var(--paper);opacity:.55;margin:clamp(16px,2.4vw,28px) 0 0}
+.n-sub{
+  font-family:var(--mono);font-weight:600;text-transform:uppercase;
+  font-size:clamp(9px,1.05vw,12px);letter-spacing:.34em;padding-left:.34em;
+  color:var(--paper);margin:clamp(13px,1.8vw,18px) 0 0;opacity:0;
+}
+.play-num .n-big span{animation:nRise .82s cubic-bezier(.2,.78,.24,1) .12s both}
+.play-num .n-rule{animation:nRule .7s cubic-bezier(.22,.75,.28,1) .62s both}
+.play-num .n-sub {animation:sIn .6s var(--ease) .86s both}
+@keyframes nRise{from{transform:translateY(102%)}to{transform:translateY(0)}}
+@keyframes nRule{from{width:0}to{width:min(64vw,460px)}}
+
+/* the still frames, for looking at the composition without waiting */
+.frozen .ov *{animation-play-state:paused !important}
+
+@media (max-width:760px){
+  .head,.bar,.stagewrap{padding-left:16px;padding-right:16px}
+}
+</style>
+</head>
+<body>
+
+<div class="head">
+  <h1>Four ways in</h1>
+  <p>Pick one. Each is about two seconds, then the ticket.</p>
+</div>
+
+<div class="bar">
+  <button data-opt="rule">1 · The rule</button>
+  <button data-opt="tear">2 · The tear</button>
+  <button data-opt="stamp">3 · The stamp</button>
+  <button data-opt="num">4 · The number</button>
+  <span class="sp"></span>
+  <button id="again">Replay</button>
+</div>
+
+<div class="stagewrap">
+  <p class="caption" id="cap"><b>1 · The rule.</b> One hairline drawn from the middle out, and two lines of small type finding it. Nothing else.</p>
+  <div class="stage" id="stage">
+    <iframe id="tk" src="about:blank" title="the ticket" scrolling="no"></iframe>
+    <div class="ov" id="ov"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var stage = document.getElementById('stage');
+  var ov    = document.getElementById('ov');
+  var cap   = document.getElementById('cap');
+  var tk    = document.getElementById('tk');
+  var timers = [];
+
+  var COPY = {
+    rule:  '<b>1 · The rule.</b> One hairline drawn from the middle out, and two lines of small type finding it. Nothing else. The most minimal of the four.',
+    tear:  '<b>2 · The tear.</b> The ticket’s own perforation is punched across the field left to right, and then the field tears along it. The reveal is the perforation.',
+    stamp: '<b>3 · The stamp.</b> A validation stamp draws itself: rings, then the line of type round the outside, then the number. The cabinet’s register.',
+    num:   '<b>4 · The number.</b> Type and one hairline. The game number set enormous, the small print under it, and then it goes. No illustration anywhere.'
+  };
+
+  var MARK = {
+    rule: function () {
+      return '<div class="r-in">' +
+        '<p class="r-name">Mohammed Essam</p>' +
+        '<div class="r-rule"></div>' +
+        '<p class="r-sub">Game no. 13 · Cairo · Dubai · Madrid</p>' +
+      '</div>';
+    },
+    tear: function () {
+      return '<div class="t-half top"><div class="t-perf"></div></div>' +
+             '<div class="t-half bot"><div class="t-perf"></div></div>' +
+             '<div class="t-line"></div>';
+    },
+    stamp: function () {
+      var ring = 'MOHAMMED ESSAM · CAIRO · DUBAI · MADRID · ';
+      return '<svg class="s-svg" viewBox="0 0 200 200" aria-hidden="true"' +
+             ' xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">' +
+        '<defs><path id="pvArc" fill="none"' +
+          ' d="M100,100 m-77,0 a77,77 0 1,1 154,0 a77,77 0 1,1 -154,0"/></defs>' +
+        '<circle class="s-ring1" cx="100" cy="100" r="96"/>' +
+        '<circle class="s-ring2" cx="100" cy="100" r="85"/>' +
+        '<text class="s-arc"><textPath href="#pvArc" xlink:href="#pvArc"' +
+          ' startOffset="0" textLength="472" lengthAdjust="spacing">' + ring + ring + '</textPath></text>' +
+        '<g class="s-numwrap"><text class="s-num" x="100" y="101">13</text></g>' +
+        '<path class="s-tick" d="M62 148 H138"/>' +
+      '</svg>';
+    },
+    num: function () {
+      return '<div class="n-in">' +
+        '<p class="n-big"><span>13</span></p>' +
+        '<div class="n-rule"></div>' +
+        '<p class="n-sub">Award-losing copywriter · so far</p>' +
+      '</div>';
+    }
+  };
+
+  /* how long each one runs before it hands over. Kept close to two seconds:
+     longer than that and a loading screen is a toll gate. */
+  var HOLD = { rule: 1900, tear: 2280, stamp: 2100, num: 1950 };
+
+  function clear() {
+    timers.forEach(clearTimeout); timers = [];
+    ov.className = 'ov'; ov.innerHTML = '';
+    stage.classList.remove('is-done');
+  }
+  function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+
+  function play(opt) {
+    clear();
+    cap.innerHTML = COPY[opt];
+    [].forEach.call(document.querySelectorAll('.bar button[data-opt]'), function (b) {
+      b.classList.toggle('on', b.dataset.opt === opt);
+    });
+    stage.dataset.opt = opt;
+
+    /* the ticket is reloaded each time so its own headline re-measures itself
+       against this stage, which is not the size of a browser window */
+    tk.src = 'index.html?preview=1&cb=' + Date.now();
+
+    ov.innerHTML = MARK[opt]();
+    /* one frame, so the starting state is painted before the class that
+       animates away from it */
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () { ov.classList.add('play-' + opt); });
+    });
+
+    if (opt === 'tear') {
+      /* the tear takes the field away itself: the two halves ARE the red, so
+         the ticket only has to be there behind them before they part. The
+         overlay is left in place, transparent, and cleared on the next play. */
+      later(function () { stage.classList.add('is-done'); }, 1350);
+    } else {
+      later(function () {
+        ov.classList.add('gone');
+        stage.classList.add('is-done');
+      }, HOLD[opt]);
+    }
+  }
+
+  [].forEach.call(document.querySelectorAll('.bar button[data-opt]'), function (b) {
+    b.addEventListener('click', function () { play(b.dataset.opt); });
+  });
+  document.getElementById('again').addEventListener('click', function () {
+    play(stage.dataset.opt || 'rule');
+  });
+
+  play('rule');
+})();
+</script>
+
+</body>
+</html>

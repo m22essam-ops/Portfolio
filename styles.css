@@ -7,27 +7,32 @@
      rest  = off-white gallery
    ============================================================ */
 
-/* ---- MONIQA -------------------------------------------------
+/* ---- MONIQA, and why it is switched off ---------------------
    Free typeface by Rajesh Rajput, SIL Open Font License 1.1.
-   The files are NOT in this repo: get them from the designer's
-   own page (behance.net/gallery/114431757) and drop whatever you
-   download into a "fonts" folder next to this file. Any ONE of the
-   names below is enough, the rest are ignored.
-   Until then the page uses Syne, which is the chosen look now,
-   not a placeholder. Moniqa only takes over if you add the file.
-   -------------------------------------------------------------- */
+   The files are NOT in this repo and never have been.
+
+   This used to be a live @font-face naming six candidate files, so
+   every page load asked the server for five fonts that do not exist
+   and got five 404s, on every page, for every visitor. A browser
+   fetches a webfont as soon as something on the page asks for that
+   family, and "Moniqa" was first in the home headline stack, so it
+   asked on every single load. Syne is the chosen look now, not a
+   placeholder, so the cost was being paid for nothing.
+
+   TO TURN IT ON: get the files from the designer's own page
+   (behance.net/gallery/114431757), drop them into a "fonts" folder
+   next to this file, uncomment the block below, and put "Moniqa"
+   back at the front of --display-home. Name only the file you
+   actually have, or the missing ones are 404s again.
+
 @font-face{
   font-family:"Moniqa";
-  src:url("fonts/Moniqa.woff2") format("woff2-variations"),
-      url("fonts/Moniqa-Variable.woff2") format("woff2-variations"),
-      url("fonts/Moniqa.woff2") format("woff2"),
-      url("fonts/Moniqa-Regular.woff2") format("woff2"),
-      url("fonts/Moniqa-Regular.otf") format("opentype"),
-      url("fonts/Moniqa-Regular.ttf") format("truetype");
+  src:url("fonts/Moniqa.woff2") format("woff2");
   font-weight:100 900;
   font-style:normal;
   font-display:swap;
 }
+   -------------------------------------------------------------- */
 
 :root{
   --red:#E3261A;
@@ -51,8 +56,11 @@
      on all three that change their paper. A token means it follows. */
   --nav-bg:#F2EEE5f2;
 
-  /* the home headline. Syne is the look; Moniqa only if you add the file. */
-  --display-home:"Moniqa","Syne","Bricolage Grotesque",sans-serif;
+  /* the home headline. Syne IS the look. "Moniqa" is not listed here on
+     purpose: naming a family with no file behind it is what made the browser
+     ask for five fonts that do not exist on every page load. See the top of
+     this file for how to turn it back on. */
+  --display-home:"Syne","Bricolage Grotesque",sans-serif;
   --display:"Bricolage Grotesque","Hanken Grotesk",sans-serif;
   --mono:"Barlow Condensed","Hanken Grotesk",sans-serif;
 
@@ -93,103 +101,12 @@ h1,h2,h3,.big{
   margin:0;
 }
 
-/* ========================= THE LOADING SCREEN =========================
-   Two dice and one word, for about two seconds, and then the ticket.
-
-   The whole of it is built by the inline script at the top of index.html, so
-   with the script off there is nothing here at all and the page is exactly the
-   page. It is on the SAME red as the home field, so what happens at the end is
-   the ticket arriving on a screen that was already there, not a lid coming off
-   a different room.
-
-   The dice are two divs and eighteen dots. No image, nothing to download,
-   sharp at any size, and the pips are switched by a data attribute so the
-   faces can change every tenth of a second while they tumble.
+/* The dice loading screen lived here and was taken back out on 22 Aug 2026:
+   "the intro is soooooooooo bad, need to look elegant and decent, like the
+   cabinet". The replacement is being chosen from preview-intro.html and the
+   home page carries no intro at all until he picks one. Do not put the dice
+   back. What he wants is the cabinet's register: drawn, quiet, staged.
    ==================================================================== */
-.boot{display:none}
-html.is-booting .boot{
-  display:grid;place-items:center;
-  position:fixed;inset:0;z-index:9999;
-  background:var(--red);
-  transition:opacity .52s var(--ease);
-}
-html.is-booting .boot.is-out{opacity:0;pointer-events:none}
-/* the ticket waits underneath. Opacity only: it keeps its place in the layout,
-   so the headline can still measure itself and the foil can still be painted
-   while this is over the top of them. */
-html.is-booting body.is-home .ticket{opacity:0}
-body.is-home .ticket{transition:opacity .5s var(--ease)}
-
-.boot-in{
-  display:flex;flex-direction:column;align-items:center;
-  gap:clamp(30px,5vh,54px);
-}
-.boot-dice{display:flex;gap:clamp(18px,2.6vw,34px)}
-
-.die{
-  --d:clamp(76px,11vw,150px);
-  width:var(--d);height:var(--d);
-  display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr);
-  gap:8%;padding:11.5%;
-  background:var(--paper);border-radius:19%;
-  animation:tumble .56s infinite;
-  will-change:transform;
-}
-.boot-dice .die:nth-child(2){animation-delay:-.28s}
-/* no transition on the pips. A face changes in one frame or it is not a face:
-   with even a twentieth of a second of fade on it, a die rolling every 105ms
-   is never showing a whole number, and the pips come out grey. */
-.die i{border-radius:50%;background:var(--ink);opacity:0}
-/* the six faces. The pips sit in a 3x3 in source order, so nothing needs
-   placing: a face is just which of the nine are lit. */
-.die[data-face="1"] i:nth-child(5),
-.die[data-face="2"] i:nth-child(1),.die[data-face="2"] i:nth-child(9),
-.die[data-face="3"] i:nth-child(1),.die[data-face="3"] i:nth-child(5),.die[data-face="3"] i:nth-child(9),
-.die[data-face="4"] i:nth-child(1),.die[data-face="4"] i:nth-child(3),
-.die[data-face="4"] i:nth-child(7),.die[data-face="4"] i:nth-child(9),
-.die[data-face="5"] i:nth-child(1),.die[data-face="5"] i:nth-child(3),.die[data-face="5"] i:nth-child(5),
-.die[data-face="5"] i:nth-child(7),.die[data-face="5"] i:nth-child(9),
-.die[data-face="6"] i:nth-child(1),.die[data-face="6"] i:nth-child(3),.die[data-face="6"] i:nth-child(4),
-.die[data-face="6"] i:nth-child(6),.die[data-face="6"] i:nth-child(7),.die[data-face="6"] i:nth-child(9){
-  opacity:1;
-}
-
-/* the throw. translateY is a percentage of the die's own height, so it holds
-   its shape at every size the clamp lands on. Up is eased out and down is
-   eased in, per keyframe: one easing across the whole loop puts all the
-   travel in the first third and the rest of it reads as a pause. */
-@keyframes tumble{
-  0%  {transform:translateY(0)    rotate(0deg)   scale(1);    animation-timing-function:cubic-bezier(.24,.68,.4,1)}
-  22% {transform:translateY(-40%) rotate(-20deg) scale(1.04); animation-timing-function:cubic-bezier(.6,0,.78,.4)}
-  50% {transform:translateY(0)    rotate(-3deg)  scale(.97);  animation-timing-function:cubic-bezier(.24,.68,.4,1)}
-  74% {transform:translateY(-27%) rotate(17deg)  scale(1.03); animation-timing-function:cubic-bezier(.6,0,.78,.4)}
-  100%{transform:translateY(0)    rotate(0deg)   scale(1)}
-}
-/* and where they stop. One squash on landing and nothing else: the number is
-   the point, and a die that keeps moving after it has settled is not a die
-   that has settled. */
-.boot.is-landed .die{animation:land .44s var(--ease) both}
-@keyframes land{
-  0%  {transform:translateY(-34%) rotate(-9deg) scale(1)}
-  56% {transform:translateY(0) rotate(0deg) scale(1.07,.9)}
-  100%{transform:translateY(0) rotate(0deg) scale(1)}
-}
-
-.boot-word{
-  margin:0;display:flex;
-  font-family:var(--mono);font-weight:600;
-  font-size:clamp(14px,1.55vw,20px);
-  letter-spacing:.44em;text-transform:lowercase;
-  color:var(--paper);
-  /* the tracking hangs off the last character, so the block sits left of
-     centre unless the same amount is put back on the front */
-  padding-left:.44em;
-}
-.boot-word i{font-style:normal;opacity:.3;animation:blip 1.15s infinite}
-.boot-word i:nth-of-type(2){animation-delay:.15s}
-.boot-word i:nth-of-type(3){animation-delay:.3s}
-@keyframes blip{0%,66%,100%{opacity:.3}18%,44%{opacity:1}}
-.boot.is-landed .boot-word i{animation:none;opacity:1}
 
 /* ============================ HOME: THE TICKET ============================ */
 
