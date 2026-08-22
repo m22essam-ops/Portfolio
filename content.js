@@ -1694,7 +1694,7 @@ window.SITE_CONTENT = {
           "hidden": true
         }
       ],
-      aspect: 1.8041
+      aspect: 1.8514
     },
     mobile: {
       items: [
