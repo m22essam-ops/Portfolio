@@ -101,12 +101,79 @@ h1,h2,h3,.big{
   margin:0;
 }
 
-/* The dice loading screen lived here and was taken back out on 22 Aug 2026:
+/* ============================ THE WAY IN ============================
+   The ticket's own perforation is punched across the red field, left to
+   right, and when the row is complete the field tears along it and the two
+   halves travel off, each carrying its scalloped edge away with it.
+
+   Chosen from preview-intro.html on 22 Aug 2026 over three others (a drawn
+   rule, a validation stamp, and the game number set enormous). It won because
+   it is the only one built out of something the site already owns, and the
+   only one that is honestly a LOADING screen: the perforation crossing the
+   screen is a progress bar that does not look like one.
+
+   It replaced two tumbling dice, which were his idea and then his complaint:
    "the intro is soooooooooo bad, need to look elegant and decent, like the
-   cabinet". The replacement is being chosen from preview-intro.html and the
-   home page carries no intro at all until he picks one. Do not put the dice
-   back. What he wants is the cabinet's register: drawn, quiet, staged.
-   ==================================================================== */
+   cabinet". Do not put the dice back.
+
+   All of it is built by the inline script at the top of index.html, so with
+   JavaScript off there is no overlay at all.
+   ================================================================== */
+.boot{display:none}
+html.is-booting .boot{
+  display:block;position:fixed;inset:0;z-index:9999;
+  /* NO background of its own. The two halves ARE the red field. Give this a
+     red as well and it parts to reveal more red, which is exactly the trap a
+     card wipe on this site fell into once already. */
+  background:transparent;
+}
+
+/* THE TICKET IS NOT HIDDEN. It is behind the halves from the first frame and
+   the tear uncovers it, so there is no class anywhere whose removal the page's
+   visibility depends on, and the headline can measure itself and the foil can
+   be painted the whole time this is on top of them. */
+
+.boot-half{
+  position:absolute;left:0;right:0;
+  /* a pixel of overlap each. Two halves of an odd number of pixels leave a
+     sub-pixel seam down the middle, and one hairline of paper showing through
+     before the perforation is punched gives the whole thing away. */
+  height:calc(50% + 1px);
+  background:var(--red);
+  will-change:transform;
+}
+.boot-half.top{top:0}
+.boot-half.bot{bottom:0}
+
+/* The punched holes. A window that grows in steps over a strip that does not
+   move, rather than an animated mask: the strip keeps its own width so the
+   holes are revealed one after another instead of being stretched, and a
+   growing width is understood by everything that has ever rendered CSS. */
+.boot-punch{
+  position:absolute;left:0;width:0;height:14px;overflow:hidden;
+}
+.boot-half.top .boot-punch{bottom:-7px}
+.boot-half.bot .boot-punch{top:-7px}
+.boot-punch i{
+  position:absolute;left:0;top:0;height:14px;width:100vw;
+  background-image:radial-gradient(circle at 11px 7px,var(--paper) 5px,transparent 5.5px);
+  background-size:22px 14px;
+}
+
+/* steps(), so they are punched one at a time rather than wiped across */
+html.is-booting .boot.is-punching .boot-punch{animation:bootPunch .95s steps(28,end) .15s both}
+@keyframes bootPunch{from{width:0}to{width:100%}}
+/* someone who clicks before it has finished gets the row completed at once,
+   not a half-punched ticket torn in half */
+html.is-booting .boot.is-skipped .boot-punch{animation:none;width:100%}
+
+/* The tear. Eased IN rather than out: paper holds, gives all at once, and
+   then it is gone. An ease-out here reads as two panels sliding, which is a
+   slideshow transition and not a ticket being torn. */
+html.is-booting .boot.is-tearing .boot-half.top{animation:bootTearUp   .82s cubic-bezier(.55,0,.28,1) both}
+html.is-booting .boot.is-tearing .boot-half.bot{animation:bootTearDown .82s cubic-bezier(.55,0,.28,1) both}
+@keyframes bootTearUp  {from{transform:translateY(0)}to{transform:translateY(-101%)}}
+@keyframes bootTearDown{from{transform:translateY(0)}to{transform:translateY(101%)}}
 
 /* ============================ HOME: THE TICKET ============================ */
 

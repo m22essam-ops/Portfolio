@@ -464,37 +464,62 @@ resonated"). Either a concrete result or nothing.
 Four things landed in one pass. Everything above this line is older and parts
 of it have been overtaken; where the two disagree, this section is the newer.
 
-### The loading screen
+### The way in (the intro)
 
-Two dice and the word "loading", about two seconds, then the ticket. His brief,
-in his words: "can we just use a couple of dice and the word loading.. for 2
-seconds". It replaces nothing, because nothing was there: the press check in
-`preview-motion.html` was never approved and is still not on the site.
+The ticket's own perforation is punched across the red field, left to right,
+and when the row is complete the field tears along it and the two halves
+travel off, each carrying its scalloped edge away with it. About two seconds.
+
+**It replaced two tumbling dice**, which were his idea ("can we just use a
+couple of dice and the word loading.. for 2 seconds") and then his complaint,
+the next day, in full: "the intro is soooooooooo bad!!!! Need to look elegant
+and decent, like the cabinet." Do not put the dice back.
+
+Four candidates were built in `preview-intro.html` and he picked this one over
+a drawn hairline, a validation stamp that strokes itself on, and the game
+number set enormous. It won on two counts: it is the only one made out of
+something the site already owns, and it is the only one that is honestly a
+*loading* screen, because the perforation crossing the screen is a progress
+bar that does not look like one. **`preview-intro.html` still holds all four**
+if the decision is ever reopened.
 
 Built entirely by the inline script at the top of `index.html`. **The `.boot`
-div in the HTML is an empty shell on purpose** — with JavaScript off, nothing
-is drawn and the page is exactly the page. Nobody can be left facing a red
-screen that never lifts.
+div in the HTML is an empty shell on purpose** — with JavaScript off nothing is
+drawn and the page is exactly the page.
 
-- It plays **once per tab** (`sessionStorage.bootSeen`). He reloads the home
-  page all day from admin and the designer, and `auto-refresh.js` reloads it
-  for him on every content change; a two-second screen on each of those is a
-  tax on his own work. **`?intro=1` forces it** and is how to look at it again.
-- It holds for 1.5s **and** until `window.load`, whichever is later, then lands.
+- **The ticket is never hidden.** It sits behind the two halves from the first
+  frame and the tear uncovers it. There is no class anywhere whose removal the
+  page's visibility depends on, and `fitTitle()` can measure the headline and
+  the foil can be painted the whole time this is on top of them. Verified: the
+  headline still measures and fits through the overlay.
+- **The overlay carries no red of its own.** The two halves ARE the field.
+  Give `.boot` a background as well and it parts to reveal more red, which is
+  the trap a card wipe on this site fell into once already.
+- Each half is `calc(50% + 1px)`. Two halves of an odd number of pixels leave
+  a sub-pixel seam, and one hairline of paper down the middle before the
+  perforation is punched gives the whole thing away.
+- The punch is **a window that grows in `steps()` over a strip that does not
+  move**, not an animated mask: the strip keeps its own width, so the holes are
+  revealed one at a time instead of being stretched, and a growing width is
+  understood by everything that has ever rendered CSS.
+- The tear is eased **in**, not out. Paper holds, gives all at once, and then
+  it is gone. An ease-out reads as two panels sliding, which is a slideshow.
+- It tears once the perforation is complete **and** `window.load` has fired,
+  whichever is later. Hard cap 3.4s so one slow embed cannot hold the page.
 - **`setTimeout(off, 6000)` is registered on the line directly after
-  `is-booting` goes on `<html>`.** From that moment the ticket is hidden by a
-  class, so a throw anywhere below would strand the page. That one line makes
+  `is-booting` goes on `<html>`.** From that moment the page is under an
+  overlay and a throw anywhere below would leave it there. That one line makes
   it impossible. It goes first and it does not move.
-- Click, tap, key or scroll leaves early. `prefers-reduced-motion` never sees it.
-- The ticket is hidden with **opacity only**, never `display` or `visibility`:
-  `fitTitle()` has to be able to measure the headline and the foil has to be
-  paintable while the overlay is over the top of them.
-- The dice land on **1 and 3**. The ticket is game no. 13 and its serial is
-  131313, so that is the number the page is already printed with, not a
-  random pair. Don't "fix" it to something luckier.
-- **No transition on the pips.** A face changes in one frame or it is not a
-  face: with even .05s of fade, a die rerolling every 105ms never shows a whole
-  number and the pips come out grey. That was tried and taken back out.
+- Click, tap, key or scroll tears it early, and **completes the row of holes
+  first**, so an impatient visitor gets the same gesture early rather than a
+  half-punched ticket ripped in half.
+- It plays **once per tab** (`sessionStorage.bootSeen`). He reloads this page
+  all day from admin and the designer, and `auto-refresh.js` reloads it on
+  every content change; a two-second screen on each of those taxes his own
+  work. **`?intro=1` forces it** and is how to look at it again.
+- **`prefers-reduced-motion` wins over `?intro=1`.** Asking for less motion is
+  not a preference a query string gets to override. All six combinations of
+  the three flags were checked.
 
 ### The work menu is a dropdown
 
