@@ -1459,6 +1459,11 @@ window.SITE_CONTENT = {
     label: "Don't take it personally (it seems so)",
     heading: "A little about me.",
     portrait: "portrait-studio.jpg",
+    portraits: [
+      "portrait-studio.jpg",
+      "portrait-rooftop.jpg",
+      "about-photo.jpg"
+    ],
     portraitAlt: "Mohammed Essam",
     paragraphs: [
       "Four years writing for people who skip the ads, and a bunch of other years writing just because I like to. Add to that an entire life having fun being dead serious about making ordinary things look superficially good (my room included).",

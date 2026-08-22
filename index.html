@@ -227,10 +227,21 @@
     body: '"Hanken Grotesk",-apple-system,sans-serif'
   };
 
+  /* WHICH artboard, decided by the DEVICE rather than by the window.
+     It used to be `(orientation:landscape) and (min-width:900px)`, so any
+     desktop window dragged narrow or tall fell through to the phone
+     composition and the ticket stood up vertically on a laptop. That is only
+     safe to change because the ticket now scales as one piece: a small
+     desktop window shows a smaller desktop ticket instead of breaking.
+     A touch screen with no mouse is a phone. Everything else is a desktop,
+     at every window size. */
+  var TOUCH = window.matchMedia('(hover: none) and (pointer: coarse)');
   function artboard() {
     var L = C.layout || {};
-    var wide = window.matchMedia('(orientation:landscape) and (min-width:900px)').matches;
-    var a = wide ? L.desktop : L.mobile;
+    var phone = TOUCH.matches;
+    var a = phone ? L.mobile : L.desktop;
+    /* if the one it wants is empty, the other is better than the flow layout */
+    if (!(a && a.items && a.items.length)) a = phone ? L.desktop : L.mobile;
     return (a && a.items && a.items.length) ? a : null;
   }
 
@@ -311,6 +322,23 @@
     if (it.radius) s.borderRadius = it.radius + 'px';
   }
 
+  /* The ticket's natural size while it is locked, and the one number that
+     changes as the window is dragged. Kept out here so the resize handler can
+     reach it without re-running the whole layout. */
+  var NAT = null;
+  function scaleTicket() {
+    var tk = document.querySelector('.ticket');
+    if (!tk || !NAT) return;
+    var cs = getComputedStyle(document.body);
+    var padX = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+    var padY = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+    var availW = Math.max(120, window.innerWidth - padX);
+    var availH = Math.max(120, (window.innerHeight || document.documentElement.clientHeight) - padY);
+    var k = Math.min(availW / NAT[0], availH / NAT[1]);
+    tk.style.setProperty('--tk-k', k.toFixed(4));
+  }
+  window.scaleHomeTicket = scaleTicket;
+
   function applyLayout() {
     var tk = document.querySelector('.ticket');
     var body = document.querySelector('.tk-body');
@@ -328,7 +356,11 @@
     var art = artboard();
     if (!art) {
       tk.classList.remove('is-canvas', 'is-locked');
-      tk.style.removeProperty('--tk-aspect');
+      document.body.classList.remove('home-locked');
+      NAT = null;
+      tk.style.removeProperty('--tk-nat-w');
+      tk.style.removeProperty('--tk-nat-h');
+      tk.style.removeProperty('--tk-k');
       return;
     }
     tk.classList.add('is-canvas');
@@ -336,14 +368,32 @@
     /* Lock the ticket to the shape the artboard was drawn at, BEFORE anything
        is measured: H below is read off the laid-out box, so the shape has to
        be settled first or every type size is computed against the wrong
-       height. An artboard with no aspect keeps the old stretch behaviour. */
+       height. An artboard with no aspect keeps the old stretch behaviour.
+
+       The ticket is laid out ONCE at a fixed natural size and then scaled with
+       a transform to fit the window. That is what makes dragging the window
+       smooth: sizing it in vw/vh meant every position, every type size and the
+       headline fit had to be recomputed, which only happened 120ms after the
+       drag stopped, so nothing moved and then everything jumped. A transform
+       is one number, it costs no layout, and the composition scales in the
+       compositor as the mouse moves. */
     var ratio = parseFloat(art.aspect);
     if (ratio > 0) {
-      tk.style.setProperty('--tk-aspect', ratio);
+      var natW = parseFloat(art.w) > 0 ? parseFloat(art.w) : (TOUCH.matches ? 390 : 1600);
+      var natH = Math.round(natW / ratio);
+      tk.style.setProperty('--tk-nat-w', natW + 'px');
+      tk.style.setProperty('--tk-nat-h', natH + 'px');
       tk.classList.add('is-locked');
+      document.body.classList.add('home-locked');
+      NAT = [natW, natH];
+      scaleTicket();
     } else {
       tk.classList.remove('is-locked');
-      tk.style.removeProperty('--tk-aspect');
+      document.body.classList.remove('home-locked');
+      NAT = null;
+      tk.style.removeProperty('--tk-nat-w');
+      tk.style.removeProperty('--tk-nat-h');
+      tk.style.removeProperty('--tk-k');
     }
 
     var H = body.clientHeight;
@@ -373,7 +423,11 @@
         delete n.dataset.baseSize;
       });
       tk.classList.remove('is-canvas', 'is-locked');
-      tk.style.removeProperty('--tk-aspect');
+      document.body.classList.remove('home-locked');
+      NAT = null;
+      tk.style.removeProperty('--tk-nat-w');
+      tk.style.removeProperty('--tk-nat-h');
+      tk.style.removeProperty('--tk-k');
     }
   }
   window.applyHomeLayout = applyLayout;   /* the designer re-runs this as he drags */
@@ -479,11 +533,23 @@
   };
   fitAll();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll);
+  /* Two speeds. The scale is one custom property and no layout, so it runs on
+     every resize event and the ticket tracks the mouse. Everything else (the
+     headline fit, repainting the foil bitmap) is expensive and waits for the
+     drag to stop. While the ticket is locked the slow half has nothing to do
+     anyway, because the composition is laid out once at its natural size. */
   var fitWait;
   window.addEventListener('resize', function () {
+    scaleTicket();
     clearTimeout(fitWait);
-    fitWait = setTimeout(fitAll, 120);
-  });
+    fitWait = setTimeout(fitAll, 140);
+  }, { passive: true });
+
+  /* plugging in a mouse, or picking the tablet up, can change the answer to
+     "is this a phone", and that swaps the whole composition */
+  var onDeviceChange = function () { applyLayout(); fitAll(); };
+  if (TOUCH.addEventListener) TOUCH.addEventListener('change', onDeviceChange);
+  else if (TOUCH.addListener) TOUCH.addListener(onDeviceChange);
 
   if (hasWon) {
     var ul = document.getElementById('wonList');
@@ -551,7 +617,7 @@
     link.appendChild(foil);
 
     var ctx = foil.getContext('2d', { willReadFrequently: true });
-    var drawing = false, moved = 0, checks = 0, open = false;
+    var drawing = false, moved = 0, open = false;
 
     /* Third go. The first was a flat fill, the second a linear gradient that
        came out as brushed aluminium, the third was mid grey with heavy dark
@@ -561,9 +627,13 @@
        base, a broad soft sheen, bright grain with only a little dark in it to
        keep it from going flat, and the darkening kept to the very edge. */
     function paint() {
-      var r = link.getBoundingClientRect();
-      if (!r.width || !r.height) return;
-      var w = r.width, h = r.height;
+      /* the punch's own unscaled box, NOT its rect. The ticket is laid out at
+         a natural size and scaled by a transform, so the rect shrinks and
+         grows with the window while the box never moves: drawing to the rect
+         re-rasterised the whole sparkle on every resize and made the brush a
+         different size at every window width. */
+      var w = link.offsetWidth, h = link.offsetHeight;
+      if (!w || !h) return;
       var dpr = Math.min(window.devicePixelRatio || 1, 2);
       foil.width = Math.round(w * dpr);
       foil.height = Math.round(h * dpr);
@@ -571,16 +641,28 @@
       ctx.globalCompositeOperation = 'source-over';
 
       /* light silver, very slightly cool */
-      ctx.fillStyle = '#b3b7bb';
+      ctx.fillStyle = '#bcc0c5';
       ctx.fillRect(0, 0, w, h);
 
       /* the sheen: a wide soft band across the middle, brighter than the base */
       var sh = ctx.createLinearGradient(0, 0, 0, h);
-      sh.addColorStop(0,   'rgba(255,255,255,.10)');
-      sh.addColorStop(.34, 'rgba(255,255,255,.40)');
-      sh.addColorStop(.55, 'rgba(255,255,255,.16)');
-      sh.addColorStop(1,   'rgba(120,124,130,.30)');
+      sh.addColorStop(0,   'rgba(255,255,255,.16)');
+      sh.addColorStop(.32, 'rgba(255,255,255,.58)');
+      sh.addColorStop(.55, 'rgba(255,255,255,.22)');
+      sh.addColorStop(1,   'rgba(120,124,130,.28)');
       ctx.fillStyle = sh;
+      ctx.fillRect(0, 0, w, h);
+
+      /* a second, angled highlight so the panel reads as a surface catching
+         light from one side rather than as a flat grey strip. It does not
+         move: he asked for brighter, not for something running about. */
+      var gl = ctx.createLinearGradient(0, h, w * .78, 0);
+      gl.addColorStop(0,   'rgba(255,255,255,0)');
+      gl.addColorStop(.42, 'rgba(255,255,255,0)');
+      gl.addColorStop(.58, 'rgba(255,255,255,.34)');
+      gl.addColorStop(.68, 'rgba(255,255,255,.05)');
+      gl.addColorStop(1,   'rgba(255,255,255,0)');
+      ctx.fillStyle = gl;
       ctx.fillRect(0, 0, w, h);
 
       /* brushed direction, very faint, on the diagonal */
@@ -595,14 +677,27 @@
 
       /* SPARKLE. Mostly bright, a little dark. This is the tell, and getting
          the ratio wrong is what made the last one look like tarmac. */
-      var grains = Math.round(w * h / 10);
+      var grains = Math.round(w * h / 7);
       for (var i = 0; i < grains; i++) {
-        var bright = Math.random() < .72;
+        var bright = Math.random() < .80;
         ctx.fillStyle = bright
-          ? 'rgba(255,255,255,' + (.10 + Math.random() * .5).toFixed(3) + ')'
-          : 'rgba(96,100,106,'  + (.06 + Math.random() * .2).toFixed(3) + ')';
+          ? 'rgba(255,255,255,' + (.16 + Math.random() * .62).toFixed(3) + ')'
+          : 'rgba(96,100,106,'  + (.05 + Math.random() * .18).toFixed(3) + ')';
         ctx.fillRect(Math.random() * w | 0, Math.random() * h | 0,
-                     Math.random() < .18 ? 2 : 1, 1);
+                     Math.random() < .26 ? 2 : 1, 1);
+      }
+
+      /* a scattering of bigger glints. Foil catches the light in points, and
+         a field of even grain reads as texture rather than as metal. */
+      var glints = Math.round(w * h / 900);
+      for (var g = 0; g < glints; g++) {
+        var gx = Math.random() * w, gy = Math.random() * h;
+        var rad = 1.6 + Math.random() * 2.4;
+        var sp = ctx.createRadialGradient(gx, gy, 0, gx, gy, rad);
+        sp.addColorStop(0, 'rgba(255,255,255,' + (.55 + Math.random() * .4).toFixed(2) + ')');
+        sp.addColorStop(1, 'rgba(255,255,255,0)');
+        ctx.fillStyle = sp;
+        ctx.fillRect(gx - rad, gy - rad, rad * 2, rad * 2);
       }
 
       /* only the very edge darkens, so the panel sits on the paper */
@@ -632,10 +727,16 @@
       if (foil.parentNode) foil.parentNode.removeChild(foil);
     }
 
+    /* The pointer arrives in screen pixels and the canvas is drawn in the
+       ticket's own unscaled pixels, so the parent's scale has to be divided
+       back out or the scratch lands away from the cursor on every screen
+       that is not exactly 1:1. */
     function at(e) {
       var r = foil.getBoundingClientRect();
       var p = e.touches ? e.touches[0] : e;
-      return [p.clientX - r.left, p.clientY - r.top];
+      var kx = r.width  ? foil.offsetWidth  / r.width  : 1;
+      var ky = r.height ? foil.offsetHeight / r.height : 1;
+      return [(p.clientX - r.left) * kx, (p.clientY - r.top) * ky];
     }
     function dig(x, y) {
       ctx.globalCompositeOperation = 'destination-out';
@@ -648,29 +749,41 @@
       for (var i = 3; i < d.length; i += 4 * 160) { t++; if (d[i] < 26) c++; }
       return t ? c / t : 0;
     }
-    function check() { if (!open && ++checks % 5 === 0 && cleared() > .45) reveal(); }
+    /* It opens when they have cleared 60% AND taken their hand off, not the
+       instant the threshold is crossed mid-stroke: it used to vanish out from
+       under the cursor half way through a scratch, which is not how a scratch
+       card behaves. Nothing checks during the drag any more.
+
+       The escape hatches all survive, and they have to: a click with no drag
+       opens it, keyboard focus opens it, and a browser without canvas or a
+       visitor who asked for less motion never sees the foil at all. Someone
+       who cannot drag must never be locked out of the only call to action on
+       the page. That also means a plain click still bypasses the 60%, by
+       design. */
+    var NEEDED = .6;
+    function settle() { if (!open && cleared() > NEEDED) reveal(); }
 
     foil.addEventListener('mousedown', function (e) {
       drawing = true; moved = 0; var c = at(e); dig(c[0], c[1]); e.preventDefault();
     });
     foil.addEventListener('mousemove', function (e) {
-      if (!drawing) return; moved++; var c = at(e); dig(c[0], c[1]); check(); e.preventDefault();
+      if (!drawing) return; moved++; var c = at(e); dig(c[0], c[1]); e.preventDefault();
     });
     window.addEventListener('mouseup', function () {
       if (!drawing) return;
       drawing = false;
       /* a click with no drag: they tapped it, so just open it */
-      if (moved < 3) reveal(); else check();
+      if (moved < 3) reveal(); else settle();
     });
     foil.addEventListener('touchstart', function (e) {
       drawing = true; moved = 0; var c = at(e); dig(c[0], c[1]); e.preventDefault();
     }, { passive: false });
     foil.addEventListener('touchmove', function (e) {
-      if (!drawing) return; moved++; var c = at(e); dig(c[0], c[1]); check(); e.preventDefault();
+      if (!drawing) return; moved++; var c = at(e); dig(c[0], c[1]); e.preventDefault();
     }, { passive: false });
     foil.addEventListener('touchend', function () {
       drawing = false;
-      if (moved < 3) reveal(); else check();
+      if (moved < 3) reveal(); else settle();
     });
 
     /* keyboard users never meet the foil */

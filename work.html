@@ -112,6 +112,12 @@
       '</div></header>' +
       '<div class="wrap"><div class="work-list" id="workList"></div></div>';
 
+    /* The two work pages get their own ground and their own rhythm, so they
+       are told apart at a glance instead of by reading the heading. Only the
+       everything page is staggered; work that worked keeps the uniform grid
+       he asked to leave alone. */
+    if (!ranOnly) document.body.classList.add('page-work-all');
+
     var list = document.getElementById('workList');
 
     if (!items.length) {

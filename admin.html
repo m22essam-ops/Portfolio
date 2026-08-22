@@ -455,7 +455,8 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
       <label class="field"><span>Section label</span><input data-path="about.label"></label>
       <label class="field"><span>Heading</span><input data-path="about.heading"></label>
     </div>
-    <label class="field"><span>Portrait file name (put the file in images/)</span><input data-path="about.portrait"></label>
+    <label class="field"><span>Portrait file name (put the file in images/)</span><input data-path="about.portrait"><small>Used on its own if the box below is empty.</small></label>
+    <label class="field"><span>More photos, one file name per line</span><textarea data-path="about.portraits" data-type="textlist" rows="4" placeholder="about-photo.jpg&#10;me-in-cairo.jpg&#10;me-in-madrid.jpg"></textarea><small>Two or more and the About picture becomes a shuffle: hover it, tap it or press Enter on it and it steps to the next. Put the one you want seen first at the top. Leave this empty and it stays a single photo.</small></label>
     <label class="field"><span>Bio (one paragraph per line)</span><textarea data-path="about.paragraphs" data-type="textlist" rows="5"></textarea></label>
     <label class="field"><span>Skills (one per line)</span><textarea data-path="about.skills" data-type="textlist" rows="4"></textarea></label>
     <div class="subhead">Work experience</div>

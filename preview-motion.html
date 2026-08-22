@@ -217,9 +217,18 @@ body.showroom{background:var(--bg);color:var(--fg);margin:0}
    is torn out. It is the furthest of the five from the slot machine, because
    nothing is being selected at random: someone is tearing out a ticket. */
 .op-book{background:transparent}
+/* The pad comes in larger than the ticket, as though it is close to you, and
+   settles back to the ticket's size as the last one is torn off. That gives
+   the flips some scale and gives the tear something to land. */
 .op-book .book{
   position:absolute;inset:0;margin:auto;width:95%;height:95%;
-  perspective:1800px;perspective-origin:50% 0%;
+  perspective:2200px;perspective-origin:50% 0%;
+  transform:scale(1.24);
+}
+.op-book.run .book{animation:bookSettle 2.05s cubic-bezier(.36,.06,.24,1) forwards}
+@keyframes bookSettle{
+  0%  {transform:scale(1.24)}
+  100%{transform:scale(1)}
 }
 .op-book .card{
   position:absolute;inset:0;background:var(--paper);
@@ -246,17 +255,23 @@ body.showroom{background:var(--bg);color:var(--fg);margin:0}
   background-image:radial-gradient(circle at 6px 5px,var(--red) 3.4px,transparent 3.9px);
   background-size:14px 10px;opacity:.5;
 }
-/* a hint of type on the pages behind, so they read as tickets rather than as
-   blank cards, without giving anyone anything to actually read */
-.op-book .leaf::after{
-  content:"";position:absolute;left:8%;right:36%;top:26%;height:15%;
-  background:
-    linear-gradient(var(--ink),var(--ink)) 0    0%/62% 22% no-repeat,
-    linear-gradient(var(--red),var(--red)) 0   42%/80% 26% no-repeat,
-    linear-gradient(var(--ink),var(--ink)) 0   88%/40% 12% no-repeat;
-  opacity:.13;border-radius:1px;
+/* Every page carries the SAME layout as the real ticket, drawn as a loading
+   skeleton. The boxes are generated from his actual layout.desktop items, so
+   this is not an impression of the composition, it is the composition. Grey
+   because they turn far too fast to read: type would be noise, a skeleton
+   reads instantly as "a ticket, not yet filled in". */
+.op-book .skel{position:absolute;inset:0;overflow:hidden}
+.op-book .skel b{
+  position:absolute;display:block;border-radius:2px;
+  background:rgba(11,10,9,.13);
 }
-.op-book.run .leaf{animation:leafOff .5s cubic-bezier(.42,.03,.32,1) forwards;animation-delay:var(--d)}
+/* the headline is the heaviest thing on the ticket, so it is the heaviest
+   thing in the skeleton; a picture that has not loaded is the lightest */
+.op-book .skel b.big{background:rgba(11,10,9,.19)}
+.op-book .skel b.img{background:rgba(11,10,9,.085)}
+.op-book .skel b.hot{background:rgba(227,38,26,.20)}
+.op-book .skel b.solid{background:rgba(227,38,26,.30)}
+.op-book.run .leaf{animation:leafOff 1s cubic-bezier(.42,.03,.32,1) forwards;animation-delay:var(--d)}
 /* it lifts off the pad before it goes over, and dims as it turns away from
    the light, which is what sells it as paper rather than as a rotating div */
 @keyframes leafOff{
@@ -272,14 +287,16 @@ body.showroom{background:var(--bg);color:var(--fg);margin:0}
   38% {transform:translateY(-1.4%) rotate(-.35deg)}
   100%{transform:translateY(1.2%) rotate(.25deg)}
 }
-/* four leaves at 0 / .10 / .20 / .30 with a .5s turn, so the pad is clear at
-   .80s. The tear waits for that, and the wipe waits for the tear. */
+/* Four leaves at 0 / .22 / .44 / .66 with a 1s turn, so the pad is clear at
+   1.66s. The tear waits for that, and the wipe waits for the tear. Twice the
+   length of the first pass, which is what he asked for and what the flips
+   needed: at half a second a page was gone before you had registered it. */
 .op-book .card{clip-path:inset(0 0 0 0)}
 .op-book.run .card{
-  animation:cardTear .32s cubic-bezier(.5,0,.75,.4) .80s forwards,
-            printInk .4s cubic-bezier(.6,.02,.28,1) 1.06s forwards;
+  animation:cardTear .6s cubic-bezier(.5,0,.75,.4) 1.68s forwards,
+            printInk .62s cubic-bezier(.6,.02,.28,1) 2.16s forwards;
 }
-.op-book.run .veil{animation:printInk .4s cubic-bezier(.6,.02,.28,1) 1.06s forwards}
+.op-book.run .veil{animation:printInk .62s cubic-bezier(.6,.02,.28,1) 2.16s forwards}
 
 /* ---------- OPENER 5 · THE PICK ----------
    A spread of blank tickets, one comes forward and becomes the page. Reads
@@ -449,9 +466,9 @@ body.showroom{background:var(--bg);color:var(--fg);margin:0}
            first; --s is how deep it sits, which is how far it peeks out -->
       <div class="book">
         <div class="card"></div>
-        <div class="leaf" style="--d:.30s;--s:3"></div>
-        <div class="leaf" style="--d:.20s;--s:2"></div>
-        <div class="leaf" style="--d:.10s;--s:1"></div>
+        <div class="leaf" style="--d:.66s;--s:3"></div>
+        <div class="leaf" style="--d:.44s;--s:2"></div>
+        <div class="leaf" style="--d:.22s;--s:1"></div>
         <div class="leaf" style="--d:0s;--s:0"></div>
       </div>
     </div>
@@ -585,10 +602,51 @@ body.showroom{background:var(--bg);color:var(--fg);margin:0}
   set('tearTop', nameUp);
   set('tearBot', T.serial || '');
 
+  /* ---------- the book's skeleton ----------
+     Every page in the pad carries his ACTUAL layout, drawn as grey blocks:
+     the boxes come straight out of layout.desktop, so the pages are the
+     composition rather than a drawing of it. Text boxes become a bar the
+     height of their own type (`size` is a percentage of the ticket height),
+     centred in the box, so a headline reads as a headline and small print
+     reads as small print. Boxes with no type (the stamp, the barcode) fill,
+     because that is what a picture looks like before it loads. */
+  function buildSkeleton() {
+    var L = (C.layout && C.layout.desktop) || null;
+    if (!L || !L.items || !L.items.length) return '';
+    var out = [];
+    L.items.forEach(function (it) {
+      if (!it || it.hidden || it.x == null || it.y == null) return;
+      var w = it.w || 8, h = it.h || 3;
+      var slot = it.slot || '';
+      var kind = '';
+      var top = it.y, height = h;
+      if (it.size) {
+        /* a line of type sitting in the middle of its box */
+        var bar = Math.min(h, it.size * 0.86);
+        top = it.y + (h - bar) / 2;
+        height = bar;
+        if (it.size > 8) kind = slot === 'titleBottom' ? 'hot' : 'big';
+        else if (slot === 'badge' || it.fill === 'red') kind = 'solid';
+        else if (slot === 'titleBottom' || it.color === 'red') kind = 'hot';
+      } else {
+        kind = 'img';                                     /* stamp, barcode */
+      }
+      out.push('<b class="' + kind + '" style="left:' + it.x + '%;top:' + top.toFixed(2) +
+               '%;width:' + w + '%;height:' + height.toFixed(2) + '%"></b>');
+    });
+    return '<div class="skel">' + out.join('') + '</div>';
+  }
+
+  var skel = buildSkeleton();
+  if (skel) {
+    [].forEach.call(document.querySelectorAll('.op-book .leaf, .op-book .card'),
+      function (n) { n.insertAdjacentHTML('afterbegin', skel); });
+  }
+
   /* ---------- play an opener ---------- */
   var OPS = {
     book: {
-      el: document.getElementById('opBook'), ms: 1500,
+      el: document.getElementById('opBook'), ms: 2900,
       say: '<b>The book. My pick, and it is your idea.</b> A raffle book is the actual object: tickets bound together along a perforated stub. Pages flip off the top the way you work through a real book of them, it stops on yours, and that one is torn out. It is the only one of the five where something is <i>done</i> rather than displayed, and it is the furthest from the slot machine you killed, because nothing is being drawn at random. Someone is tearing out a ticket and handing it over.'
     },
     pick: {

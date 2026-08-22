@@ -75,12 +75,46 @@
   document.getElementById('aboutHeading').textContent = A.heading || 'Who I am.';
 
   var portrait = document.getElementById('aboutPortrait');
-  if (A.portrait) {
-    portrait.src = window.imgSrc(A.portrait);
-    portrait.alt = A.portraitAlt || 'Mohammed Essam';
-  } else {
+  /* ---- the portrait, and the rest of the roll ----
+     `about.portraits` is a list; `about.portrait` is the old single field and
+     still works, so nothing breaks if he never adds a second one. With more
+     than one the frame becomes a shuffle: hovering steps to the next, and a
+     click does the same, which is the only version that works on a phone
+     where there is no hover at all. The swap is a hard cut, not a fade:
+     the art direction is flat and a cross-fade would put a soft grey moment
+     in the middle of two duotones. */
+  var roll = (A.portraits && A.portraits.length ? A.portraits : [A.portrait])
+    .filter(function (s) { return s && String(s).trim(); });
+
+  if (roll.length) {
     var shot = document.getElementById('aboutShot');
-    if (shot) shot.style.display = 'none';
+    var seen = 0;
+    portrait.src = window.imgSrc(roll[0]);
+    portrait.alt = A.portraitAlt || 'Mohammed Essam';
+
+    if (roll.length > 1) {
+      /* decode them all up front, or the first swap is a blank frame */
+      roll.slice(1).forEach(function (s) { new Image().src = window.imgSrc(s); });
+
+      var step = function () {
+        seen = (seen + 1) % roll.length;
+        portrait.src = window.imgSrc(roll[seen]);
+      };
+      shot.classList.add('has-roll');
+      shot.setAttribute('title', roll.length + ' photos. Hover or tap.');
+      shot.addEventListener('mouseenter', step);
+      shot.addEventListener('click', step);
+      /* it is a control now, so it has to answer a keyboard too */
+      shot.setAttribute('tabindex', '0');
+      shot.setAttribute('role', 'button');
+      shot.setAttribute('aria-label', 'Show the next photo');
+      shot.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); step(); }
+      });
+    }
+  } else {
+    var empty = document.getElementById('aboutShot');
+    if (empty) empty.style.display = 'none';
   }
 
   var box = document.getElementById('aboutText');

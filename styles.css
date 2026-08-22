@@ -660,6 +660,13 @@ body.has-won .tk-badge{background:var(--ink)}
 .about-shot .about-portrait{
   position:absolute;inset:0;width:100%;height:100%;transform:none;border:0;
 }
+/* with more than one photo the frame is a control, so it says so: the cursor
+   changes and the frame lifts a hair. No count printed on it, no arrows, no
+   dots. Finding out it changes is the whole of the joke. */
+.about-shot.has-roll{cursor:pointer;transition:transform .2s var(--ease)}
+.about-shot.has-roll:hover,
+.about-shot.has-roll:focus-visible{transform:rotate(-1.6deg) scale(1.012)}
+.about-shot.has-roll:focus-visible{outline:2px solid var(--red);outline-offset:4px}
 .about-text{font-size:19px;line-height:1.62;margin:0 0 22px;color:var(--fg-dim)}
 .skills-list{display:flex;flex-wrap:wrap;gap:9px;margin-top:32px}
 .skill-tag{border:1px solid var(--line);border-radius:100px;padding:6px 13px;font-size:11px;color:var(--fg-dim)}
@@ -688,6 +695,10 @@ body.has-won .tk-badge{background:var(--ink)}
 
 @media (max-width:900px){
   .work-list{grid-template-columns:1fr;gap:44px}
+  /* one column has no second column to be staggered against, and the centre
+     rule has no seam to mark */
+  body.page-work-all .work-list > .piece:nth-child(even){margin-top:0}
+  body.page-work-all::before{display:none}
   .about-grid{grid-template-columns:1fr;gap:34px}
   /* stacked, there is no text beside it to match, so the frame carries its
      own portrait shape instead of stretching to a row it now owns alone */
@@ -836,17 +847,28 @@ body.has-won .tk-badge{background:var(--ink)}
    margin reads as the field rather than as a letterbox.
 
    A layout with no aspect keeps the old stretch-to-fill behaviour exactly,
-   so nothing that exists regresses. */
+   so nothing that exists regresses.
+
+   The ticket is laid out ONCE at a fixed natural size and then scaled to fit.
+   Sizing it in vw/vh instead meant every position, every type size and the
+   headline fit had to be recomputed on resize, which only happened 120ms after
+   the drag stopped: nothing moved, then everything jumped. A scale is one
+   number, costs no layout, and follows the mouse. */
+/* Out of flow, and centred by its own transform. A scaled box still occupies
+   its UNSCALED size in layout, so left in the flow a 1600x848 ticket grew the
+   body past the viewport and the page scrolled 31px behind a ticket that
+   visually fitted. Taking it out of flow means the composition's natural size
+   cannot affect the page at all, at any scale. */
 .ticket.is-canvas.is-locked{
-  --tk-fit-w:calc(100vw - 44px);
-  --tk-fit-h:calc(100svh - 80px);
-  width:min(var(--tk-fit-w),calc(var(--tk-fit-h) * var(--tk-aspect)));
-  height:min(var(--tk-fit-h),calc(var(--tk-fit-w) / var(--tk-aspect)));
+  position:fixed;left:50%;top:50%;
+  width:var(--tk-nat-w);
+  height:var(--tk-nat-h);
   min-height:0;max-width:none;flex:none;
+  transform:translate(-50%,-50%) scale(var(--tk-k,1));
 }
-@media (orientation:landscape) and (min-width:900px){
-  .ticket.is-canvas.is-locked{--tk-fit-w:95vw;--tk-fit-h:95svh}
-}
+/* the home page is a single screen by design, and now nothing can make it
+   otherwise */
+body.is-home.home-locked{overflow:hidden}
 
 /* ============================ PER-PAGE COLOUR ============================
    Each page sits on its own ground with one small element of its own, so
@@ -857,6 +879,11 @@ body.has-won .tk-badge{background:var(--ink)}
 body.page-work  { --bg:#EFE9DC; --well:#E2DACA; }
 body.page-about { --bg:#F1E4DC; --well:#E4D2C6; }
 body.page-awards{ --bg:#E6E7E2; --well:#D6D8D1; }
+/* everything, including the work that never ran: a cooler paper, so the two
+   work pages are told apart at a glance rather than by reading the heading.
+   Work that worked keeps the warm ground above, unchanged, because he asked
+   for that page to stay exactly as it is. */
+body.page-work-all { --bg:#E9E9E2; --well:#DADBD1; }
 
 /* the hint of an element: one quiet mark per page, behind everything,
    printed in the page's own well colour so it never fights the work */
@@ -884,7 +911,22 @@ body.page-about::before{
 body.page-awards::before{
   left:0;right:0;top:63%;height:2px;background:var(--well);opacity:.5;
 }
+/* everything: a column rule down the middle, which is the seam the staggered
+   grid is offset across. It replaces the registration cross rather than
+   sitting next to it, so the page still carries exactly one mark. */
+body.page-work-all::before{
+  right:auto;top:0;bottom:0;left:50%;width:2px;height:auto;
+  background:var(--well);border-radius:0;opacity:.4;
+}
 body.page-work > *,body.page-about > *,body.page-awards > *{position:relative;z-index:1}
+
+/* ---- the staggered grid ----
+   The right-hand column sits lower than the left, so the page reads as a run
+   of work rather than as a table of it. Noted for whoever reads this later:
+   the project notes say the work index is deliberately ONE uniform grid, and
+   this reverses that. It is his decision, taken on 22 Aug 2026, and it applies
+   only to the everything page. Work that worked keeps the uniform grid. */
+body.page-work-all .work-list > .piece:nth-child(even){margin-top:clamp(40px,7vw,110px)}
 
 /* ============================ THE CABINET ============================ */
 .cab-wrap{padding:clamp(28px,6vh,72px) 0 clamp(40px,8vh,96px);text-align:center}
