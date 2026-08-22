@@ -1658,15 +1658,15 @@ window.SITE_CONTENT = {
         },
         {
           slot: "barcode",
-          x: 3.79,
+          x: 5.13,
           y: 87.3,
-          w: 12.34,
-          h: 8.22
+          w: 13.2,
+          h: 6.16
         },
         {
           slot: "terms",
           x: 22.02,
-          y: 91.41,
+          y: 92.01,
           w: 74.19,
           h: 6.22,
           size: 1.9,
@@ -1692,6 +1692,18 @@ window.SITE_CONTENT = {
           x: 89.23,
           y: 64.1,
           "hidden": true
+        },
+        {
+          type: "text",
+          text: "Listen tou your gut",
+          size: 2.2,
+          color: "muted",
+          font: "display",
+          w: 13.2,
+          h: 3.15,
+          x: 5.13,
+          y: 93.46,
+          tracking: 0.149
         }
       ],
       aspect: 1.8514
