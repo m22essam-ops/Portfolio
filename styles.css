@@ -470,33 +470,34 @@ body.has-won .tk-badge{background:var(--ink)}
 .page-nav .links a:hover,.page-nav .links a.on{opacity:1;color:var(--red)}
 
 /* ---- the second door, hanging under the first ----
-   Work that worked is a smaller tab under The work. It reads as a paper tab
-   rather than a dropdown: same ground as the page, one hairline, no shadow
-   and no rounded card, because a menu panel would be the one piece of
-   generic web furniture on the whole site. */
+   Work that worked is a smaller tab under The work, and it is ALWAYS there.
+   It was a hover popup first and that was wrong twice over: it hid a whole
+   page of his work behind a gesture a phone cannot make, and a menu that
+   appears and vanishes is the one piece of generic web furniture on the site.
+   Printed and permanent, it reads as the paper tab on a folder instead.
+
+   The nav keeps its 70px row and grows underneath it, so the tab sits INSIDE
+   the nav's own box and above its rule. Nothing on the page is covered. */
+.page-nav.has-sub .wrap{padding-bottom:30px}
 .page-nav .nav-item{position:relative;display:inline-block}
 .page-nav .nav-sub{
-  position:absolute;left:50%;top:100%;transform:translate(-50%,-6px);
-  margin-top:9px;
-  background:var(--bg);border:1px solid var(--line);
-  padding:7px 11px;
-  font-size:.82em;letter-spacing:.09em;
-  opacity:0;visibility:hidden;pointer-events:none;
-  transition:opacity .16s var(--ease),transform .16s var(--ease),visibility .16s;
+  position:absolute;left:50%;top:100%;transform:translateX(-50%);
+  margin-top:9px;white-space:nowrap;
+  background:var(--bg);border:1px solid var(--line);border-top:0;
+  border-radius:0 0 3px 3px;
+  padding:5px 10px 6px;
+  font-size:.78em;letter-spacing:.09em;opacity:.62;
+  transition:opacity .16s var(--ease),color .16s var(--ease),border-color .16s var(--ease);
 }
-/* the little notch that ties the tab to the link above it */
+/* the notch that ties the tab to the link above it */
 .page-nav .nav-sub::before{
   content:"";position:absolute;left:50%;top:-9px;width:1px;height:9px;
   background:var(--line);
 }
-.page-nav .nav-item:hover .nav-sub,
-.page-nav .nav-item:focus-within .nav-sub,
-.page-nav .nav-item.is-open .nav-sub{
-  opacity:1;visibility:visible;pointer-events:auto;transform:translate(-50%,0);
-}
+.page-nav .nav-sub:hover,
+.page-nav .nav-sub:focus-visible{opacity:1;color:var(--red);border-color:var(--red)}
 /* it is its own page, so it gets the same red the nav gives the current one */
-.page-nav .nav-sub.on{opacity:1;visibility:visible;pointer-events:auto;
-  transform:translate(-50%,0);color:var(--red);border-color:var(--red)}
+.page-nav .nav-sub.on{opacity:1;color:var(--red);border-color:var(--red)}
 
 .page-head{padding:88px 0 44px}
 .page-head h1{font-size:clamp(52px,11vw,138px)}

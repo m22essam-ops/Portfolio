@@ -102,7 +102,37 @@
       };
       shot.classList.add('has-roll');
       shot.setAttribute('title', roll.length + ' photos. Hover or tap.');
-      shot.addEventListener('mouseenter', step);
+
+      /* While the pointer is on it, it keeps going: one photograph a second
+         until they leave. Desktop only, because a touch screen has no pointer
+         to rest anywhere, and the tap below already steps it.
+
+         Not under reduced motion either: content that changes itself on a
+         timer is the thing that setting is asking us not to do. Those
+         visitors still get the tap and the keyboard. */
+      var hoverRoll = null;
+      var canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+      var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (canHover && !still) {
+        shot.addEventListener('mouseenter', function () {
+          step();                                   /* one straight away */
+          clearInterval(hoverRoll);
+          hoverRoll = setInterval(step, 1000);      /* then one a second */
+        });
+        shot.addEventListener('mouseleave', function () {
+          clearInterval(hoverRoll);
+          hoverRoll = null;
+        });
+        /* a tab switch leaves the pointer nowhere, so stop rather than run on
+           in a page nobody is looking at */
+        document.addEventListener('visibilitychange', function () {
+          if (document.hidden) { clearInterval(hoverRoll); hoverRoll = null; }
+        });
+      } else if (canHover) {
+        shot.addEventListener('mouseenter', step);  /* reduced motion: one step */
+      }
+
       shot.addEventListener('click', step);
       /* it is a control now, so it has to answer a keyboard too */
       shot.setAttribute('tabindex', '0');

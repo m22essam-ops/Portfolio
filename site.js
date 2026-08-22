@@ -98,15 +98,15 @@
   }
 
   /* ----- the second door, under the first -----
-     Work that worked hangs under The work as a small tab on hover. Built here
-     rather than in each page's HTML so it exists on all of them at once, and
-     hung off whichever link actually points at the work page so it follows if
-     that link is ever renamed.
+     Work that worked is a small tab printed under The work, and it is always
+     there. Built here rather than in each page's HTML so it exists on all of
+     them at once, and hung off whichever link actually points at the work page
+     so it follows if that link is ever renamed.
 
-     A phone has no hover, so the tab is opened by a tap on the parent instead:
-     the FIRST tap opens it, a second tap on the same link follows through to
-     the work page. Nobody loses the main link, and nobody has to discover a
-     hover state that their device cannot produce. */
+     It used to appear on hover. That was wrong twice: it hid a whole page of
+     his work behind a gesture a phone cannot make, and a menu that appears
+     and vanishes is generic web furniture. A permanent tab needs no gesture,
+     works identically on every device, and reads as paper. */
   var navLinks = document.querySelector('.page-nav .links');
   if (navLinks) {
     var workLink = navLinks.querySelector('a[href="work.html"], a[href="./work.html"]');
@@ -130,18 +130,9 @@
         workLink.classList.remove('on');
       }
 
-      var coarse = window.matchMedia('(hover: none)').matches;
-      if (coarse) {
-        workLink.addEventListener('click', function (e) {
-          if (!wrap.classList.contains('is-open')) {
-            e.preventDefault();
-            wrap.classList.add('is-open');
-          }
-        });
-        document.addEventListener('click', function (e) {
-          if (!wrap.contains(e.target)) wrap.classList.remove('is-open');
-        });
-      }
+      /* the nav has to make room for it, or the tab would hang over the page */
+      var bar = document.querySelector('.page-nav');
+      if (bar) bar.classList.add('has-sub');
     }
   }
 
