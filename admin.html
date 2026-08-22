@@ -374,22 +374,11 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
     </div>
 
     <div class="subhead">The cabinet (awards.html)</div>
-    <p class="hint">The page behind the award badge: an empty display case that opens, then asks how long you are prepared to wait. Every line of it is here. Empty the first line and the page still works, it just says nothing.</p>
+    <p class="hint">The page behind the award badge: an empty display case that opens on nothing, and one line. Empty that line and the page still works, it just says nothing.</p>
+    <label class="field"><span>The line after it opens</span><input data-path="ticket.cabinet.line" placeholder="Nothing to show yet. Please come back in a year to check."><small>Set large, so keep it to a sentence.</small></label>
     <div class="grid2">
-      <label class="field"><span>The line after it opens</span><input data-path="ticket.cabinet.empty" placeholder="Nothing to show for now."><small>Set very large, so keep it to a few words.</small></label>
-      <label class="field"><span>The question above the buttons</span><input data-path="ticket.cabinet.ask" placeholder="Come back in a few"></label>
-    </div>
-    <div class="grid2">
-      <label class="field"><span>Button 1</span><input data-path="ticket.cabinet.minutes" placeholder="Minutes"></label>
-      <label class="field"><span>...answers</span><input data-path="ticket.cabinet.minutesLine" placeholder="Are you mental?"><small>Shelves stay empty and the cabinet shakes its head.</small></label>
-    </div>
-    <div class="grid2">
-      <label class="field"><span>Button 2</span><input data-path="ticket.cabinet.days" placeholder="Days"></label>
-      <label class="field"><span>...answers</span><input data-path="ticket.cabinet.daysLine" placeholder="One. Don't spend it all at once."><small>One thing appears on a shelf.</small></label>
-    </div>
-    <div class="grid2">
-      <label class="field"><span>Button 3</span><input data-path="ticket.cabinet.years" placeholder="Years"></label>
-      <label class="field"><span>...answers</span><input data-path="ticket.cabinet.yearsLine" placeholder="Now we're talking."><small>Twenty appear, filling all three shelves.</small></label>
+      <label class="field"><span>The words inside it that become the link</span><input data-path="ticket.cabinet.linkText" placeholder="in a year"><small>Must appear in the line above, spelled the same. Leave empty and nothing is linked.</small></label>
+      <label class="field"><span>...and where they go</span><input data-path="ticket.cabinet.linkUrl" placeholder="https://calendly.com/m22essam/30min"><small>Opens in a new tab.</small></label>
     </div>
 
     <div class="subhead">Work that worked</div>

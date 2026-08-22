@@ -469,38 +469,41 @@ body.has-won .tk-badge{background:var(--ink)}
 .page-nav .links a{text-decoration:none;opacity:.55;transition:opacity .16s;white-space:nowrap}
 .page-nav .links a:hover,.page-nav .links a.on{opacity:1;color:var(--red)}
 
-/* ---- the work section's own tier ----
-   Work that worked is a page inside the work section, so the header carries a
-   second tier that says which of the two you are on. It is aligned to the
-   same left margin as the logo above it and the work grid below it, so the
-   three line up down the page. That alignment is the whole design: the tab
-   this replaced floated centred under one nav item, aligned to nothing, and
-   read as a dropdown that had forgotten to drop.
+/* ---- the work menu ----
+   Hover The work and the section drops down. A section tier was tried instead
+   and it only appeared once you were already on a work page, which made it a
+   step too many; this is one move from anywhere.
 
-   The tier sits inside the sticky bar, above its rule, so nothing on the page
-   is covered and the whole header travels as one object. */
-.page-nav .nav-sec{border-top:1px solid var(--line)}
-.page-nav .nav-sec .wrap{
-  /* justify-content has to be said out loud: .page-nav .wrap sets
-     space-between for the logo-and-links row above, and inherited through it
-     the two tiers flew to opposite ends of the header. */
-  display:flex;align-items:center;justify-content:flex-start;
-  gap:28px;height:auto;
-  padding-top:9px;padding-bottom:9px;
-  font-size:.88em;
+   Aligned to the LEFT edge of the link it belongs to, not centred under it:
+   centred is what made the first attempt read as a dropdown that had
+   forgotten to drop. Paper, one hairline, no shadow and no rounded card. */
+.page-nav .nav-item{position:relative;display:inline-block}
+.page-nav .nav-menu{
+  position:absolute;left:0;top:100%;
+  /* the padding is the bridge: with a margin instead, the gap between link
+     and panel is dead ground and the menu shuts as the pointer crosses it */
+  padding-top:11px;
+  display:flex;flex-direction:column;min-width:100%;
+  opacity:0;visibility:hidden;pointer-events:none;
+  transform:translateY(-4px);
+  transition:opacity .15s var(--ease),transform .15s var(--ease),visibility .15s;
+  z-index:60;
 }
-.page-nav .nav-sec-a{
-  text-decoration:none;color:var(--fg);opacity:.5;
-  padding:2px 0;position:relative;white-space:nowrap;
-  transition:opacity .16s var(--ease),color .16s var(--ease);
+.page-nav .nav-menu > a{
+  display:block;white-space:nowrap;text-decoration:none;
+  background:var(--bg);border:1px solid var(--line);border-bottom:0;
+  padding:9px 14px;color:var(--fg);opacity:.72;
+  transition:opacity .14s var(--ease),color .14s var(--ease),background .14s var(--ease);
 }
-.page-nav .nav-sec-a:hover,
-.page-nav .nav-sec-a:focus-visible{opacity:1}
-/* the one you are on is named in red and underscored, the way a tab is */
-.page-nav .nav-sec-a.on{opacity:1;color:var(--red)}
-.page-nav .nav-sec-a.on::after{
-  content:"";position:absolute;left:0;right:0;bottom:-9px;height:2px;
-  background:var(--red);
+.page-nav .nav-menu > a:last-child{border-bottom:1px solid var(--line)}
+.page-nav .nav-menu > a:hover,
+.page-nav .nav-menu > a:focus-visible{opacity:1;color:var(--red)}
+.page-nav .nav-menu > a.on{opacity:1;color:var(--red)}
+
+.page-nav .nav-item:hover .nav-menu,
+.page-nav .nav-item:focus-within .nav-menu,
+.page-nav .nav-item.is-open .nav-menu{
+  opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0);
 }
 
 .page-head{padding:88px 0 44px}
@@ -993,66 +996,92 @@ body.page-awards::before{
 }
 body.page-work > *,body.page-about > *,body.page-awards > *{position:relative;z-index:1}
 
-/* ============================ THE CABINET ============================ */
-.cab-wrap{padding:clamp(28px,6vh,72px) 0 clamp(40px,8vh,96px);text-align:center}
-.cab-stage{display:flex;justify-content:center}
-.cab{width:min(100%,460px);height:auto;overflow:visible}
+/* ============================ THE CABINET ============================
+   One screen, and it does not scroll. The page is a column that fills the
+   viewport under the nav: the cabinet takes whatever height is left after the
+   line and the way back have taken theirs, and it is sized by HEIGHT rather
+   than width so a short laptop window shrinks it instead of pushing the words
+   off the bottom. There is no footer on this page for the same reason. */
+body.page-awards{height:100svh;overflow:hidden;display:flex;flex-direction:column}
+body.page-awards #page{
+  flex:1 1 auto;min-height:0;display:flex;flex-direction:column;
+}
+.cab-wrap{
+  flex:1 1 auto;min-height:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:clamp(10px,2.2vh,30px);
+  padding:clamp(12px,2.4vh,34px) 0 clamp(16px,3vh,40px);
+  text-align:center;
+}
+.cab-stage{
+  flex:1 1 auto;min-height:0;
+  display:flex;justify-content:center;align-items:center;width:100%;
+}
+/* height first: the cabinet gives way, the words never do */
+.cab{width:auto;height:100%;max-width:min(100%,460px);max-height:100%;overflow:visible}
 
 .cab .ink-1{fill:var(--well)}
 .cab .ink-2{fill:#0B0A09}
 .cab .ink-3{fill:#1a1815}
 .cab .shelf-top{fill:var(--well);opacity:.85}
 
+/* ---- the case settles in ---- */
+.cab{opacity:0;transform:scale(.965) translateY(10px);
+  transition:opacity .6s ease,transform .7s cubic-bezier(.22,.85,.28,1)}
+.cab.is-in{opacity:1;transform:none}
+
+/* ---- the shelves draw themselves in ----
+   Left to right, one after another, so the emptiness is something you watch
+   being built rather than something that was simply already there. */
+.cab .shelf{
+  transform-box:fill-box;transform-origin:left center;
+  transform:scaleX(0);opacity:0;
+  transition:transform .52s cubic-bezier(.3,.85,.3,1),opacity .3s ease;
+}
+.cab.is-drawn .shelf{transform:scaleX(1);opacity:1}
+.cab.is-drawn .shelf[data-row="0"]{transition-delay:0s}
+.cab.is-drawn .shelf[data-row="1"]{transition-delay:.13s}
+.cab.is-drawn .shelf[data-row="2"]{transition-delay:.26s}
+
 /* the doors: glass, so the empty shelves show through before they swing */
 .cab .glass{fill:#ffffff10}
 .cab .frame{fill:none;stroke:var(--well);stroke-width:3}
-.cab .glint{fill:#ffffff14}
+.cab .glint{fill:#ffffff14;transition:opacity .8s ease}
 .cab .knob{fill:var(--red)}
 .cab .door{
   transform-box:fill-box;transform-origin:left center;
-  transition:transform .95s cubic-bezier(.3,.9,.25,1),opacity .95s ease;
+  transition:transform 1.05s cubic-bezier(.26,.86,.24,1);
 }
 .cab .door-r{transform-origin:right center}
-.cab.is-open .door-l{transform:perspective(900px) rotateY(-104deg)}
-.cab.is-open .door-r{transform:perspective(900px) rotateY(104deg)}
-.cab.is-shrug{animation:cab-shrug .5s var(--ease)}
-@keyframes cab-shrug{
-  0%,100%{transform:none}
-  30%{transform:translateX(-7px) rotate(-.8deg)}
-  65%{transform:translateX(7px) rotate(.8deg)}
-}
-
-.cab .trophy{fill:var(--red)}
-.cab .loot-item{
-  opacity:0;transform:translateY(-14px);
-  transition:opacity .34s ease,transform .34s cubic-bezier(.2,1.4,.4,1);
-}
-.cab .loot-item.in{opacity:1;transform:none}
+/* the slack before the swing: a door takes up its play against the catch
+   before it gives, and that half-beat is what stops it reading as a flap */
+.cab.is-unlatch .door-l{transform:perspective(900px) rotateY(5deg);transition-duration:.18s}
+.cab.is-unlatch .door-r{transform:perspective(900px) rotateY(-5deg);transition-duration:.18s}
+.cab.is-open .door-l{transform:perspective(900px) rotateY(-106deg)}
+.cab.is-open .door-r{transform:perspective(900px) rotateY(106deg)}
+/* the reflection dies as the glass turns away from the room */
+.cab.is-open .glint{opacity:0}
 
 .cab-say{opacity:0;transform:translateY(10px);transition:opacity .5s ease,transform .5s var(--ease)}
 .cab-say.in{opacity:1;transform:none}
+/* sized against the HEIGHT as well as the width: this page cannot scroll, so
+   a headline measured only in vw runs off the bottom of a short window */
 .cab-line{
-  font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-height:1.02;
-  font-size:clamp(30px,6.4vw,68px);margin:clamp(24px,5vh,54px) 0 0;
-  max-width:20ch;margin-inline:auto;
+  font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-height:1.04;
+  font-size:clamp(22px,min(5vw,4.4vh),52px);
+  margin:0;max-width:22ch;margin-inline:auto;
 }
-.cab-ask{opacity:0;transform:translateY(8px);transition:opacity .45s ease,transform .45s var(--ease)}
-.cab-ask.in{opacity:1;transform:none}
-.cab-sub{
-  font-family:var(--mono);text-transform:uppercase;letter-spacing:.16em;
-  font-weight:600;font-size:13px;color:var(--fg-dim);margin:22px 0 14px;
+/* the booking link inside it: underlined because it is the one thing on the
+   page to press, and it has to look like it */
+.cab-line a{
+  color:var(--red);text-decoration:underline;text-underline-offset:.14em;
+  text-decoration-thickness:.06em;
+  transition:color .16s var(--ease);
 }
-.cab-picks{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.cab-pick{
-  font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em;
-  font-weight:700;font-size:clamp(14px,1.5vw,17px);
-  background:none;color:var(--fg);border:2px solid var(--fg);
-  padding:11px 22px;border-radius:0;cursor:pointer;
-  transition:background .16s var(--ease),color .16s var(--ease),transform .16s var(--ease);
-}
-.cab-pick:hover{background:var(--fg);color:var(--bg);transform:translateY(-2px)}
-.cab-pick.on{background:var(--red);border-color:var(--red);color:#fff}
-.cab-back{margin:clamp(30px,6vh,58px) 0 0}
+.cab-line a:hover{color:var(--red-hot)}
+/* the line and the way back are one flex child between them, so the gap on
+   .cab-wrap does not separate them and this has to */
+.cab-back{margin:clamp(14px,2.4vh,28px) 0 0}
 .cab-back a{
   font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em;
   font-weight:600;font-size:13px;color:var(--fg-dim);text-decoration:none;
@@ -1067,6 +1096,9 @@ body.page-work > *,body.page-about > *,body.page-awards > *{position:relative;z-
 .all-work:hover{text-decoration:underline}
 
 @media (prefers-reduced-motion:reduce){
-  .cab .door,.cab .loot-item,.cab-say,.cab-ask{transition:none}
-  .cab.is-shrug{animation:none}
+  /* the staged open starts from hidden states, so they have to be handed
+     their finished values outright rather than merely having timing zeroed */
+  .cab,.cab .door,.cab .shelf,.cab .glint,.cab-say{transition:none}
+  .cab{opacity:1;transform:none}
+  .cab .shelf{transform:scaleX(1);opacity:1}
 }

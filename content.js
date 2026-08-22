@@ -55,14 +55,9 @@ window.SITE_CONTENT = {
       }
     ],
     cabinet: {
-      empty: "Nothing to show for now.",
-      ask: "Come back in a few",
-      minutes: "Minutes",
-      minutesLine: "Are you mental?",
-      days: "Days",
-      daysLine: "One. Don't spend it all at once.",
-      years: "Years",
-      yearsLine: "Now we're talking."
+      line: "Nothing to show yet. Please come back in a year to check.",
+      linkText: "in a year",
+      linkUrl: "https://calendly.com/m22essam/30min"
     },
     barcodeUrl: "https://open.spotify.com/playlist/3LBELz6m3BsYudI8OQar6B",
     barcodeLabel: "The playlist",

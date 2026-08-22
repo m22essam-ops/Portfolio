@@ -97,57 +97,74 @@
     }
   }
 
-  /* ----- the work section's own tier in the header -----
-     Work that worked is a page inside the work section, so the header says so
-     with a second tier rather than a tab dangling off one link. A floating
-     lozenge centred under a nav item aligns to nothing and reads as a
-     dropdown that forgot to drop; a tier aligned to the same left margin as
-     the logo and the page's content reads as structure.
+  /* ----- the work menu -----
+     Hover The work and the two pages inside it drop down. Like every menu in
+     the world, on purpose: a section tier was tried instead and it was one
+     step too many, because it only appeared once you were already on a work
+     page. From here it is one move from anywhere on the site.
 
-     It appears on the two work index pages, which is where the choice between
-     them means anything. From anywhere else The work is one click away and
-     the tier is waiting there. Built here rather than in each page's HTML so
-     there is one copy of it. */
+     Built here rather than in each page's HTML so there is one copy of it,
+     and hung off whichever link actually points at the work page so it
+     follows a rename. */
   var navBar = document.querySelector('.page-nav');
-  var qs = new URLSearchParams(location.search);
-  var onWorkIndex = /(^|\/)work\.html$/.test(location.pathname) && !qs.get('slug');
+  var navLinks = navBar && navBar.querySelector('.links');
 
-  if (navBar && onWorkIndex && !navBar.querySelector('.nav-sec')) {
-    var W = C.work || {};
-    var ran = /[?&]ran=1\b/.test(location.search);
-    var strip = function (s, fallback) {
-      var t = String(s == null ? '' : s).trim().replace(/\.\s*$/, '');
-      return t || fallback;
-    };
-    /* "All work" is a navigation label, not a headline: his own heading for
-       that page is "The work", which under a nav item already reading THE WORK
-       would just say it twice. */
-    var tiers = [
-      { href: 'work.html',       label: 'All work',                              on: !ran },
-      { href: 'work.html?ran=1', label: strip(W.ranHeading, 'Work that worked'), on: ran }
-    ];
+  if (navLinks && !navLinks.querySelector('.nav-menu')) {
+    var workLink = navLinks.querySelector('a[href="work.html"], a[href="./work.html"]');
+    if (workLink) {
+      var W = C.work || {};
+      var qs = new URLSearchParams(location.search);
+      var onWork = /(^|\/)work\.html$/.test(location.pathname) && !qs.get('slug');
+      var ran = /[?&]ran=1\b/.test(location.search);
+      var strip = function (s, fallback) {
+        var t = String(s == null ? '' : s).trim().replace(/\.\s*$/, '');
+        return t || fallback;
+      };
 
-    var sec = document.createElement('div');
-    sec.className = 'nav-sec';
-    var secWrap = document.createElement('div');
-    secWrap.className = 'wrap';
-    /* built as nodes, not as a string: the label is his copy out of admin and
-       textContent cannot be talked into being markup */
-    tiers.forEach(function (t) {
-      var a = document.createElement('a');
-      a.className = 'nav-sec-a' + (t.on ? ' on' : '');
-      a.href = t.href;
-      a.textContent = t.label;
-      if (t.on) a.setAttribute('aria-current', 'page');
-      secWrap.appendChild(a);
-    });
-    sec.appendChild(secWrap);
-    navBar.appendChild(sec);
-    navBar.classList.add('has-sec');
+      var item = document.createElement('span');
+      item.className = 'nav-item';
+      workLink.parentNode.insertBefore(item, workLink);
+      item.appendChild(workLink);
 
-    /* the top row marks the section, the tier marks the page inside it */
-    var topWork = navBar.querySelector('.links a[href="work.html"], .links a[href="./work.html"]');
-    if (topWork) topWork.classList.add('on');
+      var menu = document.createElement('span');
+      menu.className = 'nav-menu';
+      [
+        /* "All work" is a navigation label, not a headline: his heading for
+           that page is "The work", which under a link already reading THE WORK
+           would only say it twice. */
+        { href: 'work.html',       label: 'All work',                              on: onWork && !ran },
+        { href: 'work.html?ran=1', label: strip(W.ranHeading, 'Work that worked'), on: onWork && ran }
+      ].forEach(function (t) {
+        var a = document.createElement('a');
+        a.href = t.href;
+        a.textContent = t.label;          /* his copy, never parsed as markup */
+        if (t.on) { a.className = 'on'; a.setAttribute('aria-current', 'page'); }
+        menu.appendChild(a);
+      });
+      item.appendChild(menu);
+
+      /* the parent stays lit while you are anywhere in the section */
+      if (onWork) workLink.classList.add('on');
+
+      /* A touch screen has no hover, so the first tap opens the menu and a
+         second on the same link goes through to the work page. Nobody has to
+         produce a gesture their device cannot make, and nobody loses the link. */
+      if (window.matchMedia('(hover: none)').matches) {
+        workLink.addEventListener('click', function (e) {
+          if (!item.classList.contains('is-open')) {
+            e.preventDefault();
+            item.classList.add('is-open');
+          }
+        });
+        document.addEventListener('click', function (e) {
+          if (!item.contains(e.target)) item.classList.remove('is-open');
+        });
+      }
+      /* and it closes on Escape, wherever the focus happens to be */
+      item.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') { item.classList.remove('is-open'); workLink.focus(); }
+      });
+    }
   }
 
   /* ----- nav shrink on scroll ----- */
