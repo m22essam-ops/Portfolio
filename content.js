@@ -1578,7 +1578,7 @@ window.SITE_CONTENT = {
         },
         {
           slot: "badge",
-          x: 80.74,
+          x: 81.03,
           y: 8.77,
           w: 13.74,
           h: 5.78,
