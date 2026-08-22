@@ -97,6 +97,54 @@
     }
   }
 
+  /* ----- the second door, under the first -----
+     Work that worked hangs under The work as a small tab on hover. Built here
+     rather than in each page's HTML so it exists on all of them at once, and
+     hung off whichever link actually points at the work page so it follows if
+     that link is ever renamed.
+
+     A phone has no hover, so the tab is opened by a tap on the parent instead:
+     the FIRST tap opens it, a second tap on the same link follows through to
+     the work page. Nobody loses the main link, and nobody has to discover a
+     hover state that their device cannot produce. */
+  var navLinks = document.querySelector('.page-nav .links');
+  if (navLinks) {
+    var workLink = navLinks.querySelector('a[href="work.html"], a[href="./work.html"]');
+    if (workLink && !navLinks.querySelector('.nav-sub')) {
+      var wrap = document.createElement('span');
+      wrap.className = 'nav-item';
+      workLink.parentNode.insertBefore(wrap, workLink);
+      wrap.appendChild(workLink);
+
+      var sub = document.createElement('a');
+      sub.className = 'nav-sub';
+      sub.href = 'work.html?ran=1';
+      sub.textContent = (C.work && C.work.ranHeading)
+        ? String(C.work.ranHeading).replace(/\.\s*$/, '')
+        : 'Work that worked';
+      wrap.appendChild(sub);
+
+      /* mark the sub-tab as the current page when it is */
+      if (/[?&]ran=1\b/.test(location.search)) {
+        sub.classList.add('on');
+        workLink.classList.remove('on');
+      }
+
+      var coarse = window.matchMedia('(hover: none)').matches;
+      if (coarse) {
+        workLink.addEventListener('click', function (e) {
+          if (!wrap.classList.contains('is-open')) {
+            e.preventDefault();
+            wrap.classList.add('is-open');
+          }
+        });
+        document.addEventListener('click', function (e) {
+          if (!wrap.contains(e.target)) wrap.classList.remove('is-open');
+        });
+      }
+    }
+  }
+
   /* ----- nav shrink on scroll ----- */
   var nav = document.getElementById('siteNav');
   if (nav) {

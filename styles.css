@@ -469,6 +469,35 @@ body.has-won .tk-badge{background:var(--ink)}
 .page-nav .links a{text-decoration:none;opacity:.55;transition:opacity .16s;white-space:nowrap}
 .page-nav .links a:hover,.page-nav .links a.on{opacity:1;color:var(--red)}
 
+/* ---- the second door, hanging under the first ----
+   Work that worked is a smaller tab under The work. It reads as a paper tab
+   rather than a dropdown: same ground as the page, one hairline, no shadow
+   and no rounded card, because a menu panel would be the one piece of
+   generic web furniture on the whole site. */
+.page-nav .nav-item{position:relative;display:inline-block}
+.page-nav .nav-sub{
+  position:absolute;left:50%;top:100%;transform:translate(-50%,-6px);
+  margin-top:9px;
+  background:var(--bg);border:1px solid var(--line);
+  padding:7px 11px;
+  font-size:.82em;letter-spacing:.09em;
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity .16s var(--ease),transform .16s var(--ease),visibility .16s;
+}
+/* the little notch that ties the tab to the link above it */
+.page-nav .nav-sub::before{
+  content:"";position:absolute;left:50%;top:-9px;width:1px;height:9px;
+  background:var(--line);
+}
+.page-nav .nav-item:hover .nav-sub,
+.page-nav .nav-item:focus-within .nav-sub,
+.page-nav .nav-item.is-open .nav-sub{
+  opacity:1;visibility:visible;pointer-events:auto;transform:translate(-50%,0);
+}
+/* it is its own page, so it gets the same red the nav gives the current one */
+.page-nav .nav-sub.on{opacity:1;visibility:visible;pointer-events:auto;
+  transform:translate(-50%,0);color:var(--red);border-color:var(--red)}
+
 .page-head{padding:88px 0 44px}
 .page-head h1{font-size:clamp(52px,11vw,138px)}
 .page-head .note{margin:22px 0 0;font-size:12px;color:var(--fg-dim);max-width:60ch;letter-spacing:.12em}
@@ -660,15 +689,47 @@ body.has-won .tk-badge{background:var(--ink)}
   filter:grayscale(1) contrast(1.42) brightness(.93);
   mix-blend-mode:screen;
 }
+/* The About picture is a stamp, built the same way as the one on the ticket:
+   a red field, perforated edges eaten out of it, and the photograph printed
+   over the red as two inks. The black box frame it had before belonged to
+   nothing else on the site. The perforations are punched in the PAGE's own
+   ground, not in the ticket's paper, so they read as holes rather than as
+   white dots sitting on top of the colour. */
 .about-shot{
-  background:var(--red-deep);border:10px solid var(--ink);
-  border-radius:2px;overflow:hidden;transform:rotate(-1.6deg);
+  background:var(--red);
+  border:0;border-radius:2px;overflow:hidden;
+  transform:rotate(-1.6deg);
   line-height:0;
   position:relative;min-height:340px;
+  padding:14px;
 }
-/* out of flow, so the row's height is the text's height and nothing else */
+/* the perforation: half-circles of the page eating the four edges. At inset:0
+   rather than -1px because the stamp clips its own overflow, and anything
+   hanging outside the box would simply be cut off. */
+.about-shot::before{
+  content:"";position:absolute;inset:0;z-index:3;pointer-events:none;
+  background-image:
+    radial-gradient(circle at 50% 0,   var(--bg) 6.2px, transparent 6.7px),
+    radial-gradient(circle at 50% 100%,var(--bg) 6.2px, transparent 6.7px),
+    radial-gradient(circle at 0 50%,   var(--bg) 6.2px, transparent 6.7px),
+    radial-gradient(circle at 100% 50%,var(--bg) 6.2px, transparent 6.7px);
+  background-size:18px 12px, 18px 12px, 12px 18px, 12px 18px;
+  background-position:top center, bottom center, left center, right center;
+  background-repeat:repeat-x, repeat-x, repeat-y, repeat-y;
+}
+/* Out of flow, so the row's height is the text's height and nothing else.
+   Inset by the padding, so the red field shows as the stamp's margin the way
+   it does on the ticket, and printed over it rather than sitting on it. */
 .about-shot .about-portrait{
-  position:absolute;inset:0;width:100%;height:100%;transform:none;border:0;
+  position:absolute;left:14px;top:14px;transform:none;border:0;
+  /* sized, not inset. An <img> is a replaced element: give it four insets and
+     width:auto and it keeps its INTRINSIC size instead of stretching to them,
+     so the photograph stood 661px tall inside a 470px stamp and hung out of
+     the bottom of it. */
+  width:calc(100% - 28px);height:calc(100% - 28px);
+  background:var(--red-deep);
+  filter:grayscale(1) contrast(1.26) brightness(1.14);
+  mix-blend-mode:screen;
 }
 /* with more than one photo the frame is a control, so it says so: the cursor
    changes and the frame lifts a hair. No count printed on it, no arrows, no
@@ -891,12 +952,13 @@ body.page-awards{ --bg:#E6E7E2; --well:#D6D8D1; --nav-bg:#E6E7E2f2; }
    out the same day; the two pages read as one body of work with a change of
    ground, not as two different designs.
 
-   The ground is a cool grey-green against the warm cream of Work that worked.
-   A near-shade was tried first and he was right that it did nothing: this is
-   a different colour family, so you know which page you are on the moment it
-   loads. Still light, so the campaign stills sit the way they do everywhere
-   else and the gallery stays editorial rather than going dark. */
-body.page-work-all { --bg:#DCDED5; --well:#CACEC0; --nav-bg:#DCDED5f2; }
+   The ground is a sage against the warm cream of Work that worked. Two
+   lighter versions were tried first and both were too polite to register; it
+   has to be a colour you would name, not a shade of off-white. Still light
+   enough that near-black type keeps its contrast and the campaign stills sit
+   the way they do everywhere else, so the gallery stays editorial rather than
+   going dark, which the notes rule out for reasons that still hold. */
+body.page-work-all { --bg:#C4CCB6; --well:#AFB89F; --nav-bg:#C4CCB6f2; }
 
 /* the hint of an element: one quiet mark per page, behind everything,
    printed in the page's own well colour so it never fights the work */
