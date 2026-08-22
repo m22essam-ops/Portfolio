@@ -469,35 +469,39 @@ body.has-won .tk-badge{background:var(--ink)}
 .page-nav .links a{text-decoration:none;opacity:.55;transition:opacity .16s;white-space:nowrap}
 .page-nav .links a:hover,.page-nav .links a.on{opacity:1;color:var(--red)}
 
-/* ---- the second door, hanging under the first ----
-   Work that worked is a smaller tab under The work, and it is ALWAYS there.
-   It was a hover popup first and that was wrong twice over: it hid a whole
-   page of his work behind a gesture a phone cannot make, and a menu that
-   appears and vanishes is the one piece of generic web furniture on the site.
-   Printed and permanent, it reads as the paper tab on a folder instead.
+/* ---- the work section's own tier ----
+   Work that worked is a page inside the work section, so the header carries a
+   second tier that says which of the two you are on. It is aligned to the
+   same left margin as the logo above it and the work grid below it, so the
+   three line up down the page. That alignment is the whole design: the tab
+   this replaced floated centred under one nav item, aligned to nothing, and
+   read as a dropdown that had forgotten to drop.
 
-   The nav keeps its 70px row and grows underneath it, so the tab sits INSIDE
-   the nav's own box and above its rule. Nothing on the page is covered. */
-.page-nav.has-sub .wrap{padding-bottom:30px}
-.page-nav .nav-item{position:relative;display:inline-block}
-.page-nav .nav-sub{
-  position:absolute;left:50%;top:100%;transform:translateX(-50%);
-  margin-top:9px;white-space:nowrap;
-  background:var(--bg);border:1px solid var(--line);border-top:0;
-  border-radius:0 0 3px 3px;
-  padding:5px 10px 6px;
-  font-size:.78em;letter-spacing:.09em;opacity:.62;
-  transition:opacity .16s var(--ease),color .16s var(--ease),border-color .16s var(--ease);
+   The tier sits inside the sticky bar, above its rule, so nothing on the page
+   is covered and the whole header travels as one object. */
+.page-nav .nav-sec{border-top:1px solid var(--line)}
+.page-nav .nav-sec .wrap{
+  /* justify-content has to be said out loud: .page-nav .wrap sets
+     space-between for the logo-and-links row above, and inherited through it
+     the two tiers flew to opposite ends of the header. */
+  display:flex;align-items:center;justify-content:flex-start;
+  gap:28px;height:auto;
+  padding-top:9px;padding-bottom:9px;
+  font-size:.88em;
 }
-/* the notch that ties the tab to the link above it */
-.page-nav .nav-sub::before{
-  content:"";position:absolute;left:50%;top:-9px;width:1px;height:9px;
-  background:var(--line);
+.page-nav .nav-sec-a{
+  text-decoration:none;color:var(--fg);opacity:.5;
+  padding:2px 0;position:relative;white-space:nowrap;
+  transition:opacity .16s var(--ease),color .16s var(--ease);
 }
-.page-nav .nav-sub:hover,
-.page-nav .nav-sub:focus-visible{opacity:1;color:var(--red);border-color:var(--red)}
-/* it is its own page, so it gets the same red the nav gives the current one */
-.page-nav .nav-sub.on{opacity:1;color:var(--red);border-color:var(--red)}
+.page-nav .nav-sec-a:hover,
+.page-nav .nav-sec-a:focus-visible{opacity:1}
+/* the one you are on is named in red and underscored, the way a tab is */
+.page-nav .nav-sec-a.on{opacity:1;color:var(--red)}
+.page-nav .nav-sec-a.on::after{
+  content:"";position:absolute;left:0;right:0;bottom:-9px;height:2px;
+  background:var(--red);
+}
 
 .page-head{padding:88px 0 44px}
 .page-head h1{font-size:clamp(52px,11vw,138px)}

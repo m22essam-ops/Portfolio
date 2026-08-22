@@ -97,43 +97,57 @@
     }
   }
 
-  /* ----- the second door, under the first -----
-     Work that worked is a small tab printed under The work, and it is always
-     there. Built here rather than in each page's HTML so it exists on all of
-     them at once, and hung off whichever link actually points at the work page
-     so it follows if that link is ever renamed.
+  /* ----- the work section's own tier in the header -----
+     Work that worked is a page inside the work section, so the header says so
+     with a second tier rather than a tab dangling off one link. A floating
+     lozenge centred under a nav item aligns to nothing and reads as a
+     dropdown that forgot to drop; a tier aligned to the same left margin as
+     the logo and the page's content reads as structure.
 
-     It used to appear on hover. That was wrong twice: it hid a whole page of
-     his work behind a gesture a phone cannot make, and a menu that appears
-     and vanishes is generic web furniture. A permanent tab needs no gesture,
-     works identically on every device, and reads as paper. */
-  var navLinks = document.querySelector('.page-nav .links');
-  if (navLinks) {
-    var workLink = navLinks.querySelector('a[href="work.html"], a[href="./work.html"]');
-    if (workLink && !navLinks.querySelector('.nav-sub')) {
-      var wrap = document.createElement('span');
-      wrap.className = 'nav-item';
-      workLink.parentNode.insertBefore(wrap, workLink);
-      wrap.appendChild(workLink);
+     It appears on the two work index pages, which is where the choice between
+     them means anything. From anywhere else The work is one click away and
+     the tier is waiting there. Built here rather than in each page's HTML so
+     there is one copy of it. */
+  var navBar = document.querySelector('.page-nav');
+  var qs = new URLSearchParams(location.search);
+  var onWorkIndex = /(^|\/)work\.html$/.test(location.pathname) && !qs.get('slug');
 
-      var sub = document.createElement('a');
-      sub.className = 'nav-sub';
-      sub.href = 'work.html?ran=1';
-      sub.textContent = (C.work && C.work.ranHeading)
-        ? String(C.work.ranHeading).replace(/\.\s*$/, '')
-        : 'Work that worked';
-      wrap.appendChild(sub);
+  if (navBar && onWorkIndex && !navBar.querySelector('.nav-sec')) {
+    var W = C.work || {};
+    var ran = /[?&]ran=1\b/.test(location.search);
+    var strip = function (s, fallback) {
+      var t = String(s == null ? '' : s).trim().replace(/\.\s*$/, '');
+      return t || fallback;
+    };
+    /* "All work" is a navigation label, not a headline: his own heading for
+       that page is "The work", which under a nav item already reading THE WORK
+       would just say it twice. */
+    var tiers = [
+      { href: 'work.html',       label: 'All work',                              on: !ran },
+      { href: 'work.html?ran=1', label: strip(W.ranHeading, 'Work that worked'), on: ran }
+    ];
 
-      /* mark the sub-tab as the current page when it is */
-      if (/[?&]ran=1\b/.test(location.search)) {
-        sub.classList.add('on');
-        workLink.classList.remove('on');
-      }
+    var sec = document.createElement('div');
+    sec.className = 'nav-sec';
+    var secWrap = document.createElement('div');
+    secWrap.className = 'wrap';
+    /* built as nodes, not as a string: the label is his copy out of admin and
+       textContent cannot be talked into being markup */
+    tiers.forEach(function (t) {
+      var a = document.createElement('a');
+      a.className = 'nav-sec-a' + (t.on ? ' on' : '');
+      a.href = t.href;
+      a.textContent = t.label;
+      if (t.on) a.setAttribute('aria-current', 'page');
+      secWrap.appendChild(a);
+    });
+    sec.appendChild(secWrap);
+    navBar.appendChild(sec);
+    navBar.classList.add('has-sec');
 
-      /* the nav has to make room for it, or the tab would hang over the page */
-      var bar = document.querySelector('.page-nav');
-      if (bar) bar.classList.add('has-sub');
-    }
+    /* the top row marks the section, the tier marks the page inside it */
+    var topWork = navBar.querySelector('.links a[href="work.html"], .links a[href="./work.html"]');
+    if (topWork) topWork.classList.add('on');
   }
 
   /* ----- nav shrink on scroll ----- */
