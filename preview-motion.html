@@ -109,7 +109,10 @@ body.showroom{background:var(--bg);color:var(--fg);margin:0}
    uncover more red. They peel back together, so what appears under the wipe is
    the real page. */
 .op-print{background:transparent}
-.op-print .veil{position:absolute;inset:0;background:var(--red);clip-path:inset(0 0 0 0)}
+/* the red that hides the page. Shared: every opener that reveals the real
+   ticket underneath needs one, and it has to peel back WITH whatever is
+   covering the ticket or the wipe just uncovers more red. */
+.op .veil{position:absolute;inset:0;background:var(--red);clip-path:inset(0 0 0 0)}
 .op-print .slot{
   position:absolute;left:50%;top:0;transform:translateX(-50%);
   width:46%;height:clamp(6px,1vw,11px);background:var(--ink);border-radius:0 0 3px 3px;
@@ -207,6 +210,110 @@ body.showroom{background:var(--bg);color:var(--fg);margin:0}
   100%{transform:translateY(106%) rotate(2deg)}
 }
 
+/* ---------- OPENER 4 · THE BOOK ----------
+   His idea, and the best of the five. A raffle book is the actual object:
+   tickets bound together with a perforated stub. Pages flip off the top the
+   way a real book of tickets is worked through, it stops on his, and that one
+   is torn out. It is the furthest of the five from the slot machine, because
+   nothing is being selected at random: someone is tearing out a ticket. */
+.op-book{background:transparent}
+.op-book .book{
+  position:absolute;inset:0;margin:auto;width:95%;height:95%;
+  perspective:1800px;perspective-origin:50% 0%;
+}
+.op-book .card{
+  position:absolute;inset:0;background:var(--paper);
+  border-radius:2px;transform-origin:50% 0%;
+}
+/* A stack has to look like a stack, so each page below the top one peeks out
+   a few pixels. And NO backface-visibility:hidden: a page that hides its own
+   back vanishes the instant it passes 90 degrees, which reads as pages
+   blinking out rather than turning over. Paper has two sides. */
+.op-book .leaf{
+  position:absolute;background:var(--paper);
+  border-radius:2px;transform-origin:50% 0%;
+  left:calc(var(--s) * 11px);
+  right:calc(var(--s) * -11px);
+  top:calc(var(--s) * -13px);
+  bottom:calc(var(--s) * 13px);
+  /* a hairline edge, not a drop shadow: the art direction rules those out and
+     a stack of paper only needs its edges to separate */
+  border:1px solid rgba(11,10,9,.10);
+}
+/* the stub: the perforated strip every ticket in the book is bound by */
+.op-book .leaf::before,.op-book .card::before{
+  content:"";position:absolute;left:0;right:0;top:7%;height:10px;
+  background-image:radial-gradient(circle at 6px 5px,var(--red) 3.4px,transparent 3.9px);
+  background-size:14px 10px;opacity:.5;
+}
+/* a hint of type on the pages behind, so they read as tickets rather than as
+   blank cards, without giving anyone anything to actually read */
+.op-book .leaf::after{
+  content:"";position:absolute;left:8%;right:36%;top:26%;height:15%;
+  background:
+    linear-gradient(var(--ink),var(--ink)) 0    0%/62% 22% no-repeat,
+    linear-gradient(var(--red),var(--red)) 0   42%/80% 26% no-repeat,
+    linear-gradient(var(--ink),var(--ink)) 0   88%/40% 12% no-repeat;
+  opacity:.13;border-radius:1px;
+}
+.op-book.run .leaf{animation:leafOff .5s cubic-bezier(.42,.03,.32,1) forwards;animation-delay:var(--d)}
+/* it lifts off the pad before it goes over, and dims as it turns away from
+   the light, which is what sells it as paper rather than as a rotating div */
+@keyframes leafOff{
+  0%  {transform:rotateX(0deg) translateY(0);filter:brightness(1)}
+  22% {transform:rotateX(-24deg) translateY(-1%);filter:brightness(1.01)}
+  100%{transform:rotateX(-165deg) translateY(-4%);filter:brightness(.84)}
+}
+/* then his is torn off the stub and the page comes through underneath.
+   The tear tugs against the perforation before it gives, and the wipe that
+   uncovers the real ticket runs on the card and the veil together. */
+@keyframes cardTear{
+  0%  {transform:translateY(0) rotate(0deg)}
+  38% {transform:translateY(-1.4%) rotate(-.35deg)}
+  100%{transform:translateY(1.2%) rotate(.25deg)}
+}
+/* four leaves at 0 / .10 / .20 / .30 with a .5s turn, so the pad is clear at
+   .80s. The tear waits for that, and the wipe waits for the tear. */
+.op-book .card{clip-path:inset(0 0 0 0)}
+.op-book.run .card{
+  animation:cardTear .32s cubic-bezier(.5,0,.75,.4) .80s forwards,
+            printInk .4s cubic-bezier(.6,.02,.28,1) 1.06s forwards;
+}
+.op-book.run .veil{animation:printInk .4s cubic-bezier(.6,.02,.28,1) 1.06s forwards}
+
+/* ---------- OPENER 5 · THE PICK ----------
+   A spread of blank tickets, one comes forward and becomes the page. Reads
+   the draw rather than the object. Kept deliberately as one pull, with the
+   others blank, so it never turns into a shuffle. */
+.op-pick{background:transparent}
+.op-pick .spread{position:absolute;inset:0}
+.op-pick .spread i{
+  position:absolute;left:50%;top:50%;width:26%;height:34%;
+  background:var(--paper);border-radius:2px;opacity:.82;
+  transform:translate(-50%,-50%) translate(var(--x),var(--y)) rotate(var(--a));
+}
+.op-pick.run .spread i{
+  animation:pickAway .6s cubic-bezier(.5,0,.8,.5) .18s forwards;
+}
+@keyframes pickAway{
+  to{opacity:0;transform:translate(-50%,-50%) translate(calc(var(--x) * 2.6),calc(var(--y) * 2.6)) rotate(var(--a)) scale(.82)}
+}
+.op-pick .card{
+  position:absolute;inset:0;margin:auto;width:95%;height:95%;
+  background:var(--paper);border-radius:2px;clip-path:inset(0 0 0 0);
+  transform:scale(.2) rotate(-7deg);
+}
+.op-pick.run .card{
+  animation:pickUp .68s cubic-bezier(.3,.85,.32,1) .1s forwards,
+            printInk .4s cubic-bezier(.6,.02,.28,1) .8s forwards;
+}
+@keyframes pickUp{
+  0%  {transform:scale(.2) rotate(-7deg)}
+  70% {transform:scale(1.03) rotate(.8deg)}
+  100%{transform:scale(1) rotate(0deg)}
+}
+.op-pick.run .veil{animation:printInk .4s cubic-bezier(.6,.02,.28,1) .8s forwards}
+
 @keyframes opGo{to{opacity:0}}
 .op.leaving{animation:opGo .3s var(--ease) forwards}
 
@@ -294,9 +401,9 @@ body.showroom{background:var(--bg);color:var(--fg);margin:0}
 <section class="sr-sec">
   <p class="sr-kicker">One</p>
   <h2>The cold open</h2>
-  <p class="lede">All three land on the same ticket, so the only thing you are
+  <p class="lede">All five land on the same ticket, so the only thing you are
      comparing is the movement. It plays once per visit, not on every trip back
-     to the home page.</p>
+     to the home page. <b>The book is yours and it is the one I would build.</b></p>
 
   <div class="stage" id="stage">
     <!-- the real home page. Not a drawing of it. -->
@@ -334,9 +441,39 @@ body.showroom{background:var(--bg);color:var(--fg);margin:0}
       <div class="half t"><span id="tearTop"></span><div class="perf"></div></div>
       <div class="half b"><span id="tearBot"></span><div class="perf"></div></div>
     </div>
+
+    <!-- opener 4: the book -->
+    <div class="op op-book" id="opBook" hidden>
+      <div class="veil"></div>
+      <!-- last in the DOM is the top of the pad, so it is the one that turns
+           first; --s is how deep it sits, which is how far it peeks out -->
+      <div class="book">
+        <div class="card"></div>
+        <div class="leaf" style="--d:.30s;--s:3"></div>
+        <div class="leaf" style="--d:.20s;--s:2"></div>
+        <div class="leaf" style="--d:.10s;--s:1"></div>
+        <div class="leaf" style="--d:0s;--s:0"></div>
+      </div>
+    </div>
+
+    <!-- opener 5: the pick -->
+    <div class="op op-pick" id="opPick" hidden>
+      <div class="veil"></div>
+      <div class="spread">
+        <i style="--x:-118%;--y:-46%;--a:-17deg"></i>
+        <i style="--x:  16%;--y:-64%;--a:  9deg"></i>
+        <i style="--x: 132%;--y:-30%;--a: 14deg"></i>
+        <i style="--x:-142%;--y: 42%;--a:  8deg"></i>
+        <i style="--x: -12%;--y: 68%;--a:-11deg"></i>
+        <i style="--x: 124%;--y: 48%;--a: 19deg"></i>
+      </div>
+      <div class="card"></div>
+    </div>
   </div>
 
   <div class="sr-ctl">
+    <button class="sr-btn" data-op="book">▶ The book</button>
+    <button class="sr-btn" data-op="pick">▶ The pick</button>
     <button class="sr-btn" data-op="print">▶ The print</button>
     <button class="sr-btn" data-op="wipe">▶ The wipe</button>
     <button class="sr-btn" data-op="tear">▶ The tear</button>
@@ -450,6 +587,14 @@ body.showroom{background:var(--bg);color:var(--fg);margin:0}
 
   /* ---------- play an opener ---------- */
   var OPS = {
+    book: {
+      el: document.getElementById('opBook'), ms: 1500,
+      say: '<b>The book. My pick, and it is your idea.</b> A raffle book is the actual object: tickets bound together along a perforated stub. Pages flip off the top the way you work through a real book of them, it stops on yours, and that one is torn out. It is the only one of the five where something is <i>done</i> rather than displayed, and it is the furthest from the slot machine you killed, because nothing is being drawn at random. Someone is tearing out a ticket and handing it over.'
+    },
+    pick: {
+      el: document.getElementById('opPick'), ms: 1250,
+      say: '<b>The pick.</b> A spread of blank tickets, one comes forward and becomes the page. It reads the draw rather than the object, and it is the more obvious of your two ideas. Kept as one pull with the others blank, so it never becomes a shuffle. Good, but the book says the same thing with a hand in it.'
+    },
     print: {
       el: document.getElementById('opPrint'), ms: 1270,
       say: '<b>The print.</b> The ticket is pushed out of the machine and lands where the real one sits, so nothing jumps when the cover leaves. It is the most literal of the three and the only one that says "lottery" without a word. Longest at about 1.2 seconds, which is the argument against it.'
@@ -486,7 +631,7 @@ body.showroom{background:var(--bg);color:var(--fg);margin:0}
   }
   document.getElementById('stage').addEventListener('click', skip);
   document.addEventListener('keydown', skip);
-  ['opPrint', 'opWipe', 'opTear'].forEach(function (id) {
+  ['opPrint', 'opWipe', 'opTear', 'opBook', 'opPick'].forEach(function (id) {
     document.getElementById(id).addEventListener('click', skip);
   });
 
