@@ -1546,10 +1546,12 @@ window.SITE_CONTENT = {
         {
           slot: "game",
           x: 3.79,
-          y: 4.29,
-          w: 17.89,
+          y: 3.08,
+          w: 21.75,
           h: 6.91,
-          size: 2.054
+          size: 2.01,
+          tracking: 0.298,
+          weight: "400"
         },
         {
           slot: "serial",
@@ -1574,14 +1576,15 @@ window.SITE_CONTENT = {
           y: 4.29,
           w: 14.32,
           h: 4.48,
-          size: 2.24
+          size: 2.1,
+          weight: "400"
         },
         {
           slot: "badge",
-          x: 81.03,
-          y: 8.77,
+          x: 81.52,
+          y: 9.1,
           w: 13.74,
-          h: 5.78,
+          h: 5.56,
           size: 2.054,
           font: "body",
           tracking: 0.12,
