@@ -126,16 +126,37 @@
       workLink.parentNode.insertBefore(item, workLink);
       item.appendChild(workLink);
 
+      /* the caret. Nothing else on the header tells you a link has anything
+         under it, and a menu you cannot see the handle of is a menu nobody
+         opens. Marked hidden from screen readers because aria-haspopup on the
+         link below already says the same thing, in words. */
+      var caret = document.createElement('span');
+      caret.className = 'nav-caret';
+      caret.setAttribute('aria-hidden', 'true');
+      caret.textContent = '▾';           /* ▾ */
+      workLink.appendChild(caret);
+      workLink.setAttribute('aria-haspopup', 'true');
+      workLink.setAttribute('aria-expanded', 'false');
+
       /* ONE item. The parent link is already the all-work page, so listing
          "All work" underneath it only said the same thing twice. The menu
-         exists to offer the thing that is NOT the default. */
+         exists to offer the thing that is NOT the default.
+
+         Two elements, not one: the outer .nav-menu is the hit area and holds
+         the bridging padding, the inner .nav-menu-in is the panel you can see.
+         The notch is drawn on the inner one, so it points at the parent from
+         the panel's own top edge rather than floating in the gap. */
       var menu = document.createElement('span');
       menu.className = 'nav-menu';
+      var panel = document.createElement('span');
+      panel.className = 'nav-menu-in';
+      menu.appendChild(panel);
+
       var sub = document.createElement('a');
       sub.href = 'work.html?ran=1';
       sub.textContent = strip(W.ranHeading, 'Work that worked');  /* his copy */
       if (onWork && ran) { sub.className = 'on'; sub.setAttribute('aria-current', 'page'); }
-      menu.appendChild(sub);
+      panel.appendChild(sub);
       item.appendChild(menu);
 
       /* the parent stays lit while you are anywhere in the section */
@@ -153,10 +174,17 @@
          and coming back cancels the close. That grace period is what every
          menu that works has, and what every menu that does not is missing. */
       var shut;
-      var open  = function () { clearTimeout(shut); item.classList.add('is-open'); };
-      var close = function () { clearTimeout(shut); shut = setTimeout(function () {
+      var open  = function () {
+        clearTimeout(shut);
+        item.classList.add('is-open');
+        workLink.setAttribute('aria-expanded', 'true');
+      };
+      var shutNow = function () {
+        clearTimeout(shut);
         item.classList.remove('is-open');
-      }, 260); };
+        workLink.setAttribute('aria-expanded', 'false');
+      };
+      var close = function () { clearTimeout(shut); shut = setTimeout(shutNow, 260); };
 
       item.addEventListener('mouseenter', open);
       item.addEventListener('mouseleave', close);
@@ -178,14 +206,12 @@
           }
         });
         document.addEventListener('click', function (e) {
-          if (!item.contains(e.target)) { clearTimeout(shut); item.classList.remove('is-open'); }
+          if (!item.contains(e.target)) shutNow();
         });
       }
       /* and it closes on Escape, wherever the focus happens to be */
       item.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') {
-          clearTimeout(shut); item.classList.remove('is-open'); workLink.focus();
-        }
+        if (e.key === 'Escape') { shutNow(); workLink.focus(); }
       });
     }
   }

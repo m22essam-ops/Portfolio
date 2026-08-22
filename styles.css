@@ -93,6 +93,104 @@ h1,h2,h3,.big{
   margin:0;
 }
 
+/* ========================= THE LOADING SCREEN =========================
+   Two dice and one word, for about two seconds, and then the ticket.
+
+   The whole of it is built by the inline script at the top of index.html, so
+   with the script off there is nothing here at all and the page is exactly the
+   page. It is on the SAME red as the home field, so what happens at the end is
+   the ticket arriving on a screen that was already there, not a lid coming off
+   a different room.
+
+   The dice are two divs and eighteen dots. No image, nothing to download,
+   sharp at any size, and the pips are switched by a data attribute so the
+   faces can change every tenth of a second while they tumble.
+   ==================================================================== */
+.boot{display:none}
+html.is-booting .boot{
+  display:grid;place-items:center;
+  position:fixed;inset:0;z-index:9999;
+  background:var(--red);
+  transition:opacity .52s var(--ease);
+}
+html.is-booting .boot.is-out{opacity:0;pointer-events:none}
+/* the ticket waits underneath. Opacity only: it keeps its place in the layout,
+   so the headline can still measure itself and the foil can still be painted
+   while this is over the top of them. */
+html.is-booting body.is-home .ticket{opacity:0}
+body.is-home .ticket{transition:opacity .5s var(--ease)}
+
+.boot-in{
+  display:flex;flex-direction:column;align-items:center;
+  gap:clamp(30px,5vh,54px);
+}
+.boot-dice{display:flex;gap:clamp(18px,2.6vw,34px)}
+
+.die{
+  --d:clamp(76px,11vw,150px);
+  width:var(--d);height:var(--d);
+  display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr);
+  gap:8%;padding:11.5%;
+  background:var(--paper);border-radius:19%;
+  animation:tumble .56s infinite;
+  will-change:transform;
+}
+.boot-dice .die:nth-child(2){animation-delay:-.28s}
+/* no transition on the pips. A face changes in one frame or it is not a face:
+   with even a twentieth of a second of fade on it, a die rolling every 105ms
+   is never showing a whole number, and the pips come out grey. */
+.die i{border-radius:50%;background:var(--ink);opacity:0}
+/* the six faces. The pips sit in a 3x3 in source order, so nothing needs
+   placing: a face is just which of the nine are lit. */
+.die[data-face="1"] i:nth-child(5),
+.die[data-face="2"] i:nth-child(1),.die[data-face="2"] i:nth-child(9),
+.die[data-face="3"] i:nth-child(1),.die[data-face="3"] i:nth-child(5),.die[data-face="3"] i:nth-child(9),
+.die[data-face="4"] i:nth-child(1),.die[data-face="4"] i:nth-child(3),
+.die[data-face="4"] i:nth-child(7),.die[data-face="4"] i:nth-child(9),
+.die[data-face="5"] i:nth-child(1),.die[data-face="5"] i:nth-child(3),.die[data-face="5"] i:nth-child(5),
+.die[data-face="5"] i:nth-child(7),.die[data-face="5"] i:nth-child(9),
+.die[data-face="6"] i:nth-child(1),.die[data-face="6"] i:nth-child(3),.die[data-face="6"] i:nth-child(4),
+.die[data-face="6"] i:nth-child(6),.die[data-face="6"] i:nth-child(7),.die[data-face="6"] i:nth-child(9){
+  opacity:1;
+}
+
+/* the throw. translateY is a percentage of the die's own height, so it holds
+   its shape at every size the clamp lands on. Up is eased out and down is
+   eased in, per keyframe: one easing across the whole loop puts all the
+   travel in the first third and the rest of it reads as a pause. */
+@keyframes tumble{
+  0%  {transform:translateY(0)    rotate(0deg)   scale(1);    animation-timing-function:cubic-bezier(.24,.68,.4,1)}
+  22% {transform:translateY(-40%) rotate(-20deg) scale(1.04); animation-timing-function:cubic-bezier(.6,0,.78,.4)}
+  50% {transform:translateY(0)    rotate(-3deg)  scale(.97);  animation-timing-function:cubic-bezier(.24,.68,.4,1)}
+  74% {transform:translateY(-27%) rotate(17deg)  scale(1.03); animation-timing-function:cubic-bezier(.6,0,.78,.4)}
+  100%{transform:translateY(0)    rotate(0deg)   scale(1)}
+}
+/* and where they stop. One squash on landing and nothing else: the number is
+   the point, and a die that keeps moving after it has settled is not a die
+   that has settled. */
+.boot.is-landed .die{animation:land .44s var(--ease) both}
+@keyframes land{
+  0%  {transform:translateY(-34%) rotate(-9deg) scale(1)}
+  56% {transform:translateY(0) rotate(0deg) scale(1.07,.9)}
+  100%{transform:translateY(0) rotate(0deg) scale(1)}
+}
+
+.boot-word{
+  margin:0;display:flex;
+  font-family:var(--mono);font-weight:600;
+  font-size:clamp(14px,1.55vw,20px);
+  letter-spacing:.44em;text-transform:lowercase;
+  color:var(--paper);
+  /* the tracking hangs off the last character, so the block sits left of
+     centre unless the same amount is put back on the front */
+  padding-left:.44em;
+}
+.boot-word i{font-style:normal;opacity:.3;animation:blip 1.15s infinite}
+.boot-word i:nth-of-type(2){animation-delay:.15s}
+.boot-word i:nth-of-type(3){animation-delay:.3s}
+@keyframes blip{0%,66%,100%{opacity:.3}18%,44%{opacity:1}}
+.boot.is-landed .boot-word i{animation:none;opacity:1}
+
 /* ============================ HOME: THE TICKET ============================ */
 
 body.is-home{
@@ -474,31 +572,76 @@ body.has-won .tk-badge{background:var(--ink)}
    and it only appeared once you were already on a work page, which made it a
    step too many; this is one move from anywhere.
 
-   Aligned to the LEFT edge of the link it belongs to, not centred under it:
-   centred is what made the first attempt read as a dropdown that had
-   forgotten to drop. Paper, one hairline, no shadow and no rounded card. */
+   It is built to READ as a dropdown, which the first two passes did not. Four
+   things do that work and all four are load-bearing:
+     a caret on the parent, so you know there is something to open before you
+       open it, and it turns over when the menu is down;
+     a panel with its own width, so it is a surface rather than a stray link;
+     a notch pointing back up at the parent, which is what says "this belongs
+       to that" without a line joining them;
+     rows that fill on hover, because a menu row is a target, not a word.
+   The one elevation on the site is here. It is soft and low-contrast, not the
+   1970s hard offset the art direction rules out: without any lift at all the
+   panel reads as part of the page rather than over it.
+
+   Aligned to the LEFT edge of the link it belongs to, not centred under it. */
 .page-nav .nav-item{position:relative;display:inline-block}
+
+/* the caret. Drawn in type rather than as an image so it takes the link's own
+   colour and weight, and turned with a transform so the shape stays crisp. */
+.page-nav .nav-item > a .nav-caret{
+  display:inline-block;margin-left:6px;font-size:.72em;line-height:1;
+  transform:translateY(-1px);
+  transition:transform .18s var(--ease);
+}
+.page-nav .nav-item.is-open > a .nav-caret{transform:translateY(-1px) rotate(180deg)}
+/* the parent stays lit while its menu is down, so the header shows where you
+   are even before you pick anything out of it */
+.page-nav .nav-item.is-open > a{opacity:1;color:var(--red)}
+
 .page-nav .nav-menu{
-  position:absolute;left:0;top:100%;
+  position:absolute;left:-14px;top:100%;
   /* the padding is the bridge: with a margin instead, the gap between link
      and panel is dead ground and the menu shuts as the pointer crosses it */
-  padding-top:11px;
-  display:flex;flex-direction:column;min-width:100%;
+  padding-top:12px;
+  display:block;
   opacity:0;visibility:hidden;pointer-events:none;
-  transform:translateY(-4px);
-  transition:opacity .15s var(--ease),transform .15s var(--ease),visibility .15s;
+  transform:translateY(-6px);
+  transition:opacity .16s var(--ease),transform .16s var(--ease),visibility .16s;
   z-index:60;
 }
-.page-nav .nav-menu > a{
+.page-nav .nav-menu-in{
+  display:flex;flex-direction:column;
+  min-width:212px;
+  background:var(--bg);
+  border:1px solid var(--line);
+  box-shadow:0 12px 30px -14px rgba(11,10,9,.34);
+  position:relative;
+}
+/* the notch. Two of them stacked: the outer one is the hairline, the inner is
+   the paper sitting a pixel over it, so the border appears to open around the
+   arrow instead of being drawn across its base. */
+.page-nav .nav-menu-in::before,
+.page-nav .nav-menu-in::after{
+  content:"";position:absolute;left:24px;width:11px;height:11px;
+  transform:rotate(45deg);
+}
+.page-nav .nav-menu-in::before{
+  top:-6px;background:var(--line);
+}
+.page-nav .nav-menu-in::after{
+  top:-5px;background:var(--bg);
+}
+.page-nav .nav-menu a{
   display:block;white-space:nowrap;text-decoration:none;
-  background:var(--bg);border:1px solid var(--line);border-bottom:0;
-  padding:9px 14px;color:var(--fg);opacity:.72;
+  padding:11px 18px;color:var(--fg);opacity:.72;
+  border-bottom:1px solid var(--line);
   transition:opacity .14s var(--ease),color .14s var(--ease),background .14s var(--ease);
 }
-.page-nav .nav-menu > a:last-child{border-bottom:1px solid var(--line)}
-.page-nav .nav-menu > a:hover,
-.page-nav .nav-menu > a:focus-visible{opacity:1;color:var(--red)}
-.page-nav .nav-menu > a.on{opacity:1;color:var(--red)}
+.page-nav .nav-menu a:last-child{border-bottom:0}
+.page-nav .nav-menu a:hover,
+.page-nav .nav-menu a:focus-visible{opacity:1;color:var(--red);background:var(--well)}
+.page-nav .nav-menu a.on{opacity:1;color:var(--red)}
 
 /* .is-open is the authority, set by site.js with a grace period on closing.
    :hover is kept alongside it only so the menu still works if the script has
@@ -635,6 +778,66 @@ body.has-won .tk-badge{background:var(--ink)}
   letter-spacing:.16em;font-size:12px;font-weight:600;color:var(--fg-dim);
 }
 .back-link:hover{color:var(--red)}
+
+/* ---- the language switch ----
+   Top of a project page, opposite the way back, on the line the back link was
+   already holding. It only appears on a project that HAS another language, so
+   it can never offer a door into a page that is still in English.
+   The two share the row, so .back-link's own bottom margin comes off here and
+   goes onto the row instead, or the switch sits 44px above the rule it
+   belongs to. */
+.project-top{
+  display:flex;align-items:baseline;justify-content:space-between;
+  gap:20px;margin-bottom:44px;
+}
+.project-top .back-link{margin-bottom:0}
+.lang-switch{
+  margin:0;display:flex;align-items:baseline;gap:9px;flex:none;
+  font-family:var(--mono);font-size:12px;font-weight:600;
+  letter-spacing:.16em;text-transform:uppercase;
+}
+.lang-switch a{text-decoration:none;color:var(--fg-faint);transition:color .15s var(--ease)}
+.lang-switch a:hover{color:var(--red)}
+.lang-switch a.on{color:var(--fg);cursor:default}
+.lang-switch .bar{color:var(--fg-faint);opacity:.5}
+/* the page's registration cross is fixed at right:34px top:96px, which is
+   exactly where the switch lands, and the two were printed on top of each
+   other. Only a page that HAS a switch moves its mark, so every other work
+   page keeps the cross where it has always been. Down beside the title, where
+   the right-hand side of a left-aligned headline is empty anyway. */
+body.page-work.has-lang::before{top:196px}
+
+/* ---- Japanese ----
+   Noto Sans JP is added to the END of each stack, never the front, so Latin
+   glyphs still come out of Syne, Bricolage and Barlow and only the Japanese
+   falls through to Noto. Font fallback is per character, so one stack does
+   both scripts without either one being told to imitate the other.
+
+   The display tracking has to come off. -0.03em is a Latin fix for the gaps
+   between capitals; on kana and kanji, which are drawn to fill their own
+   square, it pushes the characters into each other. Same for the .95 leading:
+   Japanese carries a taller face inside the line and needs the room. */
+body.lang-ja{
+  --display:"Bricolage Grotesque","Noto Sans JP","Hanken Grotesk",sans-serif;
+  --mono:"Barlow Condensed","Noto Sans JP","Hanken Grotesk",sans-serif;
+  font-family:"Hanken Grotesk","Noto Sans JP",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+body.lang-ja h1,body.lang-ja h2,body.lang-ja h3{letter-spacing:0;line-height:1.2}
+body.lang-ja .project-title{line-height:1.16}
+/* Japanese wraps between characters and has its own rules about which ones
+   may not start or end a line. Say so, or the browser guesses. */
+/* and the measure has to be re-set. 62ch is 62 ZEROES wide, and a kanji is
+   about two of those, so the English column comes out at roughly 22 Japanese
+   characters a line: a newspaper column, not a paragraph. Set on the paragraph
+   itself and in em, which is one character square in a Japanese face, so the
+   number in this rule is literally the characters per line. Measured: 34,
+   which lands the column within a few pixels of the English one beside it. */
+body.lang-ja .project-body{max-width:none}
+body.lang-ja .project-body p{
+  max-width:34em;
+  line-height:1.85;line-break:strict;text-align:justify;
+}
+body.lang-ja .credits-list li{line-break:strict}
 
 .project-meta{font-size:11.5px;color:var(--fg-faint);margin:0 0 16px}
 .status-produced{color:var(--red)}
@@ -962,16 +1165,17 @@ body.is-home.home-locked{overflow:hidden}
 body.page-work  { --bg:#EFE9DC; --well:#E2DACA; --nav-bg:#EFE9DCf2; }
 body.page-about { --bg:#F1E4DC; --well:#E4D2C6; --nav-bg:#F1E4DCf2; }
 body.page-awards{ --bg:#E6E7E2; --well:#D6D8D1; --nav-bg:#E6E7E2f2; }
-/* Work that worked, and ONLY that page: a deep dusty blue. The work that ran
-   is the one part of the site that is finished, so it is the one ground that
-   is a colour rather than a paper. All work stays on the ordinary paper above
-   and carries the registration cross; a sage was tried on it on 22 Aug 2026
-   and taken back out, because the difference belongs on the page that earned
-   it, not on the default one.
+/* Work that worked, and ONLY that page: a dusty blue. The work that ran is the
+   one part of the site that is finished, so it is the one ground that is a
+   colour rather than a paper. All work stays on the ordinary paper above and
+   carries the registration cross; a sage was tried on it on 22 Aug 2026 and
+   taken back out, because the difference belongs on the page that earned it,
+   not on the default one.
 
-   Grey-leaning rather than a true blue: the campaign stills have to sit on it
-   and the red has to stay the loudest thing on the page. */
-body.page-work-ran { --bg:#A3BAD1; --well:#89A3BD; --nav-bg:#A3BAD1f2; }
+   Grey-leaning rather than a true blue, and LIGHT: the campaign stills have to
+   sit on it and the red has to stay the loudest thing on the page. #A3BAD1 was
+   tried first and it was too heavy, closer to a painted wall than to paper. */
+body.page-work-ran { --bg:#CFDCE6; --well:#B9CBDA; --nav-bg:#CFDCE6f2; }
 
 /* the hint of an element: one quiet mark per page, behind everything,
    printed in the page's own well colour so it never fights the work */
@@ -989,22 +1193,10 @@ body.page-work::before{
     linear-gradient(var(--well),var(--well)) center/100% 2px no-repeat,
     radial-gradient(circle,transparent 22px,var(--well) 22px,var(--well) 24px,transparent 24px);
 }
-/* Work that worked: a ticked box, because that page is the work that is
-   finished and a tick says so without a caption. It REPLACES the registration
-   cross, so the page still carries exactly one mark, and it has to come after
-   the cross rule above or that one wins on source order and you get half a
-   cross wearing a tick. Drawn as a mask rather than a coloured image so it
-   takes --well like every other mark and follows the page's ground. */
-body.page-work-ran{
-  --tick:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='6' y='6' width='88' height='88' fill='none' stroke='%23000' stroke-width='5'/%3E%3Cpath d='M22 52 L42 72 L80 26' fill='none' stroke='%23000' stroke-width='9' stroke-linecap='square' stroke-linejoin='miter'/%3E%3C/svg%3E");
-}
-body.page-work-ran::before{
-  right:30px;top:92px;width:86px;height:86px;
-  background:var(--well);
-  -webkit-mask:var(--tick) center/contain no-repeat;
-          mask:var(--tick) center/contain no-repeat;
-  opacity:.75;
-}
+/* Work that worked had a ticked box here for one pass on 22 Aug 2026 and it is
+   gone at the owner's call. The colour is the difference now, and that is
+   enough: the page keeps the registration cross like every other work page,
+   so there is still exactly one mark on it. Do not put the tick back. */
 
 /* about: one perforation run down the left edge, like the ticket's */
 body.page-about::before{

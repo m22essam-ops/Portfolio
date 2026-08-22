@@ -71,6 +71,27 @@ window.SITE_CONTENT = {
     emptyWork: "Nothing here yet. Give it a minute.",
     nextLabel: "Keep going"
   },
+  /* ---- other languages ----
+     A feasibility test, not a translated site. ONE project carries a `ja`
+     block (rivan-tower) and this holds the furniture round it: the words the
+     page prints itself rather than the words he wrote. A project with no `ja`
+     block never shows the switch, so nothing here can leave a half-English
+     page in front of anyone.
+
+     Names stay in Latin script on purpose. Japanese credits carry foreign
+     names that way as a matter of course, and inventing a katakana spelling
+     of a real colleague's name is a mistake with their name on it. */
+  i18n: {
+    ja: {
+      label: "JA",
+      allWork: "作品一覧",
+      credits: "クレジット",
+      next: "次の作品",
+      backTo: "戻る",
+      produced: "制作済み",
+      spec: "企画案"
+    }
+  },
   work: {
     heading: "The work.",
     note: "Some are real. Some are spec. None of them are in Japanese.",
@@ -319,6 +340,34 @@ window.SITE_CONTENT = {
             name: "Social Nuts"
           }
         ],
+        /* ---- the Japanese version ----
+           The feasibility test. Add a `ja` block to a project and EN | JA
+           appears at the top of its page; leave it off and nothing changes.
+           Only the fields written here are swapped, so a half-finished
+           translation shows the English for whatever it has not reached.
+           The credit NAMES are not translated, only the roles. */
+        ja: {
+          title: "このホテルは、あなたのもの。",
+          tagline: "部屋は、借りずに持つ。",
+          sticker: "一週間で完売",
+          client: "リヴァン・タワー",
+          category: "フィルム",
+          story: [
+            "リヴァン・タワーは、エジプトの人がホテルに抱くイメージを変えたいと考えていた。部屋は借りるものではなく、持つもの。",
+            "バユーミ・フアードを起用し、二日間でコメディ映像を撮影。ホテル暮らしを休暇ではなく、住所として描いた。",
+            "タワーは一週間で完売した。"
+          ],
+          credits: [
+            { role: "脚本・監督" },
+            { role: "クリエイティブストラテジスト" },
+            { role: "撮影監督" },
+            { role: "編集・カラリスト" },
+            { role: "モーショングラフィックス" },
+            { role: "アカウントディレクター" },
+            { role: "プロダクション" },
+            { role: "エージェンシー" }
+          ]
+        },
         next: {},
         "draft": false,
         "ran": true

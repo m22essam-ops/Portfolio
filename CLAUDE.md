@@ -459,6 +459,118 @@ credited them, fixed only for obvious typos.
 Don't write vague result claims ("the results were awesome", "it really
 resonated"). Either a concrete result or nothing.
 
+## Added 22 Aug 2026
+
+Four things landed in one pass. Everything above this line is older and parts
+of it have been overtaken; where the two disagree, this section is the newer.
+
+### The loading screen
+
+Two dice and the word "loading", about two seconds, then the ticket. His brief,
+in his words: "can we just use a couple of dice and the word loading.. for 2
+seconds". It replaces nothing, because nothing was there: the press check in
+`preview-motion.html` was never approved and is still not on the site.
+
+Built entirely by the inline script at the top of `index.html`. **The `.boot`
+div in the HTML is an empty shell on purpose** — with JavaScript off, nothing
+is drawn and the page is exactly the page. Nobody can be left facing a red
+screen that never lifts.
+
+- It plays **once per tab** (`sessionStorage.bootSeen`). He reloads the home
+  page all day from admin and the designer, and `auto-refresh.js` reloads it
+  for him on every content change; a two-second screen on each of those is a
+  tax on his own work. **`?intro=1` forces it** and is how to look at it again.
+- It holds for 1.5s **and** until `window.load`, whichever is later, then lands.
+- **`setTimeout(off, 6000)` is registered on the line directly after
+  `is-booting` goes on `<html>`.** From that moment the ticket is hidden by a
+  class, so a throw anywhere below would strand the page. That one line makes
+  it impossible. It goes first and it does not move.
+- Click, tap, key or scroll leaves early. `prefers-reduced-motion` never sees it.
+- The ticket is hidden with **opacity only**, never `display` or `visibility`:
+  `fitTitle()` has to be able to measure the headline and the foil has to be
+  paintable while the overlay is over the top of them.
+- The dice land on **1 and 3**. The ticket is game no. 13 and its serial is
+  131313, so that is the number the page is already printed with, not a
+  random pair. Don't "fix" it to something luckier.
+- **No transition on the pips.** A face changes in one frame or it is not a
+  face: with even .05s of fade, a die rerolling every 105ms never shows a whole
+  number and the pips come out grey. That was tried and taken back out.
+
+### The work menu is a dropdown
+
+Third attempt, and the first one that reads as a menu. Four things do that
+work and all four are load-bearing: **a caret** on the parent so you know
+there is something to open, **a panel with its own width**, **a notch**
+pointing back up at the parent, and **rows that fill on hover**.
+
+`.nav-menu` is the hit area and carries the bridging padding; `.nav-menu-in`
+is the panel you can see and the notch hangs off it. The bridge is padding,
+never margin: a margin makes the gap between link and panel dead ground and
+the menu shuts as the pointer crosses it. Verified: every point from the
+link's bottom edge to the bottom of the panel hit-tests inside `.nav-item`.
+
+**Opening and closing is driven from `site.js`, not `:hover` alone, with a
+260ms grace period on close.** A CSS-only menu has to be chased: the moment
+`:hover` goes false, `pointer-events` flips to none in the same frame and the
+panel cannot be re-entered even if the pointer comes straight back. That is
+what "the menu disappears before I click it" was, twice. Keep the grace period.
+
+**The one elevation on the site is this panel's shadow.** It is soft and
+low-contrast, not the hard 1970s offset the art direction rules out. Without
+any lift the panel reads as part of the page rather than over it.
+
+The menu holds **one item**, Work that worked. The parent link is already the
+all-work page, so listing "All work" under it said the same thing twice.
+
+### Two grounds, one mark
+
+- **All work** keeps the ordinary paper `#EFE9DC` and the registration cross.
+- **Work that worked** is `page-work-ran`, a light dusty blue `#CFDCE6`.
+  `#A3BAD1` was tried on 22 Aug and rejected as too heavy.
+- A ticked box was added to Work that worked in the same pass **and removed at
+  his call the same day**. The colour is the difference; that is enough. Don't
+  put the tick back.
+- `work.ranNote` is the line under the Work-that-worked heading. It is his to
+  write and currently holds a placeholder.
+
+### A second language, on one project
+
+A **feasibility test**, not a translated site. `work.projects[].ja` on
+`rivan-tower` is the only one, and `i18n.ja` holds the furniture round it (the
+words the page prints itself, as opposed to the words he wrote).
+
+- **The EN | JA switch only appears on a project that actually has a `ja`
+  block.** It can never be a door into a page that is still in English.
+- Every field is taken one at a time, so whatever the translation has not
+  reached falls back to his English rather than coming out blank.
+- **Credit roles translate, names do not.** Japanese credits carry foreign
+  names in Latin as a matter of course, and inventing a katakana spelling of a
+  real colleague's name is a mistake with their name on it. The two lists are
+  merged by position, and **if their lengths disagree the translated list is
+  dropped entirely** — adding a credit in admin must never slide the wrong job
+  title onto somebody's name.
+- The next-project link carries the language only if the next project has it.
+- **Noto Sans JP is added to the END of every stack, never the front.** Font
+  fallback is per character, so Latin still comes out of Syne, Bricolage and
+  Barlow and only the Japanese falls through to Noto. It is fetched only when
+  a second language is actually on screen.
+- The display tracking has to come off: `-.03em` is a Latin fix for gaps
+  between capitals and it pushes kana into each other. Same for the .95
+  leading. See `body.lang-ja` in `styles.css`.
+- **The measure has to be re-set too.** `62ch` is 62 zeroes wide and a kanji is
+  about two of those, so the English column comes out at 22 Japanese characters
+  a line. Set on the paragraph and in `em`, which is one character square, so
+  the number in the rule is literally the characters per line.
+- The page mark is fixed at `right:34px top:96px`, which is exactly where the
+  switch lands. Only a page that has a switch moves its mark (`.has-lang`).
+- Both save paths handle it: `b64encode` goes through `TextEncoder` before
+  `btoa`, and `local-server.py` writes `content.js` as UTF-8. Verified that a
+  round trip through admin preserves `i18n` and the `ja` block, because admin
+  deep-clones the whole of `SITE_CONTENT` and serialises it whole rather than
+  rebuilding the projects array from its form fields.
+- **`work.note` currently ends "None of them are in Japanese."** One of them
+  now is. That is his line and it is flagged, not changed.
+
 ## Don't
 
 - Don't add a build step or framework.
@@ -471,3 +583,7 @@ resonated"). Either a concrete result or nothing.
   only his own supplied images; project thumbnails are the exception).
 - Don't put ten "you may also like" links at the end of a project page. One.
 - Don't write a result claim you can't back with a number.
+- Don't go back to a CSS-only hover menu. The grace period in `site.js` is the
+  whole fix.
+- Don't put the tick back on Work that worked.
+- Don't translate a colleague's name into another script.

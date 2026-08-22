@@ -14,6 +14,97 @@
 </head>
 <body class="is-home">
 
+<!-- THE LOADING SCREEN
+     Two dice and the word, for about two seconds, and then the ticket.
+
+     An empty shell here and everything inside it built by the script below,
+     which is deliberate: with JavaScript off there is no overlay at all and
+     the page is exactly the page. Nothing can leave a visitor staring at a
+     red screen that never lifts.
+
+     It runs at the top of the body, before the ticket has been painted, so
+     there is no flash of the page arriving and then being covered up. -->
+<div class="boot" id="boot" aria-hidden="true"></div>
+<script>
+(function () {
+  var el = document.getElementById('boot');
+  if (!el) return;
+
+  /* Once per tab. He reloads this page all day from admin and the designer,
+     and auto-refresh.js reloads it for him every time content.js changes: a
+     loading screen that plays on every one of those is a two-second tax on
+     his own work. A visitor arriving fresh gets it. ?intro=1 forces it, which
+     is how to look at it again without opening a new window. */
+  var force = /[?&]intro=1\b/.test(location.search);
+  var still = false, seen = false;
+  try { still = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+  try { seen  = sessionStorage.getItem('bootSeen') === '1'; } catch (e) {}
+  if (!force && (still || seen)) { el.parentNode.removeChild(el); return; }
+  try { sessionStorage.setItem('bootSeen', '1'); } catch (e) {}
+
+  var pips = '<i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>';
+  el.innerHTML =
+    '<div class="boot-in">' +
+      '<div class="boot-dice">' +
+        '<span class="die" data-face="2">' + pips + '</span>' +
+        '<span class="die" data-face="5">' + pips + '</span>' +
+      '</div>' +
+      '<p class="boot-word">loading<i>.</i><i>.</i><i>.</i></p>' +
+    '</div>';
+  document.documentElement.classList.add('is-booting');
+  /* THE PANIC EXIT, registered on the very next line and before anything else
+     can run. From here on the ticket is hidden by a class, so a throw anywhere
+     below would leave a red screen and no way off it. This is the one line
+     that makes that impossible, so it goes first and it never moves. */
+  setTimeout(off, 6000);
+
+  var dice = el.querySelectorAll('.die');
+  var roll = setInterval(function () {
+    dice[0].setAttribute('data-face', 1 + Math.floor(Math.random() * 6));
+    dice[1].setAttribute('data-face', 1 + Math.floor(Math.random() * 6));
+  }, 105);
+
+  var landed = false, gone = false;
+
+  function land() {
+    if (landed) return;
+    landed = true;
+    clearInterval(roll);
+    /* they come to rest on one and three. Not a random pair: the ticket is
+       game no. 13 and its serial is 131313, so the dice are the number the
+       rest of the page is already printed with. */
+    dice[0].setAttribute('data-face', '1');
+    dice[1].setAttribute('data-face', '3');
+    el.classList.add('is-landed');
+    setTimeout(off, 540);
+  }
+
+  function off() {
+    if (gone) return;
+    gone = true;
+    clearInterval(roll);
+    el.classList.add('is-out');
+    document.documentElement.classList.remove('is-booting');
+    setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 640);
+  }
+
+  /* It holds for its two seconds AND until the page has actually finished
+     loading, whichever is later, because a loading screen that lets go while
+     the fonts are still coming in is worse than none. The hard cap is the
+     safety net: one slow embed must never be able to keep the ticket hidden. */
+  var timeUp = false, ready = document.readyState === 'complete';
+  var maybe = function () { if (timeUp && ready) land(); };
+  setTimeout(function () { timeUp = true; maybe(); }, 1500);
+  window.addEventListener('load', function () { ready = true; maybe(); });
+  setTimeout(function () { ready = timeUp = true; maybe(); }, 3400);
+
+  /* and anyone who has seen it can leave early */
+  ['click', 'touchstart', 'keydown', 'wheel'].forEach(function (ev) {
+    window.addEventListener(ev, off, { once: true, passive: true });
+  });
+})();
+</script>
+
 <main class="ticket">
   <div class="perf top" aria-hidden="true"></div>
 
