@@ -141,6 +141,32 @@
       /* the parent stays lit while you are anywhere in the section */
       if (onWork) workLink.classList.add('on');
 
+      /* ---- opening and closing ----
+         Driven from here rather than left to :hover alone. A CSS-only menu
+         has to be chased: the pointer must never once leave the element or
+         its children, and the instant it does, pointer-events flips to none
+         and the menu cannot be re-entered even if the pointer comes straight
+         back. Any diagonal move, any sub-pixel seam, any moment the browser
+         hit-tests something else, and it is gone before you reach it.
+
+         So: it opens on enter and closes a quarter of a second AFTER leave,
+         and coming back cancels the close. That grace period is what every
+         menu that works has, and what every menu that does not is missing. */
+      var shut;
+      var open  = function () { clearTimeout(shut); item.classList.add('is-open'); };
+      var close = function () { clearTimeout(shut); shut = setTimeout(function () {
+        item.classList.remove('is-open');
+      }, 260); };
+
+      item.addEventListener('mouseenter', open);
+      item.addEventListener('mouseleave', close);
+      /* the panel is a child, but say it out loud: if anything ever moves it
+         out of the item, the menu still holds while the pointer is on it */
+      menu.addEventListener('mouseenter', open);
+      menu.addEventListener('mouseleave', close);
+      item.addEventListener('focusin', open);
+      item.addEventListener('focusout', close);
+
       /* A touch screen has no hover, so the first tap opens the menu and a
          second on the same link goes through to the work page. Nobody has to
          produce a gesture their device cannot make, and nobody loses the link. */
@@ -148,16 +174,18 @@
         workLink.addEventListener('click', function (e) {
           if (!item.classList.contains('is-open')) {
             e.preventDefault();
-            item.classList.add('is-open');
+            open();
           }
         });
         document.addEventListener('click', function (e) {
-          if (!item.contains(e.target)) item.classList.remove('is-open');
+          if (!item.contains(e.target)) { clearTimeout(shut); item.classList.remove('is-open'); }
         });
       }
       /* and it closes on Escape, wherever the focus happens to be */
       item.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') { item.classList.remove('is-open'); workLink.focus(); }
+        if (e.key === 'Escape') {
+          clearTimeout(shut); item.classList.remove('is-open'); workLink.focus();
+        }
       });
     }
   }

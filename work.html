@@ -112,11 +112,11 @@
       '</div></header>' +
       '<div class="wrap"><div class="work-list" id="workList"></div></div>';
 
-    /* The two work pages get their own ground and their own rhythm, so they
-       are told apart at a glance instead of by reading the heading. Only the
-       everything page is staggered; work that worked keeps the uniform grid
-       he asked to leave alone. */
-    if (!ranOnly) document.body.classList.add('page-work-all');
+    /* Work that worked gets its own ground and its own mark, so the two pages
+       are told apart at a glance instead of by reading the heading. All work
+       keeps the ordinary paper and the registration cross: the difference
+       belongs on the page that earned it, not on the default one. */
+    if (ranOnly) document.body.classList.add('page-work-ran');
 
     var list = document.getElementById('workList');
 

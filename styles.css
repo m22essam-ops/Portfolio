@@ -500,8 +500,15 @@ body.has-won .tk-badge{background:var(--ink)}
 .page-nav .nav-menu > a:focus-visible{opacity:1;color:var(--red)}
 .page-nav .nav-menu > a.on{opacity:1;color:var(--red)}
 
+/* .is-open is the authority, set by site.js with a grace period on closing.
+   :hover is kept alongside it only so the menu still works if the script has
+   not run yet, and NOT with pointer-events, which is the trap: the moment
+   :hover goes false pointer-events flips to none in the same frame and the
+   panel cannot be re-entered. */
 .page-nav .nav-item:hover .nav-menu,
-.page-nav .nav-item:focus-within .nav-menu,
+.page-nav .nav-item:focus-within .nav-menu{
+  opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0);
+}
 .page-nav .nav-item.is-open .nav-menu{
   opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0);
 }
@@ -951,26 +958,20 @@ body.is-home.home-locked{overflow:hidden}
    red and the type do not change: only the paper and one mark. The tokens
    are the same ones the gallery already uses, so nothing else needs to know.
    ------------------------------------------------------------------------ */
-/* Work that worked is blue. It is the produced work, the pages that ran, so
-   it gets the one ground on the site that is unmistakably a colour and not a
-   paper. Muted and grey-leaning rather than a true blue: the stills have to
-   sit on it and the red accent has to stay the loudest thing on the page. */
-body.page-work  { --bg:#B7C6D4; --well:#9DAFC1; --nav-bg:#B7C6D4f2; }
+/* the base for both work pages, and what All work keeps: the ordinary paper */
+body.page-work  { --bg:#EFE9DC; --well:#E2DACA; --nav-bg:#EFE9DCf2; }
 body.page-about { --bg:#F1E4DC; --well:#E4D2C6; --nav-bg:#F1E4DCf2; }
 body.page-awards{ --bg:#E6E7E2; --well:#D6D8D1; --nav-bg:#E6E7E2f2; }
-/* Everything, including the work that never ran. The ONLY difference from
-   Work that worked is the paper: same grid, same mark, same everything else.
-   A staggered grid and a centre rule were tried on 22 Aug 2026 and taken back
-   out the same day; the two pages read as one body of work with a change of
-   ground, not as two different designs.
+/* Work that worked, and ONLY that page: a deep dusty blue. The work that ran
+   is the one part of the site that is finished, so it is the one ground that
+   is a colour rather than a paper. All work stays on the ordinary paper above
+   and carries the registration cross; a sage was tried on it on 22 Aug 2026
+   and taken back out, because the difference belongs on the page that earned
+   it, not on the default one.
 
-   The ground is a sage against the warm cream of Work that worked. Two
-   lighter versions were tried first and both were too polite to register; it
-   has to be a colour you would name, not a shade of off-white. Still light
-   enough that near-black type keeps its contrast and the campaign stills sit
-   the way they do everywhere else, so the gallery stays editorial rather than
-   going dark, which the notes rule out for reasons that still hold. */
-body.page-work-all { --bg:#C4CCB6; --well:#AFB89F; --nav-bg:#C4CCB6f2; }
+   Grey-leaning rather than a true blue: the campaign stills have to sit on it
+   and the red has to stay the loudest thing on the page. */
+body.page-work-ran { --bg:#A3BAD1; --well:#89A3BD; --nav-bg:#A3BAD1f2; }
 
 /* the hint of an element: one quiet mark per page, behind everything,
    printed in the page's own well colour so it never fights the work */
@@ -988,6 +989,23 @@ body.page-work::before{
     linear-gradient(var(--well),var(--well)) center/100% 2px no-repeat,
     radial-gradient(circle,transparent 22px,var(--well) 22px,var(--well) 24px,transparent 24px);
 }
+/* Work that worked: a ticked box, because that page is the work that is
+   finished and a tick says so without a caption. It REPLACES the registration
+   cross, so the page still carries exactly one mark, and it has to come after
+   the cross rule above or that one wins on source order and you get half a
+   cross wearing a tick. Drawn as a mask rather than a coloured image so it
+   takes --well like every other mark and follows the page's ground. */
+body.page-work-ran{
+  --tick:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='6' y='6' width='88' height='88' fill='none' stroke='%23000' stroke-width='5'/%3E%3Cpath d='M22 52 L42 72 L80 26' fill='none' stroke='%23000' stroke-width='9' stroke-linecap='square' stroke-linejoin='miter'/%3E%3C/svg%3E");
+}
+body.page-work-ran::before{
+  right:30px;top:92px;width:86px;height:86px;
+  background:var(--well);
+  -webkit-mask:var(--tick) center/contain no-repeat;
+          mask:var(--tick) center/contain no-repeat;
+  opacity:.75;
+}
+
 /* about: one perforation run down the left edge, like the ticket's */
 body.page-about::before{
   left:18px;top:0;bottom:0;width:12px;
@@ -1020,7 +1038,8 @@ body.page-awards #page{
 .cab-wrap{
   flex:1 1 auto;min-height:0;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:clamp(10px,2.2vh,30px);
+  /* tight under the cabinet, so the sentence sits up close to it */
+  gap:clamp(2px,.8vh,12px);
   padding:clamp(12px,2.4vh,34px) 0 clamp(16px,3vh,40px);
   text-align:center;
 }
@@ -1093,8 +1112,9 @@ body.page-awards #page{
 }
 .cab-line a:hover{color:var(--red-hot)}
 /* the line and the way back are one flex child between them, so the gap on
-   .cab-wrap does not separate them and this has to */
-.cab-back{margin:clamp(14px,2.4vh,28px) 0 0}
+   .cab-wrap does not separate them and this has to. Deliberately much larger
+   than that gap: the sentence belongs to the cabinet, the way back does not. */
+.cab-back{margin:clamp(30px,5.5vh,64px) 0 0}
 .cab-back a{
   font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em;
   font-weight:600;font-size:13px;color:var(--fg-dim);text-decoration:none;

@@ -1448,7 +1448,7 @@ window.SITE_CONTENT = {
       }
     ],
     ranHeading: "Work that worked.",
-    ranNote: ""
+    ranNote: "[Placeholder] One line about the work that actually ran."
   },
   about: {
     label: "Don't take it personally (it seems so)",
