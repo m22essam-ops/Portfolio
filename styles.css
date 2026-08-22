@@ -124,7 +124,13 @@ body.is-home{
   font-size:11px;padding:6px 11px;border-radius:0;
   margin:0;white-space:nowrap;flex:none;
   font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em;font-weight:600;
+  /* it became a link when it started opening the cabinet, and picked up the
+     browser's underline with it. The red block is the affordance. */
+  text-decoration:none;
 }
+/* the barcode is a link to the playlist for the same reason, and a rule under
+   a barcode reads as part of the barcode */
+a.barcode{text-decoration:none}
 
 /* The name lockup, and the reason anyone knows whose site this is: the home
    has no nav bar. Name left and big, his line and the award count pushed to
@@ -695,10 +701,6 @@ body.has-won .tk-badge{background:var(--ink)}
 
 @media (max-width:900px){
   .work-list{grid-template-columns:1fr;gap:44px}
-  /* one column has no second column to be staggered against, and the centre
-     rule has no seam to mark */
-  body.page-work-all .work-list > .piece:nth-child(even){margin-top:0}
-  body.page-work-all::before{display:none}
   .about-grid{grid-template-columns:1fr;gap:34px}
   /* stacked, there is no text beside it to match, so the frame carries its
      own portrait shape instead of stretching to a row it now owns alone */
@@ -879,11 +881,14 @@ body.is-home.home-locked{overflow:hidden}
 body.page-work  { --bg:#EFE9DC; --well:#E2DACA; }
 body.page-about { --bg:#F1E4DC; --well:#E4D2C6; }
 body.page-awards{ --bg:#E6E7E2; --well:#D6D8D1; }
-/* everything, including the work that never ran: a cooler paper, so the two
-   work pages are told apart at a glance rather than by reading the heading.
-   Work that worked keeps the warm ground above, unchanged, because he asked
-   for that page to stay exactly as it is. */
-body.page-work-all { --bg:#E9E9E2; --well:#DADBD1; }
+/* Everything, including the work that never ran. The ONLY difference from
+   Work that worked is the paper: same grid, same mark, same everything else.
+   A staggered grid and a centre rule were tried on 22 Aug 2026 and taken back
+   out the same day; he wants the two pages to read as one body of work with
+   a change of ground, not as two different designs. Slightly cooler and a
+   shade lighter, which is enough to feel on arrival and not enough to notice
+   as a decision. */
+body.page-work-all { --bg:#EBE9DE; --well:#DEDACB; }
 
 /* the hint of an element: one quiet mark per page, behind everything,
    printed in the page's own well colour so it never fights the work */
@@ -911,22 +916,7 @@ body.page-about::before{
 body.page-awards::before{
   left:0;right:0;top:63%;height:2px;background:var(--well);opacity:.5;
 }
-/* everything: a column rule down the middle, which is the seam the staggered
-   grid is offset across. It replaces the registration cross rather than
-   sitting next to it, so the page still carries exactly one mark. */
-body.page-work-all::before{
-  right:auto;top:0;bottom:0;left:50%;width:2px;height:auto;
-  background:var(--well);border-radius:0;opacity:.4;
-}
 body.page-work > *,body.page-about > *,body.page-awards > *{position:relative;z-index:1}
-
-/* ---- the staggered grid ----
-   The right-hand column sits lower than the left, so the page reads as a run
-   of work rather than as a table of it. Noted for whoever reads this later:
-   the project notes say the work index is deliberately ONE uniform grid, and
-   this reverses that. It is his decision, taken on 22 Aug 2026, and it applies
-   only to the everything page. Work that worked keeps the uniform grid. */
-body.page-work-all .work-list > .piece:nth-child(even){margin-top:clamp(40px,7vw,110px)}
 
 /* ============================ THE CABINET ============================ */
 .cab-wrap{padding:clamp(28px,6vh,72px) 0 clamp(40px,8vh,96px);text-align:center}

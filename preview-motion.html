@@ -331,6 +331,126 @@ body.showroom{background:var(--bg);color:var(--fg);margin:0}
 }
 .op-pick.run .veil{animation:printInk .4s cubic-bezier(.6,.02,.28,1) .8s forwards}
 
+/* ---------- OPENER 6 · THE PRESS CHECK ----------
+   Two inks, out of register, then a hard snap into alignment.
+
+   Why this one is the elevated answer. His palette IS a two-colour job:
+   black and red on off-white, nothing else. A lottery ticket is a printed
+   object. The registration cross is already the mark on his work page, so the
+   language is his own. And it argues with the one real weakness in the
+   concept, which his own notes name: a lottery sells LUCK when the thing he
+   is selling is CRAFT. An intro about getting the plates dead on register
+   says craft without a word of copy.
+
+   Nothing here is distressed, halftoned or aged. Hairlines and flat colour:
+   a modern press check, not a 1970s print pastiche. */
+.op-press{background:transparent}
+.op-press .bed{position:absolute;inset:0;background:var(--red)}
+.op-press .sheet{
+  position:absolute;inset:0;margin:auto;width:95%;height:95%;
+  background:var(--paper);
+}
+
+/* the plates. Same box as the sheet, each holding the composition in one ink */
+.op-press .plate{
+  position:absolute;inset:0;margin:auto;width:95%;height:95%;
+  pointer-events:none;
+}
+.op-press .plate s,.op-press .plate u{
+  position:absolute;display:flex;flex-direction:column;justify-content:center;
+  text-decoration:none;white-space:nowrap;overflow:visible;
+}
+.op-press .plate .punch{justify-content:flex-end;white-space:normal}
+.op-press .plate-ink s,.op-press .plate-ink u{color:var(--ink)}
+.op-press .plate-red s,.op-press .plate-red u{color:var(--red)}
+/* the badge is a solid block of ink on the real ticket, so it is one here */
+.op-press .plate-red .chip{
+  background:var(--red);color:var(--paper);justify-content:center;text-align:center;
+}
+/* the punches are ruled boxes, and a rule is ink too */
+.op-press .plate-ink .punch{border:1.5px solid currentColor;padding:.5em .6em}
+/* the barcode, drawn rather than typed */
+.op-press .plate-ink .bars{
+  background:repeating-linear-gradient(90deg,
+    currentColor 0 2px, transparent 2px 4px, currentColor 4px 5px, transparent 5px 9px);
+}
+/* the stamp: two rings, on the red plate. Square, or border-radius:50% on an
+   oblong box draws an ellipse and the seal reads as a smudge. */
+.op-press .plate-red .mark{
+  border:2px solid currentColor;border-radius:50%;box-sizing:border-box;
+}
+.op-press .plate-red .mark::after{
+  content:"";position:absolute;inset:14%;border:1.5px solid currentColor;border-radius:50%;
+}
+
+/* OUT of register at rest, and the whole point of the thing.
+
+   The offsets are in em, and the plate's font-size is its own height, so the
+   misregistration scales with the stage instead of being a fixed number of
+   pixels that vanishes on a big screen. They also have to be far bolder than
+   a real press would ever be: a genuine job is out by fractions of a
+   millimetre, which at this size is invisible. This is the idea of
+   misregistration, legible from across a room. */
+.op-press .plate-ink{transform:translate(-.030em,-.022em)}
+.op-press .plate-red{transform:translate(.036em,.027em)}
+.op-press.run .plate-ink{animation:regInk 2.2s forwards}
+.op-press.run .plate-red{animation:regRed 2.2s forwards}
+/* the drift is slow and the correction is instant. A press does not ease into
+   register, it is knocked into it. */
+@keyframes regInk{
+  0%  {transform:translate(-.030em,-.022em);animation-timing-function:cubic-bezier(.4,0,.6,1)}
+  62% {transform:translate(-.044em,-.032em);animation-timing-function:cubic-bezier(.9,0,.1,1)}
+  74% {transform:translate(0,0)}
+  100%{transform:translate(0,0)}
+}
+@keyframes regRed{
+  0%  {transform:translate(.036em,.027em);animation-timing-function:cubic-bezier(.4,0,.6,1)}
+  62% {transform:translate(.050em,.038em);animation-timing-function:cubic-bezier(.9,0,.1,1)}
+  74% {transform:translate(0,0)}
+  100%{transform:translate(0,0)}
+}
+
+/* the marks: hairline crosses at the corners and a two-swatch colour bar.
+   They are the press furniture, and they leave once the job is right. */
+.op-press .marks{position:absolute;inset:0;pointer-events:none}
+.op-press .marks i{
+  position:absolute;width:26px;height:26px;opacity:0;
+  background:
+    linear-gradient(var(--ink),var(--ink)) center/1.5px 100% no-repeat,
+    linear-gradient(var(--ink),var(--ink)) center/100% 1.5px no-repeat,
+    radial-gradient(circle,transparent 7px,var(--ink) 7px,var(--ink) 8.5px,transparent 8.5px);
+}
+.op-press .marks i:nth-child(1){left:1.2%;top:1.6%}
+.op-press .marks i:nth-child(2){right:1.2%;top:1.6%}
+.op-press .marks i:nth-child(3){left:1.2%;bottom:1.6%}
+.op-press .marks i:nth-child(4){right:1.2%;bottom:1.6%}
+.op-press .marks b{
+  position:absolute;left:50%;bottom:1.4%;transform:translateX(-50%);
+  display:flex;gap:3px;opacity:0;
+}
+.op-press .marks b span{width:22px;height:8px}
+.op-press .marks b span:nth-child(1){background:var(--ink)}
+.op-press .marks b span:nth-child(2){background:var(--red)}
+.op-press.run .marks i,.op-press.run .marks b{animation:markIn 2.2s forwards}
+@keyframes markIn{
+  0%  {opacity:0}
+  10% {opacity:.85}
+  70% {opacity:.85}
+  86% {opacity:0}
+  100%{opacity:0}
+}
+
+/* once it is in register the sheet becomes the page */
+.op-press .sheet,.op-press .bed,.op-press .plate{clip-path:inset(0 0 0 0)}
+.op-press.run .sheet,.op-press.run .bed,
+.op-press.run .plate{animation:printInk .5s cubic-bezier(.6,.02,.28,1) 2.24s forwards}
+.op-press.run .plate-ink{
+  animation:regInk 2.2s forwards, printInk .5s cubic-bezier(.6,.02,.28,1) 2.24s forwards;
+}
+.op-press.run .plate-red{
+  animation:regRed 2.2s forwards, printInk .5s cubic-bezier(.6,.02,.28,1) 2.24s forwards;
+}
+
 @keyframes opGo{to{opacity:0}}
 .op.leaving{animation:opGo .3s var(--ease) forwards}
 
@@ -459,6 +579,18 @@ body.showroom{background:var(--bg);color:var(--fg);margin:0}
       <div class="half b"><span id="tearBot"></span><div class="perf"></div></div>
     </div>
 
+    <!-- opener 6: the press check -->
+    <div class="op op-press" id="opPress" hidden>
+      <div class="bed"></div>
+      <div class="sheet"></div>
+      <div class="plate plate-ink" id="plateInk"></div>
+      <div class="plate plate-red" id="plateRed"></div>
+      <div class="marks">
+        <i></i><i></i><i></i><i></i>
+        <b><span></span><span></span></b>
+      </div>
+    </div>
+
     <!-- opener 4: the book -->
     <div class="op op-book" id="opBook" hidden>
       <div class="veil"></div>
@@ -489,6 +621,7 @@ body.showroom{background:var(--bg);color:var(--fg);margin:0}
   </div>
 
   <div class="sr-ctl">
+    <button class="sr-btn" data-op="press">▶ The press check</button>
     <button class="sr-btn" data-op="book">▶ The book</button>
     <button class="sr-btn" data-op="pick">▶ The pick</button>
     <button class="sr-btn" data-op="print">▶ The print</button>
@@ -602,6 +735,99 @@ body.showroom{background:var(--bg);color:var(--fg);margin:0}
   set('tearTop', nameUp);
   set('tearBot', T.serial || '');
 
+  /* ---------- the ticket's face, rendered as one ink ----------
+     The press check needs the composition in two separations, and blocks
+     would not carry it: misregistration is only legible on TYPE, where you
+     see the same letterform twice a few thousandths apart. So this draws the
+     real ticket out of his layout and his words, in a single colour.
+
+     Positions come from layout.desktop, exactly as the page uses them, and
+     type is sized in em against the plate's own font-size, which is set to
+     the plate's pixel height. `size` is already a percentage of the ticket
+     height, so size/100 em lands on the same number the page computes. */
+  /* SINGLE quotes. These go into a style="" attribute, and a double quote in
+     there closes the attribute: everything after font-family was being thrown
+     away, which is why the plates came out in Helvetica with no tracking, no
+     weight and no uppercase. */
+  var FONTS = {
+    mono:  "'Barlow Condensed','Hanken Grotesk',sans-serif",
+    disp:  "'Bricolage Grotesque','Hanken Grotesk',sans-serif",
+    home:  "'Moniqa','Syne','Bricolage Grotesque',sans-serif",
+    body:  "'Hanken Grotesk',sans-serif"
+  };
+  function fontFor(slot) {
+    if (/^title/.test(slot)) return FONTS.home;
+    if (/^nav\d/.test(slot)) return FONTS.disp;
+    if (slot === 'sub') return FONTS.body;
+    return FONTS.mono;
+  }
+  /* which plate each piece prints on. The second headline line and the badge
+     are the red ink on the real ticket, so they are the red plate here. */
+  var RED_SLOTS = { titleBottom: 1, badge: 1, stamp: 1 };
+
+  function textFor(slot) {
+    var N = C.nav || {};
+    if (slot === 'name') return String(N.logo || 'Mohammed Essam').replace(/\s*\.\s*$/, '');
+    if (/^nav(\d)$/.test(slot)) {
+      var i = +RegExp.$1, n = (T.nav || [])[i];
+      return n ? (n.label || '') : '';
+    }
+    return T[slot] == null ? '' : String(T[slot]);
+  }
+
+  function ticketFace(ink) {
+    var L = (C.layout && C.layout.desktop) || null;
+    if (!L || !L.items || !L.items.length) return '';
+    var out = [];
+    L.items.forEach(function (it) {
+      if (!it || it.hidden || it.x == null || it.y == null) return;
+      var slot = it.slot || '';
+      var isRed = !!RED_SLOTS[slot];
+      if (ink === 'red' && !isRed) return;
+      if (ink === 'ink' && isRed) return;
+
+      var box = 'left:' + it.x + '%;top:' + it.y + '%;width:' + (it.w || 8) +
+                '%;height:' + (it.h || 3) + '%;';
+      /* the stamp and the barcode are not type: a mark and a run of bars */
+      if (!it.size) {
+        if (slot === 'barcode') {
+          out.push('<u class="bars" style="' + box + '"></u>');
+        } else if (slot === 'stamp') {
+          /* a seal is round. The box he drew is not square, so the mark takes
+             the box's HEIGHT for both sides and centres itself in the width,
+             or border-radius:50% draws an ellipse and it reads as a smudge. */
+          out.push('<u class="mark" style="left:' + (it.x + (it.w || 8) / 2).toFixed(2) +
+                   '%;top:' + it.y + '%;height:' + (it.h || 3) +
+                   '%;aspect-ratio:1;transform:translateX(-50%);"></u>');
+        }
+        return;
+      }
+      var txt = textFor(slot);
+      if (!txt) return;
+      /* the same tracking and leading the stylesheet gives each voice, or the
+         plate is his layout set in the wrong type and reads as a mock-up */
+      var TRACK = { name: .12, game: .12, serial: .12, band: .06, badge: .14,
+                    terms: .08, scratchNote: .1 };
+      var track = it.tracking != null ? it.tracking
+                : /^title/.test(slot) ? -.035
+                : (TRACK[slot] != null ? TRACK[slot] : 0);
+      var lead = it.leading != null ? it.leading : (/^title/.test(slot) ? .86 : 1.25);
+      var st = box +
+        'font-size:' + (it.size / 100).toFixed(5) + 'em;' +
+        'font-family:' + fontFor(slot) + ';' +
+        'font-weight:' + (it.weight || (/^title/.test(slot) ? 800
+                          : /^nav|^name/.test(slot) ? 700 : 600)) + ';' +
+        'letter-spacing:' + track + 'em;' +
+        'line-height:' + lead + ';' +
+        (it.align ? 'text-align:' + it.align + ';' : '') +
+        (it.upper || /^(name|game|serial|band|badge|terms|scratchNote)$/.test(slot)
+          ? 'text-transform:uppercase;' : '');
+      var cls = slot === 'badge' ? ' class="chip"' : (/^nav\d/.test(slot) ? ' class="punch"' : '');
+      out.push('<s' + cls + ' style="' + st + '">' + esc(txt) + '</s>');
+    });
+    return out.join('');
+  }
+
   /* ---------- the book's skeleton ----------
      Every page in the pad carries his ACTUAL layout, drawn as grey blocks:
      the boxes come straight out of layout.desktop, so the pages are the
@@ -643,8 +869,31 @@ body.showroom{background:var(--bg);color:var(--fg);margin:0}
       function (n) { n.insertAdjacentHTML('afterbegin', skel); });
   }
 
+  /* the two separations */
+  var plateInk = document.getElementById('plateInk');
+  var plateRed = document.getElementById('plateRed');
+  if (plateInk) plateInk.innerHTML = ticketFace('ink');
+  if (plateRed) plateRed.innerHTML = ticketFace('red');
+
+  /* Every size on a plate is an em, and the em is the plate's own height, so
+     the whole separation scales with the stage the way the real ticket scales
+     with the window. One number, set here and on resize. */
+  function sizePlates() {
+    [plateInk, plateRed].forEach(function (p) {
+      if (p && p.offsetHeight) p.style.fontSize = p.offsetHeight + 'px';
+    });
+  }
+  /* it has to be measured while it is on screen: the opener sits inside a
+     hidden element until it plays, and a display:none box is 0 tall, which
+     made every size on the plate 0em of 0px */
+  window.addEventListener('resize', sizePlates, { passive: true });
+
   /* ---------- play an opener ---------- */
   var OPS = {
+    press: {
+      el: document.getElementById('opPress'), ms: 2800,
+      say: '<b>The press check. This is the elevated one.</b> Your palette IS a two-colour job: black and red on off-white, nothing else. So the ticket arrives as two plates, visibly out of register, drifting further out, and then knocked dead into alignment in a single frame. Registration crosses and a colour bar sit in the margins and leave once the job is right. It is your own language already: the registration cross is the mark on your work page. And it quietly argues with the one real weakness in the concept, the one your notes name: a lottery sells <i>luck</i> when what you are selling is <i>craft</i>. This says craft without a word of copy, and every creative director who has ever stood over a press will clock it in half a second.'
+    },
     book: {
       el: document.getElementById('opBook'), ms: 2900,
       say: '<b>The book. My pick, and it is your idea.</b> A raffle book is the actual object: tickets bound together along a perforated stub. Pages flip off the top the way you work through a real book of them, it stops on yours, and that one is torn out. It is the only one of the five where something is <i>done</i> rather than displayed, and it is the furthest from the slot machine you killed, because nothing is being drawn at random. Someone is tearing out a ticket and handing it over.'
@@ -689,8 +938,9 @@ body.showroom{background:var(--bg);color:var(--fg);margin:0}
   }
   document.getElementById('stage').addEventListener('click', skip);
   document.addEventListener('keydown', skip);
-  ['opPrint', 'opWipe', 'opTear', 'opBook', 'opPick'].forEach(function (id) {
-    document.getElementById(id).addEventListener('click', skip);
+  ['opPrint', 'opWipe', 'opTear', 'opBook', 'opPick', 'opPress'].forEach(function (id) {
+    var n = document.getElementById(id);
+    if (n) n.addEventListener('click', skip);
   });
 
   function play(key) {
@@ -708,6 +958,7 @@ body.showroom{background:var(--bg);color:var(--fg);margin:0}
     cur = el;
     el.hidden = false;
     el.classList.remove('run', 'leaving');
+    if (key === 'press') sizePlates();      /* now that it has a height */
     void el.offsetWidth;                    /* restart the animation */
 
     /* Someone who asked their machine to stop moving things gets the page,
