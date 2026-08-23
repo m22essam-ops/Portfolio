@@ -1,3 +1,46 @@
+FONT FILES GO IN THIS FOLDER, AND NEVER LEAVE IT.
+=================================================
+
+git is set to ignore everything in here except this README, so any font
+file you drop in stays on your machine. That is deliberate. "Free for
+commercial use" means you may SET TYPE with a font. It does not mean you
+may hand the file to everyone who visits the site, which is what putting
+it in a public repo does. Nothing here goes live until the licence is
+sorted and it is built in on purpose.
+
+Two fonts are wired up to appear the moment their file is here.
+
+
+DROWNER  -  for the preview only, so far
+========================================
+
+  Hainz Studio. Try it at preview-font.html, which sets the home
+  headline in Syne and in Drowner and lets you flip between them.
+
+  WHERE
+    https://www.behance.net/gallery/217765021/FREE-FONT-DROWNER-Display-Font
+    (free version, from the designer's own page)
+
+    Commercial licence, if it ends up on the live site:
+    https://creativemarket.com/HainzStudio/290988602-Drowner-Display-Font
+
+  WHAT TO DROP IN
+    One file, named one of:
+
+        Drowner.woff2       <- best
+        Drowner.otf         <- fine
+        Drowner.ttf         <- fine
+
+    Refresh preview-font.html and the switch turns on. Until then it
+    stays greyed out and says so, rather than showing you Syne with
+    Drowner's name on it.
+
+  NOTE
+    Drowner is a distressed, textured face. "No grain, no texture of any
+    kind" is a rule in CLAUDE.md that you set yourself after rejecting
+    that look twice. Worth looking at it big before deciding.
+
+
 MONIQA goes in this folder.
 ===========================
 

@@ -9,17 +9,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Syne:wght@400..800&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
-   A specimen sheet, not part of the site. Nothing here ships.
+   A specimen sheet, not part of the site. Nothing here ships,
+   and NO FONT FILE IS EVER COMMITTED (see .gitignore).
 
-   It exists because a typeface cannot be judged from a description
-   and I cannot render one I do not have the file for. Put the file
-   in fonts/ and this page answers the question immediately, at the
-   real size, against the face it would replace.
+   Rebuilt 23 Aug 2026. The first version stacked two specimens
+   and let the missing font fall back to Syne, so both panels
+   drew the same face and it looked like a broken comparison.
+   That was the error: a fallback that resembles the real thing
+   is worse than showing nothing.
 
-   This is the same drop-in slot Moniqa has in styles.css, and the
-   404s it makes while the file is missing are the reason that one
-   is commented out on the live site. They stay here because this
-   page is never linked from anywhere.
+   Now there is ONE headline in ONE position and a switch, which
+   is the only way to judge two faces anyway. And if Drowner is
+   not installed the switch is dead and says so. It cannot show
+   you a face and be wrong about which one it is.
    ============================================================ */
 @font-face{
   font-family:"Drowner";
@@ -27,122 +29,141 @@
       url("fonts/Drowner.otf")   format("opentype"),
       url("fonts/Drowner.ttf")   format("truetype");
   font-weight:100 900;
-  font-display:swap;
+  /* block, not swap: swap would paint Syne first and this whole page is
+     about not mistaking one face for the other */
+  font-display:block;
 }
 
 :root{
-  --red:#E3261A; --ink:#0B0A09; --paper:#F6F3EE;
+  --red:#E3261A; --hot:#FF3B2B; --ink:#0B0A09; --paper:#F6F3EE;
   --mono:"Barlow Condensed","Hanken Grotesk",sans-serif;
+  --ease:cubic-bezier(.2,.8,.2,1);
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--red);font-family:var(--mono);color:var(--paper)}
 
-.head{padding:26px 30px 20px;border-bottom:1px solid #ffffff33}
-.head h1{margin:0 0 6px;font-family:"Bricolage Grotesque",sans-serif;font-size:24px;letter-spacing:-.02em}
-.head p{margin:0;font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.72}
+.head{padding:24px 30px 18px}
+.head h1{margin:0 0 6px;font-family:"Bricolage Grotesque",sans-serif;font-size:23px;letter-spacing:-.02em}
+.head p{margin:0;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;opacity:.75}
 
-.miss{
-  margin:24px 30px;padding:20px 22px;
-  background:var(--paper);color:var(--ink);border-radius:3px;
+/* ---- the switch ---- */
+.bar{display:flex;gap:9px;padding:0 30px 20px;align-items:center;flex-wrap:wrap}
+.bar button{
+  font-family:var(--mono);font-weight:600;font-size:12px;
+  letter-spacing:.14em;text-transform:uppercase;
+  background:none;color:var(--paper);border:1px solid #ffffff5c;
+  padding:10px 16px;cursor:pointer;transition:.15s;
 }
-.miss h2{margin:0 0 8px;font-family:"Bricolage Grotesque",sans-serif;font-size:17px;letter-spacing:-.01em}
-.miss p{margin:0 0 10px;font-family:"Hanken Grotesk",sans-serif;font-size:14.5px;line-height:1.55;letter-spacing:0;text-transform:none}
-.miss code{background:#0B0A0912;padding:2px 6px;border-radius:3px;font-size:13px}
-.miss a{color:var(--red)}
-.miss p:last-child{margin-bottom:0}
+.bar button:hover:not(:disabled){background:var(--paper);color:var(--red);border-color:var(--paper)}
+.bar button.on{background:var(--paper);color:var(--red);border-color:var(--paper)}
+.bar button:disabled{opacity:.34;cursor:not-allowed}
+.bar .which{font-size:11px;letter-spacing:.14em;text-transform:uppercase;opacity:.8;margin-left:6px}
 
-/* each specimen is the home page's own ticket, at the home page's own size */
-.spec{padding:26px 30px 34px}
-.spec .tag{
-  font-size:11px;letter-spacing:.2em;text-transform:uppercase;
-  margin:0 0 10px;display:flex;gap:10px;align-items:center;
-}
-.spec .tag b{font-weight:600}
-.spec .tag em{font-style:normal;opacity:.66}
-.ticket{
-  background:var(--paper);color:var(--ink);
-  border-radius:4px;padding:38px 42px 42px;
-}
-.tk-title{
-  margin:0;font-weight:800;
-  letter-spacing:-.035em;line-height:.92;
-  font-size:clamp(46px,9vw,118px);
-}
+/* ---- the stage: the home page's own ticket, at its own size ---- */
+.stage{margin:0 30px;background:var(--paper);color:var(--ink);border-radius:4px;padding:40px 42px 44px}
+.tk-title{margin:0;font-weight:800;line-height:.92;font-size:clamp(46px,9vw,120px)}
 .tk-title span{display:block;white-space:nowrap}
 .tk-title span:last-child{color:var(--red)}
-.syne .tk-title{font-family:"Syne","Bricolage Grotesque",sans-serif}
-.drow .tk-title{font-family:"Drowner","Syne",sans-serif}
-/* a distressed face carries its own texture, so it is given no tracking
-   help: this is the face as it actually is */
-.drow .tk-title{letter-spacing:0}
+.sizes{display:flex;flex-wrap:wrap;gap:12px 30px;margin-top:30px;align-items:baseline;color:var(--ink)}
+.sizes div{font-weight:800}
+.s1{font-size:52px}.s2{font-size:32px}.s3{font-size:21px}.s4{font-size:14px}
 
-.sizes{display:flex;flex-wrap:wrap;gap:26px;margin-top:26px;align-items:baseline}
-.sizes div{font-family:"Drowner","Syne",sans-serif;font-weight:800;color:var(--ink)}
-.syne .sizes div{font-family:"Syne",sans-serif}
-.s1{font-size:56px}.s2{font-size:34px}.s3{font-size:22px}.s4{font-size:15px}
+/* SYNE is the default and gets Syne's own tracking */
+.stage{--face:"Syne","Bricolage Grotesque",sans-serif;--track:-.035em}
+.stage.is-drowner{--face:"Drowner";--track:0}
+.tk-title,.sizes div{font-family:var(--face);letter-spacing:var(--track)}
 
-.note{
-  padding:0 30px 40px;font-size:12px;letter-spacing:.1em;
-  text-transform:uppercase;opacity:.7;max-width:70ch;line-height:1.9;
+/* ---- the missing-file notice, in place of the specimen ---- */
+.miss{margin:0 30px 30px;background:var(--paper);color:var(--ink);border-radius:4px;padding:26px 30px}
+.miss h2{margin:0 0 10px;font-family:"Bricolage Grotesque",sans-serif;font-size:19px;letter-spacing:-.01em}
+.miss ol{margin:0;padding-left:20px}
+.miss li,.miss p{font-family:"Hanken Grotesk",sans-serif;font-size:15px;line-height:1.62;letter-spacing:0;text-transform:none;margin:0 0 10px}
+.miss li:last-child,.miss p:last-child{margin-bottom:0}
+.miss code{background:#0B0A0914;padding:2px 7px;border-radius:3px;font-size:13.5px}
+.miss a{color:var(--red)}
+.miss .safe{
+  margin-top:16px;padding-top:14px;border-top:1px solid #0B0A091f;
+  font-size:13.5px;color:#0B0A09a8;
 }
+
+.foot{padding:22px 30px 44px;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;opacity:.78;max-width:74ch;line-height:1.95}
 </style>
 </head>
 <body>
 
 <div class="head">
   <h1>Drowner, against what is there now</h1>
-  <p>The home headline, at the size the home page sets it</p>
+  <p>One headline, one position. Flip it.</p>
 </div>
 
-<div class="miss" id="miss" hidden>
-  <h2>The Drowner file is not in this folder yet</h2>
-  <p>Everything below is showing <strong>Syne</strong>, so the two specimens look identical. To see the real thing:</p>
-  <p>1. Get it from <a href="https://www.behance.net/gallery/217765021/FREE-FONT-DROWNER-Display-Font" target="_blank" rel="noopener">Hainz Studio's own page on Behance</a> (free version), or buy the commercial licence on <a href="https://creativemarket.com/HainzStudio/290988602-Drowner-Display-Font" target="_blank" rel="noopener">Creative Market</a>. This site is your professional portfolio, so it is a commercial use and the licence matters.</p>
-  <p>2. Put the file in a <code>fonts</code> folder next to this page, named <code>Drowner.otf</code>, <code>Drowner.ttf</code> or <code>Drowner.woff2</code>.</p>
-  <p>3. Refresh this page. Nothing else needs changing.</p>
+<div class="bar">
+  <button id="bSyne" class="on" type="button">Syne &mdash; now</button>
+  <button id="bDrow" type="button" disabled>Drowner &mdash; not installed</button>
+  <span class="which" id="which">Showing Syne</span>
 </div>
 
-<div class="spec syne">
-  <p class="tag"><b>Now</b><em>Syne</em></p>
-  <div class="ticket">
-    <h2 class="tk-title"><span>Award-losing</span><span>copywriter</span></h2>
-    <div class="sizes">
-      <div class="s1">Award-losing</div>
-      <div class="s2">Work that worked</div>
-      <div class="s3">The Hotel Is Yours</div>
-      <div class="s4">Mohammed Essam</div>
-    </div>
+<div class="miss" id="miss">
+  <h2>Drowner is not in this folder, so it cannot be shown</h2>
+  <p><strong>The last version of this page faked it.</strong> It fell back to Syne and labelled that panel "Drowner", which is why the two looked identical. It will not do that again: the switch above stays dead until the real file is here.</p>
+  <ol>
+    <li>Open <a href="https://www.behance.net/gallery/217765021/FREE-FONT-DROWNER-Display-Font" target="_blank" rel="noopener">Hainz Studio's own Behance page</a> and take the free download. The link on that page goes to the designer's own file, which is the version to use.</li>
+    <li>Unzip it. Put <strong>one</strong> file in the <code>fonts</code> folder next to this page and name it <code>Drowner.otf</code>, <code>Drowner.ttf</code> or <code>Drowner.woff2</code>.</li>
+    <li>Refresh. The switch turns on.</li>
+  </ol>
+  <p class="safe"><strong>It cannot leak.</strong> <code>fonts/</code> is in <code>.gitignore</code>, so the file stays on your machine and git will not take it even if you try. That matters: "free for commercial use" lets you <em>set type</em> with a font, not hand the file to everyone who visits the site. Nothing goes live until you have the licence sorted and we build it in deliberately.</p>
+</div>
+
+<div class="stage" id="stage" hidden>
+  <h2 class="tk-title"><span>Award-losing</span><span>copywriter</span></h2>
+  <div class="sizes">
+    <div class="s1">Award-losing</div>
+    <div class="s2">Work that worked</div>
+    <div class="s3">The Hotel Is Yours</div>
+    <div class="s4">Mohammed Essam</div>
   </div>
 </div>
 
-<div class="spec drow">
-  <p class="tag"><b>Proposed</b><em>Drowner &mdash; Hainz Studio</em></p>
-  <div class="ticket">
-    <h2 class="tk-title"><span>Award-losing</span><span>copywriter</span></h2>
-    <div class="sizes">
-      <div class="s1">Award-losing</div>
-      <div class="s2">Work that worked</div>
-      <div class="s3">The Hotel Is Yours</div>
-      <div class="s4">Mohammed Essam</div>
-    </div>
-  </div>
-</div>
-
-<p class="note" id="warn"></p>
+<p class="foot" id="foot"></p>
 
 <script>
 (function () {
-  function ready(fn) {
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fn);
-    else setTimeout(fn, 400);
+  var stage = document.getElementById('stage');
+  var miss  = document.getElementById('miss');
+  var bS    = document.getElementById('bSyne');
+  var bD    = document.getElementById('bDrow');
+  var which = document.getElementById('which');
+  var foot  = document.getElementById('foot');
+
+  function show(drowner) {
+    stage.classList.toggle('is-drowner', drowner);
+    bD.classList.toggle('on', drowner);
+    bS.classList.toggle('on', !drowner);
+    which.textContent = 'Showing ' + (drowner ? 'Drowner' : 'Syne');
   }
-  ready(function () {
+  bS.addEventListener('click', function () { show(false); });
+  bD.addEventListener('click', function () { if (!bD.disabled) show(true); });
+
+  function settle(fn) {
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fn);
+    else setTimeout(fn, 500);
+  }
+
+  settle(function () {
     var have = false;
-    try { have = document.fonts.check('700 100px Drowner'); } catch (e) {}
-    document.getElementById('miss').hidden = have;
-    document.getElementById('warn').textContent = have
-      ? 'Drowner is loaded. The lower specimen is the real face.'
-      : '';
+    /* the file is asked for by name. A missing one leaves the family
+       unresolved, which is exactly what has to be detected. */
+    try { have = document.fonts.check('800 100px Drowner'); } catch (e) {}
+
+    /* Syne is always showable, so the stage goes up either way; only the
+       Drowner half of the switch depends on the file being here. */
+    stage.hidden = false;
+    miss.hidden = have;
+    bD.disabled = !have;
+    bD.textContent = have ? 'Drowner' : 'Drowner — not installed';
+    foot.textContent = have
+      ? 'Both faces are real. Flip between them and judge it at this size, not at a caption size.'
+      : 'The panel above is Syne, and it is labelled Syne. Nothing here is pretending to be Drowner.';
+    show(false);
   });
 })();
 </script>

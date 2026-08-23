@@ -8,6 +8,15 @@ images/Dominos V5.mp4
 images/tuborg final video case.mp4
 images/Nothing Phone Case Study V3 3.mov
 
+# FONT BINARIES NEVER GET COMMITTED.
+# Publishing a font file to a public repo redistributes it, which almost no
+# font licence allows, free ones included: "free for commercial use" means you
+# may SET type with it, not that you may hand the file to everyone who visits.
+# Drop whatever you like into fonts/ to try it locally; git will not take it.
+# The README in there is the exception, because it is instructions, not a font.
+fonts/*
+!fonts/README.txt
+
 # local tooling + scratch/option pages (not part of the site)
 .freebuff/
 edit-options.html
