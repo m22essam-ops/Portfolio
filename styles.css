@@ -413,11 +413,19 @@ body.has-won .stamp-value{color:var(--ink)}
   gap:10px 12px;margin-bottom:34px;
 }
 .tk-nav > a{grid-row:2}
-/* the note sits on top of the covered box, as its caption */
+/* The note sits on top of the covered box, as its caption.
+
+   NO text-transform. It used to be forced to capitals, so "...think you can
+   give it a shot?" came out shouting and every note he wrote came out in the
+   same voice whatever he typed. He asked for his own casing back, and he is
+   right: this is the one line up there that is him speaking rather than the
+   ticket's furniture, and a copywriter choosing lower case has chosen it.
+   The tracking comes down a little to suit mixed case, which needs less air
+   between letters than a run of capitals does. */
 .scratch-cap{
   grid-column:3;grid-row:1;align-self:end;
-  font-family:var(--mono);text-transform:uppercase;
-  letter-spacing:.13em;font-weight:600;font-size:10.5px;
+  font-family:var(--mono);
+  letter-spacing:.08em;font-weight:600;font-size:11px;
   color:var(--ink-30);line-height:1.4;
 }
 .tk-nav a{
@@ -430,17 +438,75 @@ body.has-won .stamp-value{color:var(--ink)}
   gap:8px;
   font-family:var(--display);font-weight:800;
   letter-spacing:-.02em;font-size:19px;
-  transition:background .16s var(--ease),color .16s var(--ease);
 }
 .tk-nav a i{
   grid-column:2;grid-row:1;justify-self:end;
   font-style:normal;font-family:var(--mono);font-size:12px;letter-spacing:.14em;opacity:.45;
+  /* the number sits at the TOP, so the rising fill reaches it last. Its own
+     delay, longer than the label's, or it brightens over bare paper. */
+  transition:opacity .16s var(--ease);
 }
+.tk-nav a:hover i,
+.tk-nav a:focus-visible i{transition:opacity .16s var(--ease) .17s}
 .tk-nav a b{grid-column:1/-1;grid-row:2;align-self:end;font-weight:inherit}
-.tk-nav a:hover{background:var(--red);border-color:var(--red);color:var(--paper)}
 /* a sensible ceiling: past this they stop reading as buttons */
 .tk-midleft .tk-nav a{max-height:150px}
-.tk-nav a:hover i{opacity:.8}
+
+/* ---- THE FILL ON HOVER ----
+   Shared by the home punches and the résumé button on About, so the two
+   pages answer the pointer the same way.
+
+   The red rises from the bottom of the box rather than appearing all at once.
+   These were already going red on hover and he asked for a hover state
+   anyway, which is the honest verdict on a colour that swaps in one frame:
+   nothing appears to have happened, it is simply a different colour now. A
+   fill with a direction reads as the box being filled in, which is what a
+   coupon is for.
+
+   It is a pseudo-element and not a background, because `background` cannot
+   be given a direction. That means the box has to own a stacking context
+   (position) and clip the fill (overflow), and the real children have to be
+   lifted above it or the fill covers the words.
+
+   `border-color` was missing from the old transition, so the outline snapped
+   red while the fill faded. Both are timed together here. */
+.tk-nav a,
+.resume-btn{
+  position:relative;overflow:hidden;
+  /* LEAVING. No delay on the way out: the fill drains downwards and uncovers
+     the top of the box first, so the words have to be dark again before the
+     red has gone from behind them. */
+  transition:color .16s var(--ease),border-color .18s var(--ease);
+}
+/* ARRIVING. The colour waits for the fill to reach the words. Without the
+   delay the type turns off-white while the red is still climbing, so for
+   about a fifth of a second it is off-white on off-white and the label
+   disappears. Dark type on red is perfectly legible; pale type on pale paper
+   is not, so the change is timed to land as the fill completes. */
+.tk-nav a:hover,
+.tk-nav a:focus-visible,
+.resume-btn:hover,
+.resume-btn:focus-visible{
+  transition:color .16s var(--ease) .11s,border-color .18s var(--ease);
+}
+.tk-nav a::before,
+.resume-btn::before{
+  content:"";position:absolute;inset:0;z-index:0;
+  background:var(--red);
+  transform:scaleY(0);transform-origin:50% 100%;
+  transition:transform .26s cubic-bezier(.2,.75,.3,1);
+}
+.tk-nav a > *,
+.resume-btn > *{position:relative;z-index:1}
+.tk-nav a:hover,
+.tk-nav a:focus-visible{border-color:var(--red);color:var(--paper)}
+.tk-nav a:hover::before,
+.tk-nav a:focus-visible::before{transform:scaleY(1)}
+.tk-nav a:hover i,
+.tk-nav a:focus-visible i{opacity:.8}
+/* pressed: it sits down into the fill rather than bouncing */
+.tk-nav a:active::before{transform:scaleY(1)}
+.tk-nav a:active{transform:translateY(1px)}
 
 /* the covered box: foil sits over the punch until it is scratched off */
 .tk-nav a.covered{position:relative;overflow:hidden;border-color:var(--red)}
@@ -448,12 +514,23 @@ body.has-won .stamp-value{color:var(--ink)}
   position:absolute;inset:0;width:100%;height:100%;
   cursor:crosshair;touch-action:none;z-index:2;
 }
+/* The covered one does NOT fill. The fill would sit under the foil and show
+   through the moment the first stripe came off, which hands over the ending
+   before the joke has been told. The outline going hot red is the whole of
+   its hover, on purpose. */
 .tk-nav a.covered:hover{background:none;border-color:var(--red-hot);color:var(--ink)}
+.tk-nav a.covered:hover::before,
+.tk-nav a.covered:focus-visible::before{transform:scaleY(0)}
+
 .tk-nav a.scratched{
   background:var(--red);border-color:var(--red);color:var(--paper);
   animation:pop .34s var(--ease);
 }
 .tk-nav a.scratched i{opacity:.75}
+/* once it is open it is a button like the others, but it is already red, so
+   the fill that arrives is the hot one or nothing appears to happen at all */
+.tk-nav a.scratched:hover::before,
+.tk-nav a.scratched:focus-visible::before{background:var(--red-hot)}
 @keyframes pop{
   0%{transform:scale(.97)}
   55%{transform:scale(1.025)}
@@ -846,6 +923,39 @@ body.lang-ja .exp-role{
   word-break:keep-all;overflow-wrap:anywhere;
 }
 body.lang-ja .exp-org{line-height:1.55}
+
+/* ---- the résumé button ----
+   Under the experience list, which is where a CV belongs: he has just read
+   the four jobs and this is the long version of them.
+
+   Built like a home punch and it fills the same way (the shared rules are up
+   with .tk-nav a), so the one button on this page and the three on the home
+   page answer the pointer identically. The arrow drops a couple of pixels on
+   hover, which is the only part that says "download" without a word. */
+#aboutResume{margin:38px 0 0}
+.resume-btn{
+  display:inline-flex;align-items:center;gap:16px;
+  border:2px solid var(--fg);border-radius:3px;
+  padding:15px 22px;text-decoration:none;color:var(--fg);
+  font-family:var(--display);font-weight:800;
+  letter-spacing:-.02em;font-size:19px;
+}
+.resume-btn:hover,
+.resume-btn:focus-visible{color:var(--paper);border-color:var(--red)}
+.resume-btn:hover::before,
+.resume-btn:focus-visible::before{transform:scaleY(1)}
+.resume-btn:active{transform:translateY(1px)}
+.resume-arrow{
+  font-family:var(--mono);font-size:17px;line-height:1;opacity:.5;
+  transition:opacity .18s var(--ease),transform .22s var(--ease);
+}
+.resume-btn:hover .resume-arrow,
+.resume-btn:focus-visible .resume-arrow{opacity:1;transform:translateY(3px)}
+/* on a phone it takes the width rather than sitting as a small tab in a
+   large empty space under the list */
+@media (max-width:560px){
+  .resume-btn{display:flex;justify-content:space-between;width:100%}
+}
 
 /* And the page heading has to come down. Every Japanese character is one full
    em wide, where a Latin one averages about half, so the same point size buys

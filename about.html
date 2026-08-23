@@ -45,6 +45,9 @@
     <div id="aboutText"></div>
   </div>
   <div class="exp-list" id="expList"></div>
+  <!-- the résumé, under the experience list. Filled by the script below from
+       contact.resume, and left out entirely when there is no link in it. -->
+  <div id="aboutResume"></div>
 </div>
 
 <!-- the tear-off stub. site.js fills it. -->
@@ -199,6 +202,20 @@
       '<span class="exp-time">' + esc(e.time) + '</span>' +
       '</div>';
   }).join('');
+
+  /* ---- the résumé ----
+     Straight out of contact.resume, which is admin section 6, so the link and
+     the words on the button are both his. No link in there and the button is
+     not built at all, rather than sitting on the page going nowhere.
+     It opens in its own tab because it leaves the site. */
+  var R = (C.contact && C.contact.resume) || {};
+  if (R.url && String(R.url).trim()) {
+    document.getElementById('aboutResume').innerHTML =
+      '<a class="resume-btn" href="' + esc(String(R.url).trim()) + '" target="_blank" rel="noopener">' +
+        '<span>' + esc(R.label || 'Download my résumé') + '</span>' +
+        '<span class="resume-arrow" aria-hidden="true">&#8595;</span>' +
+      '</a>';
+  }
 
   /* the footer stub, including its small print, is built by site.js */
 
