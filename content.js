@@ -1548,9 +1548,11 @@ window.SITE_CONTENT = {
     ],
     portraitAlt: "Mohammed Essam",
     paragraphs: [
-      "Four years writing for people who skip the ads, and a bunch of other years writing just because I like to. Add to that an entire life having fun being dead serious about making ordinary things look superficially good (my room included).",
-      "I am an award-losing copywriter so far. Designed in Egypt, put to work in the UAE, and licensed in Madrid, which makes my buffet of ideas accidentally intercontinental.",
-      "I only believe in two things. One, buttlines are just headlines done butt first. And two, he who was born in a city can't be named a farmer. I don't know; I really just needed a second thing."
+      "More than 5 years of writing for people who skip the ads, and a few more years writing just because I like to.",
+      "An entire life having fun being serious about making ordinary things look superficially good (my room included).",
+      "Award-losing copywriter so far. Designed in Egypt, put to work in the UAE, and licensed in Madrid, which makes my buffet of ideas accidentally intercontinental.",
+      "I fought the AI and the AI won, so I moved to easier fights now: managing my MacBook's storage to open one more Adobe file.",
+      "Give me a mic connected to the whole world, and my take would be: \"No one who uses noise-canceling headphones can say human connection is the most powerful.\""
     ],
     skills: [
       "Big idea development",
