@@ -143,15 +143,26 @@ body{margin:0;background:var(--red);font-family:var(--mono);color:var(--paper)}
   bS.addEventListener('click', function () { show(false); });
   bD.addEventListener('click', function () { if (!bD.disabled) show(true); });
 
+  /* A browser does not download a webfont because a @font-face mentions one.
+     It downloads it when something on the page is about to be PAINTED in it.
+     Nothing here is, until the switch is thrown, and the switch will not turn
+     on until the font is loaded: the font waits for the switch and the switch
+     waits for the font, and the page sits there insisting a file that is
+     plainly in the folder is not.
+
+     document.fonts.load() is the way out. It asks for the family outright
+     rather than waiting for something to need it. Only THEN does check()
+     mean anything. document.fonts.ready on its own does not help: it resolves
+     when nothing is pending, and nothing was ever pending. */
   function settle(fn) {
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fn);
-    else setTimeout(fn, 500);
+    if (!document.fonts || !document.fonts.load) { setTimeout(fn, 500); return; }
+    document.fonts.load('800 100px Drowner')
+      .then(function () { return document.fonts.ready; })
+      .then(fn, fn);           /* a missing file rejects; carry on and report it */
   }
 
   settle(function () {
     var have = false;
-    /* the file is asked for by name. A missing one leaves the family
-       unresolved, which is exactly what has to be detected. */
     try { have = document.fonts.check('800 100px Drowner'); } catch (e) {}
 
     /* Syne is always showable, so the stage goes up either way; only the
