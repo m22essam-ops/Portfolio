@@ -1544,7 +1544,52 @@ window.SITE_CONTENT = {
         org: "Social Nuts, Cairo",
         time: "Feb 2019 – Jun 2023"
       }
-    ]
+    ],
+    /* ---- the Japanese version ----
+       Same shape as a project's `ja` block: only the fields written here are
+       swapped, anything left out falls back to the English. Remove this whole
+       block and the EN | JA switch disappears with it.
+
+       These are not transcriptions. The three jokes are rebuilt so they work
+       in Japanese rather than being carried across word for word:
+
+       "award-losing" is a coinage against "award-winning", so the Japanese is
+       a coinage against 受賞歴 (a record of winning): 落選歴, a record of
+       losing. Same joke, same mechanism, made out of Japanese.
+
+       "buttlines are just headlines done butt first" keeps the head/butt pair
+       literally (ヘッドライン / 尻), because that IS the joke and it survives.
+
+       "he who was born in a city can't be named a farmer" is a fake proverb,
+       so the Japanese is written in the classical register real proverbs use
+       (生まれし者 … 呼ばれず). It has to SOUND like a proverb to be funny that
+       it is not one.
+
+       Company names stay in Latin, cities do not, and the dates are rewritten
+       year-first because that is the order Japanese writes them in. */
+    ja: {
+      heading: "わたしについて、少し。",
+      paragraphs: [
+        "広告をスキップする人たちのために書いて四年。それ以外の年は、ただ書くのが好きで書いていました。そこに、ふつうのものを上っ面だけよく見せることへ大真面目に取り組んできた一生分を足してください（自分の部屋も含む）。",
+        "今のところ、落選歴のあるコピーライターです。エジプトで設計され、UAEで実働に入り、マドリードで認可を受けました。おかげでアイデアのビュッフェは、意図せず大陸をまたいでいます。",
+        "信じていることは二つだけ。ひとつ、バットラインとは、尻から書いただけのヘッドラインである。ふたつ、都会に生まれし者、農夫とは呼ばれず。いや、わかりません。二つ目がどうしても必要だっただけです。"
+      ],
+      skills: [
+        "ビッグアイデア開発",
+        "ブランドキャンペーン",
+        "人心操作",
+        "コピーライティング",
+        "ソーシャル・コンテンツ",
+        "脚本・ナレーション",
+        "コンセプト開発"
+      ],
+      experience: [
+        { role: "シニアコピーライター",       org: "Yango（MENA）",              time: "2024年6月 – 2025年7月" },
+        { role: "コピーライター",             org: "Ducklife, ドバイ（パートタイム）", time: "2024年2月 – 2025年7月" },
+        { role: "コピーライター",             org: "We Are Social, ドバイ",       time: "2023年7月 – 2024年6月" },
+        { role: "クリエイティブコピーライター", org: "Social Nuts, カイロ",         time: "2019年2月 – 2023年6月" }
+      ]
+    }
   },
   contact: {
     label: "03 — Get in touch",

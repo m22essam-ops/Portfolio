@@ -25,7 +25,14 @@
 </nav>
 
 <header class="page-head">
-  <div class="wrap"><h1 id="aboutHeading"></h1></div>
+  <div class="wrap">
+    <!-- the EN | JA row, filled by the script below and only when this page
+         actually has another language. Above the heading rather than beside
+         it: the heading runs to 138px and a 12px switch alongside it reads
+         as debris. -->
+    <div id="aboutLang"></div>
+    <h1 id="aboutHeading"></h1>
+  </div>
 </header>
 
 <div class="wrap">
@@ -72,7 +79,28 @@
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 
-  document.getElementById('aboutHeading').textContent = A.heading || 'Who I am.';
+  /* ---- language ----
+     The shared helpers are in site.js, so this page and the project page use
+     one copy of them. `has` is worked out from the content, not hard-coded:
+     the switch appears because `about.ja` exists, and deleting that block
+     takes the switch with it. */
+  var has  = Object.keys(window.LANGS || {}).filter(function (k) {
+    return A[k] && typeof A[k] === 'object';
+  });
+  var want = window.langWanted();
+  var lang = (want && A[want]) ? want : '';
+  var alt  = lang ? A[lang] : null;
+  var say  = window.langPick(A, alt);
+  var L    = lang ? window.LANGS[lang] : null;
+
+  window.applyLang(lang);
+  document.getElementById('aboutLang').innerHTML =
+    window.langSwitch('about.html', has, lang);
+
+  var heading = say('heading') || 'Who I am.';
+  document.getElementById('aboutHeading').textContent = heading;
+  /* the tab has to follow too, or a Japanese page sits behind an English tab */
+  if (lang) document.title = String(heading).replace(/[.。]\s*$/, '') + ' · Mohammed Essam';
 
   var portrait = document.getElementById('aboutPortrait');
   /* ---- the portrait, and the rest of the roll ----
@@ -148,17 +176,24 @@
   }
 
   var box = document.getElementById('aboutText');
-  var html = (A.paragraphs || []).map(function (t) {
+  var html = (say('paragraphs') || []).map(function (t) {
     return '<p class="about-text">' + esc(t) + '</p>';
   }).join('');
-  if ((A.skills || []).length) {
-    html += '<div class="skills-list">' + A.skills.map(function (s) {
+  var skills = say('skills') || [];
+  /* the skills are a flat list of words, so they are swapped whole rather
+     than merged by position: there is nothing on the English side that has
+     to keep lining up with them */
+  if (skills.length) {
+    html += '<div class="skills-list">' + skills.map(function (s) {
       return '<span class="skill-tag">' + esc(s) + '</span>';
     }).join('') + '</div>';
   }
   box.innerHTML = html;
 
-  document.getElementById('expList').innerHTML = (A.experience || []).map(function (e) {
+  /* the jobs ARE merged by position, and dropped whole if the two lists stop
+     being the same length. See langRows() in site.js for why. */
+  var jobs = window.langRows(A.experience, alt && alt.experience, ['role', 'org', 'time']);
+  document.getElementById('expList').innerHTML = jobs.map(function (e) {
     return '<div class="exp-row">' +
       '<div><span class="exp-role">' + esc(e.role) + '</span><span class="exp-org">' + esc(e.org) + '</span></div>' +
       '<span class="exp-time">' + esc(e.time) + '</span>' +

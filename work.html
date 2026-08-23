@@ -93,24 +93,12 @@
   var ranOnly = qs.get('ran') === '1';
 
   /* ---- language ----
-     A feasibility test on ONE project, not a translated site. The switch is
-     drawn only for a project that actually carries a `ja` block, so it can
-     never be a door into a page that is still in English, and every field is
-     taken one at a time: whatever the translation has not reached falls back
-     to his English rather than coming out blank. */
-  var LANGS = C.i18n || {};
-  var want = String(qs.get('lang') || '').toLowerCase();
-  var L = (want && LANGS[want]) ? LANGS[want] : null;
-
-  /* Noto Sans JP is fetched only when a second language is actually on
-     screen. It is a large family and the English site has no use for it. */
-  function loadFont(lang) {
-    if (lang !== 'ja') return;
-    var f = document.createElement('link');
-    f.rel = 'stylesheet';
-    f.href = 'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap';
-    document.head.appendChild(f);
-  }
+     A feasibility test, not a translated site. The shared helpers live in
+     site.js and the About page uses the same ones. The switch is drawn only
+     for a project that actually carries a `ja` block, so it can never be a
+     door into a page that is still in English. */
+  var LANGS = window.LANGS || {};
+  var want  = window.langWanted();
 
   /* ============ WORK INDEX ============ */
   function renderIndex() {
@@ -175,18 +163,12 @@
     /* the translation for this project, if it has one AND that is the language
        being asked for. `say` takes one field at a time so a half-finished
        translation shows his English for the rest instead of a hole. */
-    var alt  = (L && want && p[want] && typeof p[want] === 'object') ? p[want] : null;
+    var alt  = (want && p[want] && typeof p[want] === 'object') ? p[want] : null;
     var lang = alt ? want : '';
-    var say  = function (key) {
-      if (alt && alt[key] != null && String(alt[key]).trim()) return alt[key];
-      return p[key];
-    };
+    var say  = window.langPick(p, alt);
+    var L    = lang ? LANGS[lang] : null;
 
-    if (lang) {
-      document.documentElement.lang = lang;
-      document.body.classList.add('lang-' + lang);
-      loadFont(lang);
-    }
+    window.applyLang(lang);
 
     document.getElementById('pageTitle').textContent = say('title') + ' · Mohammed Essam';
 
@@ -195,25 +177,13 @@
       : ((L && L.spec) || W.presentedLabel || 'Spec');
 
     /* the switch, only where there is something to switch TO */
-    var here = 'work.html?slug=' + encodeURIComponent(p.slug);
-    var switcher = '';
     var others = Object.keys(LANGS).filter(function (k) {
       return p[k] && typeof p[k] === 'object';
     });
-    if (others.length) {
-      switcher = '<p class="lang-switch">' +
-        '<a href="' + here + '" lang="en"' + (lang ? '' : ' class="on" aria-current="true"') + '>EN</a>' +
-        others.map(function (k) {
-          var on = (k === lang);
-          return '<span class="bar" aria-hidden="true">|</span>' +
-            '<a href="' + here + '&lang=' + encodeURIComponent(k) + '" lang="' + esc(k) + '"' +
-            (on ? ' class="on" aria-current="true"' : '') + '>' +
-            esc((LANGS[k] && LANGS[k].label) || k.toUpperCase()) + '</a>';
-        }).join('') +
-        '</p>';
-      /* the page mark has to get out of its way: see .has-lang in styles.css */
-      document.body.classList.add('has-lang');
-    }
+    var switcher = window.langSwitch(
+      'work.html?slug=' + encodeURIComponent(p.slug), others, lang);
+    /* the page mark has to get out of its way: see .has-lang in styles.css */
+    if (switcher) document.body.classList.add('has-lang');
 
     var html = '<section class="project"><div class="wrap">' +
       '<div class="project-top">' +
@@ -258,25 +228,14 @@
     /* Credits are merged by position rather than swapped wholesale: the ROLES
        translate, the NAMES do not. Japanese credits carry foreign names in
        Latin as a matter of course, and inventing a katakana spelling of a real
-       colleague's name is a mistake with their name on it.
-
-       And position is only trustworthy while the two lists are the same
-       length. Add or delete a credit in admin and the translated list no
-       longer lines up, which would put the wrong job title against a real
-       person's name. If the counts disagree, the whole translated list is
-       dropped and the credits come out in English. An English credit is a
-       small loss; a wrong one is somebody else's problem. */
-    var altCr = (alt && alt.credits) || [];
-    if (altCr.length !== (p.credits || []).length) altCr = [];
-    var credits = (p.credits || []).map(function (c, i) {
-      var t = altCr[i] || {};
-      return {
-        role: (t.role && String(t.role).trim()) ? t.role : c.role,
-        name: (t.name && String(t.name).trim()) ? t.name : c.name
-      };
-    }).filter(function (c) {
-      return (c.role && String(c.role).trim()) || (c.name && String(c.name).trim());
-    });
+       colleague's name is a mistake with their name on it. langRows() in
+       site.js drops the translation entirely if the two lists stop being the
+       same length, which is what stops a job title sliding onto the wrong
+       person after a credit is added or deleted in admin. */
+    var credits = window.langRows(p.credits, alt && alt.credits, ['role', 'name'])
+      .filter(function (c) {
+        return (c.role && String(c.role).trim()) || (c.name && String(c.name).trim());
+      });
     if (credits.length) {
       html += '<div class="credits"><h2 class="credits-head">' +
         esc((L && L.credits) || 'Credits') + '</h2><ul class="credits-list">' +

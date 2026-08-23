@@ -4,6 +4,95 @@
 (function () {
   var C = window.SITE_CONTENT || {};
 
+  /* ================= A SECOND LANGUAGE =================
+     A feasibility test, not a translated site. Two things carry one so far:
+     the About page (`about.ja`) and the Rivan Tower project
+     (`work.projects[].ja`). `i18n.<lang>` holds the furniture round them,
+     meaning the words a page prints itself rather than the words he wrote.
+
+     It all lives here rather than in each page because both pages need the
+     same four moves, and a second copy of this is a second copy to get wrong.
+
+     THE RULE THAT MAKES IT SAFE: a switch is only ever drawn for content that
+     actually HAS the other language. It can never be a door into a page that
+     is still in English.
+     ==================================================== */
+  var LANGS = window.LANGS = C.i18n || {};
+
+  function esc1(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  /* which language the URL is asking for, if it is one we have */
+  window.langWanted = function () {
+    var q = String(new URLSearchParams(location.search).get('lang') || '').toLowerCase();
+    return (q && LANGS[q]) ? q : '';
+  };
+
+  window.applyLang = function (lang) {
+    if (!lang) return;
+    document.documentElement.lang = lang;
+    document.body.classList.add('lang-' + lang);
+    if (lang === 'ja') {
+      /* Fetched only when Japanese is actually on screen. It is a large
+         family and the English site has no use for it. Note it goes at the
+         END of the stacks in styles.css, never the front: font fallback is
+         per character, so Latin still comes out of Syne, Bricolage and
+         Barlow and only the Japanese falls through to Noto. */
+      var f = document.createElement('link');
+      f.rel = 'stylesheet';
+      f.href = 'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap';
+      document.head.appendChild(f);
+    }
+  };
+
+  /* the EN | JA row. `has` is the languages THIS page has, not all of them. */
+  window.langSwitch = function (baseHref, has, current) {
+    has = (has || []).filter(function (k) { return LANGS[k]; });
+    if (!has.length) return '';
+    var join = baseHref.indexOf('?') > -1 ? '&' : '?';
+    var out = '<a href="' + esc1(baseHref) + '" lang="en"' +
+              (current ? '' : ' class="on" aria-current="true"') + '>EN</a>';
+    has.forEach(function (k) {
+      out += '<span class="bar" aria-hidden="true">|</span>' +
+             '<a href="' + esc1(baseHref + join + 'lang=' + encodeURIComponent(k)) +
+             '" lang="' + esc1(k) + '"' +
+             (k === current ? ' class="on" aria-current="true"' : '') + '>' +
+             esc1(LANGS[k].label || k.toUpperCase()) + '</a>';
+    });
+    return '<p class="lang-switch">' + out + '</p>';
+  };
+
+  /* one field at a time, so a half-finished translation shows his English for
+     whatever it has not reached rather than leaving a hole */
+  window.langPick = function (obj, alt) {
+    return function (key) {
+      if (alt && alt[key] != null && String(alt[key]).trim()) return alt[key];
+      return (obj || {})[key];
+    };
+  };
+
+  /* Two parallel lists merged by POSITION, which is only trustworthy while
+     they are the same length. Add or delete a credit or a job in admin and
+     the translated list no longer lines up, which would put the wrong job
+     title against a real person's name, or the wrong dates against a real
+     employer. If the counts disagree the translation is dropped and the list
+     comes out in English. An English row is a small loss; a wrong one is
+     somebody else's problem. */
+  window.langRows = function (rows, altRows, keys) {
+    rows = rows || [];
+    altRows = (altRows && altRows.length === rows.length) ? altRows : [];
+    return rows.map(function (r, i) {
+      var t = altRows[i] || {}, out = {};
+      keys.forEach(function (k) {
+        out[k] = (t[k] && String(t[k]).trim()) ? t[k] : r[k];
+      });
+      return out;
+    });
+  };
+
   /* ----- top nav -----
      The logo is a two-line lockup: the name in capitals, the job underneath
      and deliberately not bold. Plain text, no red dot: the trailing period

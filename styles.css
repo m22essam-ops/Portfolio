@@ -784,6 +784,10 @@ body.has-won .tk-badge{background:var(--ink)}
 .lang-switch a:hover{color:var(--red)}
 .lang-switch a.on{color:var(--fg);cursor:default}
 .lang-switch .bar{color:var(--fg-faint);opacity:.5}
+/* Above a page heading rather than beside a back link, which is where the
+   About page needs it. On its own line and right-aligned: that heading runs
+   to 138px and a 12px switch set alongside it reads as debris. */
+.page-head .lang-switch{justify-content:flex-end;margin:0 0 20px}
 /* the page's registration cross is fixed at right:34px top:96px, which is
    exactly where the switch lands, and the two were printed on top of each
    other. Only a page that HAS a switch moves its mark, so every other work
@@ -822,6 +826,40 @@ body.lang-ja .project-body p{
   line-height:1.85;line-break:strict;text-align:justify;
 }
 body.lang-ja .credits-list li{line-break:strict}
+
+/* the About page. Same three problems as the project page and the same three
+   answers: a measure counted in characters rather than in zeroes, room in the
+   line, and the Latin tracking taken back off the display face. */
+body.lang-ja .about-text{
+  max-width:32em;              /* 32 characters a line, set at the paragraph's own size */
+  line-height:1.9;line-break:strict;text-align:justify;
+}
+body.lang-ja .exp-role{
+  letter-spacing:0;line-height:1.4;
+  /* a job title is a single katakana run with no punctuation in it, so left
+     to itself the browser breaks it wherever it runs out of room, including
+     before the long-vowel mark. Hold the run together; the row stacks under
+     900px so there is width for it. */
+  word-break:keep-all;overflow-wrap:anywhere;
+}
+body.lang-ja .exp-org{line-height:1.55}
+
+/* And the page heading has to come down. Every Japanese character is one full
+   em wide, where a Latin one averages about half, so the same point size buys
+   roughly a fifth less line. At the English 11vw the heading broke in the
+   middle of a word, which is normal in Japanese body text and unforgivable in
+   a headline. This lands it on one line on a wide screen and lets it break at
+   the comma below that. */
+body.lang-ja .page-head h1{
+  font-size:clamp(32px,7.4vw,100px);
+  /* Japanese may break between almost any two characters, which is right in
+     body copy and unforgivable in a headline: 少し came apart across two
+     lines. keep-all holds a run together so the break lands on the comma
+     instead, and overflow-wrap is the escape hatch for a run that genuinely
+     cannot fit, so a longer heading can never push off the side of a phone. */
+  word-break:keep-all;
+  overflow-wrap:anywhere;
+}
 
 .project-meta{font-size:11.5px;color:var(--fg-faint);margin:0 0 16px}
 .status-produced{color:var(--red)}
@@ -969,6 +1007,14 @@ body.lang-ja .credits-list li{line-break:strict}
 @media (max-width:900px){
   .work-list{grid-template-columns:1fr;gap:44px}
   .about-grid{grid-template-columns:1fr;gap:34px}
+  /* The dates come off the end of the row and sit under the job. Beside it
+     they were taking about a third of a phone's width and leaving the title
+     a column too narrow to hold it, which broke "Creative Copywriter" across
+     two lines in English and broke クリエイティブコピーライター in the middle
+     of a long-vowel mark in Japanese, which is a line a Japanese typesetter
+     may not begin. Full width fixes both without shrinking any type. */
+  .exp-row{flex-direction:column;align-items:flex-start;gap:6px}
+  .exp-time{order:-1}
   /* stacked, there is no text beside it to match, so the frame carries its
      own portrait shape instead of stretching to a row it now owns alone */
   .about-shot{min-height:0;aspect-ratio:4/5}

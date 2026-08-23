@@ -558,43 +558,87 @@ all-work page, so listing "All work" under it said the same thing twice.
 - `work.ranNote` is the line under the Work-that-worked heading. It is his to
   write and currently holds a placeholder.
 
-### A second language, on one project
+### A second language (a feasibility test)
 
-A **feasibility test**, not a translated site. `work.projects[].ja` on
-`rivan-tower` is the only one, and `i18n.ja` holds the furniture round it (the
-words the page prints itself, as opposed to the words he wrote).
+Not a translated site. **Two things carry Japanese**: the About page
+(`about.ja`) and the Rivan Tower project (`work.projects[].ja`). `i18n.ja`
+holds the furniture round them, meaning the words a page prints itself as
+opposed to the words he wrote.
 
-- **The EN | JA switch only appears on a project that actually has a `ja`
-  block.** It can never be a door into a page that is still in English.
-- Every field is taken one at a time, so whatever the translation has not
-  reached falls back to his English rather than coming out blank.
-- **Credit roles translate, names do not.** Japanese credits carry foreign
-  names in Latin as a matter of course, and inventing a katakana spelling of a
-  real colleague's name is a mistake with their name on it. The two lists are
-  merged by position, and **if their lengths disagree the translated list is
-  dropped entirely** — adding a credit in admin must never slide the wrong job
-  title onto somebody's name.
+**All the plumbing is in `site.js`** — `langWanted`, `applyLang`, `langSwitch`,
+`langPick`, `langRows` — because both pages need the same four moves and a
+second copy of this is a second copy to get wrong. Adding a third translated
+page should not add a fifth copy of it either.
+
+- **THE RULE THAT MAKES IT SAFE: a switch is only ever drawn for content that
+  actually HAS the other language.** It can never be a door into a page that is
+  still in English. Delete a `ja` block and its switch disappears with it.
+- Every field is taken one at a time (`langPick`), so a half-finished
+  translation shows his English for whatever it has not reached.
+- **Parallel lists are merged by position, and dropped whole if the two stop
+  being the same length** (`langRows`). Credits and jobs both go through it.
+  Add a credit in admin without touching the translation and the whole
+  translated list falls back to English, rather than sliding the wrong job
+  title onto a real person's name or the wrong dates onto a real employer.
+  All three cases were tested: matched, mismatched, and partly filled.
+- **Credit and company NAMES are never translated, cities are.** Japanese
+  credits carry foreign names in Latin as a matter of course. Dates are
+  rewritten year-first, which is the order Japanese writes them in.
 - The next-project link carries the language only if the next project has it.
-- **Noto Sans JP is added to the END of every stack, never the front.** Font
+- The nav stays in English on a translated page. It is global chrome and only
+  two things are translated; a Japanese nav pointing at English pages is worse
+  than an English one.
+
+**The jokes are rebuilt, not transcribed.** This matters more than the rest of
+it, because his copy is the site:
+
+- "award-losing" is a coinage against "award-winning", so the Japanese is a
+  coinage against 受賞歴 (a record of winning): **落選歴**, a record of losing.
+- "buttlines are just headlines done butt first" keeps the head/butt pair
+  literally (ヘッドライン / 尻), because that IS the joke and it survives.
+- "he who was born in a city can't be named a farmer" is a fake proverb, so
+  the Japanese is written in the classical register real proverbs use
+  (生まれし者 … 呼ばれず). It has to sound like a proverb to be funny that it is
+  not one.
+
+**Japanese typesetting, all of it in `body.lang-ja` in styles.css:**
+
+- **Noto Sans JP goes at the END of every stack, never the front.** Font
   fallback is per character, so Latin still comes out of Syne, Bricolage and
   Barlow and only the Japanese falls through to Noto. It is fetched only when
-  a second language is actually on screen.
-- The display tracking has to come off: `-.03em` is a Latin fix for gaps
-  between capitals and it pushes kana into each other. Same for the .95
-  leading. See `body.lang-ja` in `styles.css`.
-- **The measure has to be re-set too.** `62ch` is 62 zeroes wide and a kanji is
-  about two of those, so the English column comes out at 22 Japanese characters
+  Japanese is actually on screen; verified absent on the English pages.
+- The display tracking comes off. `-.03em` is a Latin fix for gaps between
+  capitals and it pushes kana into each other. Same for the `.95` leading.
+- **The measure has to be re-set.** `62ch` is 62 zeroes wide and a kanji is
+  about two of those, so an English column comes out at 22 Japanese characters
   a line. Set on the paragraph and in `em`, which is one character square, so
-  the number in the rule is literally the characters per line.
-- The page mark is fixed at `right:34px top:96px`, which is exactly where the
-  switch lands. Only a page that has a switch moves its mark (`.has-lang`).
-- Both save paths handle it: `b64encode` goes through `TextEncoder` before
-  `btoa`, and `local-server.py` writes `content.js` as UTF-8. Verified that a
-  round trip through admin preserves `i18n` and the `ja` block, because admin
-  deep-clones the whole of `SITE_CONTENT` and serialises it whole rather than
-  rebuilding the projects array from its form fields.
-- **`work.note` currently ends "None of them are in Japanese."** One of them
-  now is. That is his line and it is flagged, not changed.
+  the number in the rule IS the characters per line. 34 on a project, 32 on
+  About.
+- **The page heading comes down to `7.4vw` from `11vw`.** Every Japanese
+  character is a full em where a Latin one averages about half, so the same
+  size buys roughly a fifth less line.
+- **`word-break:keep-all` on headings and job titles.** Japanese may break
+  between almost any two characters, which is right in body copy and wrong in
+  a headline: 少し came apart across two lines, and クリエイティブコピーライター
+  broke before its long-vowel mark, which is a character a Japanese typesetter
+  may not begin a line with. `overflow-wrap:anywhere` is the escape hatch so a
+  longer heading can still never push off the side of a phone.
+- **`.exp-row` stacks under 900px** and the dates move above the job. Beside
+  it they took a third of a phone's width and left the title a column too
+  narrow to hold it. This fixes the English rows too.
+- Verified by walking every text node character by character and reporting
+  which character starts each visual line: **zero forbidden line starts** at
+  both 388px and 1360px.
+
+**Both save paths handle it.** `b64encode` goes through `TextEncoder` before
+`btoa`, and `local-server.py` writes `content.js` as UTF-8. A round trip
+through admin preserves `i18n`, `about.ja` and the project's `ja`, because
+admin deep-clones the whole of `SITE_CONTENT` and serialises it whole rather
+than rebuilding its arrays from the form fields. Verified.
+
+**`work.note` still ends "None of them are in Japanese."** Two of them now are.
+That is his line and it is flagged, not changed. `about.label` is not
+translated because nothing renders it.
 
 ## Don't
 
