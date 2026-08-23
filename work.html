@@ -150,7 +150,15 @@
         ? '<div class="frame">' + sticker + '<img src="' + esc(window.imgSrc(p.image)) +
           '" alt="' + esc(p.alt || p.title) + '" loading="lazy"></div>'
         : '<div class="frame empty">' + sticker + '</div>';
-      var meta = [p.client, p.year].filter(Boolean).join(' · ');
+      /* The client is left OFF this line when the title already opens with it,
+         which is now every project: he asked for the brand in front of the
+         idea so the grid can be scanned by brand. Printed in both places it
+         was the same word twice, two lines apart, which reads as a mistake
+         rather than as emphasis. Titles that do NOT start with the brand
+         still get it here, so nothing loses its client. */
+      var brandInTitle = p.client &&
+        String(p.title || '').toLowerCase().indexOf(String(p.client).toLowerCase()) === 0;
+      var meta = [brandInTitle ? '' : p.client, p.year].filter(Boolean).join(' · ');
 
       return '<a class="piece reveal" href="work.html?slug=' + encodeURIComponent(p.slug) + '">' +
         img +
@@ -198,7 +206,12 @@
         '<a class="back-link" href="work.html">← ' + esc((L && L.allWork) || 'All work') + '</a>' +
         switcher +
       '</div>' +
-      '<p class="project-meta">' + esc([say('client'), say('category'), p.year].filter(Boolean).join(' · ')) +
+      /* same rule as the grid card: the brand is not printed twice on one page */
+      '<p class="project-meta">' + esc([
+          String(say('title') || '').toLowerCase()
+            .indexOf(String(say('client') || ' ').toLowerCase()) === 0 ? '' : say('client'),
+          say('category'), p.year
+        ].filter(Boolean).join(' · ')) +
       ' · <span class="' + (entry.ran ? 'status-produced' : 'status-pitched') + '">' + esc(status) + '</span>' +
       (say('sticker') ? ' · ' + esc(say('sticker')) : '') + '</p>' +
       '<h1 class="project-title">' + esc(say('title')) + '</h1>';

@@ -1097,6 +1097,32 @@ label.field .ja-stale { display: block; color: var(--accent); font-size: 11.5px;
     (M.work.projects || []).forEach(function (p, i) {
       scan('work.projects.' + i, p.title || p.slug || 'A project', p);
     });
+
+    /* TWO PROJECTS WITH THE SAME TRANSLATION.
+       This happened once, silently: Unstoppable Rides ended up carrying a
+       word-for-word copy of The Hotel Is Yours' Japanese, including Rivan's
+       client, story and credits. Nothing on the site could tell, so the Yango
+       page offered EN | JA and served somebody else's project behind it.
+       Whatever copied it is not in this editor, so instead of guessing at the
+       cause, the condition is simply made loud. */
+    var seen = {};
+    (M.work.projects || []).forEach(function (p) {
+      var ja = p.ja;
+      if (!ja || !ja.title) return;
+      var key = String(ja.title).trim();
+      if (!key) return;
+      if (seen[key]) {
+        out.push({
+          path: '', where: 'TWO PROJECTS, ONE TRANSLATION',
+          what: seen[key] + '  and  ' + (p.title || p.slug),
+          was: 'these two carry the same Japanese title',
+          now: 'one of them is showing the other one\'s work in Japanese',
+          jp: key
+        });
+      } else {
+        seen[key] = p.title || p.slug;
+      }
+    });
     return out;
   }
 
