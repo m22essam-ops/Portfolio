@@ -1726,9 +1726,11 @@ window.SITE_CONTENT = {
     ja: {
       heading: "わたしについて、少し。",
       paragraphs: [
-        "広告をスキップする人たちのために書いて四年。それ以外の年は、ただ書くのが好きで書いていました。そこに、ふつうのものを上っ面だけよく見せることへ大真面目に取り組んできた一生分を足してください（自分の部屋も含む）。",
-        "今のところ、落選歴のあるコピーライターです。エジプトで設計され、UAEで実働に入り、マドリードで認可を受けました。おかげでアイデアのビュッフェは、意図せず大陸をまたいでいます。",
-        "信じていることは二つだけ。ひとつ、バットラインとは、尻から書いただけのヘッドラインである。ふたつ、都会に生まれし者、農夫とは呼ばれず。いや、わかりません。二つ目がどうしても必要だっただけです。"
+        "広告をスキップする人たちのために書いて五年以上。それとは別に、ただ好きだからという理由だけで書いていた年も何年か。",
+        "そして、ふつうのものを上っ面だけよく見せることに真面目になり、それを楽しんできた一生分（自分の部屋も含む）。",
+        "今のところ、落選歴のあるコピーライター。エジプトで設計され、UAEで実働に入り、マドリードで認可を受けました。おかげでアイデアのビュッフェは、意図せず大陸をまたいでいます。",
+        "AIと戦って、AIが勝ちました。それで、もっと簡単な戦いに移りました。Adobeのファイルをもう一つ開くために、MacBookの空き容量と戦っています。",
+        "世界中につながったマイクを渡されたとして、私が言うことはこれです。「ノイズキャンセリングのヘッドホンを使う人間に、人と人とのつながりこそ最強だと言う資格はない。」"
       ],
       skills: [
         "ビッグアイデア開発",
@@ -1764,9 +1766,11 @@ window.SITE_CONTENT = {
       _from: {
         heading: "A little about me.",
         paragraphs: [
-          "Four years writing for people who skip the ads, and a bunch of other years writing just because I like to. Add to that an entire life having fun being dead serious about making ordinary things look superficially good (my room included).",
-          "I am an award-losing copywriter so far. Designed in Egypt, put to work in the UAE, and licensed in Madrid, which makes my buffet of ideas accidentally intercontinental.",
-          "I only believe in two things. One, buttlines are just headlines done butt first. And two, he who was born in a city can't be named a farmer. I don't know; I really just needed a second thing."
+          "More than 5 years of writing for people who skip the ads, and a few more years writing just because I like to.",
+          "An entire life having fun being serious about making ordinary things look superficially good (my room included).",
+          "Award-losing copywriter so far. Designed in Egypt, put to work in the UAE, and licensed in Madrid, which makes my buffet of ideas accidentally intercontinental.",
+          "I fought the AI and the AI won, so I moved to easier fights now: managing my MacBook's storage to open one more Adobe file.",
+          "Give me a mic connected to the whole world, and my take would be: \"No one who uses noise-canceling headphones can say human connection is the most powerful.\""
         ],
         skills: [
           "Big idea development",

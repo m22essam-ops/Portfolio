@@ -110,15 +110,23 @@
     document.getElementById('pageTitle').textContent =
       (ranOnly ? 'Work that worked' : 'The work') + ' · Mohammed Essam';
 
+    /* The way back to all the work goes AFTER the grid, not under the heading.
+       It sat at the top for one pass and it was the wrong thing in the wrong
+       place twice over: a big red line of capitals shouting louder than his
+       own sub-line, and a door OUT of the page offered before anyone had seen
+       a single thing in it. At the foot of the list it is what it actually
+       is, which is the end of the list. Small, quiet, and it says four words,
+       because `ranNote` above already explains what this page is a subset of. */
     page.innerHTML =
       '<header class="page-head"><div class="wrap">' +
         '<h1>' + esc(heading) + '</h1>' +
         (note ? '<p class="note">' + esc(note) + '</p>' : '') +
-        (ranOnly
-          ? '<p class="note"><a class="all-work" href="work.html">See everything, including the work that never ran →</a></p>'
-          : '') +
       '</div></header>' +
-      '<div class="wrap"><div class="work-list" id="workList"></div></div>';
+      '<div class="wrap"><div class="work-list" id="workList"></div>' +
+        (ranOnly
+          ? '<p class="all-work-end"><a class="all-work" href="work.html">See all work →</a></p>'
+          : '') +
+      '</div>';
 
     /* Work that worked gets its own ground and its own mark, so the two pages
        are told apart at a glance instead of by reading the heading. All work

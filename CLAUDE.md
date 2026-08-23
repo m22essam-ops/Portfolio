@@ -671,6 +671,51 @@ than rebuilding its arrays from the form fields. Verified.
 That is his line and it is flagged, not changed. `about.label` is not
 translated because nothing renders it.
 
+## Added 23 Aug 2026
+
+### content.js comments do not survive
+
+**Anything written as a comment in `content.js` is gone the next time he
+saves.** admin holds the file as data and serialises it back out as JSON, so
+comments are not edited away, they simply never make the round trip. Do not
+put explanations in there expecting them to last. They belong in this file.
+
+### The way back off Work that worked
+
+It is at the FOOT of the grid now, small and quiet, and says four words:
+"See all work →". It spent one pass under the heading as a line of red
+capitals reading "See everything, including the work that never ran", which
+was the wrong thing in the wrong place twice over: louder than his own
+sub-line, and a door OUT of the page offered before anyone had seen a single
+thing in it. `ranNote` already explains what the page is a subset of.
+
+### Drag a project to reorder it (admin)
+
+A grip handle in each card's summary. **Move up / Move down stay** and are not
+redundant: they are the keyboard path, the touch path, and the only way to
+move something one place without aiming.
+
+- The card is made `draggable` only while the handle is held. Set it
+  permanently and no text inside any field could be selected.
+- Cards are reordered in the DOM live during the drag, so what he sees is the
+  answer rather than a hint about it. On drop the order is read back out of
+  the DOM via each card's `data-idx` and applied to the array.
+- **The re-render after a drop is not optional.** Every field carries a
+  `data-path` with its index baked in (`work.projects.4.title`), so after a
+  move those paths address the wrong projects and the next keystroke would be
+  written into somebody else's card. Verified after a real drag: every card's
+  field path matches the project it is inside.
+
+### Fonts
+
+`preview-font.html` sets "Award-losing copywriter" at home-page size in Syne
+and in **Drowner** (Hainz Studio), side by side, and tells him what is missing
+until the file is in `fonts/`. It is not linked from the site.
+
+**Drowner is a distressed, textured display face**, which runs straight into
+the art direction above: no grain, no texture of any kind, twice rejected as
+1970s pastiche. Raised with him; his call.
+
 ## Don't
 
 - Don't add a build step or framework.

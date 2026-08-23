@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drowner vs Syne · Mohammed Essam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Syne:wght@400..800&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   A specimen sheet, not part of the site. Nothing here ships.
+
+   It exists because a typeface cannot be judged from a description
+   and I cannot render one I do not have the file for. Put the file
+   in fonts/ and this page answers the question immediately, at the
+   real size, against the face it would replace.
+
+   This is the same drop-in slot Moniqa has in styles.css, and the
+   404s it makes while the file is missing are the reason that one
+   is commented out on the live site. They stay here because this
+   page is never linked from anywhere.
+   ============================================================ */
+@font-face{
+  font-family:"Drowner";
+  src:url("fonts/Drowner.woff2") format("woff2"),
+      url("fonts/Drowner.otf")   format("opentype"),
+      url("fonts/Drowner.ttf")   format("truetype");
+  font-weight:100 900;
+  font-display:swap;
+}
+
+:root{
+  --red:#E3261A; --ink:#0B0A09; --paper:#F6F3EE;
+  --mono:"Barlow Condensed","Hanken Grotesk",sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--red);font-family:var(--mono);color:var(--paper)}
+
+.head{padding:26px 30px 20px;border-bottom:1px solid #ffffff33}
+.head h1{margin:0 0 6px;font-family:"Bricolage Grotesque",sans-serif;font-size:24px;letter-spacing:-.02em}
+.head p{margin:0;font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.72}
+
+.miss{
+  margin:24px 30px;padding:20px 22px;
+  background:var(--paper);color:var(--ink);border-radius:3px;
+}
+.miss h2{margin:0 0 8px;font-family:"Bricolage Grotesque",sans-serif;font-size:17px;letter-spacing:-.01em}
+.miss p{margin:0 0 10px;font-family:"Hanken Grotesk",sans-serif;font-size:14.5px;line-height:1.55;letter-spacing:0;text-transform:none}
+.miss code{background:#0B0A0912;padding:2px 6px;border-radius:3px;font-size:13px}
+.miss a{color:var(--red)}
+.miss p:last-child{margin-bottom:0}
+
+/* each specimen is the home page's own ticket, at the home page's own size */
+.spec{padding:26px 30px 34px}
+.spec .tag{
+  font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  margin:0 0 10px;display:flex;gap:10px;align-items:center;
+}
+.spec .tag b{font-weight:600}
+.spec .tag em{font-style:normal;opacity:.66}
+.ticket{
+  background:var(--paper);color:var(--ink);
+  border-radius:4px;padding:38px 42px 42px;
+}
+.tk-title{
+  margin:0;font-weight:800;
+  letter-spacing:-.035em;line-height:.92;
+  font-size:clamp(46px,9vw,118px);
+}
+.tk-title span{display:block;white-space:nowrap}
+.tk-title span:last-child{color:var(--red)}
+.syne .tk-title{font-family:"Syne","Bricolage Grotesque",sans-serif}
+.drow .tk-title{font-family:"Drowner","Syne",sans-serif}
+/* a distressed face carries its own texture, so it is given no tracking
+   help: this is the face as it actually is */
+.drow .tk-title{letter-spacing:0}
+
+.sizes{display:flex;flex-wrap:wrap;gap:26px;margin-top:26px;align-items:baseline}
+.sizes div{font-family:"Drowner","Syne",sans-serif;font-weight:800;color:var(--ink)}
+.syne .sizes div{font-family:"Syne",sans-serif}
+.s1{font-size:56px}.s2{font-size:34px}.s3{font-size:22px}.s4{font-size:15px}
+
+.note{
+  padding:0 30px 40px;font-size:12px;letter-spacing:.1em;
+  text-transform:uppercase;opacity:.7;max-width:70ch;line-height:1.9;
+}
+</style>
+</head>
+<body>
+
+<div class="head">
+  <h1>Drowner, against what is there now</h1>
+  <p>The home headline, at the size the home page sets it</p>
+</div>
+
+<div class="miss" id="miss" hidden>
+  <h2>The Drowner file is not in this folder yet</h2>
+  <p>Everything below is showing <strong>Syne</strong>, so the two specimens look identical. To see the real thing:</p>
+  <p>1. Get it from <a href="https://www.behance.net/gallery/217765021/FREE-FONT-DROWNER-Display-Font" target="_blank" rel="noopener">Hainz Studio's own page on Behance</a> (free version), or buy the commercial licence on <a href="https://creativemarket.com/HainzStudio/290988602-Drowner-Display-Font" target="_blank" rel="noopener">Creative Market</a>. This site is your professional portfolio, so it is a commercial use and the licence matters.</p>
+  <p>2. Put the file in a <code>fonts</code> folder next to this page, named <code>Drowner.otf</code>, <code>Drowner.ttf</code> or <code>Drowner.woff2</code>.</p>
+  <p>3. Refresh this page. Nothing else needs changing.</p>
+</div>
+
+<div class="spec syne">
+  <p class="tag"><b>Now</b><em>Syne</em></p>
+  <div class="ticket">
+    <h2 class="tk-title"><span>Award-losing</span><span>copywriter</span></h2>
+    <div class="sizes">
+      <div class="s1">Award-losing</div>
+      <div class="s2">Work that worked</div>
+      <div class="s3">The Hotel Is Yours</div>
+      <div class="s4">Mohammed Essam</div>
+    </div>
+  </div>
+</div>
+
+<div class="spec drow">
+  <p class="tag"><b>Proposed</b><em>Drowner &mdash; Hainz Studio</em></p>
+  <div class="ticket">
+    <h2 class="tk-title"><span>Award-losing</span><span>copywriter</span></h2>
+    <div class="sizes">
+      <div class="s1">Award-losing</div>
+      <div class="s2">Work that worked</div>
+      <div class="s3">The Hotel Is Yours</div>
+      <div class="s4">Mohammed Essam</div>
+    </div>
+  </div>
+</div>
+
+<p class="note" id="warn"></p>
+
+<script>
+(function () {
+  function ready(fn) {
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fn);
+    else setTimeout(fn, 400);
+  }
+  ready(function () {
+    var have = false;
+    try { have = document.fonts.check('700 100px Drowner'); } catch (e) {}
+    document.getElementById('miss').hidden = have;
+    document.getElementById('warn').textContent = have
+      ? 'Drowner is loaded. The lower specimen is the real face.'
+      : '';
+  });
+})();
+</script>
+
+</body>
+</html>
