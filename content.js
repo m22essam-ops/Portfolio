@@ -18,7 +18,7 @@ window.SITE_CONTENT = {
     serial: "No. 131313 . Exp. never",
     titleTop: "Award-losing",
     titleBottom: "copywriter",
-    sub: "I craft headlines in English and Arabic to sell just about anything, yet I can’t rewrite my destiny...",
+    sub: "I write headlines in English and Arabic to sell just about anything, yet I can’t rewrite my destiny...",
     scratchNote: "...think you can give it a shot?",
     badge: "I WON NOTHING",
     terms: "Odds of winning: historically High. Ticket has no cash value and neither did the awards. Keep this as proof of participation or share it with your loved ones.",
@@ -84,7 +84,7 @@ window.SITE_CONTENT = {
   },
   work: {
     heading: "The work.",
-    note: "Some are real. Some are spec. None of them are in Japanese.",
+    note: "A mix of real and spec work. I added stickers to save you the guesswork.",
     producedLabel: "Produced",
     presentedLabel: "Spec",
     limit: 0,
