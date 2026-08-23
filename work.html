@@ -220,9 +220,26 @@
             return '<figure class="project-media"><div class="video-wrap"><video src="' +
               esc(window.imgSrc(src)) + '" controls preload="metadata" playsinline></video></div>' + cap + '</figure>';
           }
-          /* a pasted embed: dig the src out of it */
+          /* A pasted embed: dig the src out of it.
+
+             What comes out is still HTML SOURCE, so its ampersands are
+             written &amp; — Vimeo's embed code is full of them. Escaping that
+             again gave the browser &amp;amp;, which it decoded once, leaving
+             a literal &amp; between every parameter. The video still played,
+             because its id is in the path, but every parameter after the
+             first arrived under the wrong name: autopause became amp;autopause
+             and did nothing, so on a project with five videos they would all
+             have kept playing over each other.
+
+             Decoded once here, escaped once below, which is the right number
+             of each. Done through the DOM rather than a list of replacements
+             so every entity is covered, not the four anyone remembers. */
           var em = /<iframe[^>]*\bsrc=["']([^"']+)["']/i.exec(src);
-          if (em) src = em[1];
+          if (em) {
+            var dec = document.createElement('textarea');
+            dec.innerHTML = em[1];
+            src = dec.value;
+          }
           return '<figure class="project-media"><div class="video-wrap"><iframe src="' + esc(src) +
             '" title="' + esc(m.caption || p.title) + '" frameborder="0" loading="lazy"' +
             ' allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>' + cap + '</figure>';

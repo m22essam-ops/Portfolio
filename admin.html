@@ -299,6 +299,27 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
 #jaWarn .ja-old { color: #7C7C7C; }
 #jaWarn .ja-jp { color: var(--ink); }
 label.field .ja-stale { display: block; color: var(--accent); font-size: 11.5px; margin-top: 4px; }
+
+/* ---------- where the videos live ---------- */
+#vidHosts:empty { display: none; }
+.vid-warn, .vid-ok {
+  border: 1px solid var(--line);
+  border-left-width: 3px;
+  padding: 14px 16px;
+  border-radius: 4px;
+  margin: 0 0 16px;
+  font-size: 13px;
+  line-height: 1.55;
+}
+.vid-warn { border-left-color: var(--accent); background: #190E07; }
+.vid-ok   { border-left-color: var(--teal);   background: #0C1615; }
+.vid-warn p, .vid-ok p { margin: 6px 0 0; color: var(--soft); }
+.vid-warn ul { margin: 10px 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 6px; }
+.vid-warn li {
+  background: #241611; border: 1px solid #3A2620; border-radius: 3px;
+  padding: 4px 9px; font-size: 12px; color: #C9BDB8;
+}
+.vid-warn li b { color: var(--accent); margin-left: 5px; }
 </style>
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="favicon.png">
@@ -373,6 +394,7 @@ label.field .ja-stale { display: block; color: var(--accent); font-size: 11.5px;
     <p class="hint"><strong>One list, in the exact order the site shows them.</strong> <strong>Drag a card by the &#10303; handle</strong> to move it anywhere in the list, or use Move up / Move down inside a card to nudge it one place. Whether a piece ran is now a tickbox inside each project, not a separate list. Best work first. A project needs a "slug" to be clickable, a story to have text on its page, and a cover image to look right.</p>
 
     <div class="group-head produced">All projects, in the order they appear on the site</div>
+    <div id="vidHosts"></div>
     <div id="projects-list"></div>
     <button class="add-btn" data-act="add-project" data-group="projects" type="button">+ Add project</button>
   </section>
@@ -937,6 +959,51 @@ label.field .ja-stale { display: block; color: var(--accent); font-size: 11.5px;
     renderExperience();
     renderLinks();
     renderJaWarnings();
+    renderVideoHosts();
+  }
+
+  /* ================= WHERE THE VIDEOS LIVE =================
+     Most of the reel is hosted on his Adobe Portfolio account. If that
+     subscription ever lapses the embeds go dark and the project pages stay up
+     looking broken, which is the single biggest structural risk on the site
+     and the only one he cannot see from the outside. So it is counted here,
+     and the count goes down as he moves them.
+     ======================================================== */
+  function renderVideoHosts() {
+    var box = document.getElementById('vidHosts');
+    if (!box) return;
+    var adobe = [], other = 0;
+    (M.work.projects || []).forEach(function (p) {
+      var n = (p.media || []).filter(function (m) {
+        return m.type === 'video' && /adobe\.io/.test(String(m.src || ''));
+      }).length;
+      var moved = (p.media || []).filter(function (m) {
+        return m.type === 'video' && String(m.src || '').trim() && !/adobe\.io/.test(String(m.src));
+      }).length;
+      other += moved;
+      if (n) adobe.push({ title: p.title || p.slug || 'Untitled', n: n });
+    });
+    var total = adobe.reduce(function (a, b) { return a + b.n; }, 0);
+
+    if (!total) {
+      box.className = 'vid-ok';
+      box.innerHTML = '<strong>Every video is off Adobe.</strong> ' + other +
+        ' hosted somewhere you control. Nothing on this site depends on that ' +
+        'subscription any more.';
+      return;
+    }
+    box.className = 'vid-warn';
+    box.innerHTML =
+      '<strong>' + total + ' video' + (total === 1 ? '' : 's') +
+        ' still hosted on your Adobe Portfolio account</strong>, across ' +
+        adobe.length + ' project' + (adobe.length === 1 ? '' : 's') +
+        (other ? '. ' + other + ' already moved.' : '.') +
+      '<p>If that subscription lapses they go dark and the pages stay up looking ' +
+        'broken. Re-upload each one, then paste the new link or embed code into ' +
+        'its video slot below.</p>' +
+      '<ul>' + adobe.map(function (a) {
+        return '<li>' + esc(a.title) + ' <b>' + a.n + '</b></li>';
+      }).join('') + '</ul>';
   }
 
   /* ================= THE JAPANESE DRIFT WARNING =================
