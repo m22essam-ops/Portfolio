@@ -18,7 +18,7 @@ window.SITE_CONTENT = {
     serial: "No. 131313 . Exp. never",
     titleTop: "Award-losing",
     titleBottom: "copywriter",
-    sub: "I craft headlines in English and Arabic to sell just aboutanything, yet I can’t rewrite my destiny.",
+    sub: "I craft headlines in English and Arabic to sell just about anything, yet I can’t rewrite my destiny...",
     scratchNote: "...think you can give it a shot?",
     badge: "I WON NOTHING",
     terms: "Odds of winning: historically High. Ticket has no cash value and neither did the awards. Keep this as proof of participation or share it with your loved ones.",
@@ -1773,7 +1773,7 @@ window.SITE_CONTENT = {
           y: 59.31,
           w: 58.38,
           h: 4.95,
-          size: 2.375,
+          size: 2.33,
           weight: "700",
           color: "muted"
         },
@@ -1799,8 +1799,8 @@ window.SITE_CONTENT = {
           y: 66.9,
           w: 25.11,
           h: 2.2,
-          size: 1.755,
-          weight: "700",
+          size: 2.33,
+          weight: "600",
           color: "muted"
         },
         {
@@ -1829,9 +1829,9 @@ window.SITE_CONTENT = {
         {
           slot: "terms",
           x: 22.02,
-          y: 91.93,
+          y: 92.7,
           w: 74.19,
-          h: 6.22,
+          h: 4.69,
           size: 1.9,
           color: "deep"
         },
