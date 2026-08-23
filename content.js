@@ -22,7 +22,7 @@ window.SITE_CONTENT = {
     scratchNote: "...AND for a ticket to win, had to bought first",
     badge: "I WON NOTHING",
     terms: "Odds of winning: historically High. Ticket has no cash value and neither did the awards. Keep this as proof of participation or share it with your loved ones.",
-    stampArc: "Time is a timeless joke",
+    stampArc: "VALID UNTIL HIRED",
     stampName: "As seen on TV",
     stampValue: "",
     stampFoot: "",
