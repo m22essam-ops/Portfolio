@@ -69,9 +69,9 @@
     if (torn) return;
     torn = true;
     el.classList.add('is-tearing');
-    /* the halves are clear of the screen at .82s; a breath after that the
+    /* the halves are clear of the screen at .713s; a breath after that the
        overlay has no reason to exist */
-    setTimeout(off, 900);
+    setTimeout(off, 783);
   }
 
   function off() {
@@ -87,7 +87,11 @@
      safety net, so one slow embed can never hold the ticket behind it. */
   var timeUp = false, ready = document.readyState === 'complete';
   var maybe = function () { if (timeUp && ready) tear(); };
-  setTimeout(function () { timeUp = true; maybe(); }, 1460);
+  /* 1460 divided by 1.15, at his request. This and the two durations in
+     styles.css are one piece of choreography: change one and the punch stops
+     landing before the tear starts. The 3400 cap below is NOT scaled, because
+     it is a safety net rather than a beat. */
+  setTimeout(function () { timeUp = true; maybe(); }, 1270);
   window.addEventListener('load', function () { ready = true; maybe(); });
   setTimeout(function () { ready = timeUp = true; maybe(); }, 3400);
 

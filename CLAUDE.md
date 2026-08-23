@@ -506,6 +506,12 @@ drawn and the page is exactly the page.
   it is gone. An ease-out reads as two panels sliding, which is a slideshow.
 - It tears once the perforation is complete **and** `window.load` has fired,
   whichever is later. Hard cap 3.4s so one slow embed cannot hold the page.
+- **The whole sequence was divided by 1.15 on 23 Aug 2026 at his request**
+  and now ends at 1.98s instead of 2.28s: punch 0.13s delay + 0.826s, tear
+  triggered at 1270ms and running 0.713s, overlay gone 783ms after that.
+  Those four numbers are one piece of choreography and must be scaled
+  TOGETHER, or the punch stops landing before the tear starts. The 3.4s cap
+  and the 6s panic exit are NOT scaled: they are safety nets, not beats.
 - **`setTimeout(off, 6000)` is registered on the line directly after
   `is-booting` goes on `<html>`.** From that moment the page is under an
   overlay and a throw anywhere below would leave it there. That one line makes
@@ -629,6 +635,31 @@ it, because his copy is the site:
 - Verified by walking every text node character by character and reporting
   which character starts each visual line: **zero forbidden line starts** at
   both 388px and 1360px.
+
+**NOTHING ABOUT THE TRANSLATION IS AUTOMATIC**, and the one thing that stops
+that being dangerous is `ja._from`. It is a copy of the English each Japanese
+line was written from. Admin compares it with the English as it stands now and
+prints a warning listing what has drifted, showing what the line said, what it
+says now, and what the Japanese still says. It never translates and never
+edits. Without it, changing a line in admin would leave the site quietly
+showing the new words under EN and the old ones under JA, and the only way to
+find out would be to read Japanese.
+
+- **Rewrite `_from` whenever the Japanese is rewritten.** A warning about a
+  change that has already been dealt with is a warning he learns to ignore.
+- The English itself, not a checksum, so admin can show the old line beside
+  the new one.
+- **`_from` declares what is watched.** The comparison only looks at the keys
+  `_from` lists, at every depth, so the credits watch the ROLES and ignore the
+  NAMES. Changing a colleague's name needs no new Japanese and correctly stays
+  silent; changing a role fires. Both were tested.
+- The warning is driven off `_from` itself, not a hard-coded list, so
+  translating another project adds nothing to admin: give its `ja` block a
+  `_from` and it is watched.
+- Only the entries that actually moved are shown, not the whole list.
+- Machine translation was considered and rejected. No API returns 落選歴 for
+  "award-losing"; it returns a description of the joke instead of the joke.
+  It also needs a network call and a key, which breaks the file:// workflow.
 
 **Both save paths handle it.** `b64encode` goes through `TextEncoder` before
 `btoa`, and `local-server.py` writes `content.js` as UTF-8. A round trip

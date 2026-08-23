@@ -160,8 +160,11 @@ html.is-booting .boot{
   background-size:22px 14px;
 }
 
-/* steps(), so they are punched one at a time rather than wiped across */
-html.is-booting .boot.is-punching .boot-punch{animation:bootPunch .95s steps(28,end) .15s both}
+/* steps(), so they are punched one at a time rather than wiped across.
+   Every duration below, and the 1270ms trigger in index.html, is the original
+   divided by 1.15 at his request: the sequence ends at 1.98s instead of 2.28s.
+   They have to be scaled TOGETHER or the punch and the tear stop meeting. */
+html.is-booting .boot.is-punching .boot-punch{animation:bootPunch .826s steps(28,end) .13s both}
 @keyframes bootPunch{from{width:0}to{width:100%}}
 /* someone who clicks before it has finished gets the row completed at once,
    not a half-punched ticket torn in half */
@@ -170,8 +173,8 @@ html.is-booting .boot.is-skipped .boot-punch{animation:none;width:100%}
 /* The tear. Eased IN rather than out: paper holds, gives all at once, and
    then it is gone. An ease-out here reads as two panels sliding, which is a
    slideshow transition and not a ticket being torn. */
-html.is-booting .boot.is-tearing .boot-half.top{animation:bootTearUp   .82s cubic-bezier(.55,0,.28,1) both}
-html.is-booting .boot.is-tearing .boot-half.bot{animation:bootTearDown .82s cubic-bezier(.55,0,.28,1) both}
+html.is-booting .boot.is-tearing .boot-half.top{animation:bootTearUp   .713s cubic-bezier(.55,0,.28,1) both}
+html.is-booting .boot.is-tearing .boot-half.bot{animation:bootTearDown .713s cubic-bezier(.55,0,.28,1) both}
 @keyframes bootTearUp  {from{transform:translateY(0)}to{transform:translateY(-101%)}}
 @keyframes bootTearDown{from{transform:translateY(0)}to{transform:translateY(101%)}}
 

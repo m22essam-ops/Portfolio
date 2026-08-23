@@ -366,7 +366,35 @@ window.SITE_CONTENT = {
             { role: "アカウントディレクター" },
             { role: "プロダクション" },
             { role: "エージェンシー" }
-          ]
+          ],
+          /* the English this was translated from, so admin can say when the
+             two have drifted apart. See the long note on about.ja._from.
+             Only the credit ROLES are listed, because only the roles are
+             translated: changing a colleague's NAME needs no new Japanese,
+             and a warning that fires when nothing needs doing is a warning
+             he will learn to ignore. */
+          _from: {
+            title: "The Hotel Is Yours",
+            tagline: "Own the room, do not rent it.",
+            sticker: "Sold out in a week",
+            client: "Rivan Tower",
+            category: "Film",
+            story: [
+              "Rivan Tower wanted to change how Egyptians see hotels: own the room instead of renting it.",
+              "We cast Bayoumi Fouad and shot a comedy film in two days that treated hotel living as a permanent address rather than a holiday.",
+              "The entire tower sold out within a week."
+            ],
+            credits: [
+              { role: "Written and directed by" },
+              { role: "Creative strategist" },
+              { role: "DOP" },
+              { role: "Editor and colorist" },
+              { role: "Motion graphics" },
+              { role: "Account director" },
+              { role: "Production" },
+              { role: "Agency" }
+            ]
+          }
         },
         next: {},
         "draft": false,
@@ -1588,7 +1616,47 @@ window.SITE_CONTENT = {
         { role: "コピーライター",             org: "Ducklife, ドバイ（パートタイム）", time: "2024年2月 – 2025年7月" },
         { role: "コピーライター",             org: "We Are Social, ドバイ",       time: "2023年7月 – 2024年6月" },
         { role: "クリエイティブコピーライター", org: "Social Nuts, カイロ",         time: "2019年2月 – 2023年6月" }
-      ]
+      ],
+      /* ---- what this was translated FROM ----
+         Nothing here is shown on the site. It is a copy of the English as it
+         stood when the Japanese above was written, and admin compares it with
+         the English as it stands NOW.
+
+         It exists because nothing about the translation is automatic. Change
+         a line in admin and the Japanese does not follow it and says nothing:
+         the site would quietly show the new line under EN and the old one
+         under JA, and the only way to find out would be to read Japanese.
+         With this, admin says so.
+
+         The English itself rather than a checksum, so admin can show what the
+         line used to say next to what it says now.
+
+         WHENEVER THE JAPANESE ABOVE IS REWRITTEN, REWRITE THIS TO MATCH, or
+         the warning is about a change that has already been dealt with, and a
+         warning that cries wolf is worse than no warning at all. */
+      _from: {
+        heading: "A little about me.",
+        paragraphs: [
+          "Four years writing for people who skip the ads, and a bunch of other years writing just because I like to. Add to that an entire life having fun being dead serious about making ordinary things look superficially good (my room included).",
+          "I am an award-losing copywriter so far. Designed in Egypt, put to work in the UAE, and licensed in Madrid, which makes my buffet of ideas accidentally intercontinental.",
+          "I only believe in two things. One, buttlines are just headlines done butt first. And two, he who was born in a city can't be named a farmer. I don't know; I really just needed a second thing."
+        ],
+        skills: [
+          "Big idea development",
+          "Brand campaigns",
+          "Manipulating",
+          "Copywriting",
+          "Social & content",
+          "Scripting & VO",
+          "Concept Development"
+        ],
+        experience: [
+          { role: "Senior Copywriter",   org: "Yango, MENA",                      time: "Jun 2024 – Jul 2025" },
+          { role: "Copywriter",          org: "Ducklife, Dubai (part-time)",      time: "Feb 2024 – Jul 2025" },
+          { role: "Copywriter",          org: "We Are Social, Dubai",             time: "Jul 2023 – Jun 2024" },
+          { role: "Creative Copywriter", org: "Social Nuts, Cairo",               time: "Feb 2019 – Jun 2023" }
+        ]
+      }
     }
   },
   contact: {

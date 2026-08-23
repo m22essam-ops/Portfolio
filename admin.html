@@ -255,6 +255,25 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
   background: #000;
 }
 @media (max-width: 720px) { .media-grid-admin { grid-template-columns: 1fr; } }
+/* ---------- the Japanese drift warning ----------
+   Nothing about the translation is automatic. Change an English line and the
+   Japanese does not follow it and says nothing, so the site would quietly
+   show the new line under EN and the old one under JA. This is the thing
+   that stops that being silent. It never translates anything; it only says
+   which lines have moved out from under their translation. */
+#jaWarn { margin: 22px 28px 0; border: 1px solid var(--accent); background: #190E07; padding: 18px 20px; border-radius: 4px; }
+#jaWarn h2 { margin: 0 0 5px; font-size: 15px; color: var(--accent); }
+#jaWarn > p { margin: 0 0 6px; color: var(--soft); font-size: 13px; }
+#jaWarn ul { margin: 8px 0 0; padding: 0; list-style: none; }
+#jaWarn li { border-top: 1px solid var(--line); padding: 13px 0 0; margin-top: 12px; }
+#jaWarn .ja-where { font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--soft); }
+#jaWarn .ja-what { font-weight: 600; margin: 1px 0 9px; }
+#jaWarn .ja-line { font-size: 13px; margin: 4px 0; display: flex; gap: 10px; }
+#jaWarn .ja-line b { color: var(--soft); font-weight: 500; flex: none; width: 96px; }
+#jaWarn .ja-line span { min-width: 0; }
+#jaWarn .ja-old { color: #7C7C7C; }
+#jaWarn .ja-jp { color: var(--ink); }
+label.field .ja-stale { display: block; color: var(--accent); font-size: 11.5px; margin-top: 4px; }
 </style>
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="favicon.png">
@@ -280,6 +299,11 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
 </header>
 
 <main>
+
+  <!-- Filled by renderJaWarnings(). Hidden entirely when nothing has drifted,
+       so on a normal day this block does not exist. -->
+  <div id="jaWarn" hidden></div>
+
   <div class="howto">
     <h2>How this works</h2>
     <ol>
@@ -773,6 +797,145 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
     renderProjects('projects');
     renderExperience();
     renderLinks();
+    renderJaWarnings();
+  }
+
+  /* ================= THE JAPANESE DRIFT WARNING =================
+     Two things on this site carry a Japanese version: the About page and the
+     Rivan Tower project. NOTHING ABOUT THAT IS AUTOMATIC. The Japanese is
+     hand-written copy sitting in content.js exactly like the English, and
+     editing the English here does not change it and does not complain.
+
+     So each `ja` block carries a `_from`: a copy of the English it was
+     written from. This compares that with the English as it stands now and
+     says which lines have moved out from under their translation. It does not
+     translate, and it never edits anything.
+
+     It is driven off `_from` itself rather than off a hard-coded list, so
+     translating a second project adds nothing here: give its `ja` block a
+     `_from` and it is watched.
+     ============================================================ */
+
+  var JA_LABEL = {
+    heading: 'Heading', paragraphs: 'Bio', skills: 'Skills',
+    experience: 'Experience', title: 'Project title', tagline: 'Tagline',
+    sticker: 'Sticker', client: 'Client', category: 'Category',
+    story: 'Story', credits: 'Credit roles'
+  };
+
+  /* Compares only the keys `_from` actually lists, at every depth. That is
+     what lets the credits watch the roles and ignore the names: a colleague's
+     name is never translated, so changing one needs no new Japanese, and a
+     warning that fires when there is nothing to do is one he will learn to
+     ignore. */
+  function jaDrifted(was, now) {
+    if (Array.isArray(was)) {
+      if (!Array.isArray(now) || now.length !== was.length) return true;
+      for (var i = 0; i < was.length; i++) if (jaDrifted(was[i], now[i])) return true;
+      return false;
+    }
+    if (was && typeof was === 'object') {
+      if (!now || typeof now !== 'object') return true;
+      for (var k in was) if (jaDrifted(was[k], now[k])) return true;
+      return false;
+    }
+    return String(was == null ? '' : was).trim() !== String(now == null ? '' : now).trim();
+  }
+
+  /* Show only the entries that actually moved. Printing all three paragraphs
+     to point at two changed words, or all seven skills to point at one, makes
+     him hunt for the difference in a wall of his own copy. When the lists are
+     different lengths there is nothing to line up, so the whole thing is
+     shown, which is right: at that point the whole translated list falls back
+     to English anyway. */
+  function jaNarrow(was, now, jp) {
+    if (Array.isArray(was) && Array.isArray(now) && was.length === now.length) {
+      var w = [], n = [], j = [];
+      for (var i = 0; i < was.length; i++) {
+        if (!jaDrifted(was[i], now[i])) continue;
+        w.push(was[i]); n.push(now[i]);
+        if (Array.isArray(jp) && jp[i] != null) j.push(jp[i]);
+      }
+      if (w.length) return { was: w, now: n, jp: j.length ? j : jp };
+    }
+    return { was: was, now: now, jp: jp };
+  }
+
+  /* one line of it, for showing in the warning */
+  function jaFlat(v) {
+    if (Array.isArray(v)) return v.map(jaFlat).filter(Boolean).join('  ·  ');
+    if (v && typeof v === 'object') {
+      return Object.keys(v).map(function (k) { return v[k]; }).filter(Boolean).join(' — ');
+    }
+    return String(v == null ? '' : v);
+  }
+
+  function jaStaleList() {
+    var out = [];
+    function scan(basePath, where, host) {
+      var ja = host && host.ja;
+      if (!ja || !ja._from) return;
+      Object.keys(ja._from).forEach(function (key) {
+        if (!jaDrifted(ja._from[key], host[key])) return;
+        out.push({
+          path:  basePath + '.' + key,
+          where: where,
+          what:  JA_LABEL[key] || key,
+          was:   ja._from[key],
+          now:   host[key],
+          jp:    ja[key]
+        });
+      });
+    }
+    scan('about', 'About page', M.about);
+    (M.work.projects || []).forEach(function (p, i) {
+      scan('work.projects.' + i, p.title || p.slug || 'A project', p);
+    });
+    return out;
+  }
+
+  function renderJaWarnings() {
+    var box = document.getElementById('jaWarn');
+    if (!box) return;
+
+    /* clear the previous pass off the fields before working out the new one */
+    $$('.ja-stale').forEach(function (n) { n.remove(); });
+
+    var list = jaStaleList();
+    if (!list.length) { box.hidden = true; box.innerHTML = ''; return; }
+
+    box.hidden = false;
+    box.innerHTML =
+      '<h2>' + list.length + (list.length === 1 ? ' line has' : ' lines have') +
+        ' changed since the Japanese was written</h2>' +
+      '<p>The Japanese version does not follow your edits, and the site will not warn anyone: ' +
+        'it would show your new words under EN and the old ones under JA. Nothing is broken and ' +
+        'nothing needs doing right now. Send this list over and the Japanese gets rewritten to match.</p>' +
+      '<ul>' + list.map(function (s) {
+        var n = jaNarrow(s.was, s.now, s.jp);
+        return '<li>' +
+          '<div class="ja-where">' + esc(s.where) + '</div>' +
+          '<div class="ja-what">' + esc(s.what) + '</div>' +
+          '<div class="ja-line"><b>It said</b><span class="ja-old">' + esc(jaFlat(n.was)) + '</span></div>' +
+          '<div class="ja-line"><b>It now says</b><span>' + esc(jaFlat(n.now)) + '</span></div>' +
+          '<div class="ja-line"><b>Japanese</b><span class="ja-jp">' + esc(jaFlat(n.jp)) + '</span></div>' +
+          '</li>';
+      }).join('') + '</ul>';
+
+    /* and a note on the field itself, because he edits in place and will not
+       scroll back to the top to find out he has just stranded a translation.
+       Only where a path names one input; anything grouped (the credits, the
+       experience rows) is covered by the list above. */
+    list.forEach(function (s) {
+      var el = document.querySelector('[data-path="' + s.path + '"]');
+      var label = el && el.closest('label.field');
+      if (!label || label.querySelector('.ja-stale')) return;
+      var note = document.createElement('small');
+      note.className = 'ja-stale';
+      note.textContent = 'The Japanese for this no longer matches. It still says: ' +
+        jaFlat(jaNarrow(s.was, s.now, s.jp).jp);
+      label.appendChild(note);
+    });
   }
 
   /* ---------------- edits: keep M in sync with the forms ---------------- */
@@ -807,7 +970,15 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
         prev.src = v ? imgUrl(v) : '';
       }
     }
+
+    /* the drift warning follows what he types, so it appears the moment he
+       strands a translation and goes away again if he undoes the edit.
+       Debounced: rebuilding it on every keystroke would move the field he is
+       typing in, because the note is added underneath it. */
+    clearTimeout(jaTick);
+    jaTick = setTimeout(renderJaWarnings, 600);
   }
+  var jaTick;
   document.addEventListener('input', updateFromPath);
   document.addEventListener('change', updateFromPath);
 
