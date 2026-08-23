@@ -71,16 +71,6 @@ window.SITE_CONTENT = {
     emptyWork: "Nothing here yet. Give it a minute.",
     nextLabel: "Keep going"
   },
-  /* ---- other languages ----
-     A feasibility test, not a translated site. ONE project carries a `ja`
-     block (rivan-tower) and this holds the furniture round it: the words the
-     page prints itself rather than the words he wrote. A project with no `ja`
-     block never shows the switch, so nothing here can leave a half-English
-     page in front of anyone.
-
-     Names stay in Latin script on purpose. Japanese credits carry foreign
-     names that way as a matter of course, and inventing a katakana spelling
-     of a real colleague's name is a mistake with their name on it. */
   i18n: {
     ja: {
       label: "JA",
@@ -340,12 +330,6 @@ window.SITE_CONTENT = {
             name: "Social Nuts"
           }
         ],
-        /* ---- the Japanese version ----
-           The feasibility test. Add a `ja` block to a project and EN | JA
-           appears at the top of its page; leave it off and nothing changes.
-           Only the fields written here are swapped, so a half-finished
-           translation shows the English for whatever it has not reached.
-           The credit NAMES are not translated, only the roles. */
         ja: {
           title: "このホテルは、あなたのもの。",
           tagline: "部屋は、借りずに持つ。",
@@ -358,21 +342,31 @@ window.SITE_CONTENT = {
             "タワーは一週間で完売した。"
           ],
           credits: [
-            { role: "脚本・監督" },
-            { role: "クリエイティブストラテジスト" },
-            { role: "撮影監督" },
-            { role: "編集・カラリスト" },
-            { role: "モーショングラフィックス" },
-            { role: "アカウントディレクター" },
-            { role: "プロダクション" },
-            { role: "エージェンシー" }
+            {
+              role: "脚本・監督"
+            },
+            {
+              role: "クリエイティブストラテジスト"
+            },
+            {
+              role: "撮影監督"
+            },
+            {
+              role: "編集・カラリスト"
+            },
+            {
+              role: "モーショングラフィックス"
+            },
+            {
+              role: "アカウントディレクター"
+            },
+            {
+              role: "プロダクション"
+            },
+            {
+              role: "エージェンシー"
+            }
           ],
-          /* the English this was translated from, so admin can say when the
-             two have drifted apart. See the long note on about.ja._from.
-             Only the credit ROLES are listed, because only the roles are
-             translated: changing a colleague's NAME needs no new Japanese,
-             and a warning that fires when nothing needs doing is a warning
-             he will learn to ignore. */
           _from: {
             title: "The Hotel Is Yours",
             tagline: "Own the room, do not rent it.",
@@ -385,14 +379,30 @@ window.SITE_CONTENT = {
               "The entire tower sold out within a week."
             ],
             credits: [
-              { role: "Written and directed by" },
-              { role: "Creative strategist" },
-              { role: "DOP" },
-              { role: "Editor and colorist" },
-              { role: "Motion graphics" },
-              { role: "Account director" },
-              { role: "Production" },
-              { role: "Agency" }
+              {
+                role: "Written and directed by"
+              },
+              {
+                role: "Creative strategist"
+              },
+              {
+                role: "DOP"
+              },
+              {
+                role: "Editor and colorist"
+              },
+              {
+                role: "Motion graphics"
+              },
+              {
+                role: "Account director"
+              },
+              {
+                role: "Production"
+              },
+              {
+                role: "Agency"
+              }
             ]
           }
         },
@@ -1573,28 +1583,6 @@ window.SITE_CONTENT = {
         time: "Feb 2019 – Jun 2023"
       }
     ],
-    /* ---- the Japanese version ----
-       Same shape as a project's `ja` block: only the fields written here are
-       swapped, anything left out falls back to the English. Remove this whole
-       block and the EN | JA switch disappears with it.
-
-       These are not transcriptions. The three jokes are rebuilt so they work
-       in Japanese rather than being carried across word for word:
-
-       "award-losing" is a coinage against "award-winning", so the Japanese is
-       a coinage against 受賞歴 (a record of winning): 落選歴, a record of
-       losing. Same joke, same mechanism, made out of Japanese.
-
-       "buttlines are just headlines done butt first" keeps the head/butt pair
-       literally (ヘッドライン / 尻), because that IS the joke and it survives.
-
-       "he who was born in a city can't be named a farmer" is a fake proverb,
-       so the Japanese is written in the classical register real proverbs use
-       (生まれし者 … 呼ばれず). It has to SOUND like a proverb to be funny that
-       it is not one.
-
-       Company names stay in Latin, cities do not, and the dates are rewritten
-       year-first because that is the order Japanese writes them in. */
     ja: {
       heading: "わたしについて、少し。",
       paragraphs: [
@@ -1612,28 +1600,27 @@ window.SITE_CONTENT = {
         "コンセプト開発"
       ],
       experience: [
-        { role: "シニアコピーライター",       org: "Yango（MENA）",              time: "2024年6月 – 2025年7月" },
-        { role: "コピーライター",             org: "Ducklife, ドバイ（パートタイム）", time: "2024年2月 – 2025年7月" },
-        { role: "コピーライター",             org: "We Are Social, ドバイ",       time: "2023年7月 – 2024年6月" },
-        { role: "クリエイティブコピーライター", org: "Social Nuts, カイロ",         time: "2019年2月 – 2023年6月" }
+        {
+          role: "シニアコピーライター",
+          org: "Yango（MENA）",
+          time: "2024年6月 – 2025年7月"
+        },
+        {
+          role: "コピーライター",
+          org: "Ducklife, ドバイ（パートタイム）",
+          time: "2024年2月 – 2025年7月"
+        },
+        {
+          role: "コピーライター",
+          org: "We Are Social, ドバイ",
+          time: "2023年7月 – 2024年6月"
+        },
+        {
+          role: "クリエイティブコピーライター",
+          org: "Social Nuts, カイロ",
+          time: "2019年2月 – 2023年6月"
+        }
       ],
-      /* ---- what this was translated FROM ----
-         Nothing here is shown on the site. It is a copy of the English as it
-         stood when the Japanese above was written, and admin compares it with
-         the English as it stands NOW.
-
-         It exists because nothing about the translation is automatic. Change
-         a line in admin and the Japanese does not follow it and says nothing:
-         the site would quietly show the new line under EN and the old one
-         under JA, and the only way to find out would be to read Japanese.
-         With this, admin says so.
-
-         The English itself rather than a checksum, so admin can show what the
-         line used to say next to what it says now.
-
-         WHENEVER THE JAPANESE ABOVE IS REWRITTEN, REWRITE THIS TO MATCH, or
-         the warning is about a change that has already been dealt with, and a
-         warning that cries wolf is worse than no warning at all. */
       _from: {
         heading: "A little about me.",
         paragraphs: [
@@ -1651,10 +1638,26 @@ window.SITE_CONTENT = {
           "Concept Development"
         ],
         experience: [
-          { role: "Senior Copywriter",   org: "Yango, MENA",                      time: "Jun 2024 – Jul 2025" },
-          { role: "Copywriter",          org: "Ducklife, Dubai (part-time)",      time: "Feb 2024 – Jul 2025" },
-          { role: "Copywriter",          org: "We Are Social, Dubai",             time: "Jul 2023 – Jun 2024" },
-          { role: "Creative Copywriter", org: "Social Nuts, Cairo",               time: "Feb 2019 – Jun 2023" }
+          {
+            role: "Senior Copywriter",
+            org: "Yango, MENA",
+            time: "Jun 2024 – Jul 2025"
+          },
+          {
+            role: "Copywriter",
+            org: "Ducklife, Dubai (part-time)",
+            time: "Feb 2024 – Jul 2025"
+          },
+          {
+            role: "Copywriter",
+            org: "We Are Social, Dubai",
+            time: "Jul 2023 – Jun 2024"
+          },
+          {
+            role: "Creative Copywriter",
+            org: "Social Nuts, Cairo",
+            time: "Feb 2019 – Jun 2023"
+          }
         ]
       }
     }
@@ -1855,8 +1858,8 @@ window.SITE_CONTENT = {
         },
         {
           type: "text",
-          text: "Listen tou your gut",
-          size: 2.1,
+          text: "Listen to your gut",
+          size: 2.26,
           color: "muted",
           font: "display",
           w: 13.2,
