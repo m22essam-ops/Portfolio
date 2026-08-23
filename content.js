@@ -90,6 +90,183 @@ window.SITE_CONTENT = {
     limit: 0,
     projects: [
       {
+        slug: "pop-the-pressure",
+        title: "Pop the Pressure",
+        client: "Tuborg",
+        category: "D&AD brief",
+        year: "2026",
+        image: "Tuborg poster on poster.jpg",
+        alt: "Tuborg Pop the Pressure",
+        sticker: "D&AD brief",
+        tagline: "Thousands of balloons, one Glastonbury set.",
+        story: [
+          "Rising depression and anxiety are holding London's youth back.",
+          "To release the pressure, Tuborg ran a symbolic activation at Glastonbury. During a set by Dave, fans popped thousands of balloons standing in for real struggles, to feel lighter, see clearer and party responsibly."
+        ],
+        media: [
+          {
+            type: "image",
+            src: "Tuborg caseboard.jpg",
+            caption: ""
+          },
+          {
+            type: "video",
+            src: "<div style=\"padding:55.21% 0 0 0;position:relative;\"><iframe src=\"https://player.vimeo.com/video/1218494179?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;\" title=\"Tuborg - Pop The Pressure\"></iframe></div>",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "Tuborg Poster Mockup 44.jpg",
+            caption: "",
+            layout: "half"
+          },
+          {
+            type: "image",
+            src: "Tuborg poster on poster.jpg",
+            caption: "",
+            layout: "half"
+          },
+          {
+            type: "image",
+            src: "Tuborg wall  mockup.png",
+            caption: "",
+            layout: "half"
+          },
+          {
+            type: "image",
+            src: "tuborg tote.jpg",
+            caption: "",
+            layout: "half"
+          }
+        ],
+        credits: [
+          {
+            role: "Team",
+            name: "Mohammed Essam, Baltazar Lee, Ana Molinero"
+          },
+          {
+            role: "Tutor",
+            name: "Pranay Suri"
+          },
+          {
+            role: "Client",
+            name: "Tuborg for D&AD, Miami Ad School Madrid"
+          },
+          {
+            role: "",
+            name: ""
+          },
+          {
+            role: "Producer",
+            name: "Evgeniia Sabirzianova"
+          },
+          {
+            role: "Production lead",
+            name: "Olesia Starodubtseva"
+          },
+          {
+            role: "Brand director",
+            name: "Viktoria Nikulnikova"
+          }
+        ],
+        next: {},
+        "draft": false,
+        "ran": false
+      },
+      {
+        slug: "true-colors-of-dominos",
+        title: "The True Colors",
+        client: "Domino's",
+        category: "Miami Ad School",
+        year: "2026",
+        image: "Minimalist Elegant Modern Bold  Advertising Poster Design _ Coffee Shop Branding.jpg",
+        alt: "Domino's making the streets safer",
+        sticker: "Never left the deck",
+        tagline: "Billboards that hear you walking home.",
+        story: [
+          "Walking home at night in heels should not be frightening. To help women feel safer on the streets of London, Domino's showed the city its true colors with slicing-edge OOH billboards using audio-recognition technology. The billboards pick up the sound of accelerating high heels and flash intense red and blue, mimicking a police siren to scare off anyone thinking of causing trouble.",
+          "With every headline about players moving to the Saudi League, we staged a press conference where David Villa announced he was heading to Saudi Arabia to bring fun back to football."
+        ],
+        media: [
+          {
+            type: "image",
+            src: "Dominos art board.jpg",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "Dominos art style .jpg",
+            caption: "",
+            layout: "full"
+          },
+          {
+            type: "video",
+            src: "<div style=\"padding:56.25% 0 0 0;position:relative;\"><iframe src=\"https://player.vimeo.com/video/1205222256?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;\" title=\"Dominos - The True Color\"></iframe></div>",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "dominos bus stop poster mockup.jpg",
+            caption: "",
+            layout: "half"
+          },
+          {
+            type: "image",
+            src: "Dominos news.jpg",
+            caption: "",
+            layout: "half"
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          }
+        ],
+        credits: [
+          {
+            role: "Team",
+            name: "Mohammed Essam, Baltazar Lee"
+          },
+          {
+            role: "Tutor",
+            name: "Pranay Suri"
+          },
+          {
+            role: "Client",
+            name: "Domino's, Miami Ad School Madrid"
+          },
+          {
+            role: "",
+            name: ""
+          },
+          {
+            role: "Art director",
+            name: "James Young"
+          },
+          {
+            role: "Account director",
+            name: "Rhea Samuel"
+          },
+          {
+            role: "Account managers",
+            name: "Mo Awkel, Marwa Elkhateeb"
+          }
+        ],
+        next: {},
+        "draft": false,
+        "ran": false
+      },
+      {
         slug: "yango-unstoppable-rides",
         title: "Unstoppable Rides",
         client: "Yango",
@@ -101,7 +278,8 @@ window.SITE_CONTENT = {
         tagline: "A super app for a city that is not on your side.",
         story: [
           "Sometimes the city is not in your favour, especially when you are in a rush or sticking to a budget. The Yango super app has an answer for each of those.",
-          "Three films: The Wedding Rush and No-Haggle No-Worries for Pakistan, One-Super-Tap for Oman."
+          "Three films: The Wedding Rush and No-Haggle No-Worries for Pakistan, One-Super-Tap for Oman.",
+          "The entire tower sold out within a week."
         ],
         media: [
           {
@@ -163,11 +341,91 @@ window.SITE_CONTENT = {
           {
             role: "Brand director",
             name: "Viktoria Nikulnikova"
+          },
+          {
+            role: "Agency",
+            name: "Social Nuts"
           }
         ],
         next: {},
         "draft": false,
-        "ran": true
+        "ran": true,
+        ja: {
+          title: "このホテルは、あなたのもの。",
+          tagline: "部屋は、借りずに持つ。",
+          sticker: "一週間で完売",
+          client: "リヴァン・タワー",
+          category: "フィルム",
+          story: [
+            "リヴァン・タワーは、エジプトの人がホテルに抱くイメージを変えたいと考えていた。部屋は借りるものではなく、持つもの。",
+            "バユーミ・フアードを起用し、二日間でコメディ映像を撮影。ホテル暮らしを休暇ではなく、住所として描いた。",
+            "タワーは一週間で完売した。"
+          ],
+          credits: [
+            {
+              role: "脚本・監督"
+            },
+            {
+              role: "クリエイティブストラテジスト"
+            },
+            {
+              role: "撮影監督"
+            },
+            {
+              role: "編集・カラリスト"
+            },
+            {
+              role: "モーショングラフィックス"
+            },
+            {
+              role: "アカウントディレクター"
+            },
+            {
+              role: "プロダクション"
+            },
+            {
+              role: "エージェンシー"
+            }
+          ],
+          _from: {
+            title: "The Hotel Is Yours",
+            tagline: "Own the room, do not rent it.",
+            sticker: "Sold out in a week",
+            client: "Rivan Tower",
+            category: "Film",
+            story: [
+              "Rivan Tower wanted to change how Egyptians see hotels: own the room instead of renting it.",
+              "We cast Bayoumi Fouad and shot a comedy film in two days that treated hotel living as a permanent address rather than a holiday.",
+              "The entire tower sold out within a week."
+            ],
+            credits: [
+              {
+                role: "Written and directed by"
+              },
+              {
+                role: "Creative strategist"
+              },
+              {
+                role: "DOP"
+              },
+              {
+                role: "Editor and colorist"
+              },
+              {
+                role: "Motion graphics"
+              },
+              {
+                role: "Account director"
+              },
+              {
+                role: "Production"
+              },
+              {
+                role: "Agency"
+              }
+            ]
+          }
+        }
       },
       {
         slug: "pringles-champions-of-fun",
@@ -192,7 +450,8 @@ window.SITE_CONTENT = {
           {
             type: "video",
             src: "https://www-ccv.adobe.io/v1/player/ccv/-YpNaC-uYJp/embed?bgcolor=%23191919&lazyLoading=true&api_key=BehancePro2View",
-            caption: ""
+            caption: "",
+            layout: "full"
           },
           {
             type: "video",
@@ -202,12 +461,14 @@ window.SITE_CONTENT = {
           {
             type: "video",
             src: "https://www-ccv.adobe.io/v1/player/ccv/SHZUgP9SsQ5/embed?bgcolor=%23191919&lazyLoading=true&api_key=BehancePro2View",
-            caption: ""
+            caption: "",
+            layout: "half"
           },
           {
             type: "video",
             src: "https://www-ccv.adobe.io/v1/player/ccv/8g88kBNAEE4/embed?bgcolor=%23191919&lazyLoading=true&api_key=BehancePro2View",
-            caption: ""
+            caption: "",
+            layout: "half"
           },
           {
             type: "image",
@@ -288,12 +549,26 @@ window.SITE_CONTENT = {
           {
             type: "image",
             src: "",
-            caption: ""
+            caption: "",
+            layout: "half"
           },
           {
             type: "image",
             src: "",
-            caption: ""
+            caption: "",
+            layout: "half"
+          },
+          {
+            type: "image",
+            src: "Tuborg wall  mockup.png",
+            caption: "",
+            layout: "half"
+          },
+          {
+            type: "image",
+            src: "tuborg tote.jpg",
+            caption: "",
+            layout: "half"
           }
         ],
         credits: [
@@ -409,143 +684,6 @@ window.SITE_CONTENT = {
         next: {},
         "draft": false,
         "ran": true
-      },
-      {
-        slug: "true-colors-of-dominos",
-        title: "The True Colors",
-        client: "Domino's",
-        category: "Miami Ad School",
-        year: "2026",
-        image: "Minimalist Elegant Modern Bold  Advertising Poster Design _ Coffee Shop Branding.jpg",
-        alt: "Domino's making the streets safer",
-        sticker: "Never left the deck",
-        tagline: "Billboards that hear you walking home.",
-        story: [
-          "Walking home at night in heels should not be frightening. To help women feel safer on the streets of London, Domino's showed the city its true colors with slicing-edge OOH billboards using audio-recognition technology. The billboards pick up the sound of accelerating high heels and flash intense red and blue, mimicking a police siren to scare off anyone thinking of causing trouble."
-        ],
-        media: [
-          {
-            type: "image",
-            src: "Dominos art board.jpg",
-            caption: ""
-          },
-          {
-            type: "image",
-            src: "Dominos art style .jpg",
-            caption: "",
-            layout: "full"
-          },
-          {
-            type: "video",
-            src: "<div style=\"padding:56.25% 0 0 0;position:relative;\"><iframe src=\"https://player.vimeo.com/video/1205222256?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;\" title=\"Dominos - The True Color\"></iframe></div>",
-            caption: ""
-          },
-          {
-            type: "image",
-            src: "dominos bus stop poster mockup.jpg",
-            caption: "",
-            layout: "half"
-          },
-          {
-            type: "image",
-            src: "Dominos news.jpg",
-            caption: "",
-            layout: "half"
-          }
-        ],
-        credits: [
-          {
-            role: "Team",
-            name: "Mohammed Essam, Baltazar Lee"
-          },
-          {
-            role: "Tutor",
-            name: "Pranay Suri"
-          },
-          {
-            role: "Client",
-            name: "Domino's, Miami Ad School Madrid"
-          },
-          {
-            role: "",
-            name: ""
-          }
-        ],
-        next: {},
-        "draft": false,
-        "ran": false
-      },
-      {
-        slug: "pop-the-pressure",
-        title: "Pop the Pressure",
-        client: "Tuborg",
-        category: "D&AD brief",
-        year: "2026",
-        image: "Tuborg poster on poster.jpg",
-        alt: "Tuborg Pop the Pressure",
-        sticker: "D&AD brief",
-        tagline: "Thousands of balloons, one Glastonbury set.",
-        story: [
-          "Rising depression and anxiety are holding London's youth back.",
-          "To release the pressure, Tuborg ran a symbolic activation at Glastonbury. During a set by Dave, fans popped thousands of balloons standing in for real struggles, to feel lighter, see clearer and party responsibly."
-        ],
-        media: [
-          {
-            type: "image",
-            src: "Tuborg caseboard.jpg",
-            caption: ""
-          },
-          {
-            type: "video",
-            src: "<div style=\"padding:55.21% 0 0 0;position:relative;\"><iframe src=\"https://player.vimeo.com/video/1218494179?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;\" title=\"Tuborg - Pop The Pressure\"></iframe></div>",
-            caption: ""
-          },
-          {
-            type: "image",
-            src: "Tuborg Poster Mockup 44.jpg",
-            caption: "",
-            layout: "half"
-          },
-          {
-            type: "image",
-            src: "Tuborg poster on poster.jpg",
-            caption: "",
-            layout: "half"
-          },
-          {
-            type: "image",
-            src: "Tuborg wall  mockup.png",
-            caption: "",
-            layout: "half"
-          },
-          {
-            type: "image",
-            src: "tuborg tote.jpg",
-            caption: "",
-            layout: "half"
-          }
-        ],
-        credits: [
-          {
-            role: "Team",
-            name: "Mohammed Essam, Baltazar Lee, Ana Molinero"
-          },
-          {
-            role: "Tutor",
-            name: "Pranay Suri"
-          },
-          {
-            role: "Client",
-            name: "Tuborg for D&AD, Miami Ad School Madrid"
-          },
-          {
-            role: "",
-            name: ""
-          }
-        ],
-        next: {},
-        "draft": false,
-        "ran": false
       },
       {
         slug: "pringles-cheesy-cheese",
