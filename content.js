@@ -91,11 +91,11 @@ window.SITE_CONTENT = {
     projects: [
       {
         slug: "pop-the-pressure",
-        title: "Pop the Pressure",
+        title: "Tuborg - Pop the Pressure",
         client: "Tuborg",
         category: "D&AD brief",
         year: "2026",
-        image: "Tuborg poster on poster.jpg",
+        image: "Tuborg poster on poster 4x3.jpg",
         alt: "Tuborg Pop the Pressure",
         sticker: "D&AD brief",
         tagline: "Thousands of balloons, one Glastonbury set.",
@@ -175,7 +175,7 @@ window.SITE_CONTENT = {
       },
       {
         slug: "true-colors-of-dominos",
-        title: "The True Colors",
+        title: "Domino's - The True Colors",
         client: "Domino's",
         category: "Miami Ad School",
         year: "2026",
@@ -268,7 +268,7 @@ window.SITE_CONTENT = {
       },
       {
         slug: "yango-unstoppable-rides",
-        title: "Unstoppable Rides",
+        title: "Yango - Unstoppable Rides",
         client: "Yango",
         category: "Film",
         year: "2025",
@@ -350,86 +350,10 @@ window.SITE_CONTENT = {
         next: {},
         "draft": false,
         "ran": true,
-        ja: {
-          title: "このホテルは、あなたのもの。",
-          tagline: "部屋は、借りずに持つ。",
-          sticker: "一週間で完売",
-          client: "リヴァン・タワー",
-          category: "フィルム",
-          story: [
-            "リヴァン・タワーは、エジプトの人がホテルに抱くイメージを変えたいと考えていた。部屋は借りるものではなく、持つもの。",
-            "バユーミ・フアードを起用し、二日間でコメディ映像を撮影。ホテル暮らしを休暇ではなく、住所として描いた。",
-            "タワーは一週間で完売した。"
-          ],
-          credits: [
-            {
-              role: "脚本・監督"
-            },
-            {
-              role: "クリエイティブストラテジスト"
-            },
-            {
-              role: "撮影監督"
-            },
-            {
-              role: "編集・カラリスト"
-            },
-            {
-              role: "モーショングラフィックス"
-            },
-            {
-              role: "アカウントディレクター"
-            },
-            {
-              role: "プロダクション"
-            },
-            {
-              role: "エージェンシー"
-            }
-          ],
-          _from: {
-            title: "The Hotel Is Yours",
-            tagline: "Own the room, do not rent it.",
-            sticker: "Sold out in a week",
-            client: "Rivan Tower",
-            category: "Film",
-            story: [
-              "Rivan Tower wanted to change how Egyptians see hotels: own the room instead of renting it.",
-              "We cast Bayoumi Fouad and shot a comedy film in two days that treated hotel living as a permanent address rather than a holiday.",
-              "The entire tower sold out within a week."
-            ],
-            credits: [
-              {
-                role: "Written and directed by"
-              },
-              {
-                role: "Creative strategist"
-              },
-              {
-                role: "DOP"
-              },
-              {
-                role: "Editor and colorist"
-              },
-              {
-                role: "Motion graphics"
-              },
-              {
-                role: "Account director"
-              },
-              {
-                role: "Production"
-              },
-              {
-                role: "Agency"
-              }
-            ]
-          }
-        }
       },
       {
         slug: "pringles-champions-of-fun",
-        title: "Champions of Fun",
+        title: "Pringles - Champions of Fun",
         client: "Pringles",
         category: "Film",
         year: "2024",
@@ -522,7 +446,7 @@ window.SITE_CONTENT = {
       },
       {
         slug: "rivan-tower",
-        title: "The Hotel Is Yours",
+        title: "Rivan Tower - The Hotel Is Yours",
         client: "Rivan Tower",
         category: "Film",
         year: "2023",
@@ -594,7 +518,7 @@ window.SITE_CONTENT = {
           }
         ],
         ja: {
-          title: "このホテルは、あなたのもの。",
+          title: "リヴァン・タワー - このホテルは、あなたのもの。",
           tagline: "部屋は、借りずに持つ。",
           sticker: "一週間で完売",
           client: "リヴァン・タワー",
@@ -631,7 +555,7 @@ window.SITE_CONTENT = {
             }
           ],
           _from: {
-            title: "The Hotel Is Yours",
+            title: "Rivan Tower - The Hotel Is Yours",
             tagline: "Own the room, do not rent it.",
             sticker: "Sold out in a week",
             client: "Rivan Tower",
@@ -675,7 +599,7 @@ window.SITE_CONTENT = {
       },
       {
         slug: "pringles-cheesy-cheese",
-        title: "Cheesy Cheese",
+        title: "Pringles Arabia - Cheesy Cheese",
         client: "Pringles Arabia",
         category: "Film",
         year: "2023",
@@ -742,7 +666,7 @@ window.SITE_CONTENT = {
       },
       {
         slug: "afg-skybridge",
-        title: "5-Star Investment",
+        title: "AFG Skybridge - 5-Star Investment",
         client: "AFG Skybridge",
         category: "Film",
         year: "2023",
@@ -808,7 +732,7 @@ window.SITE_CONTENT = {
       },
       {
         slug: "song-for-the-cashless",
-        title: "A Song for the Cashless",
+        title: "Social Nuts - A Song for the Cashless",
         client: "Social Nuts",
         category: "Music",
         year: "2022",
@@ -895,7 +819,7 @@ window.SITE_CONTENT = {
       },
       {
         slug: "quarantine-games",
-        title: "The Quarantine Games",
+        title: "Social Nuts - The Quarantine Games",
         client: "Social Nuts",
         category: "Game",
         year: "2020",
@@ -978,7 +902,7 @@ window.SITE_CONTENT = {
       },
       {
         slug: "momtaz-cement-chronicles",
-        title: "The Chronicles",
+        title: "Momtaz Cement - The Chronicles",
         client: "Momtaz Cement",
         category: "Ramadan campaign",
         year: "2023",
@@ -1087,7 +1011,7 @@ window.SITE_CONTENT = {
       },
       {
         slug: "modon-actors-too-seriously",
-        title: "Sometimes, Actors Take It Too Seriously",
+        title: "Modon - Sometimes, Actors Take It Too Seriously",
         client: "Modon",
         category: "Film",
         year: "2023",
@@ -1186,7 +1110,7 @@ window.SITE_CONTENT = {
       },
       {
         slug: "red-expo-got-the-keys",
-        title: "You Got the Keys",
+        title: "RED - You Got the Keys",
         client: "RED",
         category: "Jingle",
         year: "2024",
@@ -1280,7 +1204,7 @@ window.SITE_CONTENT = {
       },
       {
         slug: "canesten-lets-call-it",
-        title: "Let's Call It What It Is",
+        title: "Canesten - Let's Call It What It Is",
         client: "Canesten",
         category: "Miami Ad School",
         year: "2026",
@@ -1348,7 +1272,7 @@ window.SITE_CONTENT = {
       },
       {
         slug: "nivea-never-see-the-sun",
-        title: "I Might Never See the Sun Again",
+        title: "Nivea - I Might Never See the Sun Again",
         client: "Nivea",
         category: "Miami Ad School",
         year: "2026",
@@ -1417,7 +1341,7 @@ window.SITE_CONTENT = {
       },
       {
         slug: "the-mumbled-code",
-        title: "Make Their First Words Discount",
+        title: "Babyshop - Make Their First Words Discount",
         client: "Babyshop",
         category: "Digital activation",
         year: "2025",
@@ -1476,7 +1400,7 @@ window.SITE_CONTENT = {
       },
       {
         slug: "oumph-like-any-ad",
-        title: "Like Any Ad",
+        title: "Oumph! - Like Any Ad",
         client: "Oumph!",
         category: "Print",
         year: "2026",
@@ -1549,7 +1473,7 @@ window.SITE_CONTENT = {
       },
       {
         slug: "nothing-in-my-dreams",
-        title: "Nothing In My Dreams",
+        title: "Nothing Phone - Nothing In My Dreams",
         client: "Nothing Phone",
         category: "Experimental",
         year: "2026",
@@ -1606,7 +1530,7 @@ window.SITE_CONTENT = {
       },
       {
         slug: "murder-your-thirst",
-        title: "Murder What's Next",
+        title: "Liquid Death - Murder What's Next",
         client: "Liquid Death",
         category: "Radio",
         year: "2026",
