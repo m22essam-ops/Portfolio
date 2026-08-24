@@ -370,6 +370,61 @@
     return 'images/' + String(src).replace(/^images\//, '');
   };
 
+  /* ----- THE EMAIL ARRIVES HALF WRITTEN -----
+     Click anything that opens his email and the message is already there,
+     written as if by the person sending it, in his voice. It is the last joke
+     on the site and the only one that lands in somebody else's drafts folder.
+
+     Every mailto on every page goes through here, whether it was typed into
+     the HTML or built out of contact.links, so there is one copy of the words
+     and admin is the one place they are written.
+
+     Rules this has to keep:
+     - A link that already carries its own ?subject= or ?body= is left alone.
+       Someone wrote that on purpose.
+     - Blank either field in admin and that half is simply not sent. Blank
+       both and every link goes back to being a plain mailto, which is the
+       same escape hatch the seal and the jokes have.
+     - Encode with encodeURIComponent, not escape(): an apostrophe, a question
+       mark and an ampersand all appear in his draft and all three break a
+       query string if they go in raw. The line breaks go as CRLF because that
+       is what mail clients expect, and a lone \n is dropped by some of them.
+     - Rewrite the href rather than intercepting the click. A middle click, a
+       right click and copy, and a long press on a phone all have to give the
+       same address as a plain click, and only a real href does that. ----- */
+  var MAIL = C.contact || {};
+  var mailSubject = String(MAIL.mailSubject || '').trim();
+  var mailBody    = String(MAIL.mailBody    || '').trim();
+
+  window.mailHref = function (url) {
+    var href = String(url || '');
+    if (!/^mailto:/i.test(href)) return href;
+    if (href.indexOf('?') > -1) return href;            /* already spoken for */
+    var q = [];
+    if (mailSubject) q.push('subject=' + encodeURIComponent(mailSubject));
+    if (mailBody)    q.push('body='    + encodeURIComponent(mailBody.replace(/\r?\n/g, '\r\n')));
+    return q.length ? href + '?' + q.join('&') : href;
+  };
+
+  /* Swept more than once on purpose. site.js runs before each page's own
+     script, and some of those build a mailto of their own after it: the
+     cabinet's "Hire me?" on awards.html is created about twenty lines below
+     where this file finishes. A single pass here would rewrite every link
+     except that one, which is the one that matters most on that page.
+     Rewriting a link twice is free, because a link that already carries a
+     query is left alone. */
+  function sweepMail() {
+    Array.prototype.forEach.call(
+      document.querySelectorAll('a[href^="mailto:"], a[href^="MAILTO:"]'),
+      function (a) { a.setAttribute('href', window.mailHref(a.getAttribute('href'))); }
+    );
+  }
+  if (mailSubject || mailBody) {
+    sweepMail();
+    document.addEventListener('DOMContentLoaded', sweepMail);
+    window.addEventListener('load', sweepMail);
+  }
+
   /* ----- theme toggle (dark ↔ light) ----- */
   var toggle = document.getElementById('themeToggle');
   if (toggle) {

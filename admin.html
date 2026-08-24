@@ -542,6 +542,13 @@ label.field .ja-stale { display: block; color: var(--accent); font-size: 11.5px;
     <div class="subhead">Contact links (icons only — the icon is picked from each link's name)</div>
     <div id="linkRows"></div>
     <button class="add-btn" data-act="add-row" data-path="contact.links" data-row="link" type="button">+ Add link</button>
+
+    <div class="subhead">The email that writes itself</div>
+    <p class="hint">Anyone who clicks your email anywhere on the site gets their mail app open with this already in it, written as if by them. Every mailto on every page uses it, including the covered box on the home page. <strong>Empty a box and that half is not sent. Empty both and it goes back to a plain blank email.</strong> Keep it short: some mail apps quietly cut a very long one.</p>
+    <label class="field"><span>Subject</span><input data-path="contact.mailSubject" placeholder="Leave empty for no subject"></label>
+    <label class="field"><span>Message</span><textarea data-path="contact.mailBody" rows="5" placeholder="Leave empty for a blank message"></textarea>
+      <small>Line breaks are kept. It is their draft, so it is written in their voice, not yours.</small></label>
+    <p class="hint" id="mailLen"></p>
   </section>
 
   <!-- ================= NAV + FOOTER ================= -->
@@ -961,6 +968,34 @@ label.field .ja-stale { display: block; color: var(--accent); font-size: 11.5px;
     renderLinks();
     renderJaWarnings();
     renderVideoHosts();
+    renderMailLen();
+  }
+
+  /* How long the finished mailto link actually is, which is not how long the
+     words are: encoding turns every space into %20 and every apostrophe and
+     question mark into three characters, so his 329-character draft leaves as
+     roughly 420. Clients differ on where they give up and several stop
+     somewhere around 2000, so the warning starts well before that. */
+  function renderMailLen() {
+    var el = document.getElementById('mailLen');
+    if (!el) return;
+    var K = M.contact || {};
+    var subj = String(K.mailSubject || '').trim();
+    var body = String(K.mailBody || '').trim();
+    if (!subj && !body) {
+      el.textContent = 'Both empty: your email opens blank, the way it always did.';
+      el.style.color = '';
+      return;
+    }
+    var q = [];
+    if (subj) q.push('subject=' + encodeURIComponent(subj));
+    if (body) q.push('body=' + encodeURIComponent(body.replace(/\r?\n/g, '\r\n')));
+    var n = ('mailto:m22essam@gmail.com?' + q.join('&')).length;
+    var tight = n > 1500;
+    el.textContent = 'The finished link is ' + n + ' characters' +
+      (tight ? '. That is long enough that some mail apps will cut the end off. Trim it.'
+             : '. Comfortably within what every mail app accepts.');
+    el.style.color = tight ? 'var(--admin-warn, #B4451F)' : '';
   }
 
   /* ================= WHERE THE VIDEOS LIVE =================
@@ -1229,6 +1264,8 @@ label.field .ja-stale { display: block; color: var(--accent); font-size: 11.5px;
        strands a translation and goes away again if he undoes the edit.
        Debounced: rebuilding it on every keystroke would move the field he is
        typing in, because the note is added underneath it. */
+    if (el.dataset.path.indexOf('contact.mail') === 0) renderMailLen();
+
     clearTimeout(jaTick);
     jaTick = setTimeout(renderJaWarnings, 600);
   }

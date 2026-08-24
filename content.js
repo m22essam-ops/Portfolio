@@ -1449,6 +1449,8 @@ window.SITE_CONTENT = {
     headline: "Have a project? A vacancy?",
     ctaText: "Now we talk.",
     ctaUrl: "mailto:m22essam@gmail.com",
+    mailSubject: "Hi Mohamed, are you free this Monday at noon?",
+    mailBody: "I hope you're doing well, I was looking at your portfolio and i believe you will be a good fit in our team, we are looking for a copywriter, would you love to jump on a quick call? what i think i was so impressed with your style that i'm writing like you, any ways, speak to you soon.",
     sub: "",
     resume: {
       label: "Download my Résumé",

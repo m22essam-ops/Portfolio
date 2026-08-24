@@ -1168,6 +1168,18 @@ body.lang-ja .page-head h1{
   .page-nav .nav-menu-in::after{left:auto;right:24px}
 }
 
+/* THE NAV HAS TO FIT A PHONE.
+   One row cannot: the logo is 190px, the links 170, the gap 20, and a 375px
+   screen leaves 331 of usable width. "Say hi" was cut in half at the right
+   edge and the whole page could be dragged sideways after it. So below 520px
+   the links drop to their own row under the name. Nothing is removed: the
+   alternative was dropping "Say hi" on phones, and the point of a portfolio
+   is that the way to reach him is never the thing that gets cut. */
+@media (max-width:520px){
+  .page-nav .wrap{flex-wrap:wrap;height:auto;padding-top:14px;padding-bottom:12px;gap:8px 20px}
+  .page-nav .links{width:100%;gap:18px}
+}
+
 @media (max-width:520px){
   .credits-list li{flex-direction:column;gap:3px}
   .credits-list li span{flex:none}
