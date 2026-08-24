@@ -1046,6 +1046,20 @@ body.lang-ja .page-head h1{
    the words alone and the frame stretches to whatever that comes to, so
    rewriting the bio in admin re-sizes the picture with no numbers to update.
    The floor stops a very short bio from squashing it into a letterbox. */
+/* THE WHOLE ABOUT PAGE HOLDS ONE COLUMN, and it is capped rather than
+   growing with the screen, because this is a page you read.
+
+   Capping the two blocks alone left them hard against the left with 800px of
+   nothing to the right of them, which is not a margin, it is a lean. So the
+   heading is capped to the same 1200 and every part of it is centred, and the
+   heading, the photo and the jobs stay on one left edge.
+
+   1200 comes from the reading column rather than from eye: the text side is
+   1.15 of 2, so 1200 less the gap puts about 660px under the words, which is
+   the 62ch above at 19px. The photo takes the rest. */
+body.page-about .page-head .wrap,
+body.page-about .about-grid,
+body.page-about .exp-list{max-width:1200px;margin-inline:auto}
 .about-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:56px;align-items:stretch;margin-bottom:96px}
 /* The About portrait is printed the same way the stamp is: a flat red
    ground with a grey photograph screened over it, so it is two inks rather
@@ -1114,7 +1128,16 @@ body.lang-ja .page-head h1{
 .about-shot.has-roll:hover,
 .about-shot.has-roll:focus-visible{transform:rotate(-1.6deg) scale(1.012)}
 .about-shot.has-roll:focus-visible{outline:2px solid var(--red);outline-offset:4px}
-.about-text{font-size:19px;line-height:1.62;margin:0 0 22px;color:var(--fg-dim)}
+/* THE ABOUT PAGE IS FOR READING, SO IT DOES NOT GET WIDER WITH THE SCREEN.
+   The work grid should: images are the argument and they want the room. Words
+   are the opposite. When --wrap was allowed to grow, this paragraph had no
+   measure of its own and went with it: 109 characters a line on a 2400px
+   screen, against the 55 to 75 anything is comfortable to read at. The
+   Japanese version had a measure and the English one never did.
+
+   So the reading column is set here, and the two blocks that hold it are
+   capped, which is also what puts the margins back. */
+.about-text{font-size:19px;line-height:1.62;margin:0 0 22px;color:var(--fg-dim);max-width:62ch}
 .skills-list{display:flex;flex-wrap:wrap;gap:9px;margin-top:32px}
 .skill-tag{border:1px solid var(--line);border-radius:100px;padding:6px 13px;font-size:11px;color:var(--fg-dim)}
 .exp-list{margin-bottom:40px}
@@ -1124,6 +1147,8 @@ body.lang-ja .page-head h1{
 .exp-row{display:flex;justify-content:space-between;align-items:baseline;gap:20px;padding:12px 0;border-top:1px solid var(--line)}
 .exp-role{font-family:var(--display);font-weight:800;letter-spacing:-.02em;font-size:21px;line-height:1.15;display:block}
 .exp-org{font-size:15px;line-height:1.35;color:var(--fg-dim);display:block;margin-top:2px}
+/* the company carries the weight, the city stays quiet beside it */
+.exp-org b{font-weight:700;color:var(--fg)}
 .exp-time{font-size:11.5px;color:var(--fg-faint);white-space:nowrap}
 
 /* ============================ RESPONSIVE ============================ */

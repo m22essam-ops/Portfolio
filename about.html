@@ -218,9 +218,29 @@
   /* the jobs ARE merged by position, and dropped whole if the two lists stop
      being the same length. See langRows() in site.js for why. */
   var jobs = window.langRows(A.experience, alt && alt.experience, ['role', 'org', 'time']);
+  /* The agency is set bold, the place beside it is not. One field holds both
+     ("Yango, MENA", "Ducklife, Dubai (part-time)"), so the break is at the
+     first comma or bracket: what comes before is the company, what comes
+     after is where it was.
+
+     The full-width forms are in there because the Japanese version of this
+     list is punctuated the Japanese way, and one of its entries is written
+     "Yango（MENA）" with no comma at all. Matching only the ASCII comma would
+     have set that whole line bold while its neighbours were split, which
+     looks like a mistake rather than a style.
+
+     An entry with neither, "Freelance", is bold all through, which is right. */
+  function orgHtml(org) {
+    var s = String(org == null ? '' : org);
+    var m = /[,，、(（]/.exec(s);
+    return (m && m.index > 0)
+      ? '<b>' + esc(s.slice(0, m.index)) + '</b>' + esc(s.slice(m.index))
+      : '<b>' + esc(s) + '</b>';
+  }
+
   document.getElementById('expList').innerHTML = jobs.map(function (e) {
     return '<div class="exp-row">' +
-      '<div><span class="exp-role">' + esc(e.role) + '</span><span class="exp-org">' + esc(e.org) + '</span></div>' +
+      '<div><span class="exp-role">' + esc(e.role) + '</span><span class="exp-org">' + orgHtml(e.org) + '</span></div>' +
       '<span class="exp-time">' + esc(e.time) + '</span>' +
       '</div>';
   }).join('');
