@@ -712,9 +712,69 @@ move something one place without aiming.
 and in **Drowner** (Hainz Studio), side by side, and tells him what is missing
 until the file is in `fonts/`. It is not linked from the site.
 
-**Drowner is a distressed, textured display face**, which runs straight into
-the art direction above: no grain, no texture of any kind, twice rejected as
-1970s pastiche. Raised with him; his call.
+Drowner was described here as a distressed, textured face that broke the
+no-texture rule. That was wrong, taken off the foundry's marketing rather
+than the specimen: it is a clean rounded grotesque. **He killed it anyway**
+("kill it. move to the videos"), so Syne stands. No font binary is committed
+and `.gitignore` keeps it that way.
+
+## Added 24 Aug 2026
+
+### Admin could overwrite work it never saw, and did
+
+The editor holds all of content.js in memory and writes all of it back, so a
+tab is only as current as the moment it was opened. On 23 Aug a save at 23:35
+reversed a commit made at 23:23, **on the live site**: the brand in front of
+all 18 titles, the refitted Tuborg cover, and the removal of Rivan Tower's
+Japanese from Unstoppable Rides. It looked like nothing had happened.
+
+A guard already existed and had two holes, either fatal alone.
+
+- **It carried across only keys the tab had NEVER SEEN.** A field the tab knew
+  about but had not edited went back stale, and a field deleted on disk came
+  back from the dead, because the walk was over the disk's keys and a key the
+  disk no longer has was never considered. That is how a deleted translation
+  reappeared on the wrong project.
+- **It read content.js with `JSON.parse`.** content.js is JavaScript. One
+  trailing comma before a closing brace loads on every page of the site and
+  JSON.parse refuses it. The refusal was caught and ignored, so the read
+  returned nothing and the save wrote the tab's snapshot over everything. **A
+  file too "broken" to read was the one case where the guard was most needed
+  and the only case where it switched itself off.** The clobbered file had
+  exactly one trailing comma in it.
+
+Now: a **three-way merge**. Every edit already funnels through
+`updateFromPath()` or the structural click handler, so both stamp the path in
+`TOUCHED`. A touched field is the tab's; everything else is the file's,
+**deletions included**. Reading runs content.js the way the site runs it, and
+a read that genuinely fails says so on the status line instead of saving
+quietly.
+
+Things that will bite anyone changing this:
+
+- **An add, a delete or a reorder marks the WHOLE array.** Merging element-wise
+  across a reorder pairs up the wrong projects and puts one man's credits on
+  another man's film. `TOUCHED['work.projects']` short-circuits the array.
+- **The merge and the cleaning run on a copy, never on `M`.** The empty rows
+  the cleaning removes are rows he is looking at, and every field on screen
+  carries a `data-path` into `M`.
+- **A 409 from GitHub is the remote protecting somebody's work.** The retry
+  used to refetch the sha and write anyway, which defeats the one guard we did
+  not have to build. It now reads what is there, merges it, then retries.
+- `serialize()` cleaned `work.produced` / `work.presented`, the two-array shape
+  retired 20 Aug 2026, so it had quietly stopped cleaning anything: 38 empty
+  media slots across 16 projects had built up. Harmless on the site
+  (`work.html` filters an empty `src`) but they made the two sides of the
+  merge different lengths for nothing.
+
+### Rivan Tower has no stills
+
+It carried two **Tuborg** images, which he spotted and deleted. That leaves the
+strongest project on the site with one Adobe-hosted video and no photographs
+at all. Second case of one project's content sitting inside another, after the
+Japanese block. Nothing in admin clones a project, so the cause is still
+unknown; admin's warning panel now shouts if two projects ever share a
+translation.
 
 ## Don't
 
@@ -731,4 +791,8 @@ the art direction above: no grain, no texture of any kind, twice rejected as
 - Don't go back to a CSS-only hover menu. The grace period in `site.js` is the
   whole fix.
 - Don't put the tick back on Work that worked.
+- Don't parse content.js with JSON.parse. It is JavaScript, and the strictness
+  costs more than it buys: it once silently disabled the only thing standing
+  between an old admin tab and the whole site's copy.
+- Don't force past a 409 from GitHub by refetching the sha. Read, merge, retry.
 - Don't translate a colleague's name into another script.
