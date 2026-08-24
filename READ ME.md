@@ -102,8 +102,14 @@ a different one. Add a fourth with the button, or remove one.
 The square brackets are the joke: it should read like a template nobody
 filled in. Keep them when you rewrite.
 
-**All three are drafts. Version 1 is your words**, the two others are mine and
-are there to be replaced. Two things in version 1 are still your call:
+**To rewrite them: `email-prompt.md`, in this folder.** Paste it into whatever
+you write with. It already contains the brief, the rules, your own lines as
+the style reference, and the two versions you rejected with a note on why they
+failed, so it should not hand you the same thing back.
+
+**All three currently in there are drafts. Version 1 is your words**, the two
+others are mine and are there to be replaced. Two things in version 1 are
+still your call:
 
 - The subject says **"Hi Mohamed"**, one M. Everywhere else on the site it is
   Mohammed with two. It reads as the sender getting it slightly wrong, which
@@ -181,6 +187,7 @@ list in the editor counts how many are left. It turns green at zero.
 | `admin.html` | The editor. |
 | `design.html` | The home designer. |
 | `og-draw.js` | Draws the link-preview picture. Used by the editor and by the page below. |
+| `email-prompt.md` | The brief for rewriting the pre-filled emails. Paste it into a writing AI. |
 | `make-og.html` | Looks at that picture, and saves it by hand if ever needed. |
 | `local-server.py` | The little server behind `Start Site.command`. |
 | `images/` | Your pictures. `images/live/` are the ones pulled off your old site. |
