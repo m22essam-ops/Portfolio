@@ -234,13 +234,22 @@
     var s = String(org == null ? '' : org);
     var m = /[,，、(（]/.exec(s);
     return (m && m.index > 0)
-      ? '<b>' + esc(s.slice(0, m.index)) + '</b>' + esc(s.slice(m.index))
+      ? '<b>' + esc(s.slice(0, m.index)) + '</b>' +
+        '<span class="exp-place">' + esc(s.slice(m.index)) + '</span>'
       : '<b>' + esc(s) + '</b>';
   }
 
+  /* THE COMPANY LEADS, THE JOB SITS UNDER IT.
+     It used to be the other way round, four rows all starting "Copywriter"
+     and the name of the place set small underneath. Reading down the column
+     you got the same word four times before you got to anything that told
+     them apart. The agencies are the information here, so they go first and
+     they carry the weight; the city beside the agency stays quiet, and the
+     job title becomes the second line. */
   document.getElementById('expList').innerHTML = jobs.map(function (e) {
     return '<div class="exp-row">' +
-      '<div><span class="exp-role">' + esc(e.role) + '</span><span class="exp-org">' + orgHtml(e.org) + '</span></div>' +
+      '<div><span class="exp-org">' + orgHtml(e.org) + '</span>' +
+           '<span class="exp-role">' + esc(e.role) + '</span></div>' +
       '<span class="exp-time">' + esc(e.time) + '</span>' +
       '</div>';
   }).join('');

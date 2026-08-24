@@ -1145,10 +1145,19 @@ body.page-about .exp-list{max-width:1200px;margin-inline:auto}
    put half a blank line above and below every role and made the list twice
    as tall as it needed to be */
 .exp-row{display:flex;justify-content:space-between;align-items:baseline;gap:20px;padding:12px 0;border-top:1px solid var(--line)}
-.exp-role{font-family:var(--display);font-weight:800;letter-spacing:-.02em;font-size:21px;line-height:1.15;display:block}
-.exp-org{font-size:15px;line-height:1.35;color:var(--fg-dim);display:block;margin-top:2px}
-/* the company carries the weight, the city stays quiet beside it */
-.exp-org b{font-weight:700;color:var(--fg)}
+/* The company is the top line and takes the display treatment; the job title
+   is the quiet second line. Swapped round on 25 Aug 2026: with the role on
+   top the column read "Copywriter, Copywriter, Copywriter, Copywriter" and
+   the four names that actually differ were set small underneath. */
+.exp-org{font-family:var(--display);font-weight:800;letter-spacing:-.02em;font-size:21px;line-height:1.15;display:block;color:var(--fg)}
+.exp-org b{font-weight:800}
+/* The city rides along with the agency but does not compete with it: same
+   face, no weight, no tracking, quieter colour, a size down.
+   It INHERITS the family rather than naming one. Naming a stack here would
+   drop Noto Sans JP off the end of it, and the Japanese cities (ドバイ, カイロ)
+   would fall through to whatever the system happened to have instead. */
+.exp-place{font-family:inherit;font-weight:400;font-size:16px;letter-spacing:0;color:var(--fg-dim)}
+.exp-role{font-size:15px;line-height:1.35;color:var(--fg-dim);display:block;margin-top:2px}
 .exp-time{font-size:11.5px;color:var(--fg-faint);white-space:nowrap}
 
 /* ============================ RESPONSIVE ============================ */
