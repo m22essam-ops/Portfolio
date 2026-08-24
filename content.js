@@ -1520,7 +1520,7 @@ window.SITE_CONTENT = {
           y: 4.29,
           w: 14.32,
           h: 4.48,
-          size: 2.1,
+          size: 2.01,
           weight: "400"
         },
         {
