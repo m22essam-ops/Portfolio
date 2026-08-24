@@ -72,7 +72,68 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 version = '0'
             self.send_json({'ok': True, 'version': version})
             return
+        if self.headers.get('Range') and self.serve_range():
+            return
         super().do_GET()  # everything else: serve the site as usual
+
+    def serve_range(self):
+        """Answer a Range request, which the stock handler does not.
+
+        Without this a browser can only ever play a video from the start:
+        dragging the scrubber, or setting currentTime, needs the server to be
+        able to hand back the middle of a file, and the stock handler always
+        replies 200 with the whole thing. The browser reads that as "ranges
+        not supported" and refuses to seek, so currentTime silently stays at
+        0. It looks exactly like a broken video.
+
+        Returns True if it answered, False to let the normal path handle it.
+        """
+        path = self.translate_path(self.path)
+        if not os.path.isfile(path):
+            return False
+        try:
+            size = os.path.getsize(path)
+            m = re.match(r'bytes=(\d*)-(\d*)\s*$', self.headers.get('Range', ''))
+            if not m:
+                return False
+            start, end = m.group(1), m.group(2)
+            if start == '':
+                if end == '':
+                    return False
+                length = min(int(end), size)          # the last N bytes
+                start, end = size - length, size - 1
+            else:
+                start = int(start)
+                end = int(end) if end else size - 1
+            if start >= size or start > end:
+                self.send_response(416)
+                self.send_header('Content-Range', 'bytes */%d' % size)
+                self.send_header('Content-Length', '0')
+                self.end_headers()
+                return True
+            end = min(end, size - 1)
+            length = end - start + 1
+
+            self.send_response(206)
+            self.send_header('Content-Type', self.guess_type(path))
+            self.send_header('Accept-Ranges', 'bytes')
+            self.send_header('Content-Range', 'bytes %d-%d/%d' % (start, end, size))
+            self.send_header('Content-Length', str(length))
+            self.end_headers()
+            with open(path, 'rb') as f:
+                f.seek(start)
+                left = length
+                while left > 0:
+                    chunk = f.read(min(64 * 1024, left))
+                    if not chunk:
+                        break
+                    self.wfile.write(chunk)
+                    left -= len(chunk)
+            return True
+        except (BrokenPipeError, ConnectionResetError):
+            return True          # the browser moved on; not an error worth noise
+        except Exception:
+            return False         # anything unexpected: fall back to the whole file
 
     def do_POST(self):
         if self.path.rstrip('/') != '/api/save':
