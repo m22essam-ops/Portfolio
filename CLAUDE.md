@@ -767,6 +767,73 @@ Things that will bite anyone changing this:
   (`work.html` filters an empty `src`) but they made the two sides of the
   merge different lengths for nothing.
 
+### The email arrives half written
+
+Clicking his address anywhere opens the mail app with the message already in
+it, written as if by the sender, in his voice. His idea and his words;
+`contact.mailSubject` / `contact.mailBody`, editable in admin section 6 with a
+counter for the finished link's length.
+
+One implementation lives in `site.js` (`mailHref`, `sweepMail`) and a second,
+deliberate copy of the same six lines is in `index.html`, which does not load
+site.js. Things that will bite:
+
+- **Rewrite the href, do not intercept the click.** A middle click, a right
+  click and copy, and a long press on a phone all have to give the same
+  address, and only a real href does that.
+- **`encodeURIComponent`, never `escape`.** An apostrophe, a question mark and
+  an ampersand all appear in his draft and all three break a query string raw.
+  Newlines go as CRLF; some clients drop a lone `\n`.
+- **The sweep runs three times** (now, DOMContentLoaded, load). site.js runs
+  before each page's own script and `awards.html` builds its "Hire me?" after
+  it, so a single pass rewrites every link except the one that matters most on
+  that page. Rewriting twice is free: a link that already has a query is
+  skipped.
+- Blank either field and that half is not sent; blank both and it is a plain
+  mailto again.
+
+**Two things in the draft are flagged and unresolved**: the subject says
+"Hi Mohamed", one M, against the double-M rule everywhere else (it reads as
+the sender getting it slightly wrong, which is either the joke or a mistake),
+and his draft's "ocpywriter" was read as a slip and set to "copywriter".
+
+### The link preview
+
+There were no `og:` tags anywhere, so pasting the URL into WhatsApp or
+LinkedIn showed a bare link. All four public pages now carry them, plus
+`images/og.jpg`, 1200x630, drawn by **`make-og.html`** from the live ticket
+copy.
+
+- **It has to be a flat file and static tags.** The apps that draw these cards
+  do not run JavaScript, so nothing here can come out of content.js.
+- **Which also means one picture for every project page**, because work.html
+  is one file. Per-project cards would need a file per project, which is the
+  thing this site is built to avoid.
+- **Re-run `make-og.html` if the headline changes**, or every link he has ever
+  sent keeps showing the old words. It waits on `document.fonts.load` first:
+  drawing early substitutes a system font and nobody notices until it is in
+  somebody's chat window.
+- It POSTs `{files:{...}}` only, never a `content` key, so it cannot touch
+  content.js.
+
+### The nav fits a phone
+
+Below 520px the links drop to their own row under his name. One row cannot
+fit 375px: logo 190 + gap 20 + links 170 in 331 of usable width, so "Say hi"
+was cut in half. Nothing was removed; dropping "Say hi" on phones was the
+alternative and the way to reach him is not the thing that gets cut.
+
+Separately, the dropdown panel is closed with `visibility`, not `display`,
+because it has to transition. **A hidden box still takes part in layout**, so
+below 900px it anchors right instead of left or it hangs off the edge.
+
+### The local server answers Range requests
+
+It used to reply 200 with the whole file to everything, which a browser reads
+as "ranges not supported", so `currentTime` silently stayed at 0 and no video
+could be scrubbed. `serve_range()` now answers 206, 416 past the end, and
+falls through on anything it does not understand.
+
 ### Rivan Tower has no stills
 
 It carried two **Tuborg** images, which he spotted and deleted. That leaves the
@@ -795,4 +862,7 @@ translation.
   costs more than it buys: it once silently disabled the only thing standing
   between an old admin tab and the whole site's copy.
 - Don't force past a 409 from GitHub by refetching the sha. Read, merge, retry.
+- Don't try to set an og: tag from JavaScript. The scrapers do not run it.
+- Don't put copy in `PROJECT-NOTES.md`. It is a stub; `READ ME.md` is his
+  handbook and the one to keep current.
 - Don't translate a colleague's name into another script.
