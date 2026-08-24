@@ -914,6 +914,7 @@ label.field .ja-stale { display: block; color: var(--accent); font-size: 11.5px;
     if (order.some(isNaN)) return;
     var unchanged = order.every(function (v, i) { return v === i; });
     if (unchanged) return;
+    touch('work.' + group);
     var arr = M.work[group];
     M.work[group] = order.map(function (i) { return arr[i]; });
     /* A re-render is not optional. Every field in every card carries a
@@ -1176,9 +1177,30 @@ label.field .ja-stale { display: block; color: var(--accent); font-size: 11.5px;
     return /^https?:\/\//i.test(v) ? v : 'images/' + String(v).replace(/^images\//, '');
   }
 
+  /* ---- WHAT THIS TAB ACTUALLY CHANGED ---------------------------------
+     Every edit in this page funnels through updateFromPath() or the
+     structural click handler below, so both stamp the path here. At save
+     time the merge keeps this tab's value for a touched field and takes
+     the file on disk for everything else.
+
+     Without it the tab writes its entire snapshot back, so a tab opened an
+     hour ago silently reverses everything changed since. That happened on
+     23 Aug 2026: a save at 23:35 undid a commit made at 23:23, on the live
+     site, including a field the tab could not even edit.
+     --------------------------------------------------------------------- */
+  var TOUCHED = Object.create(null);
+  function touch(path) { if (path) TOUCHED[path] = true; }
+  function touchedAtOrUnder(path) {
+    if (TOUCHED[path]) return true;
+    var under = path + '.';
+    for (var k in TOUCHED) if (k.indexOf(under) === 0) return true;
+    return false;
+  }
+
   function updateFromPath(e) {
     var el = e.target;
     if (!el.dataset.path) return;
+    touch(el.dataset.path);
     var v = el.value;
     if (el.type === 'checkbox') {
       v = el.checked;
@@ -1223,11 +1245,13 @@ label.field .ja-stale { display: block; color: var(--accent); font-size: 11.5px;
     var idx = parseInt(btn.dataset.idx, 10);
 
     if (act === 'add-project') {
+      touch('work.' + btn.dataset.group);
       M.work[btn.dataset.group].push(emptyProject());
       renderProjects(btn.dataset.group);
     } else if (act === 'remove-project') {
       if (!confirm('Delete this project?')) return;
       var pr = parseProjPath(path);
+      touch('work.' + pr.group);
       M.work[pr.group].splice(pr.idx, 1);
       renderProjects(pr.group);
     } else if (act === 'move-project') {
@@ -1235,6 +1259,7 @@ label.field .ja-stale { display: block; color: var(--accent); font-size: 11.5px;
       var arr = M.work[pr2.group];
       var to = pr2.idx + parseInt(btn.dataset.dir, 10);
       if (to < 0 || to >= arr.length) return;
+      touch('work.' + pr2.group);
       arr.splice(to, 0, arr.splice(pr2.idx, 1)[0]);
       renderProjects(pr2.group);
     } else if (act === 'move-media') {
@@ -1247,6 +1272,7 @@ label.field .ja-stale { display: block; color: var(--accent); font-size: 11.5px;
       var t = idxM + dirM;
       while (t >= 0 && t < arrM.length && arrM[t].type !== arrM[idxM].type) t += dirM;
       if (t < 0 || t >= arrM.length) return;
+      touch('work.' + prm.group + '.' + prm.idx + '.media');
       arrM.splice(t, 0, arrM.splice(idxM, 1)[0]);
       renderProjects(prm.group);
     } else if (act === 'pick-image') {
@@ -1259,14 +1285,18 @@ label.field .ja-stale { display: block; color: var(--accent); font-size: 11.5px;
       videoPicker.click();
     } else if (act === 'add-row') {
       if (path === 'about.experience') {
+        touch(path);
         M.about.experience.push({ role: '', org: '', time: '' });
         renderExperience();
       } else if (path === 'contact.links') {
+        touch(path);
         M.contact.links.push({ label: '', url: '' });
         renderLinks();
       } else {
         var pr3 = parseProjPath(path);
         var proj = M.work[pr3.group][pr3.idx];
+        touch('work.' + pr3.group + '.' + pr3.idx +
+              (btn.dataset.row && btn.dataset.row.indexOf('media') === 0 ? '.media' : '.credits'));
         if (btn.dataset.row === 'media-image') proj.media.push({ type: 'image', src: '', caption: '' });
         else if (btn.dataset.row === 'media-video') proj.media.push({ type: 'video', src: '', caption: '' });
         else if (btn.dataset.row === 'media') proj.media.push({ type: 'image', src: '', caption: '' });
@@ -1275,14 +1305,18 @@ label.field .ja-stale { display: block; color: var(--accent); font-size: 11.5px;
       }
     } else if (act === 'remove-row') {
       if (path === 'about.experience') {
+        touch(path);
         M.about.experience.splice(idx, 1);
         renderExperience();
       } else if (path === 'contact.links') {
+        touch(path);
         M.contact.links.splice(idx, 1);
         renderLinks();
       } else {
         var pr4 = parseProjPath(path);
         var proj2 = M.work[pr4.group][pr4.idx];
+        touch('work.' + pr4.group + '.' + pr4.idx +
+              (btn.dataset.row === 'media' ? '.media' : '.credits'));
         if (btn.dataset.row === 'media') proj2.media.splice(idx, 1);
         else proj2.credits.splice(idx, 1);
         renderProjects(pr4.group);
@@ -1293,53 +1327,143 @@ label.field .ja-stale { display: block; color: var(--accent); font-size: 11.5px;
   /* ---------------- export ---------------- */
   /* ---- DO NOT CLOBBER WHAT THIS TAB NEVER LOADED ----------------------
      This page holds the whole of content.js in memory and writes all of it
-     back on save. So a tab that was opened before a new field existed has no
-     idea about that field, and saving from it deletes the field outright.
-     That has now wiped the site's artwork three times over.
+     back on save. So whatever this tab does not know, it destroys: a field
+     added since it was opened, a line edited since it was opened, a block
+     deleted since it was opened. That has wiped the site's artwork three
+     times, and on 23 Aug 2026 a save at 23:35 reversed a commit made at
+     23:23 on the live site.
 
-     Before every save the file is re-read from disk and anything on disk that
-     this tab has never heard of is carried across. Fields the tab DOES know
-     about still save normally, including ones deliberately emptied, because
-     the check is whether the key exists rather than whether it has a value.
-     Only reachable over http://; from file:// the fetch is blocked and this
-     quietly does nothing, which is another reason not to open it that way.
+     The old fix carried across only keys the tab had NEVER SEEN. That is
+     one of the three cases. A field the tab knew about but had not edited
+     still went back stale, and a field deleted on disk came back from the
+     dead, because a key the disk no longer has was never even looked at.
+
+     So: the file is re-read before every save and merged properly. A field
+     this tab actually touched is this tab's. Everything else is the file's,
+     including deletions. TOUCHED, above, is what makes that possible.
+
+     Only reachable over http://; from file:// the fetch is blocked and no
+     merge happens, which is another reason not to open it that way.
      -------------------------------------------------------------------- */
-  function graftUnknown(live, disk) {
-    if (!disk || typeof disk !== 'object' || !live || typeof live !== 'object') return;
-    if (Array.isArray(disk) !== Array.isArray(live)) return;
+  function mergeDisk(live, disk, prefix) {
+    if (!disk || typeof disk !== 'object' || !live || typeof live !== 'object') return live;
+    if (Array.isArray(disk) !== Array.isArray(live)) return live;
+
+    if (Array.isArray(live)) {
+      /* An add, a delete or a reorder marks the whole array, and then it is
+         this tab's. Merging element-wise across a reorder would pair up the
+         wrong projects and write one man's credits onto another's film. */
+      if (TOUCHED[prefix]) return live;
+      if (live.length !== disk.length) return touchedAtOrUnder(prefix) ? live : disk;
+      for (var i = 0; i < live.length; i++) {
+        live[i] = mergeDisk(live[i], disk[i], prefix + '.' + i);
+      }
+      return live;
+    }
+
     Object.keys(disk).forEach(function (k) {
+      var path = prefix ? prefix + '.' + k : k;
+      /* added on disk since this tab loaded */
       if (!(k in live)) { live[k] = disk[k]; return; }
-      if (disk[k] && typeof disk[k] === 'object') graftUnknown(live[k], disk[k]);
+      if (disk[k] && typeof disk[k] === 'object' && live[k] && typeof live[k] === 'object') {
+        live[k] = mergeDisk(live[k], disk[k], path);
+        return;
+      }
+      /* edited on disk since this tab loaded, and untouched here */
+      if (!touchedAtOrUnder(path)) live[k] = disk[k];
     });
+
+    /* deleted on disk since this tab loaded, and untouched here. This is the
+       case the old graft could not see: it walked the disk's keys, so a key
+       the disk no longer had was never considered and this tab put it back.
+       That is how one project ended up serving another project's Japanese. */
+    Object.keys(live).forEach(function (k) {
+      var path = prefix ? prefix + '.' + k : k;
+      if (!(k in disk) && !touchedAtOrUnder(path)) delete live[k];
+    });
+
+    return live;
   }
 
+  /* content.js is JAVASCRIPT, so run it the way every page on the site runs
+     it. It used to be turned into JSON with a regex over the keys and handed
+     to JSON.parse, which is stricter than the file is allowed to be: one
+     trailing comma before a closing brace, left by an edit made in a text
+     editor, is perfectly good JavaScript and the whole site loads on it, but
+     JSON.parse refuses it. The refusal was caught and ignored, so the read
+     returned nothing, and the save then wrote this tab's snapshot over
+     everything. A file too "broken" to read was the one case where the
+     protection was most needed and the only case where it switched itself
+     off. It is not a hypothetical: the file that was clobbered on 23 Aug
+     2026 had exactly one trailing comma in it. */
+  function parseContent(txt) {
+    var sandbox = {};
+    new Function('window', txt)(sandbox);
+    if (!sandbox.SITE_CONTENT) throw new Error('no SITE_CONTENT in content.js');
+    return sandbox.SITE_CONTENT;
+  }
+
+  /* The disk copy read immediately before the current save. serialize() folds
+     it in. Null when there is nothing to merge (file://, server down, or an
+     unreadable file), and then the save is this tab's snapshot, as before. */
+  var DISK = null;
+  /* Appended to the status line after a save. A merge that could not happen
+     has to say so: silence is what made the old failure invisible. */
+  var DISK_NOTE = '';
+
   function keepFieldsThisTabNeverSaw() {
-    if (!/^https?:/.test(location.protocol)) return Promise.resolve();
+    DISK = null;
+    DISK_NOTE = '';
+    if (!/^https?:/.test(location.protocol)) {
+      DISK_NOTE = ' This page was opened as a file, so nothing on disk could be' +
+                  ' read and nothing was merged: what you see here is all that' +
+                  ' was written. Open it through the local server instead.';
+      return Promise.resolve();
+    }
     return fetch('content.js?cb=' + Date.now(), { cache: 'no-store' })
       .then(function (r) { return r.ok ? r.text() : null; })
       .then(function (txt) {
-        if (!txt) return;
-        var i = txt.indexOf('{');
-        var disk = JSON.parse(
-          txt.slice(i).replace(/;\s*$/, '')
-             .replace(/^(\s*)([A-Za-z_$][\w$]*)(\s*:)/gm, '$1"$2"$3')
-        );
-        graftUnknown(M, disk);
+        if (!txt) throw new Error('the server did not return it');
+        DISK = parseContent(txt);
       })
-      .catch(function () { /* unreadable or unparseable: save what we have */ });
+      .catch(function (e) {
+        DISK = null;
+        DISK_NOTE = ' WARNING: content.js on disk could not be read (' +
+                    ((e && e.message) || 'unknown reason') + '), so this tab could' +
+                    ' not check what else had changed. Anything edited outside this' +
+                    ' tab since you opened it has just been overwritten.';
+      });
   }
 
-  function serialize() {
-    /* drop the padded empty media / credit slots so the exported file stays clean */
-    function cleanProject(p) {
-      p.media = (p.media || []).filter(function (m) { return m.src && String(m.src).trim(); });
-      p.credits = (p.credits || []).filter(function (c) {
-        return (c.role && String(c.role).trim()) || (c.name && String(c.name).trim());
+  /* Drop the padded empty media / credit slots so the exported file stays
+     clean. renderProjects() pads every project up to three empty image slots
+     so there is always a row to type into, and those empties were reaching
+     the file: 38 of them across 16 projects. They were harmless, because
+     work.html filters an empty src before it renders, but they also made
+     the two sides of the merge below different lengths for no reason.
+
+     Note this used to walk work.produced and work.presented, which is the
+     retired two-array shape. There has been one work.projects array since
+     20 Aug 2026, so it had quietly stopped cleaning anything at all. */
+  function cleanAll(o) {
+    ['projects', 'produced', 'presented'].forEach(function (g) {
+      ((o.work && o.work[g]) || []).forEach(function (p) {
+        p.media = (p.media || []).filter(function (m) { return m.src && String(m.src).trim(); });
+        p.credits = (p.credits || []).filter(function (c) {
+          return (c.role && String(c.role).trim()) || (c.name && String(c.name).trim());
+        });
       });
-      return p;
-    }
-    (M.work.produced || []).forEach(cleanProject);
-    (M.work.presented || []).forEach(cleanProject);
+    });
+    return o;
+  }
+  function clone(o) { return JSON.parse(JSON.stringify(o)); }
+
+  function serialize() {
+    /* Build the file from a COPY. The merge and the cleaning must not touch
+       M itself: the padded rows the cleaning removes are rows he is looking
+       at, and every field on screen carries a data-path into M. */
+    var out = cleanAll(clone(M));
+    if (DISK) mergeDisk(out, cleanAll(clone(DISK)), '');
     var header = [
       '/* ============================================================',
       '   YOUR SITE\'S CONTENT',
@@ -1349,7 +1473,7 @@ label.field .ja-stale { display: block; color: var(--accent); font-size: 11.5px;
       '',
       'window.SITE_CONTENT = '
     ].join('\n');
-    var json = JSON.stringify(M, null, 2)
+    var json = JSON.stringify(out, null, 2)
       .replace(/^(\s*)"([A-Za-z_][A-Za-z0-9_]*)"(\s*:)(\s*[\[{"\d\-])/gm, '$1$2$3$4');
     return header + json + ';\n';
   }
@@ -1462,7 +1586,7 @@ label.field .ja-stale { display: block; color: var(--accent); font-size: 11.5px;
       .then(function () { return saveToFolder(true); })
       .then(function (d) {
         if (d && d.ok) {
-          status('Saved to the folder ✓ — this machine only. Press Save to GitHub to put it on the live site.');
+          status('Saved to the folder ✓ — this machine only. Press Save to GitHub to put it on the live site.' + DISK_NOTE, !!DISK_NOTE);
         } else if (d) {
           status('Save failed: ' + (d.error || 'unknown error') + '.', true);
         } else {
@@ -1793,9 +1917,9 @@ label.field .ja-stale { display: block; color: var(--accent); font-size: 11.5px;
          the live site always say the same thing. */
       .then(function () { return saveToFolder(false); })
       .then(function (d) {
-        folderNote = (d && d.ok)
+        folderNote = ((d && d.ok)
           ? ' Your folder is updated too.'
-          : ' (Your folder was NOT updated: the local server is not running.)';
+          : ' (Your folder was NOT updated: the local server is not running.)') + DISK_NOTE;
       })
       .then(ghUploadImages)
       .then(function () {
@@ -1810,11 +1934,26 @@ label.field .ja-stale { display: block; color: var(--accent); font-size: 11.5px;
       })
       .then(function (putRes) {
         if (putRes.status === 409 || putRes.status === 422) {
-          /* the file changed on GitHub since we read it: refetch the sha on the
-             serving branch and retry once */
+          /* The file changed on GitHub between the sha we read and the write.
+             A 409 is GitHub protecting somebody's work, so refetching the sha
+             and writing anyway defeats the one guard we did not have to build.
+             Read what is there NOW, merge it in the same way the disk copy is
+             merged, and only then retry. */
           return ghApi('/repos/' + gh.owner + '/' + gh.repo + '/contents/content.js' + ghRef())
             .then(function (res) { return res.json(); })
-            .then(function (data) { return ghSaveOnce(data.sha); });
+            .then(function (data) {
+              try {
+                var raw = atob(String(data.content || '').replace(/\s/g, ''));
+                var bytes = new Uint8Array(raw.length);
+                for (var n = 0; n < raw.length; n++) bytes[n] = raw.charCodeAt(n);
+                var remote = parseContent(new TextDecoder('utf-8').decode(bytes));
+                /* GitHub is the copy that just refused us, so it is the newer
+                   of the two and it becomes what the untouched fields come
+                   from. serialize() re-runs the merge against it. */
+                if (remote) DISK = remote;
+              } catch (e) { /* unreadable: the disk merge alone still stands */ }
+              return ghSaveOnce(data.sha);
+            });
         }
         return putRes;
       })
