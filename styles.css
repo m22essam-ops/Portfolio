@@ -1156,6 +1156,18 @@ body.lang-ja .page-head h1{
 
 
 }
+/* The dropdown is closed with visibility, not display, because it has to be
+   able to transition. A hidden box still takes part in layout, so a panel
+   nobody can see was hanging 28px off the right of a phone and making every
+   page draggable sideways. Anchor it, and its notch, to the right edge of its
+   link instead of the left. Nothing changes above 900px, where it opens under
+   a link that is nowhere near the edge. */
+@media (max-width:900px){
+  .page-nav .nav-menu{left:auto;right:-14px}
+  .page-nav .nav-menu-in::before,
+  .page-nav .nav-menu-in::after{left:auto;right:24px}
+}
+
 @media (max-width:520px){
   .credits-list li{flex-direction:column;gap:3px}
   .credits-list li span{flex:none}
