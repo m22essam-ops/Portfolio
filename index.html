@@ -231,16 +231,27 @@
   var J = C.jokes || {};
 
   /* His email opens with the message already in it, written as if by the
-     person sending it. site.js does this for every other page; this one has
-     no site.js, so the same few lines are here. Blank either field in admin
-     and that half is not sent; blank both and it is a plain mailto again.
-     A link that already carries its own query is left alone. */
+     person sending it, and one of the drafts is picked at random per visit.
+     site.js does this for every other page; this one has no site.js, so the
+     same few lines are here. Blank a field and that half is not sent; blank
+     the lot and it is a plain mailto again. A link that already carries its
+     own query is left alone. */
+  var MAILPICK = (function () {
+    var K = C.contact || {};
+    var list = (K.mailTemplates || []).filter(function (t) {
+      return t && (String(t.subject || '').trim() || String(t.body || '').trim());
+    });
+    if (!list.length && (K.mailSubject || K.mailBody)) {
+      list = [{ subject: K.mailSubject, body: K.mailBody }];
+    }
+    return list.length ? list[Math.floor(Math.random() * list.length)] : null;
+  })();
+
   function mailPrefill(url) {
     var href = String(url || '');
-    if (!/^mailto:/i.test(href) || href.indexOf('?') > -1) return href;
-    var K = C.contact || {};
-    var subj = String(K.mailSubject || '').trim();
-    var body = String(K.mailBody || '').trim();
+    if (!/^mailto:/i.test(href) || href.indexOf('?') > -1 || !MAILPICK) return href;
+    var subj = String(MAILPICK.subject || '').trim();
+    var body = String(MAILPICK.body || '').trim();
     var q = [];
     if (subj) q.push('subject=' + encodeURIComponent(subj));
     if (body) q.push('body=' + encodeURIComponent(body.replace(/\r?\n/g, '\r\n')));

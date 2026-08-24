@@ -393,8 +393,27 @@
        right click and copy, and a long press on a phone all have to give the
        same address as a plain click, and only a real href does that. ----- */
   var MAIL = C.contact || {};
-  var mailSubject = String(MAIL.mailSubject || '').trim();
-  var mailBody    = String(MAIL.mailBody    || '').trim();
+
+  /* THREE OF THEM, AND ONE IS PICKED AT RANDOM.
+     contact.mailTemplates is a list. One is chosen per visit and used for
+     every email link on the page, so the draft does not change under him
+     between clicking the one in the nav and the one in the footer.
+
+     A tab keeps its pick until it is reloaded, which is what makes the joke
+     work: it is a form letter, and form letters do not vary while you read
+     them. Reload and you get a different one.
+
+     The old single mailSubject / mailBody still work if the list is absent,
+     so an older content.js does not lose the feature. */
+  var MAILT = (MAIL.mailTemplates || []).filter(function (t) {
+    return t && (String(t.subject || '').trim() || String(t.body || '').trim());
+  });
+  if (!MAILT.length && (MAIL.mailSubject || MAIL.mailBody)) {
+    MAILT = [{ subject: MAIL.mailSubject, body: MAIL.mailBody }];
+  }
+  var PICK = MAILT.length ? MAILT[Math.floor(Math.random() * MAILT.length)] : null;
+  var mailSubject = PICK ? String(PICK.subject || '').trim() : '';
+  var mailBody    = PICK ? String(PICK.body    || '').trim() : '';
 
   window.mailHref = function (url) {
     var href = String(url || '');

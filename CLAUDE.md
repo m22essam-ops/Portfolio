@@ -770,9 +770,16 @@ Things that will bite anyone changing this:
 ### The email arrives half written
 
 Clicking his address anywhere opens the mail app with the message already in
-it, written as if by the sender, in his voice. His idea and his words;
-`contact.mailSubject` / `contact.mailBody`, editable in admin section 6 with a
-counter for the finished link's length.
+it, written as if by the sender, in his voice. His idea.
+
+**`contact.mailTemplates` is a LIST and one is picked at random per visit**,
+the same one for every link on that page so the draft does not change under a
+visitor between the nav and the footer. Three so far; version 1 is his words,
+the other two are Claude's drafts awaiting his pass. **The square brackets are
+the joke**: it has to read like a template nobody filled in. Admin section 6
+edits them, add and remove, with a length counter each. The old flat
+`mailSubject` / `mailBody` still load if the list is absent, and admin folds
+them into the list on read.
 
 One implementation lives in `site.js` (`mailHref`, `sweepMail`) and a second,
 deliberate copy of the same six lines is in `index.html`, which does not load
@@ -809,12 +816,26 @@ copy.
 - **Which also means one picture for every project page**, because work.html
   is one file. Per-project cards would need a file per project, which is the
   thing this site is built to avoid.
-- **Re-run `make-og.html` if the headline changes**, or every link he has ever
-  sent keeps showing the old words. It waits on `document.fonts.load` first:
-  drawing early substitutes a system font and nobody notices until it is in
-  somebody's chat window.
-- It POSTs `{files:{...}}` only, never a `content` key, so it cannot touch
-  content.js.
+- **It redraws itself on save.** He asked, fairly, whether he had to redo the
+  picture every time he changed something. He does not: the drawing moved
+  into `og-draw.js`, admin loads it, and `refreshOgIfNeeded()` redraws and
+  drops `og.jpg` into `pickedFiles` before saving. Both buttons already read
+  that list, so the local write and the GitHub upload need no new plumbing.
+  - **Only when a word in the picture changed**, decided by `TOUCHED` against
+    `window.OG_FIELDS`. Redrawing every save would put an 80KB binary in the
+    repository each time he fixed a comma.
+  - **`OG_FIELDS` is the contract.** Print something new in the drawing
+    without adding it there and admin stops noticing the picture is stale.
+  - It draws from `buildPayload()`, the merged object about to be written,
+    not from `M`, so it shows the words actually being saved.
+  - A failure there is swallowed: the picture must never stop the words
+    being saved.
+- It waits on `document.fonts.load` first. A webfont is only fetched when
+  something is about to be PAINTED in it and a canvas does not count, so
+  drawing early substitutes a system font and nobody notices until it is
+  already in somebody's chat window.
+- `make-og.html` POSTs `{files:{...}}` only, never a `content` key, so it
+  cannot touch content.js.
 
 ### The nav fits a phone
 
@@ -826,6 +847,29 @@ alternative and the way to reach him is not the thing that gets cut.
 Separately, the dropdown panel is closed with `visibility`, not `display`,
 because it has to transition. **A hidden box still takes part in layout**, so
 below 900px it anchors right instead of left or it hangs off the edge.
+
+### The page grows with the screen
+
+`--wrap` was a flat 1240px at every width. Right on a laptop, wrong on his
+monitor: he sent a screenshot of the work grid at roughly 2700px with about
+750px of empty paper down each side and two 4:3 cards smaller than they are on
+a 15 inch laptop, and asked why it had been made small. **It had not been
+changed**; 1240 dates from the rebuild (`48b9367`) and the only recent `.wrap`
+edit was inside a 520px media query. Said so, then fixed it.
+
+`--wrap: clamp(1240px, 86vw, 2160px)`. Smooth, not stepped: breakpoints make
+the grid jump as a window is dragged across them.
+
+- **Only the container moves.** Every block of words already carries its own
+  measure (62ch on a project, 60ch under a heading, 44ch on a card, 32em in
+  Japanese), so nothing widens a line of text.
+- **The floor cannot hurt a phone**: `.wrap` takes the smaller of this and the
+  screen less its margins, so 375px still comes out 331.
+- **Checked against the covers before doing it.** They are all 1800px, so at
+  the new 1010px card they still land near 1.8x. Anything wider than a 2160
+  ceiling starts making single images bigger rather than showing more work.
+- Two columns is a stated design decision and was NOT changed. Three columns
+  on a wide screen is his call, not one to take quietly.
 
 ### The local server answers Range requests
 

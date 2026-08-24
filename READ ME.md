@@ -87,22 +87,27 @@ New, 24 August. Anyone who clicks your email address anywhere on the site now
 gets their mail app open with a message already in it, written as if by them,
 in your voice.
 
-You write it in **section 6**, in two boxes: a subject and a message. Every
-email link on every page uses those two boxes, including the covered box on
-the home page and the one in the awards cabinet.
+There are **three versions**, in **section 6**, and **one is picked at random
+each visit**. The same one is used for every email link on that page, so it
+does not change under them between the nav and the footer. Reload and you get
+a different one. Add a fourth with the button, or remove one.
 
 - **Empty a box and that half is not sent.**
-- **Empty both and clicking your email opens a blank message,** exactly as it
-  did before.
-- The counter underneath tells you how long the finished link is. Under about
-  1500 characters is safe everywhere; past that some mail apps cut the end
-  off and it says so.
+- **Delete them all and clicking your email opens a blank message,** exactly
+  as it did before.
+- The counter under each one tells you how long the finished link is. Under
+  about 1500 characters is safe everywhere; past that some mail apps cut the
+  end off, and it says so.
 
-Two things in the current draft are your call, and I have not changed either:
+The square brackets are the joke: it should read like a template nobody
+filled in. Keep them when you rewrite.
+
+**All three are drafts. Version 1 is your words**, the two others are mine and
+are there to be replaced. Two things in version 1 are still your call:
 
 - The subject says **"Hi Mohamed"**, one M. Everywhere else on the site it is
   Mohammed with two. It reads as the sender getting it slightly wrong, which
-  is either the joke or a mistake. Yours to decide.
+  is either the joke or a mistake.
 - Your draft had **"ocpywriter"**. I read that as a slip and made it
   "copywriter". If it was deliberate, put it back.
 
@@ -139,17 +144,21 @@ seems not to have noticed, it has: hold Shift and reload.
 holds that file as data and writes it back out clean, so comments are not
 edited away, they simply never make the trip. Notes belong in this file.
 
-**The link preview picture is a photograph, not a live thing.** The card that
-shows up when you paste your link into WhatsApp or LinkedIn uses
-`images/og.jpg`, a flat picture of the ticket. It cannot update itself,
-because the apps that draw those cards do not run any of the site's code. So
-**if you rewrite the headline, the old words stay in every link you send**
-until the picture is remade. Open `make-og.html` through the local server and
-press the button, or ask me.
+**The link preview picture looks after itself now.** The card that shows up
+when you paste your link into WhatsApp or LinkedIn is `images/og.jpg`, a flat
+picture of the ticket. It cannot update itself on the live site, because the
+apps that draw those cards do not run any of the site's code, so **the editor
+redraws it for you**: change the headline, the band, the badge, the serial,
+your name or the stamp line, press either save button, and the new picture
+goes with it. The status line tells you when that happened.
 
-For the same reason, every project page shares one preview picture. Giving
-each project its own would mean a separate file per project, which is the
-thing this site is built to avoid.
+`make-og.html` is still there to look at it, and to put it right by hand if
+the automatic one ever goes wrong. You should not normally need it.
+
+One limit: **every project page shares the same preview picture**, because
+`work.html` is a single file serving all of them. Giving each project its own
+would mean a separate file per project, which is the thing this site is built
+to avoid.
 
 **Your videos are on a subscription.** 18 of the films on the site stream from
 your Adobe Portfolio account. If that lapses, 18 project pages go dark. Every
@@ -171,7 +180,8 @@ list in the editor counts how many are left. It turns green at zero.
 | `site.js` | Shared pieces: the nav, the footer, the language switch, the email prefill. |
 | `admin.html` | The editor. |
 | `design.html` | The home designer. |
-| `make-og.html` | Redraws the link-preview picture. |
+| `og-draw.js` | Draws the link-preview picture. Used by the editor and by the page below. |
+| `make-og.html` | Looks at that picture, and saves it by hand if ever needed. |
 | `local-server.py` | The little server behind `Start Site.command`. |
 | `images/` | Your pictures. `images/live/` are the ones pulled off your old site. |
 

@@ -84,6 +84,29 @@ a{color:inherit}
 
 .wrap{width:min(100% - 44px,var(--wrap));margin-inline:auto}
 
+/* THE PAGE GROWS WITH THE SCREEN.
+   1240 was the whole story at every width, which is right on a laptop and
+   wrong on a big monitor: at 2700px it left about 750px of empty paper down
+   each side and the work grid, two 4:3 cards across, came out smaller than
+   it does on a 15 inch laptop. A portfolio's images are the argument, so on
+   a large screen they should be large.
+
+   Only the container moves. Every block of words already carries its own
+   measure in characters (62ch on a project, 60ch under a heading, 44ch on a
+   card, 32em in Japanese), so none of this widens a line of text: it widens
+   the pictures and the space around them, which is what was too small.
+
+   Smooth rather than stepped: breakpoints would make the grid jump as he
+   drags a window across them. 86vw is the share of the screen the page
+   takes; 1240 is the floor, so nothing below about 1440 changes at all and
+   the laptop layout is exactly what it was; 2160 is the ceiling, because
+   past that a two-column grid starts making single images bigger than
+   anyone wants rather than showing more work.
+
+   The floor cannot hurt a phone: .wrap takes the SMALLER of this and the
+   screen less its margins, so at 400px it still comes out 356. */
+:root{ --wrap:clamp(1240px, 86vw, 2160px) }
+
 /* mono voice: labels, serials, small print */
 .mono,.serial,.tk-top,.tk-terms,.page-nav,.sticker,.project-meta,
 .next-label,.exp-time,.skill-tag,.terms,.note,.tk-band,.tk-badge,.joke{

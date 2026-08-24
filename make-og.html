@@ -2,29 +2,25 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Make the link preview picture</title>
+<title>The link preview picture</title>
 <!-- ============================================================
-     THE PICTURE PEOPLE SEE BEFORE THEY SEE THE SITE
+     You should not normally need this page.
 
-     When mohammedessam.com is pasted into WhatsApp, LinkedIn, Slack or a
-     DM, the app fetches the page and shows a card. That card needs a
-     picture, and the picture has to be a real file sitting at a real
-     address: the apps that draw it do NOT run JavaScript, so nothing the
-     site draws for itself can ever appear there.
+     The editor redraws this picture for you whenever you change any of the
+     words that appear in it, and saves it along with everything else. This
+     page is here to LOOK at it, and as the way back if the automatic one
+     ever goes wrong.
 
-     So this page draws the ticket once, as a flat 1200x630 JPEG, and saves
-     it into the folder as og.jpg. Open it, press the button, done.
-
-     RE-RUN IT IF THE HEADLINE CHANGES. The picture is a photograph of the
-     ticket, not the ticket, so rewriting "Award-losing copywriter" in admin
-     leaves the old words in every link he has ever sent.
+     The drawing itself is in og-draw.js, so this page and the editor cannot
+     disagree about what the picture looks like.
      ============================================================ -->
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Syne:wght@400..800&display=block" rel="stylesheet">
 <style>
   body{background:#1a1a1a;color:#eee;font:14px/1.6 system-ui,sans-serif;padding:26px;margin:0}
   h1{font:600 19px/1.3 system-ui;margin:0 0 6px}
-  p{max-width:70ch;color:#bbb;margin:0 0 18px}
-  canvas{max-width:100%;height:auto;border:1px solid #444;display:block;margin:0 0 16px}
+  p{max-width:72ch;color:#bbb;margin:0 0 18px}
+  #shell{max-width:900px}
+  canvas{width:100%;height:auto;border:1px solid #444;display:block;margin:0 0 16px}
   button{font:600 14px system-ui;padding:11px 20px;background:#E3261A;color:#fff;border:0;cursor:pointer}
   button:disabled{opacity:.5;cursor:default}
   #out{margin-top:14px;color:#8fd18f;white-space:pre-wrap}
@@ -32,152 +28,44 @@
 </head>
 <body>
 
-<h1>The picture people see before they see the site</h1>
-<p>1200 &times; 630, the size every messaging app and social network crops to.
-   Press save and it is written into the folder as <code>og.jpg</code>.
-   Run this again if the headline on the home page ever changes, or the link
-   preview will keep showing the old words.</p>
+<div id="shell">
+  <h1>The link preview picture</h1>
+  <p>This is what shows up when mohammedessam.com is pasted into WhatsApp,
+     LinkedIn, Slack or a message. 1200 &times; 630, the size they all crop to.
+     <strong>The editor already redraws and saves this for you</strong> whenever
+     you change any of the words in it, so this page is just here to look at it,
+     and to put it right by hand if you ever need to.</p>
 
-<canvas id="c" width="1200" height="630"></canvas>
-<button id="save" disabled>Saving needs the local server…</button>
-<div id="out"></div>
+  <canvas id="c" width="1200" height="630"></canvas>
+  <button id="save" disabled>Saving needs the local server…</button>
+  <div id="out"></div>
+</div>
 
 <script>
   var v = (location.protocol === 'http:' || location.protocol === 'https:')
     ? '?v=' + Math.floor(Date.now() / 60000) : '';
   document.write('<scr' + 'ipt src="content.js' + v + '"><\/scr' + 'ipt>');
 </script>
+<script src="og-draw.js"></script>
 <script>
 (function () {
-  var C = window.SITE_CONTENT || {};
-  var T = C.ticket || {};
-  var RED = '#E3261A', PAPER = '#F6F3EE', INK = '#0B0A09';
-  var c = document.getElementById('c'), x = c.getContext('2d');
+  var shown = document.getElementById('c');
 
-  function tracked(text, px, weight, family, spacing) {
-    x.font = weight + ' ' + px + 'px ' + family;
-    x.letterSpacing = (spacing || 0) + 'px';
-    return x.measureText(text).width;
-  }
-
-  /* Shrink until the longest line fits, the same idea as fitTitle() on the
-     home page and for the same reason: he rewrites this line in admin and
-     "copywriter" already ran off the edge once. */
-  function fitTwo(a, b, maxW, start) {
-    var size = start;
-    for (var i = 0; i < 40; i++) {
-      var w = Math.max(tracked(a, size, 800, '"Syne", sans-serif', -size * 0.035),
-                       tracked(b, size, 800, '"Syne", sans-serif', -size * 0.035));
-      if (w <= maxW || size < 24) break;
-      size = size * (maxW / w) * 0.995;
+  window.drawOg(window.SITE_CONTENT || {}).then(function (c) {
+    shown.width = c.width; shown.height = c.height;
+    shown.getContext('2d').drawImage(c, 0, 0);
+    var b = document.getElementById('save');
+    if (location.protocol === 'http:' || location.protocol === 'https:') {
+      b.disabled = false;
+      b.textContent = 'Save it into the folder as og.jpg';
     }
-    return size;
-  }
-
-  function draw() {
-    /* the red field */
-    x.fillStyle = RED; x.fillRect(0, 0, 1200, 630);
-
-    /* the ticket, with the perforated bite down each side that the real one
-       has, punched out of the paper rather than drawn on top of it */
-    var TX = 46, TY = 40, TW = 1108, TH = 550;
-    x.fillStyle = PAPER; x.fillRect(TX, TY, TW, TH);
-    x.globalCompositeOperation = 'destination-out';
-    /* start below the black band: a hole punched through the band reads as a
-       printing fault rather than as a perforation */
-    for (var yy = TY + 78; yy < TY + TH - 10; yy += 26) {
-      x.beginPath(); x.arc(TX, yy, 6, 0, 7); x.fill();
-      x.beginPath(); x.arc(TX + TW, yy, 6, 0, 7); x.fill();
-    }
-    x.globalCompositeOperation = 'source-over';
-
-    /* the black band: his line on the left, the badge on the right */
-    var BH = 54;
-    x.fillStyle = INK; x.fillRect(TX, TY, TW, BH);
-    x.textBaseline = 'middle';
-    x.fillStyle = PAPER;
-    x.font = '600 17px "Barlow Condensed", sans-serif'; x.letterSpacing = '2.4px';
-    x.fillText(String(T.band || '').toUpperCase(), TX + 30, TY + BH / 2 + 1);
-
-    var badge = String(T.badge || '').toUpperCase();
-    if (badge) {
-      var bw = tracked(badge, 15, 700, '"Barlow Condensed", sans-serif', 2.2) + 30;
-      x.fillStyle = RED;
-      x.fillRect(TX + TW - 30 - bw, TY + 13, bw, BH - 26);
-      x.fillStyle = PAPER;
-      x.font = '700 15px "Barlow Condensed", sans-serif'; x.letterSpacing = '2.2px';
-      x.fillText(badge, TX + TW - 30 - bw + 15, TY + BH / 2 + 1);
-    }
-
-    /* microtype row */
-    x.fillStyle = 'rgba(11,10,9,.58)';
-    x.font = '500 14px "Barlow Condensed", sans-serif'; x.letterSpacing = '2.1px';
-    x.fillText(String(T.game || '').toUpperCase(), TX + 30, TY + BH + 34);
-    var ser = String(T.serial || '').toUpperCase();
-    var sw = tracked(ser, 14, 500, '"Barlow Condensed", sans-serif', 2.1);
-    x.fillText(ser, TX + TW - 30 - sw, TY + BH + 34);
-
-    /* his name: the only thing that says whose site this is */
-    x.fillStyle = INK;
-    x.font = '700 27px "Barlow Condensed", sans-serif'; x.letterSpacing = '4.6px';
-    x.fillText(String(T.name || '').toUpperCase(), TX + 30, TY + BH + 76);
-
-    /* The headline, sitting in what is left of the ticket rather than tight
-       under the name: the two blocks of furniture are at the top and the
-       bottom, so the space between them is the headline's and it should use
-       it. Centred on that gap, not on the ticket. */
-    var top = String(T.titleTop || ''), bot = String(T.titleBottom || '');
-    var size = fitTwo(top, bot, TW - 60, 132);
-    x.font = '800 ' + size + 'px "Syne", sans-serif';
-    x.letterSpacing = (-size * 0.035) + 'px';
-    x.textBaseline = 'alphabetic';
-    var gapTop = TY + BH + 96, gapBot = TY + TH - 52;
-    var blockH = size * 1.9;
-    var base = gapTop + (gapBot - gapTop - blockH) / 2 + size * 0.94;
-    x.fillStyle = INK; x.fillText(top, TX + 28, base);
-    x.fillStyle = RED; x.fillText(bot, TX + 28, base + size * 0.9);
-
-    /* Bottom left is his stamp line, not the serial again: the serial is
-       already printed top right and saying it twice in a 1200px picture is a
-       stutter. "VALID UNTIL HIRED" is the joke and the ask at once. */
-    x.fillStyle = 'rgba(11,10,9,.55)';
-    x.font = '500 15px "Barlow Condensed", sans-serif'; x.letterSpacing = '2px';
-    x.textBaseline = 'middle';
-    var foot = String(T.stampArc || T.serial || '').toUpperCase();
-    x.fillText(foot, TX + 30, TY + TH - 26);
-    var site = 'MOHAMMEDESSAM.COM';
-    var wsite = tracked(site, 15, 600, '"Barlow Condensed", sans-serif', 2);
-    x.fillStyle = RED;
-    x.font = '600 15px "Barlow Condensed", sans-serif';
-    x.fillText(site, TX + TW - 30 - wsite, TY + TH - 26);
-
-    x.letterSpacing = '0px';
-  }
-
-  /* Wait for the real faces. Drawing before they land silently substitutes a
-     system font and the picture is wrong in a way nobody notices until it is
-     already in somebody's chat window. */
-  Promise.all([
-    document.fonts.load('800 132px "Syne"'),
-    document.fonts.load('700 27px "Barlow Condensed"'),
-    document.fonts.load('600 17px "Barlow Condensed"')
-  ]).then(function () { return document.fonts.ready; })
-    .then(function () {
-      draw();
-      var b = document.getElementById('save');
-      if (location.protocol === 'http:' || location.protocol === 'https:') {
-        b.disabled = false;
-        b.textContent = 'Save it into the folder as og.jpg';
-      }
-    });
+  });
 
   document.getElementById('save').addEventListener('click', function () {
     var b = this; b.disabled = true; b.textContent = 'Saving…';
-    var data = c.toDataURL('image/jpeg', 0.92).split(',')[1];
-    /* the little server takes a name -> base64 map and always writes into
-       images/, so the file lands at images/og.jpg and that is the address
-       the og:image tags point at. Note there is no `content` key here: send
-       one and it would rewrite content.js with whatever was in it. */
+    var data = shown.toDataURL('image/jpeg', 0.92).split(',')[1];
+    /* files only, never a `content` key: sending one would rewrite
+       content.js with whatever this page happened to have in memory. */
     fetch(location.origin + '/api/save', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -185,7 +73,7 @@
     }).then(function (r) { return r.json(); })
       .then(function (d) {
         document.getElementById('out').textContent = d && d.ok
-          ? 'Saved as images/og.jpg (' + Math.round(data.length * 0.75 / 1024) + ' KB). Push it and the link preview updates.'
+          ? 'Saved as images/og.jpg (' + Math.round(data.length * 0.75 / 1024) + ' KB). This folder only: press Save to GitHub in the editor to put it on the live site.'
           : 'Failed: ' + JSON.stringify(d);
         b.disabled = false; b.textContent = 'Save it into the folder as og.jpg';
       })
