@@ -1155,9 +1155,13 @@ body.page-about #aboutResume{max-width:1200px;margin-inline:auto}
 .manip-label{font-family:var(--mono);font-size:11px;letter-spacing:.2em;
   text-transform:uppercase;color:var(--fg-faint);margin:0 0 10px}
 .manip{max-width:62ch;margin:0 0 40px;padding-bottom:80px}
-.manip p{font-size:19px;line-height:1.62;margin:0 0 26px;color:var(--fg-dim)}
+/* Direct children only. The manifesto's paragraphs are nested inside
+   .manip-creed, and a bare `.manip p` reaches them too: at the same
+   specificity the later rule wins, so the phone override further down
+   this file was quietly resetting the manifesto back to body size. */
+.manip > p{font-size:19px;line-height:1.62;margin:0 0 26px;color:var(--fg-dim)}
 /* the last line before the way out lands on its own, so it gets the weight */
-.manip p:nth-last-child(2){color:var(--fg)}
+.manip > p:nth-last-child(2){color:var(--fg)}
 /* ---- the cartoon ----
    Wider than the 62ch reading column, because a drawing squeezed into a text
    measure looks like an accident, but it keeps the column's LEFT EDGE and
@@ -1178,6 +1182,25 @@ body.page-about #aboutResume{max-width:1200px;margin-inline:auto}
   .manip-fig{margin:34px 0;max-width:100%}
   .manip-fig figcaption{font-size:15px}
 }
+/* ---- the manifesto ----
+   Set apart from the prose around it and a size up, with a rule top and
+   bottom. That is the whole of the styling: no numbers, no bullets, no
+   heading announcing that a manifesto is coming. A manifesto that introduces
+   itself is a mission statement. */
+.manip-creed{
+  margin:44px 0;padding:34px 0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)
+}
+.manip-creed p{
+  font-size:23px;line-height:1.45;margin:0 0 24px;color:var(--fg);
+  letter-spacing:-.01em;max-width:34ch
+}
+.manip-creed p:last-child{margin-bottom:0}
+@media (max-width:900px){
+  .manip-creed{margin:32px 0;padding:26px 0}
+  .manip-creed p{font-size:19px;margin-bottom:20px;max-width:none}
+}
+
 .manip-out{margin-top:46px}
 .manip-out a{
   font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
@@ -1190,7 +1213,7 @@ body.page-about #aboutResume{max-width:1200px;margin-inline:auto}
 .manip-out a:hover span{transform:translateX(4px)}
 @media (max-width:900px){
   .manip{padding-bottom:40px}
-  .manip p{font-size:17px;margin-bottom:22px}
+  .manip > p{font-size:17px;margin-bottom:22px}
 }
 
 .skills-list{display:flex;flex-wrap:wrap;gap:9px;margin-top:32px}

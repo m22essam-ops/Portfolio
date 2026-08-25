@@ -1456,7 +1456,17 @@ window.SITE_CONTENT = {
     paragraphs: [
       "I put it between Copywriting and Concept Development, where nobody reads.",
       "You read.",
-      "That is the job. Not the writing. The writing is the part they let you put in a portfolio.",
+      "Fine. The whole thing, then."
+    ],
+    caption: "The worst part is that I am good at it.",
+    manifesto: [
+      "I have never sold anything. I have only removed the reasons not to.",
+      "You cannot lie in a headline. You can only choose which true thing to say loudest.",
+      "Nobody has ever been argued into wanting something.",
+      "If you can hear the selling, I was late.",
+      "Every product is a small dissatisfaction, wrapped. I am paid for the wrapping. Some days I am paid for the dissatisfaction."
+    ],
+    close: [
       "Beer. Crisps. A hotel. A cream for something you would not say out loud. None of it kept me up at night, and that is the part you should worry about.",
       "The home page is a lottery ticket. There is a panel you have to scratch. Click my email and the message is already written.",
       "You are four moves into something and you thought you were browsing.",
@@ -1464,7 +1474,6 @@ window.SITE_CONTENT = {
       "Exactly.",
       "Anyway. Now that you are here."
     ],
-    caption: "The worst part is that I am good at it.",
     linkText: "See the work",
     linkUrl: "work.html"
   },

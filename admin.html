@@ -544,8 +544,10 @@ label.field .ja-stale { display: block; color: var(--accent); font-size: 11.5px;
       <label class="field"><span>Small line above the heading</span><input data-path="manipulating.label" placeholder="The skill you clicked"></label>
       <label class="field"><span>Heading</span><input data-path="manipulating.heading" placeholder="Manipulating."></label>
     </div>
-    <label class="field"><span>The piece (one paragraph per line)</span><textarea data-path="manipulating.paragraphs" data-type="textlist" rows="9"></textarea></label>
+    <label class="field"><span>The opening (one paragraph per line)</span><textarea data-path="manipulating.paragraphs" data-type="textlist" rows="4"></textarea><small>The drawing is placed after the second line.</small></label>
     <label class="field"><span>The line under the drawing</span><input data-path="manipulating.caption" placeholder="The worst part is that I am good at it."><small>The quote marks are added for you. Empty it and the line goes, the drawing stays.</small></label>
+    <label class="field"><span>The manifesto (one line each)</span><textarea data-path="manipulating.manifesto" data-type="textlist" rows="6"></textarea><small>Set apart and a size up, between two rules. Empty it and the block disappears.</small></label>
+    <label class="field"><span>The close (one paragraph per line)</span><textarea data-path="manipulating.close" data-type="textlist" rows="7"></textarea></label>
     <div class="grid2">
       <label class="field"><span>The way out, its words</span><input data-path="manipulating.linkText" placeholder="See the work"></label>
       <label class="field"><span>The way out, where it goes</span><input data-path="manipulating.linkUrl" placeholder="work.html"><small>Leave either empty and no link is printed.</small></label>
@@ -684,7 +686,9 @@ label.field .ja-stale { display: block; color: var(--accent); font-size: 11.5px;
     if (!Array.isArray(M.about.skillLinks)) M.about.skillLinks = [];
     if (!M.about.skillLinks[0]) M.about.skillLinks[0] = { skill: '', url: '' };
     M.manipulating = M.manipulating || {};
-    if (!Array.isArray(M.manipulating.paragraphs)) M.manipulating.paragraphs = [];
+    ['paragraphs', 'manifesto', 'close'].forEach(function (k) {
+      if (!Array.isArray(M.manipulating[k])) M.manipulating[k] = [];
+    });
     M.contact = M.contact || {};
     if (!Array.isArray(M.contact.links)) M.contact.links = [];
     if (!Array.isArray(M.contact.mailTemplates)) {

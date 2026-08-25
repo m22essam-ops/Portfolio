@@ -944,6 +944,27 @@ the lottery ticket, the panel you have to scratch, the email that writes
 itself. "You are four moves into something and you thought you were browsing."
 The line about the products is his real work, Canesten included.
 
+**It is a manifesto (25 Aug).** Three fields, not one list with markers in
+it, because a marker is something he has to remember and a field is something
+he can see: `paragraphs` is the opening, `manifesto` is the tenets, `close` is
+the rest. Empty any of the three and its block does not print.
+
+The tenets are set apart between two rules, a size up, in the page's full ink.
+**No numbers, no bullets, no heading announcing a manifesto**: a manifesto
+that introduces itself is a mission statement.
+
+- **The hook is his and is not to be touched.** "I put it between Copywriting
+  and Concept Development, where nobody reads. / You read."
+- The cleverness is meant to be in the sentences, not in the attitude, so each
+  tenet is a reversal rather than a boast: "I have never sold anything. I have
+  only removed the reasons not to." "You cannot lie in a headline. You can
+  only choose which true thing to say loudest." "If you can hear the selling,
+  I was late."
+- **`.manip > p`, never `.manip p`.** The tenets are nested inside
+  `.manip-creed`, so a bare descendant selector reaches them too, and at equal
+  specificity the later rule wins: the phone override further down the file
+  was silently resetting the manifesto back to body size.
+
 **The cartoon** is one man slumped in an armchair facing an EMPTY chair with
 the notepad and pen still on the seat. Inline SVG for the same reasons as the
 seal and the cabinet, and `currentColor` on every stroke so the ink is the
@@ -963,6 +984,13 @@ page's ink.
 - It grows to the RIGHT of the reading column, never left. A negative left
   margin was tried and put it at -30px, off the side of the screen, because
   the container has only 30px of margin to borrow at 1300px wide.
+- **It has perspective now, at his request, and the fills are what make it
+  work.** A wall line behind and a rug drawn as a receding plane give the
+  depth, but in a line drawing with no fills everything is transparent: the
+  wall ran straight through both chairs and through his head. Each object now
+  has a silhouette filled with `var(--bg)` drawn before its strokes, so it
+  occludes what is behind it. The chairs are turned three quarters so the
+  seats read as planes rather than lines.
 
 ### Rivan Tower has no stills
 
