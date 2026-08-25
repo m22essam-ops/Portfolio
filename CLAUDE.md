@@ -772,10 +772,34 @@ Things that will bite anyone changing this:
 Clicking his address anywhere opens the mail app with the message already in
 it, written as if by the sender, in his voice. His idea.
 
-**`contact.mailTemplates` is a LIST and one is picked at random per visit**,
-the same one for every link on that page so the draft does not change under a
-visitor between the nav and the footer. Three so far; version 1 is his words,
-the other two are Claude's drafts awaiting his pass. **The square brackets are
+**`contact.mailTemplates` is a LIST and it deals itself.** Shuffled once per
+visit, then advanced in order every 7 seconds, so nobody has to reload to see
+another letter. Every link on the page always carries the SAME one at any
+moment, so the draft can never change between the nav and the footer.
+
+- **Shuffled then dealt, not re-rolled.** Random picking hands out the same
+  draft twice in a row often enough to look broken.
+- **The bare address is kept on the element** as `data-mail-base`, and every
+  rewrite is built from THAT. Rewriting a rewritten href staples a second
+  query onto the first and the link grows every 7 seconds until it breaks.
+- **A link that arrives already carrying a query is marked hands-off for the
+  life of the page**, on the assumption somebody wrote it deliberately. That
+  is what broke the home page's rotation once: the covered punch was being
+  pre-filled at construction and then swept, so the sweep saw its own work and
+  stood down. The punch now gets the bare address and the sweep does all the
+  filling. One code path.
+- **Paused while the pointer or the keyboard is on a mail link**, so opening
+  the context menu to copy the address cannot have it change under the menu.
+- **Deliberately NOT gated on `document.hidden`.** That was tried and removed:
+  a hidden tab never fires `visibilitychange`, so a bug in the guard is a
+  rotation that silently never starts and nothing tells you. It is also
+  untestable in the preview pane, which reports hidden even when fronted.
+  Browsers already throttle background timers, which was the whole benefit.
+
+Three drafts. Version 1 is his words; versions 2 and 3 are Claude's and await
+his pass. Version 3 replaced an earlier one whose subject was
+"[OBLIGATORY GREETING], quick one": a bare "Hi" is a bad subject line, and the
+joke was invisible until after the moment it needed to work. **The square brackets are
 the joke**: it has to read like a template nobody filled in. Admin section 6
 edits them, add and remove, with a length counter each. The old flat
 `mailSubject` / `mailBody` still load if the list is absent, and admin folds

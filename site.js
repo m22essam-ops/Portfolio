@@ -394,14 +394,16 @@
        same address as a plain click, and only a real href does that. ----- */
   var MAIL = C.contact || {};
 
-  /* THREE OF THEM, AND ONE IS PICKED AT RANDOM.
-     contact.mailTemplates is a list. One is chosen per visit and used for
-     every email link on the page, so the draft does not change under him
-     between clicking the one in the nav and the one in the footer.
+  /* THREE OF THEM, AND THEY DEAL THEMSELVES.
+     contact.mailTemplates is a list. Every link on the page always carries
+     the SAME one at any given moment, so the draft can never change between
+     clicking the one in the nav and the one in the footer, but it moves on
+     by itself every few seconds. Nobody has to reload the page to see a
+     different letter.
 
-     A tab keeps its pick until it is reloaded, which is what makes the joke
-     work: it is a form letter, and form letters do not vary while you read
-     them. Reload and you get a different one.
+     Shuffled once, then dealt in order rather than re-rolled each time.
+     Random picking hands you the same draft twice in a row often enough to
+     look broken, and the whole point is that it visibly varies.
 
      The old single mailSubject / mailBody still work if the list is absent,
      so an older content.js does not lose the feature. */
@@ -411,17 +413,25 @@
   if (!MAILT.length && (MAIL.mailSubject || MAIL.mailBody)) {
     MAILT = [{ subject: MAIL.mailSubject, body: MAIL.mailBody }];
   }
-  var PICK = MAILT.length ? MAILT[Math.floor(Math.random() * MAILT.length)] : null;
-  var mailSubject = PICK ? String(PICK.subject || '').trim() : '';
-  var mailBody    = PICK ? String(PICK.body    || '').trim() : '';
+  /* Fisher-Yates, so where the rotation starts is different every visit */
+  for (var mi = MAILT.length - 1; mi > 0; mi--) {
+    var mj = Math.floor(Math.random() * (mi + 1));
+    var mt = MAILT[mi]; MAILT[mi] = MAILT[mj]; MAILT[mj] = mt;
+  }
+  var mailAt = 0;
+
+  function mailNow() { return MAILT.length ? MAILT[mailAt % MAILT.length] : null; }
 
   window.mailHref = function (url) {
     var href = String(url || '');
     if (!/^mailto:/i.test(href)) return href;
-    if (href.indexOf('?') > -1) return href;            /* already spoken for */
+    var pick = mailNow();
+    if (!pick) return href;
+    var subject = String(pick.subject || '').trim();
+    var body    = String(pick.body    || '').trim();
     var q = [];
-    if (mailSubject) q.push('subject=' + encodeURIComponent(mailSubject));
-    if (mailBody)    q.push('body='    + encodeURIComponent(mailBody.replace(/\r?\n/g, '\r\n')));
+    if (subject) q.push('subject=' + encodeURIComponent(subject));
+    if (body)    q.push('body='    + encodeURIComponent(body.replace(/\r?\n/g, '\r\n')));
     return q.length ? href + '?' + q.join('&') : href;
   };
 
@@ -435,13 +445,65 @@
   function sweepMail() {
     Array.prototype.forEach.call(
       document.querySelectorAll('a[href^="mailto:"], a[href^="MAILTO:"]'),
-      function (a) { a.setAttribute('href', window.mailHref(a.getAttribute('href'))); }
+      function (a) {
+        /* The bare address is remembered the first time and every rewrite is
+           built from THAT, never from the last one. Rewriting a rewritten
+           href would staple a second query onto the first and the draft would
+           grow every few seconds until the link stopped working.
+           A link that arrived with a query of its own was written on purpose,
+           so it is marked as off limits once and left alone for good. */
+        var base = a.getAttribute('data-mail-base');
+        if (base === null) {
+          var here = a.getAttribute('href') || '';
+          base = here.indexOf('?') > -1 ? '' : here;
+          a.setAttribute('data-mail-base', base);
+        }
+        if (!base) return;
+        a.setAttribute('href', window.mailHref(base));
+      }
     );
   }
-  if (mailSubject || mailBody) {
+
+  /* IT DEALS ITSELF, so nobody has to reload to see another one.
+
+     Paused only while the pointer or the keyboard is ON a mail link, which is
+     a correctness matter rather than a tidiness one: someone who opens the
+     context menu to copy the address must not have it change under the menu.
+
+     Deliberately NOT gated on document.hidden. That was tried and it is the
+     kind of guard that reads as thoughtful and cannot be proved: a hidden tab
+     never fires visibilitychange, so a bug in the guard is a rotation that
+     silently never starts and nothing tells you. Browsers already throttle
+     background timers to about once a minute, which is the whole benefit the
+     guard was buying, so the guard was cost with no proof. */
+  var mailTick = null;
+  var mailHeld = false;
+  function mailStart() {
+    if (mailTick || mailHeld || MAILT.length < 2) return;
+    mailTick = setInterval(function () { mailAt++; sweepMail(); }, 7000);
+  }
+  function mailStop() { if (mailTick) { clearInterval(mailTick); mailTick = null; } }
+
+  function mailIsLink(e) {
+    var t = e.target;
+    return t && t.closest && t.closest('a[href^="mailto:" i]');
+  }
+
+  if (MAILT.length) {
     sweepMail();
     document.addEventListener('DOMContentLoaded', sweepMail);
     window.addEventListener('load', sweepMail);
+    mailStart();
+    ['pointerover', 'focusin'].forEach(function (ev) {
+      document.addEventListener(ev, function (e) {
+        if (mailIsLink(e)) { mailHeld = true; mailStop(); }
+      }, true);
+    });
+    ['pointerout', 'focusout'].forEach(function (ev) {
+      document.addEventListener(ev, function (e) {
+        if (mailIsLink(e)) { mailHeld = false; mailStart(); }
+      }, true);
+    });
   }
 
   /* ----- theme toggle (dark ↔ light) ----- */

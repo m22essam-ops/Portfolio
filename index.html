@@ -236,7 +236,7 @@
      same few lines are here. Blank a field and that half is not sent; blank
      the lot and it is a plain mailto again. A link that already carries its
      own query is left alone. */
-  var MAILPICK = (function () {
+  var MAILT = (function () {
     var K = C.contact || {};
     var list = (K.mailTemplates || []).filter(function (t) {
       return t && (String(t.subject || '').trim() || String(t.body || '').trim());
@@ -244,18 +244,66 @@
     if (!list.length && (K.mailSubject || K.mailBody)) {
       list = [{ subject: K.mailSubject, body: K.mailBody }];
     }
-    return list.length ? list[Math.floor(Math.random() * list.length)] : null;
+    /* shuffled once, then dealt in order: re-rolling at random hands out the
+       same draft twice in a row often enough to look broken */
+    for (var i = list.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = list[i]; list[i] = list[j]; list[j] = t;
+    }
+    return list;
   })();
+  var mailAt = 0;
 
   function mailPrefill(url) {
     var href = String(url || '');
-    if (!/^mailto:/i.test(href) || href.indexOf('?') > -1 || !MAILPICK) return href;
-    var subj = String(MAILPICK.subject || '').trim();
-    var body = String(MAILPICK.body || '').trim();
+    if (!/^mailto:/i.test(href) || !MAILT.length) return href;
+    var pick = MAILT[mailAt % MAILT.length];
+    var subj = String(pick.subject || '').trim();
+    var body = String(pick.body || '').trim();
     var q = [];
     if (subj) q.push('subject=' + encodeURIComponent(subj));
     if (body) q.push('body=' + encodeURIComponent(body.replace(/\r?\n/g, '\r\n')));
     return q.length ? href + '?' + q.join('&') : href;
+  }
+
+  /* The covered punch is the only mailto on this page, and it deals itself
+     the same way the rest of the site does. The bare address is kept on the
+     element so each rewrite is built from THAT and never from the last one,
+     which would staple a second query onto the first. */
+  function sweepMail() {
+    Array.prototype.forEach.call(
+      document.querySelectorAll('a[href^="mailto:" i]'),
+      function (a) {
+        var base = a.getAttribute('data-mail-base');
+        if (base === null) {
+          var here = a.getAttribute('href') || '';
+          base = here.indexOf('?') > -1 ? '' : here;
+          a.setAttribute('data-mail-base', base);
+        }
+        if (base) a.setAttribute('href', mailPrefill(base));
+      }
+    );
+  }
+  /* Not gated on document.hidden: see the note in site.js. A hidden tab never
+     fires visibilitychange, so that guard can fail to a rotation that silently
+     never starts, and browsers already throttle background timers anyway. */
+  var mailTick = null, mailHeld = false;
+  function mailStart() {
+    if (mailTick || mailHeld || MAILT.length < 2) return;
+    mailTick = setInterval(function () { mailAt++; sweepMail(); }, 7000);
+  }
+  function mailStop() { if (mailTick) { clearInterval(mailTick); mailTick = null; } }
+  if (MAILT.length > 1) {
+    document.addEventListener('pointerover', function (e) {
+      if (e.target && e.target.closest && e.target.closest('a[href^="mailto:" i]')) {
+        mailHeld = true; mailStop();
+      }
+    }, true);
+    document.addEventListener('pointerout', function (e) {
+      if (e.target && e.target.closest && e.target.closest('a[href^="mailto:" i]')) {
+        mailHeld = false; mailStart();
+      }
+    }, true);
   }
 
   /* Has he won something yet? The whole home page hangs off this. */
@@ -720,10 +768,12 @@
     /* each punch is addressable on its own, so the designer can move and
        size them separately instead of shifting all three as one block */
     a.setAttribute('data-slot', 'nav' + ix);
-    /* The third punch is his email, so it arrives half written like every
-       other mailto on the site. This page does not load site.js, so the same
-       few lines live here; see contact.mailSubject / contact.mailBody. */
-    a.href = mailPrefill(item.url || '#');
+    /* The BARE address goes on here. sweepMail() fills it in a moment, and
+       keeps filling it as the drafts rotate. Pre-filling it at this point is
+       what broke the rotation once: the sweep saw a link that already carried
+       a query, took that to mean somebody had written it by hand, and marked
+       it hands-off for the life of the page. One code path only. */
+    a.href = item.url || '#';
     /* the label goes in its own element: as a bare text node it becomes an
        anonymous grid item and cannot be placed in the box */
     var b = document.createElement('b');
@@ -735,6 +785,8 @@
     nav.appendChild(a);
     if (item.scratch) makeScratch(a, item);
   });
+  sweepMail();
+  mailStart();
 
   /* ---- the covered box ----------------------------------------
      The last punch is under foil. They scratch it expecting a prize
