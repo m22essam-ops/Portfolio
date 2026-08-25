@@ -1056,10 +1056,16 @@ body.lang-ja .page-head h1{
 
    1200 comes from the reading column rather than from eye: the text side is
    1.15 of 2, so 1200 less the gap puts about 660px under the words, which is
-   the 62ch above at 19px. The photo takes the rest. */
+   the 62ch above at 19px. The photo takes the rest.
+
+   EVERY block inside the page goes in this list. The résumé button was left
+   out of it and was the only child of the container still running full width,
+   so it started 217px to the left of the heading, the photo and the jobs,
+   which all start together. Add a block to the page, add it here. */
 body.page-about .page-head .wrap,
 body.page-about .about-grid,
-body.page-about .exp-list{max-width:1200px;margin-inline:auto}
+body.page-about .exp-list,
+body.page-about #aboutResume{max-width:1200px;margin-inline:auto}
 .about-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:56px;align-items:stretch;margin-bottom:96px}
 /* The About portrait is printed the same way the stamp is: a flat red
    ground with a grey photograph screened over it, so it is two inks rather
