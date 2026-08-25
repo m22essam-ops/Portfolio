@@ -1144,12 +1144,22 @@ body.page-about .exp-list{max-width:1200px;margin-inline:auto}
 /* tight rows: the job title was inheriting the body's 1.6 line-height, which
    put half a blank line above and below every role and made the list twice
    as tall as it needed to be */
-.exp-row{display:flex;justify-content:space-between;align-items:baseline;gap:20px;padding:12px 0;border-top:1px solid var(--line)}
+/* ONE LINE A JOB, and the cap is the point.
+   The dates used to sit at the far side of a 1200px row with two lines of
+   type on the left, so every row had a void down the middle of it. Narrowing
+   the row is what fixes that: at 820 the gap between the job title and the
+   dates reads as a rail, at 1200 it reads as a hole. brianlovin.com, which is
+   where this arrangement comes from, runs its column at 640.
+   Left aligned rather than centred so it keeps the same left edge as the
+   heading and the photo above it. */
+.exp-row{display:flex;justify-content:space-between;align-items:baseline;gap:28px;padding:13px 0;border-top:1px solid var(--line);max-width:760px}
+/* the agency and the title travel together and wrap together */
+.exp-lead{display:flex;align-items:baseline;gap:12px;min-width:0;flex-wrap:wrap}
 /* The company is the top line and takes the display treatment; the job title
    is the quiet second line. Swapped round on 25 Aug 2026: with the role on
    top the column read "Copywriter, Copywriter, Copywriter, Copywriter" and
    the four names that actually differ were set small underneath. */
-.exp-org{font-family:var(--display);font-weight:800;letter-spacing:-.02em;font-size:21px;line-height:1.15;display:block;color:var(--fg)}
+.exp-org{font-family:var(--display);font-weight:800;letter-spacing:-.02em;font-size:20px;line-height:1.2;color:var(--fg)}
 .exp-org b{font-weight:800}
 /* The city rides along with the agency but does not compete with it: same
    face, no weight, no tracking, quieter colour, a size down.
@@ -1157,7 +1167,7 @@ body.page-about .exp-list{max-width:1200px;margin-inline:auto}
    drop Noto Sans JP off the end of it, and the Japanese cities (ドバイ, カイロ)
    would fall through to whatever the system happened to have instead. */
 .exp-place{font-family:inherit;font-weight:400;font-size:16px;letter-spacing:0;color:var(--fg-dim)}
-.exp-role{font-size:15px;line-height:1.35;color:var(--fg-dim);display:block;margin-top:2px}
+.exp-role{font-size:15px;line-height:1.2;color:var(--fg-dim)}
 .exp-time{font-size:11.5px;color:var(--fg-faint);white-space:nowrap}
 
 /* ============================ RESPONSIVE ============================ */

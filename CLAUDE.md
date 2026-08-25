@@ -878,6 +878,35 @@ as "ranges not supported", so `currentTime` silently stayed at 0 and no video
 could be scrubbed. `serve_range()` now answers 206, 416 past the end, and
 falls through on anything it does not understand.
 
+### The jobs are one line each
+
+Third arrangement, and his pick from four shown side by side with his real
+data. **Agency, the title beside it in grey, the dates on the right, all on
+one line.** Taken from brianlovin.com, which was looked at rather than
+recalled.
+
+**The cap is the fix, not the arrangement.** brianlovin runs that column at
+640px, and the reason it works is the width: the gap between the title and
+the dates has to read as a rail. `.exp-row` is capped at **760px** inside the
+1200px About column and left aligned, so it keeps the same left edge as the
+heading and the photo. At 1200 the same arrangement is the hole he objected
+to in the first place. Rows went from 65px to 51px.
+
+History, so it is not re-litigated: role on top with the agency small under
+it read "Copywriter, Copywriter, Copywriter, Copywriter" down the column.
+Swapping them fixed that and left two lines with the dates flung across a
+1200px row, which he rejected on sight. The other three options shown were
+dates in a left rail, and the date as a small label above; he took the
+one-liner.
+
+- `.exp-lead` wraps, so the title drops under the agency by itself if it ever
+  runs out of room. Under 900px the row stacks and the dates move above.
+- **The preview he picked had dropped the cities**, but he had asked for
+  "We are social - dubai" one message earlier, so they were kept and the
+  difference was flagged rather than taken as a decision.
+- Verified in Japanese: still one line, because `word-break:keep-all` holds
+  the katakana job title together and the lead can wrap if it cannot.
+
 ### Rivan Tower has no stills
 
 It carried two **Tuborg** images, which he spotted and deleted. That leaves the
