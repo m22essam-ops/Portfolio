@@ -62,6 +62,103 @@
   <article class="manip" id="mBody"></article>
 </div>
 
+<!-- THE CARTOON.
+     Drawn here as inline SVG rather than dropped in as a picture, for the
+     same reasons the seal on the home page and the cabinet are: there is
+     nothing to download, it stays sharp at any size, and it takes its ink
+     from the page's own tokens so it can never fight the palette.
+
+     It sits in the markup and is MOVED by the script into the middle of the
+     article, after the second paragraph, which is the beat it belongs on
+     ("You read." and then the man with his head in his hand). Doing it that
+     way rather than building the SVG in JavaScript means it is still drawn
+     with the script off, where it simply stays below the words instead of
+     moving up into them. Deliberately NOT a <template>: template content is
+     inert, so with JavaScript off there would be no drawing at all.
+
+     One person, an empty chair. He is facing the chair, which is the whole
+     joke: the notepad and the pen are on the seat and nobody is holding
+     them. -->
+<figure class="manip-fig" id="mDrawing">
+  <svg viewBox="0 0 700 440" role="img" aria-labelledby="mDrawTitle">
+    <title id="mDrawTitle">A man slumped in an armchair with his hand over his eyes, facing an empty chair with a notepad on it.</title>
+    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+
+      <!-- the empty chair -->
+      <g transform="translate(-402,0)">
+        <g stroke-width="2.6">
+          <path d="M470 286 C 468 226, 476 202, 496 198 C 522 192, 566 192, 590 198 C 606 202, 610 230, 608 282"/>
+          <path d="M462 292 C 500 302, 570 302, 614 290"/>
+          <path d="M464 294 L 468 350 C 512 360, 574 358, 618 348 L 614 290"/>
+          <path d="M478 352 L 474 378"/>
+          <path d="M606 350 L 610 374"/>
+          <path d="M498 262 L 556 256 L 562 288 L 504 294 Z" stroke-width="2.2"/>
+          <path d="M510 270 L 550 266" stroke-width="1.5"/>
+          <path d="M511 278 L 545 274" stroke-width="1.5"/>
+          <path d="M568 258 L 592 276" stroke-width="2.2"/>
+        </g>
+        <g stroke-width="1.3" opacity=".55">
+          <path d="M478 374 L 500 352"/><path d="M506 376 L 528 354"/>
+          <path d="M534 376 L 556 354"/><path d="M562 374 L 584 352"/>
+          <path d="M478 344 L 500 320"/><path d="M512 344 L 534 320"/>
+          <path d="M546 344 L 568 320"/><path d="M580 342 L 602 318"/>
+        </g>
+      </g>
+
+      <!-- him -->
+      <g transform="translate(266,0)">
+        <g stroke-width="2.7">
+          <path d="M126 300 C 120 200, 128 158, 156 150 C 200 138, 268 138, 306 150 C 330 158, 336 206, 330 296"/>
+          <path d="M118 308 C 176 322, 284 322, 340 306"/>
+          <path d="M118 308 C 108 280, 110 248, 122 236 C 134 224, 150 230, 152 248 C 154 268, 150 292, 148 304"/>
+          <path d="M340 306 C 350 280, 350 250, 340 238 C 330 228, 316 234, 314 250" stroke-width="2.4"/>
+          <path d="M120 310 L 124 376 C 190 390, 282 388, 344 374 L 340 306"/>
+          <path d="M140 378 L 136 400"/>
+          <path d="M328 376 L 332 396"/>
+        </g>
+        <g stroke-width="3.3">
+          <path d="M196 150 C 190 116, 212 92, 244 92 C 276 92, 296 116, 292 150 C 288 180, 266 196, 240 194 C 214 192, 200 176, 196 150 Z"/>
+          <path d="M194 136 C 194 104, 216 88, 246 90 C 272 92, 290 108, 292 132"/>
+          <path d="M206 116 C 220 100, 246 96, 264 104" stroke-width="2.3"/>
+          <path d="M290 146 C 300 144, 302 158, 292 162" stroke-width="2.2"/>
+          <path d="M232 172 C 244 176, 254 175, 262 170" stroke-width="2.5"/>
+          <path d="M198 148 C 214 132, 240 126, 262 132" stroke-width="3.1"/>
+          <path d="M262 132 C 268 126, 268 118, 262 114"/>
+          <path d="M254 130 C 258 122, 258 116, 253 112" stroke-width="2.3"/>
+          <path d="M244 130 C 247 122, 246 116, 241 113" stroke-width="2.3"/>
+          <path d="M232 131 C 234 124, 233 118, 228 115" stroke-width="2.3"/>
+          <path d="M200 150 C 190 174, 184 206, 182 238"/>
+          <path d="M214 152 C 206 178, 200 210, 198 240"/>
+          <path d="M182 238 C 176 248, 176 258, 182 264"/>
+          <path d="M286 178 C 300 190, 308 210, 308 238 C 308 264, 302 286, 296 300"/>
+          <path d="M226 192 C 216 200, 208 212, 204 226"/>
+          <path d="M244 194 C 254 206, 266 210, 278 206" stroke-width="2.4"/>
+          <path d="M262 192 C 264 202, 268 208, 274 210" stroke-width="2.2"/>
+          <path d="M294 300 C 252 306, 208 304, 178 296"/>
+          <path d="M178 296 C 166 290, 162 278, 166 266"/>
+          <path d="M170 296 C 160 326, 154 358, 152 382"/>
+          <path d="M194 300 C 186 328, 180 358, 178 384"/>
+          <path d="M152 382 C 140 386, 128 390, 126 396 C 134 402, 168 402, 180 398 C 186 396, 184 386, 178 384"/>
+          <path d="M300 304 C 268 316, 236 330, 216 342" stroke-width="2.6"/>
+          <path d="M216 342 C 208 356, 204 372, 204 386" stroke-width="2.6"/>
+          <path d="M204 386 C 194 390, 186 396, 188 400 C 200 404, 228 402, 234 398 C 238 394, 234 388, 228 386" stroke-width="2.6"/>
+        </g>
+        <g stroke-width="1.3" opacity=".55">
+          <path d="M142 398 L 166 376"/><path d="M172 400 L 198 376"/>
+          <path d="M204 400 L 230 376"/><path d="M238 400 L 264 376"/>
+          <path d="M270 398 L 296 374"/><path d="M302 396 L 326 374"/>
+          <path d="M136 372 L 160 344"/><path d="M174 372 L 198 344"/>
+          <path d="M212 372 L 236 344"/><path d="M250 372 L 274 344"/>
+          <path d="M290 370 L 314 342"/>
+        </g>
+      </g>
+
+      <path d="M18 402 L 682 394" stroke-width="2"/>
+    </g>
+  </svg>
+  <figcaption id="mCaption"></figcaption>
+</figure>
+
 <footer class="stub" id="siteFoot"></footer>
 
 <!-- content.js is fetched with a stamp that changes every minute, and only
@@ -109,7 +206,28 @@
     html += '<p class="manip-out"><a href="' + esc(url) + '">' + esc(text) +
             ' <span aria-hidden="true">&rarr;</span></a></p>';
   }
-  document.getElementById('mBody').innerHTML = html;
+  var body = document.getElementById('mBody');
+  body.innerHTML = html;
+
+  /* The drawing moves up into the article, after the second paragraph. That
+     is the beat it belongs on: "You read." and then the man with his head in
+     his hand. It is moved rather than built, so with the script off it is
+     still on the page, just below the words instead of inside them.
+
+     Blank the caption in admin and the caption line removes itself; the
+     drawing stays, because it is not a caption's illustration. */
+  var fig = document.getElementById('mDrawing');
+  if (fig) {
+    var cap = document.getElementById('mCaption');
+    var capText = String(M.caption || '').trim();
+    if (cap) {
+      if (capText) cap.textContent = '“' + capText + '”';
+      else cap.remove();
+    }
+    var ps = body.querySelectorAll('p');
+    if (ps.length >= 3) ps[1].insertAdjacentElement('afterend', fig);
+    else body.appendChild(fig);
+  }
 
   var J = C.jokes || {};
   if (J.tabAway) {

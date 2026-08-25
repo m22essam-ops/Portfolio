@@ -935,6 +935,35 @@ itself, which is the difference between the piece and a joke about a piece.
   clicked expecting something and arrived somewhere emptier.
 - Empty `skillLinks` and every tag goes back to being the span it always was.
 
+**The copy was rewritten on 25 Aug for edge, at his request.** The first pass
+explained the technique ("that is the whole technique, six honest words and
+one that should not be there"), which is the exact crime he was pulled up on
+in his own award boards: a sentence explaining the sentence above it. The
+piece now confesses instead, and turns the site's own devices in as evidence:
+the lottery ticket, the panel you have to scratch, the email that writes
+itself. "You are four moves into something and you thought you were browsing."
+The line about the products is his real work, Canesten included.
+
+**The cartoon** is one man slumped in an armchair facing an EMPTY chair with
+the notepad and pen still on the seat. Inline SVG for the same reasons as the
+seal and the cabinet, and `currentColor` on every stroke so the ink is the
+page's ink.
+
+- **It took three goes and the first two are worth not repeating.** A
+  reclining figure on an analyst's couch could not be made to read: the body
+  came out a flat wedge, a ramp rather than a person. Seated and slumped with
+  a hand over the eyes reads instantly. **A seated figure is far easier to
+  draw legibly than a reclining one.**
+- The second attempt had him facing AWAY from the therapist's chair. The two
+  halves are in `translate()` groups so swapping which side each sits on is
+  one number, not a rewrite of every coordinate.
+- **It is not a `<template>`.** Template content is inert, so the drawing
+  would vanish with JavaScript off. It sits in the markup and the script
+  MOVES it up into the article after the second paragraph.
+- It grows to the RIGHT of the reading column, never left. A negative left
+  margin was tried and put it at -30px, off the side of the screen, because
+  the container has only 30px of margin to borrow at 1300px wide.
+
 ### Rivan Tower has no stills
 
 It carried two **Tuborg** images, which he spotted and deleted. That leaves the

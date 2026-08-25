@@ -1158,6 +1158,26 @@ body.page-about #aboutResume{max-width:1200px;margin-inline:auto}
 .manip p{font-size:19px;line-height:1.62;margin:0 0 26px;color:var(--fg-dim)}
 /* the last line before the way out lands on its own, so it gets the weight */
 .manip p:nth-last-child(2){color:var(--fg)}
+/* ---- the cartoon ----
+   Wider than the 62ch reading column, because a drawing squeezed into a text
+   measure looks like an accident, but it keeps the column's LEFT EDGE and
+   grows to the right only. A negative left margin was tried first and it put
+   the drawing at -30px, off the side of the screen, because the container
+   only has 30px of margin to borrow at 1300px wide. Growing rightwards
+   cannot overflow anything.
+   `currentColor` on the strokes means the ink is the page's ink: change the
+   text colour and the drawing follows it. */
+.manip-fig{margin:46px 0;max-width:620px}
+.manip-fig svg{width:100%;height:auto;display:block;color:var(--fg)}
+.manip-fig figcaption{
+  margin-top:14px;font-size:16px;line-height:1.5;color:var(--fg-dim);
+  text-align:center;max-width:44ch;margin-left:auto;margin-right:auto
+}
+@media (max-width:900px){
+  /* nothing to break out of on a phone: the column is already the screen */
+  .manip-fig{margin:34px 0;max-width:100%}
+  .manip-fig figcaption{font-size:15px}
+}
 .manip-out{margin-top:46px}
 .manip-out a{
   font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
