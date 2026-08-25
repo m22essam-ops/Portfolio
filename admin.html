@@ -529,6 +529,26 @@ label.field .ja-stale { display: block; color: var(--accent); font-size: 11.5px;
     <div class="subhead">Work experience</div>
     <div id="expRows"></div>
     <button class="add-btn" data-act="add-row" data-path="about.experience" data-row="experience" type="button">+ Add experience row</button>
+
+    <div class="subhead">The skill that opens a page</div>
+    <p class="hint">One of your skills is a link. Type it here <strong>exactly as it is written in the skills box above</strong>, and it opens the page you name. Everything else stays plain text, and the tag looks identical either way until someone hovers it. <strong>Empty the skill and nothing on the page is a link any more.</strong></p>
+    <div class="grid2">
+      <label class="field"><span>Which skill</span><input data-path="about.skillLinks.0.skill" placeholder="Manipulating"></label>
+      <label class="field"><span>Opens which page</span><input data-path="about.skillLinks.0.url" placeholder="manipulating.html"></label>
+    </div>
+    <p class="hint" id="skillLinkNote"></p>
+
+    <div class="subhead">The manipulating piece</div>
+    <p class="hint">The page behind that skill. One paragraph per line. It is the shortest page on the site on purpose, so resist making it longer.</p>
+    <div class="grid2">
+      <label class="field"><span>Small line above the heading</span><input data-path="manipulating.label" placeholder="The skill you clicked"></label>
+      <label class="field"><span>Heading</span><input data-path="manipulating.heading" placeholder="Manipulating."></label>
+    </div>
+    <label class="field"><span>The piece (one paragraph per line)</span><textarea data-path="manipulating.paragraphs" data-type="textlist" rows="8"></textarea></label>
+    <div class="grid2">
+      <label class="field"><span>The way out, its words</span><input data-path="manipulating.linkText" placeholder="See the work"></label>
+      <label class="field"><span>The way out, where it goes</span><input data-path="manipulating.linkUrl" placeholder="work.html"><small>Leave either empty and no link is printed.</small></label>
+    </div>
   </section>
 
   <!-- ================= CONTACT ================= -->
@@ -659,6 +679,11 @@ label.field .ja-stale { display: block; color: var(--accent); font-size: 11.5px;
     if (!Array.isArray(M.about.paragraphs)) M.about.paragraphs = [];
     if (!Array.isArray(M.about.skills)) M.about.skills = [];
     if (!Array.isArray(M.about.experience)) M.about.experience = [];
+    /* the two fields for the clickable skill need somewhere to write to */
+    if (!Array.isArray(M.about.skillLinks)) M.about.skillLinks = [];
+    if (!M.about.skillLinks[0]) M.about.skillLinks[0] = { skill: '', url: '' };
+    M.manipulating = M.manipulating || {};
+    if (!Array.isArray(M.manipulating.paragraphs)) M.manipulating.paragraphs = [];
     M.contact = M.contact || {};
     if (!Array.isArray(M.contact.links)) M.contact.links = [];
     if (!Array.isArray(M.contact.mailTemplates)) {
@@ -1012,6 +1037,39 @@ label.field .ja-stale { display: block; color: var(--accent); font-size: 11.5px;
     renderJaWarnings();
     renderVideoHosts();
     renderMailLen();
+    renderSkillLinkNote();
+  }
+
+  /* The clickable skill is matched on the words, so a typo does not error, it
+     just quietly stops being a link and there is nothing on the page to tell
+     him. This is the thing that tells him. */
+  function renderSkillLinkNote() {
+    var el = document.getElementById('skillLinkNote');
+    if (!el) return;
+    var link = (M.about.skillLinks || [])[0] || {};
+    var want = String(link.skill || '').trim();
+    var url = String(link.url || '').trim();
+    if (!want && !url) {
+      el.textContent = 'Empty, so none of the skills is a link.';
+      el.style.color = '';
+      return;
+    }
+    var hit = (M.about.skills || []).some(function (s) {
+      return String(s).trim().toLowerCase() === want.toLowerCase();
+    });
+    if (!want || !url) {
+      el.textContent = 'Both boxes have to be filled in, or nothing is linked.';
+      el.style.color = '#B4451F';
+    } else if (!hit) {
+      el.textContent = 'WARNING: "' + want + '" is not one of the skills above, so nothing ' +
+                       'will be a link. It has to match one of them exactly.';
+      el.style.color = '#B4451F';
+    } else {
+      el.textContent = '"' + want + '" is in your skills list, so it opens ' + url +
+                       '. The Japanese page leaves it as plain text, because the words there ' +
+                       'do not match and the piece is only in English.';
+      el.style.color = '';
+    }
   }
 
   /* How long the finished mailto link actually is, which is not how long the
@@ -1309,6 +1367,8 @@ label.field .ja-stale { display: block; color: var(--accent); font-size: 11.5px;
        Debounced: rebuilding it on every keystroke would move the field he is
        typing in, because the note is added underneath it. */
     if (el.dataset.path.indexOf('contact.mailTemplates') === 0) renderMailLen();
+    if (el.dataset.path.indexOf('about.skillLinks') === 0 ||
+        el.dataset.path === 'about.skills') renderSkillLinkNote();
 
     clearTimeout(jaTick);
     jaTick = setTimeout(renderJaWarnings, 600);

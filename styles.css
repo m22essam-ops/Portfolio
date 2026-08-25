@@ -1144,8 +1144,44 @@ body.page-about #aboutResume{max-width:1200px;margin-inline:auto}
    So the reading column is set here, and the two blocks that hold it are
    capped, which is also what puts the margins back. */
 .about-text{font-size:19px;line-height:1.62;margin:0 0 22px;color:var(--fg-dim);max-width:62ch}
+/* ---- the manipulating piece ----
+   One column of type and a lot of paper. Set at reading size in the body
+   face, not at feature size: it is six lines long and blowing them up would
+   make it look like it thinks it is an essay.
+   The measure is the same 62ch the About bio uses, so the two pages read as
+   the same voice at the same width. */
+/* the eyebrow, above the heading rather than under it, so the first thing
+   read is what you did and the second is what it was called */
+.manip-label{font-family:var(--mono);font-size:11px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--fg-faint);margin:0 0 10px}
+.manip{max-width:62ch;margin:0 0 40px;padding-bottom:80px}
+.manip p{font-size:19px;line-height:1.62;margin:0 0 26px;color:var(--fg-dim)}
+/* the last line before the way out lands on its own, so it gets the weight */
+.manip p:nth-last-child(2){color:var(--fg)}
+.manip-out{margin-top:46px}
+.manip-out a{
+  font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--red);text-decoration:none;
+  border-bottom:1px solid transparent;transition:border-color .16s var(--ease)
+}
+.manip-out a:hover,
+.manip-out a:focus-visible{border-bottom-color:var(--red)}
+.manip-out span{display:inline-block;transition:transform .16s var(--ease)}
+.manip-out a:hover span{transform:translateX(4px)}
+@media (max-width:900px){
+  .manip{padding-bottom:40px}
+  .manip p{font-size:17px;margin-bottom:22px}
+}
+
 .skills-list{display:flex;flex-wrap:wrap;gap:9px;margin-top:32px}
 .skill-tag{border:1px solid var(--line);border-radius:100px;padding:6px 13px;font-size:11px;color:var(--fg-dim)}
+/* A skill that is a door. It must not announce itself: the whole joke is that
+   you reached for it without being told you could, so at rest it is exactly
+   the same pill as the six beside it and only the cursor gives it away. */
+a.skill-tag{text-decoration:none;cursor:pointer;
+  transition:color .16s var(--ease),border-color .16s var(--ease)}
+a.skill-tag:hover,
+a.skill-tag:focus-visible{color:var(--red);border-color:var(--red)}
 .exp-list{margin-bottom:40px}
 /* tight rows: the job title was inheriting the body's 1.6 line-height, which
    put half a blank line above and below every role and made the list twice
@@ -1416,6 +1452,12 @@ body.page-awards{ --bg:#E6E7E2; --well:#D6D8D1; --nav-bg:#E6E7E2f2; }
    sit on it and the red has to stay the loudest thing on the page. #A3BAD1 was
    tried first and it was too heavy, closer to a painted wall than to paper. */
 body.page-work-ran { --bg:#CFDCE6; --well:#B9CBDA; --nav-bg:#CFDCE6f2; }
+/* The manipulating piece keeps the About paper, because it is a room off the
+   About page rather than a section of its own, and it gets NO mark at all.
+   Every other page has one small drawn thing; this is the one that does not,
+   and that is the point of it. You clicked a confession expecting something
+   and arrived somewhere emptier than where you came from. */
+body.page-manipulating { --bg:#F1E4DC; --well:#E4D2C6; --nav-bg:#F1E4DCf2; }
 
 /* the hint of an element: one quiet mark per page, behind everything,
    printed in the page's own well colour so it never fights the work */

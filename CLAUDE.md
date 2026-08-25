@@ -907,6 +907,34 @@ one-liner.
 - Verified in Japanese: still one line, because `word-break:keep-all` holds
   the katakana job title together and the lead can wrap if it cannot.
 
+### A skill you can click (added 25 Aug 2026)
+
+His idea. "Manipulating" sits in the About skills list among six real ones,
+and it opens `manipulating.html`, a six-line piece whose joke is that
+clicking a confession is itself the manipulation working. The line he asked
+for, "honestly what did you expect from manipulation? exactly", is in it
+close to verbatim.
+
+**The page ends by converting.** "Anyway. Now that you are here." then a link
+to the work. The manipulation actually manipulates rather than describing
+itself, which is the difference between the piece and a joke about a piece.
+
+- **`about.skillLinks` matches on the WORDS, not the index**, and that is what
+  keeps the translation rule intact: the Japanese list says 人心操作, which
+  does not match "Manipulating", so on the Japanese page it stays a plain
+  span. **A link is never drawn into a page that is still in English.**
+  Verified: zero `a.skill-tag` on `?lang=ja`.
+- **The tag is identical to the other six at rest.** No underline, no colour,
+  no cursor hint beyond the pointer. The whole joke is that he reached for it
+  without being told he could, so announcing it would kill it.
+- **A typo fails silently**, because a name that matches nothing simply
+  renders as text. Admin therefore checks the name against the skills list as
+  he types and says so in red when it does not match.
+- **It is the one page with no mark.** Every other page has its own small
+  drawn thing; this one has the About paper and nothing else, because you
+  clicked expecting something and arrived somewhere emptier.
+- Empty `skillLinks` and every tag goes back to being the span it always was.
+
 ### Rivan Tower has no stills
 
 It carried two **Tuborg** images, which he spotted and deleted. That leaves the

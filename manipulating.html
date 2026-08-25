@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manipulating · Mohammed Essam</title>
+
+<meta name="description" content="One of the skills on my About page is not a skill. You clicked it anyway.">
+<!-- THE CARD PEOPLE SEE WHEN THIS LINK IS PASTED SOMEWHERE.
+     WhatsApp, LinkedIn, Slack and the rest fetch the page and read these
+     tags. They do NOT run JavaScript, so none of this can come out of
+     content.js: it has to be sitting here as plain text, and the picture
+     has to be a real file at a real address. images/og.jpg is drawn by
+     make-og.html; re-run that if the headline ever changes. -->
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Mohammed Essam">
+<meta property="og:locale" content="en_GB">
+<meta property="og:title" content="Manipulating · Mohammed Essam">
+<meta property="og:description" content="One of the skills on my About page is not a skill. You clicked it anyway.">
+<meta property="og:url" content="https://www.mohammedessam.com/manipulating.html">
+<meta property="og:image" content="https://www.mohammedessam.com/images/og.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A lottery ticket that reads: Award-losing copywriter.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://www.mohammedessam.com/manipulating.html">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Syne:wght@400..800&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="page page-manipulating">
+
+<nav class="page-nav">
+  <div class="wrap">
+    <a class="logo" href="index.html">mohammed essam</a>
+    <div class="links">
+      <a href="work.html">The work</a>
+      <a href="about.html">Who I am</a>
+      <a href="mailto:m22essam@gmail.com">Say hi</a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-head">
+  <div class="wrap">
+    <p class="manip-label" id="mLabel"></p>
+    <h1 id="mHeading"></h1>
+  </div>
+</header>
+
+<!-- The whole page is one narrow column of type and a lot of paper. That is
+     the design, not an unfinished one: it is the shortest thing on the site
+     and it is meant to be, because the joke is that you came a long way for
+     six lines. Every word is in content.js under `manipulating`, so it is
+     rewritten in admin like everything else. -->
+<div class="wrap">
+  <article class="manip" id="mBody"></article>
+</div>
+
+<footer class="stub" id="siteFoot"></footer>
+
+<!-- content.js is fetched with a stamp that changes every minute, and only
+     over http(s) so the double-click preview keeps working. -->
+<script>
+(function () {
+  var v = /^https?:$/.test(location.protocol) ? '?v=' + Math.floor(Date.now() / 60000) : '';
+  document.write('<scr' + 'ipt src="content.js' + v + '"><\/scr' + 'ipt>');
+})();
+</script>
+<script src="site.js"></script>
+<script src="auto-refresh.js"></script>
+<script>
+(function () {
+  var C = window.SITE_CONTENT || {};
+  var M = C.manipulating || {};
+
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+  function set(id, val) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var t = String(val == null ? '' : val).trim();
+    if (t) el.textContent = t; else el.remove();
+  }
+
+  document.title = (M.heading ? String(M.heading).replace(/\.$/, '') : 'Manipulating') +
+                   ' · Mohammed Essam';
+  set('mLabel', M.label);
+  set('mHeading', M.heading);
+
+  /* The last paragraph and the link belong together on the page, so the link
+     is added to the end of the article rather than sitting in its own block
+     under it: "Anyway. Now that you are here." and the way out are one beat,
+     and a rule of white space between them kills it. */
+  var paras = (M.paragraphs || []).filter(function (p) { return String(p || '').trim(); });
+  var html = paras.map(function (p) { return '<p>' + esc(p) + '</p>'; }).join('');
+
+  var url = String(M.linkUrl || '').trim();
+  var text = String(M.linkText || '').trim();
+  if (url && text) {
+    html += '<p class="manip-out"><a href="' + esc(url) + '">' + esc(text) +
+            ' <span aria-hidden="true">&rarr;</span></a></p>';
+  }
+  document.getElementById('mBody').innerHTML = html;
+
+  var J = C.jokes || {};
+  if (J.tabAway) {
+    var realTitle = document.title;
+    document.addEventListener('visibilitychange', function () {
+      document.title = document.hidden ? J.tabAway : realTitle;
+    });
+  }
+  if (J.console && window.console) console.log('%c' + J.console, 'color:#E3261A;font-size:13px');
+})();
+</script>
+
+</body>
+</html>

@@ -208,9 +208,27 @@
   /* the skills are a flat list of words, so they are swapped whole rather
      than merged by position: there is nothing on the English side that has
      to keep lining up with them */
+  /* A skill can be a door. about.skillLinks pairs the exact words with a
+     page, so "Manipulating" opens the piece about manipulating, and clicking
+     a confession is the joke completing itself.
+
+     Matching is on the words, deliberately, and that is what keeps the
+     translation rule intact: the Japanese list says 人心操作, which does not
+     match "Manipulating", so on the Japanese page it stays plain text. A
+     link is never drawn into a page that is still in English.
+
+     No skillLinks, or a name that matches nothing, and every tag is exactly
+     the span it always was. */
   if (skills.length) {
+    var links = {};
+    (A.skillLinks || []).forEach(function (l) {
+      if (l && l.skill && l.url) links[String(l.skill).trim().toLowerCase()] = l.url;
+    });
     html += '<div class="skills-list">' + skills.map(function (s) {
-      return '<span class="skill-tag">' + esc(s) + '</span>';
+      var to = links[String(s).trim().toLowerCase()];
+      return to
+        ? '<a class="skill-tag is-link" href="' + esc(to) + '">' + esc(s) + '</a>'
+        : '<span class="skill-tag">' + esc(s) + '</span>';
     }).join('') + '</div>';
   }
   box.innerHTML = html;

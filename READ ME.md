@@ -73,7 +73,10 @@ first is still free and still the right habit.
    any of them empty and it simply does not appear.
 4. **Work page labels.** The headings and the two sub-lines on the work
    pages.
-5. **About page.** Your bio, skills and job history.
+5. **About page.** Your bio, skills and job history. Also **the skill that
+   opens a page**: one of your skills is a link, and the piece behind it.
+   Type the skill exactly as it appears in the skills box or it silently
+   stops being a link, and the editor warns you when it does not match.
 6. **Contact.** Your links, your résumé button, and **the email that writes
    itself** (below).
 7. **Top bar and footer.** The menu labels and the footer line.
@@ -166,6 +169,11 @@ One limit: **every project page shares the same preview picture**, because
 would mean a separate file per project, which is the thing this site is built
 to avoid.
 
+**The manipulating piece is English only.** The skill is matched on the
+words, so the Japanese About page shows 人心操作 as plain text and never
+links into an English page. That is deliberate. If you ever translate the
+piece, add the Japanese words as a second skill link.
+
 **Your videos are on a subscription.** 18 of the films on the site stream from
 your Adobe Portfolio account. If that lapses, 18 project pages go dark. Every
 one of them is already downloaded to `~/Desktop/video-rescue/`, so nothing is
@@ -186,6 +194,7 @@ list in the editor counts how many are left. It turns green at zero.
 | `site.js` | Shared pieces: the nav, the footer, the language switch, the email prefill. |
 | `admin.html` | The editor. |
 | `design.html` | The home designer. |
+| `manipulating.html` | The page behind the Manipulating skill. |
 | `og-draw.js` | Draws the link-preview picture. Used by the editor and by the page below. |
 | `email-prompt.md` | The brief for rewriting the pre-filled emails. Paste it into a writing AI. |
 | `make-og.html` | Looks at that picture, and saves it by hand if ever needed. |

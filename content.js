@@ -1330,6 +1330,12 @@ window.SITE_CONTENT = {
       "I fought the AI and the AI won, so I moved to easier fights now: managing my MacBook's storage to open one more Adobe file.",
       "Give me a mic connected to the whole world, and my take would be: \"No one who uses noise-canceling headphones can say human connection is the most powerful.\""
     ],
+    skillLinks: [
+      {
+        skill: "Manipulating",
+        url: "manipulating.html"
+      }
+    ],
     skills: [
       "Big idea development",
       "Brand campaigns",
@@ -1444,6 +1450,21 @@ window.SITE_CONTENT = {
       }
     }
   },
+  manipulating: {
+    label: "The skill you clicked",
+    heading: "Manipulating.",
+    paragraphs: [
+      "You were reading a list of things I can do. Big idea development. Brand campaigns. Copywriting. All true, all boring.",
+      "One of them was not a skill. It was a confession. You clicked the confession.",
+      "Nobody clicks Scripting & VO.",
+      "That is the whole technique. Six honest words in a row and one that should not be there. You will always reach for the one that should not be there.",
+      "Honestly. What did you expect from manipulation?",
+      "Exactly.",
+      "Anyway. Now that you are here."
+    ],
+    linkText: "See the work",
+    linkUrl: "work.html"
+  },
   contact: {
     label: "03 — Get in touch",
     headline: "Have a project? A vacancy?",
@@ -1451,16 +1472,16 @@ window.SITE_CONTENT = {
     ctaUrl: "mailto:m22essam@gmail.com",
     mailTemplates: [
       {
-        "subject": "Opportunity at [AGENCY THAT PAYS ON TIME]",
-        "body": "Hi Mohammed,\n\nI read the whole site, which is not something I usually do.\n\nI need a senior copywriter in [CITY WITH TERRIBLE WEATHER], writing for [THE KIND OF BRAND YOU WOULD EXPECT]. The budget is [A NUMBER THAT IS LOWER THAN YOU EXPECT], and I would rather say it now than in the third email.\n\nFree for a call on [A DAY OF THE WEEK]? We can see if this is worth your time.\n\n[YOUR NAME]"
+        subject: "Opportunity at [AGENCY THAT PAYS ON TIME]",
+        body: "Hi Mohammed,\n\nI read the whole site, which is not something I usually do.\n\nI need a senior copywriter in [CITY WITH TERRIBLE WEATHER], writing for [THE KIND OF BRAND YOU WOULD EXPECT]. The budget is [A NUMBER THAT IS LOWER THAN YOU EXPECT], and I would rather say it now than in the third email.\n\nFree for a call on [A DAY OF THE WEEK]? We can see if this is worth your time.\n\n[YOUR NAME]"
       },
       {
-        "subject": "Freelance, starting [UNREASONABLE NUMBER] hours ago",
-        "body": "Hi Mohammed,\n\nWe are staring at a blank deck. The pitch is in [UNREASONABLE NUMBER] hours and the strategy has been rewritten [TOO MANY] times.\n\nWe need someone to fix the narrative before we present.\n\nIf we win, you get [VAGUE PROMISE OF FUTURE WORK]. If we lose, you still get paid.\n\nThink you can save this?\n\n[YOUR NAME]"
+        subject: "Freelance, starting [UNREASONABLE NUMBER] hours ago",
+        body: "Hi Mohammed,\n\nWe are staring at a blank deck. The pitch is in [UNREASONABLE NUMBER] hours and the strategy has been rewritten [TOO MANY] times.\n\nWe need someone to fix the narrative before we present.\n\nIf we win, you get [VAGUE PROMISE OF FUTURE WORK]. If we lose, you still get paid.\n\nThink you can save this?\n\n[YOUR NAME]"
       },
       {
-        "subject": "[OBLIGATORY GREETING], quick one",
-        "body": "Mohammed,\n\nI have [A NUMBER] tabs open and no time to write this properly.\n\nWe need a writer at [PLACE I WORK] to launch [DELIVERABLE NO ONE ASKED FOR].\n\nSend your rate. Or do not, and I will keep writing it myself, badly.\n\nYour call.\n\n[YOUR NAME]"
+        subject: "[OBLIGATORY GREETING], quick one",
+        body: "Mohammed,\n\nI have [A NUMBER] tabs open and no time to write this properly.\n\nWe need a writer at [PLACE I WORK] to launch [DELIVERABLE NO ONE ASKED FOR].\n\nSend your rate. Or do not, and I will keep writing it myself, badly.\n\nYour call.\n\n[YOUR NAME]"
       }
     ],
     sub: "",
