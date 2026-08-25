@@ -1459,20 +1459,16 @@ window.SITE_CONTENT = {
       "Fine. The whole thing, then."
     ],
     caption: "The worst part is that I am good at it.",
-    manifesto: [
-      "I have never sold anything. I have only removed the reasons not to.",
-      "You cannot lie in a headline. You can only choose which true thing to say loudest.",
-      "Nobody has ever been argued into wanting something.",
-      "If you can hear the selling, I was late.",
-      "Every product is a small dissatisfaction, wrapped. I am paid for the wrapping. Some days I am paid for the dissatisfaction."
-    ],
+    manifesto: [],
     close: [
-      "Beer. Crisps. A hotel. A cream for something you would not say out loud. None of it kept me up at night, and that is the part you should worry about.",
-      "The home page is a lottery ticket. There is a panel you have to scratch. Click my email and the message is already written.",
-      "You are four moves into something and you thought you were browsing.",
+      "Everybody is selling. Your mother sold you on food. Somebody sold you on sitting still for six hours a day for eleven years and calling it an education. Somebody sold you on the idea that you are the kind of person who reads the whole page (he lied).",
+      "I just do it for money. That is the only part anyone objects to.",
+      "And there is this thing that happens when a line lands. You feel it before anyone else has read it, this small click, and for about four seconds you are enormous. Then you remember it is for toilet paper, a coffee, or sunscreen.",
+      "I used to think the job was making people want things. It is not. Everybody already wants everything, all the time, constantly; it is exhausting. The job is standing next to (or between) the wanting and pointing.",
+      "Every campaign I have made is gone. Not archived. Gone. The posters came down, the films got pulled, somebody changed agency and deleted the folder. Months of my life, live for a week. I would do it again on Monday. So would you, about something.",
+      "You clicked a word that said Manipulating. You knew what it was. You clicked it the way you press the elevator button 5 times, the way you check a phone you just checked. That is not a flaw in you. That is just what a person is.",
       "Honestly. What did you expect from manipulation?",
-      "Exactly.",
-      "Anyway. Now that you are here."
+      "Exactly."
     ],
     linkText: "See the work",
     linkUrl: "work.html"
@@ -1484,16 +1480,16 @@ window.SITE_CONTENT = {
     ctaUrl: "mailto:m22essam@gmail.com",
     mailTemplates: [
       {
-        "subject": "Opportunity at [AGENCY THAT PAYS ON TIME]",
-        "body": "Hi Mohammed,\n\nI read the whole site, which is not something I usually do.\n\nI need a senior copywriter in [CITY WITH TERRIBLE WEATHER], writing for [THE KIND OF BRAND YOU WOULD EXPECT]. The budget is [A NUMBER THAT IS LOWER THAN YOU EXPECT], and I would rather say it now than in the third email.\n\nFree for a call on [A DAY OF THE WEEK]? We can see if this is worth your time.\n\n[YOUR NAME]"
+        subject: "Opportunity at [AGENCY THAT PAYS ON TIME]",
+        body: "Hi Mohammed,\n\nI read the whole site, which is not something I usually do.\n\nI need a senior copywriter in [CITY WITH TERRIBLE WEATHER], writing for [THE KIND OF BRAND YOU WOULD EXPECT]. The budget is [A NUMBER THAT IS LOWER THAN YOU EXPECT], and I would rather say it now than in the third email.\n\nFree for a call on [A DAY OF THE WEEK]? We can see if this is worth your time.\n\n[YOUR NAME]"
       },
       {
-        "subject": "Freelance, starting [UNREASONABLE NUMBER] hours ago",
-        "body": "Hi Mohammed,\n\nWe are staring at a blank deck. The pitch is in [UNREASONABLE NUMBER] hours and the strategy has been rewritten [TOO MANY] times.\n\nWe need someone to fix the narrative before we present.\n\nIf we win, you get [VAGUE PROMISE OF FUTURE WORK]. If we lose, you still get paid.\n\nThink you can save this?\n\n[YOUR NAME]"
+        subject: "Freelance, starting [UNREASONABLE NUMBER] hours ago",
+        body: "Hi Mohammed,\n\nWe are staring at a blank deck. The pitch is in [UNREASONABLE NUMBER] hours and the strategy has been rewritten [TOO MANY] times.\n\nWe need someone to fix the narrative before we present.\n\nIf we win, you get [VAGUE PROMISE OF FUTURE WORK]. If we lose, you still get paid.\n\nThink you can save this?\n\n[YOUR NAME]"
       },
       {
-        "subject": "[AGENCY], and a desk by the [WINDOW / PRINTER]",
-        "body": "Hi Mohammed,\n\nI run the creative department at [AGENCY WITH TOO MANY MEETINGS]. Somebody sent me your site and I have been on it for [LONGER THAN I WILL ADMIT].\n\nWe need a senior copywriter. The clients are [BETTER THAN YOU THINK / EXACTLY WHAT YOU THINK] and the brief is usually [ONE LINE AND A LOGO].\n\nYou would report to me, which is [A WARNING / A SELLING POINT]. The money is [A NUMBER]. The notice period is [HOW LONG WE KEEP YOU]. And there is a desk by the [WINDOW / PRINTER].\n\nCome and see the place. Bring the ticket.\n\n[YOUR NAME]\n[TITLE], [AGENCY]"
+        subject: "[AGENCY], and a desk by the [WINDOW / PRINTER]",
+        body: "Hi Mohammed,\n\nI run the creative department at [AGENCY WITH TOO MANY MEETINGS]. Somebody sent me your site and I have been on it for [LONGER THAN I WILL ADMIT].\n\nWe need a senior copywriter. The clients are [BETTER THAN YOU THINK / EXACTLY WHAT YOU THINK] and the brief is usually [ONE LINE AND A LOGO].\n\nYou would report to me, which is [A WARNING / A SELLING POINT]. The money is [A NUMBER]. The notice period is [HOW LONG WE KEEP YOU]. And there is a desk by the [WINDOW / PRINTER].\n\nCome and see the place. Bring the ticket.\n\n[YOUR NAME]\n[TITLE], [AGENCY]"
       }
     ],
     sub: "",
