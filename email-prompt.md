@@ -41,6 +41,46 @@ The gag lands three ways at once:
 
 The reader should smile, fill in three blanks, and hit send.
 
+**The bracket is where the writing happens.** A bracket that is only a blank
+is wasted. `[CITY]` is a blank. `[CITY WITH TERRIBLE WEATHER]` is a joke. Aim
+for the second one every time.
+
+### WHO THE JOKE IS ABOUT, which is the only rule that matters
+
+The sender has to be willing to send this from their work email with their
+boss copied in. That does NOT mean the brackets have to be polite. It means
+one specific thing:
+
+**A bracket may joke about the SENDER: their own agency, their own city,
+their own budget, their own deadline, their own product.** Self-deprecation
+is charming, it is what people already do in real emails, and it makes the
+sender look self-aware rather than stupid. Keep all of it.
+
+    [AGENCY THAT PAYS ON TIME]              good, it is a boast
+    [CITY WITH TERRIBLE WEATHER]            good, everyone slags off their own weather
+    [A NUMBER THAT IS LOWER THAN YOU EXPECT] good, disarming, and recruiters do say this
+    [UNREASONABLE NUMBER] hours             good, the deadline is nobody's fault
+    [VAGUE PROMISE OF FUTURE WORK]          good, honest about their own offer
+    [DELIVERABLE NO ONE ASKED FOR]          good, their product, their joke
+
+**A bracket may NOT put a judgement on a NAMED THIRD PARTY, and may NOT
+insult the person receiving it.** Those are the two that make an email
+undeliverable, because a real client name goes into that slot, in writing,
+from a work account.
+
+    [PRODUCT NOBODY NEEDS]      no, a named client's product
+    [BRAND THAT WILL GHOST US]  no, a named client, and it is a screenshot
+    [CLIENT WITH NO MONEY]      no, same
+    [SOMEONE WHO USES CHATGPT]  no, it insults him, and it is his own joke
+                                turned back on him
+    "the strategist gave up"    no, a colleague who might be copied in
+
+The fix for a failing bracket is almost never to remove the joke. Move it one
+step away from the person: a category instead of a client
+(`[THE KIND OF BRAND YOU WOULD EXPECT]`), a thing instead of a colleague
+(`the strategy has been rewritten [TOO MANY] times`), the sender instead of
+the recipient (`I will keep writing it myself, badly`).
+
 ### Hard rules
 
 - **Subject and body.** Plain text. Line breaks are fine, no formatting.
@@ -121,6 +161,17 @@ anywhere. It is an observation about templates, not a joke.
 **Why it failed:** the voice is close but it is *his* voice in the sender's
 mouth, and it reads as him talking to himself. The sender would never write
 "I will assume the worst" about themselves. Funny, wrong speaker.
+
+> **A [ROLE] job at [AGENCY]**
+> The job is [WHAT IT ACTUALLY IS, IN ONE LINE], it starts [WHEN], and the
+> money is [A NUMBER]. Free for a call on [A DAY]?
+
+**Why it failed, and this is the one to watch:** every bracket is safe, every
+bracket is dull. This was written by over-correcting a real problem, and the
+correction ate all the comedy: it swapped `[CITY WITH TERRIBLE WEATHER]` for
+`[WHERE]` and `[AGENCY THAT PAYS ON TIME]` for `[AGENCY]`. Sendable and
+pointless. **If the brackets are only blanks, you have written a form, not a
+joke.** The rule above exists to save the jokes, not to remove them.
 
 ### Write
 

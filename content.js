@@ -1451,16 +1451,16 @@ window.SITE_CONTENT = {
     ctaUrl: "mailto:m22essam@gmail.com",
     mailTemplates: [
       {
-        subject: "Hi Mohamed, are you free this Monday at noon?",
-        body: "I hope you're doing well, I was looking at your portfolio and i believe you will be a good fit in our team, we are looking for a copywriter, would you love to jump on a quick call? what i think i was so impressed with your style that i'm writing like you, any ways, speak to you soon.\n\n[YOUR NAME]\n[YOUR AGENCY]"
+        "subject": "Opportunity at [AGENCY THAT PAYS ON TIME]",
+        "body": "Hi Mohammed,\n\nI read the whole site, which is not something I usually do.\n\nI need a senior copywriter in [CITY WITH TERRIBLE WEATHER], writing for [THE KIND OF BRAND YOU WOULD EXPECT]. The budget is [A NUMBER THAT IS LOWER THAN YOU EXPECT], and I would rather say it now than in the third email.\n\nFree for a call on [A DAY OF THE WEEK]? We can see if this is worth your time.\n\n[YOUR NAME]"
       },
       {
-        subject: "Opportunity at [AGENCY NAME]",
-        body: "Dear [FIRST NAME],\n\nI came across your profile and thought of you immediately for a [JUNIOR / MID / SENIOR] copywriter role at [AGENCY NAME] in [CITY].\n\nThe client is [CLIENT]. The brief is [ONE LINE ABOUT THE BRIEF]. The budget is [DO NOT PASTE THIS PART].\n\nLooking forward to hearing from you.\n\nWarm regards,\n[YOUR NAME]\n[YOUR TITLE], [AGENCY NAME]"
+        "subject": "Freelance, starting [UNREASONABLE NUMBER] hours ago",
+        "body": "Hi Mohammed,\n\nWe are staring at a blank deck. The pitch is in [UNREASONABLE NUMBER] hours and the strategy has been rewritten [TOO MANY] times.\n\nWe need someone to fix the narrative before we present.\n\nIf we win, you get [VAGUE PROMISE OF FUTURE WORK]. If we lose, you still get paid.\n\nThink you can save this?\n\n[YOUR NAME]"
       },
       {
-        subject: "Not a recruiter, emailing anyway",
-        body: "Hi Mohamed,\n\nI am [YOUR NAME] and I do [WHAT YOU DO]. Nobody sent me.\n\nI have [A BRIEF / AN IDEA / NEITHER], [A BUDGET / NO BUDGET], and [A DEADLINE / A VAGUE FEELING ABOUT TIMING].\n\nIf that is enough to go on, reply. If it is not, delete this and I will assume the worst.\n\n[YOUR NAME]"
+        "subject": "[OBLIGATORY GREETING], quick one",
+        "body": "Mohammed,\n\nI have [A NUMBER] tabs open and no time to write this properly.\n\nWe need a writer at [PLACE I WORK] to launch [DELIVERABLE NO ONE ASKED FOR].\n\nSend your rate. Or do not, and I will keep writing it myself, badly.\n\nYour call.\n\n[YOUR NAME]"
       }
     ],
     sub: "",
