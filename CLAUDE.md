@@ -1070,6 +1070,59 @@ caused by this change.** Note also that measuring the ticket inside an iframe
 is unreliable for the reasons in the designer notes; the real pane is the
 only honest measurement.
 
+### The footer is the claim counter (26 Aug 2026)
+
+It was one big joke and four small icons. The joke is his and it stays; it was
+in the wrong position. Now: **the address is the headline and his sentence is
+the small print under it**, with the CV and the icons on the right.
+
+Why, because he asked for the right answer rather than a menu:
+
+- **The lottery gag had been told four times before anyone reached a footer**:
+  the whole home page, the badge, the terms, and the scratch that now says YOU
+  WON A COPYWRITER. A fifth telling at the point of action is not a payoff, it
+  is a tic.
+- **The site now HAS its closing line and it is on the home page.** If the
+  ticket hands you a prize, the footer is where you claim it. That is the one
+  job down here that does not repeat something above it.
+- **site.js already said so.** The icon row skips any mailto with the comment
+  "the email is the line". The address was always meant to BE the footer. A
+  joke took the slot and the address left the site completely: before this it
+  appeared on no page in any readable form, only as an href on one word.
+- **Demoting the sentence to small print is not a demotion.** This site sets
+  its jokes as small print already: `ticket.terms` is a gag in 10px capitals
+  along the bottom of the card. The line is going into the register this site
+  keeps for exactly that, in the place a real ticket keeps it.
+
+Things worth knowing if this is touched:
+
+- **The address link is built BARE and `sweepMail()` fills it in.** A link that
+  arrives already carrying a query is marked hands-off for the life of the
+  page, so pre-filling here would leave the footer stuck on whichever draft was
+  dealt first while every other address on the page rotated. Verified: all
+  three mailtos on a page carry the same draft at the same moment, it rotates
+  after 7s, and the href does not compound.
+- **The reveal animation moved from `.foot-in > p` to `.foot-claim`**, so the
+  address and the small print arrive as one object. The
+  `prefers-reduced-motion` override had to move with it. Miss that and people
+  who asked for less motion get the animation, which is the opposite of the
+  point.
+- **`.foot-side` returns to `align-items:flex-start` under 900px.** The row
+  stacks there, so a right-aligned column would sit right-aligned in a
+  left-aligned stack.
+- The address is `clamp(26px,4.4vw,56px)` and was checked at 1440 / 900 / 390 /
+  360: one line every time, never overflowing, no sideways scroll. The footer
+  is 216px at desktop, 32px SHORTER than the version it replaced.
+- **The CV is in the footer now.** It existed on the About page alone, so a CD
+  who had just finished a project page had no way to reach it.
+- `awards.html` has no `#siteFoot` and never has, so it has no footer. It
+  carries its own CTA. Pre-existing, flagged, not changed.
+
+**Open question for him:** the address is now set at 56px, and it is a gmail.
+He owns mohammedessam.com. `hello@mohammedessam.com` at that size would read
+considerably better than `m22essam@gmail.com`. Not changed, because it needs
+mail on the domain first.
+
 ### preview-footer.html
 
 Three footers side by side, built out of the real one: site.js fills a hidden

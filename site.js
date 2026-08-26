@@ -30,12 +30,34 @@
     tagline.textContent = C.nav.tagline;
   }
 
-  /* ----- THE FOOTER -----
-     One line. The owner killed the stub: no columns, no barcode, no giant
-     wordmark. `footer.line` is the whole sentence and `footer.linkText` is
-     the piece of it that becomes the mailto, so he writes one sentence in
-     admin and the link follows whatever he writes.
-     Built here rather than in each page's HTML so there is one copy of it. */
+  /* ----- THE FOOTER: THE CLAIM COUNTER -----
+     The owner killed the stub, and for a while this was one joke and four
+     small icons. The joke is good and it stays, but it was in the wrong
+     position, for three reasons that only became clear once the covered
+     punch started saying YOU WON A COPYWRITER:
+
+     1. By the time anyone reaches a footer, the lottery gag has been made
+        four times: the whole home page, the badge, the terms, and the
+        scratch. A fifth telling at the point of action is not a payoff,
+        it is a tic.
+     2. The site now HAS its closing line and it is on the home page. If the
+        ticket hands you a prize, the footer is where you claim it. That is
+        the one job down here that is not a repeat of something above.
+     3. The line below already said so. The icon row skips any mailto with
+        the comment "the email is the line", because the address was always
+        meant to BE this. A joke moved into the slot and the address left
+        the site altogether: it appears on no page, in no readable form.
+
+     So the address is the headline and his sentence is the small print under
+     it. That is not a demotion. This site already sets its jokes as small
+     print: `ticket.terms` is a gag in 10px capitals at the foot of the card.
+     The sentence is simply going into the register this site keeps for
+     exactly that, in the place a real ticket keeps it.
+
+     `footer.line` is still his whole sentence and `footer.linkText` still
+     picks the words that carry the mailto, so nothing he edits in admin
+     changes meaning. Built here rather than in each page's HTML so there is
+     one copy of it. */
   var foot = document.getElementById('siteFoot');
   if (foot) {
     var F = C.footer || {};
@@ -89,9 +111,43 @@
                '<svg viewBox="0 0 24 24" aria-hidden="true">' + ICON[name] + '</svg></a>';
       }).join('');
 
+      /* The address, which is the point of the whole block. Taken from
+         contact.links so admin stays the one place he edits it, falling back
+         to the line's own link and then to the contact CTA. It is left BARE
+         here on purpose: sweepMail() further down puts the half-written
+         draft on every mailto on the page, and a link that arrives already
+         carrying a query is marked hands-off for the life of the page. Fill
+         it in here and the footer would be the one address on the site stuck
+         on whichever draft happened to be dealt first. */
+      var mailUrl = '', mailText = '';
+      (C.contact && C.contact.links || []).forEach(function (l) {
+        if (mailUrl || !l || !l.url || !/^mailto:/i.test(l.url)) return;
+        mailUrl = String(l.url).split('?')[0];
+        mailText = l.label || mailUrl.replace(/^mailto:/i, '');
+      });
+      if (!mailUrl) {
+        var fb = String(F.linkUrl || (C.contact && C.contact.ctaUrl) || '');
+        if (/^mailto:/i.test(fb)) { mailUrl = fb.split('?')[0]; mailText = mailUrl.replace(/^mailto:/i, ''); }
+      }
+
+      /* The CV sits down here too. It used to exist on the About page alone,
+         so a CD who had just finished reading a project had no way to reach
+         it without going looking for one. */
+      var cv = (C.contact && C.contact.resume) || {};
+      var side =
+        (cv.url ? '<a class="foot-cv" href="' + esc(cv.url) + '" target="_blank" rel="noopener">' +
+                  esc(cv.label || 'Résumé') + '<span aria-hidden="true">&darr;</span></a>' : '') +
+        (social ? '<div class="foot-social">' + social + '</div>' : '');
+
       foot.className = 'foot';
-      foot.innerHTML = '<div class="wrap foot-in"><p>' + out + '</p>' +
-        (social ? '<div class="foot-social">' + social + '</div>' : '') + '</div>';
+      foot.innerHTML =
+        '<div class="wrap foot-in">' +
+          '<div class="foot-claim">' +
+            (mailUrl ? '<a class="foot-mail" href="' + esc(mailUrl) + '">' + esc(mailText) + '</a>' : '') +
+            '<p>' + out + '</p>' +
+          '</div>' +
+          (side ? '<div class="foot-side">' + side + '</div>' : '') +
+        '</div>';
     } else {
       foot.remove();
     }
