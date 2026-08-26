@@ -169,10 +169,10 @@ One limit: **every project page shares the same preview picture**, because
 would mean a separate file per project, which is the thing this site is built
 to avoid.
 
-**The manipulating piece is English only.** The skill is matched on the
-words, so the Japanese About page shows 人心操作 as plain text and never
-links into an English page. That is deliberate. If you ever translate the
-piece, add the Japanese words as a second skill link.
+**The site is English only.** The Japanese About page and the Japanese Rivan
+Tower page were taken off on 26 Aug 2026 at your request, along with the
+EN | JA switch. Any old `?lang=ja` link still works: it just shows the
+English page rather than breaking.
 
 **Your videos are on a subscription.** 18 of the films on the site stream from
 your Adobe Portfolio account. If that lapses, 18 project pages go dark. Every
@@ -191,7 +191,7 @@ list in the editor counts how many are left. It turns green at zero.
 | `work.html` | Both the work index and every project page. |
 | `about.html`, `awards.html` | About, and the awards cabinet. |
 | `styles.css` | How everything looks. |
-| `site.js` | Shared pieces: the nav, the footer, the language switch, the email prefill. |
+| `site.js` | Shared pieces: the nav, the footer, the email prefill. |
 | `admin.html` | The editor. |
 | `design.html` | The home designer. |
 | `manipulating.html` | The page behind the Manipulating skill. |

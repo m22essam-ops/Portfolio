@@ -71,17 +71,6 @@ window.SITE_CONTENT = {
     emptyWork: "Nothing here yet. Give it a minute.",
     nextLabel: "Keep going"
   },
-  i18n: {
-    ja: {
-      label: "JA",
-      allWork: "作品一覧",
-      credits: "クレジット",
-      next: "次の作品",
-      backTo: "戻る",
-      produced: "制作済み",
-      spec: "企画案"
-    }
-  },
   work: {
     heading: "The work.",
     note: "A mix of real and spec work. I added stickers to save you the guesswork.",
@@ -447,82 +436,6 @@ window.SITE_CONTENT = {
             name: "Social Nuts"
           }
         ],
-        ja: {
-          title: "リヴァン・タワー - このホテルは、あなたのもの。",
-          tagline: "部屋は、借りずに持つ。",
-          sticker: "一週間で完売",
-          client: "リヴァン・タワー",
-          category: "フィルム",
-          story: [
-            "リヴァン・タワーは、エジプトの人がホテルに抱くイメージを変えたいと考えていた。部屋は借りるものではなく、持つもの。",
-            "バユーミ・フアードを起用し、二日間でコメディ映像を撮影。ホテル暮らしを休暇ではなく、住所として描いた。",
-            "タワーは一週間で完売した。"
-          ],
-          credits: [
-            {
-              role: "脚本・監督"
-            },
-            {
-              role: "クリエイティブストラテジスト"
-            },
-            {
-              role: "撮影監督"
-            },
-            {
-              role: "編集・カラリスト"
-            },
-            {
-              role: "モーショングラフィックス"
-            },
-            {
-              role: "アカウントディレクター"
-            },
-            {
-              role: "プロダクション"
-            },
-            {
-              role: "エージェンシー"
-            }
-          ],
-          _from: {
-            title: "Rivan Tower - The Hotel Is Yours",
-            tagline: "Own the room, do not rent it.",
-            sticker: "Sold out in a week",
-            client: "Rivan Tower",
-            category: "Film",
-            story: [
-              "Rivan Tower wanted to change how Egyptians see hotels: own the room instead of renting it.",
-              "We cast Bayoumi Fouad and shot a comedy film in two days that treated hotel living as a permanent address rather than a holiday.",
-              "The entire tower sold out within a week."
-            ],
-            credits: [
-              {
-                role: "Written and directed by"
-              },
-              {
-                role: "Creative strategist"
-              },
-              {
-                role: "DOP"
-              },
-              {
-                role: "Editor and colorist"
-              },
-              {
-                role: "Motion graphics"
-              },
-              {
-                role: "Account director"
-              },
-              {
-                role: "Production"
-              },
-              {
-                role: "Agency"
-              }
-            ]
-          }
-        },
         next: {},
         "draft": false,
         "ran": true
@@ -1366,89 +1279,7 @@ window.SITE_CONTENT = {
         org: "Social Nuts, Cairo",
         time: "Feb 2019 – Jun 2023"
       }
-    ],
-    ja: {
-      heading: "わたしについて、少し。",
-      paragraphs: [
-        "広告をスキップする人たちのために書いて五年以上。それとは別に、ただ好きだからという理由だけで書いていた年も何年か。",
-        "そして、ふつうのものを上っ面だけよく見せることに真面目になり、それを楽しんできた一生分（自分の部屋も含む）。",
-        "今のところ、落選歴のあるコピーライター。エジプトで設計され、UAEで実働に入り、マドリードで認可を受けました。おかげでアイデアのビュッフェは、意図せず大陸をまたいでいます。",
-        "AIと戦って、AIが勝ちました。それで、もっと簡単な戦いに移りました。Adobeのファイルをもう一つ開くために、MacBookの空き容量と戦っています。",
-        "世界中につながったマイクを渡されたとして、私が言うことはこれです。「ノイズキャンセリングのヘッドホンを使う人間に、人と人とのつながりこそ最強だと言う資格はない。」"
-      ],
-      skills: [
-        "ビッグアイデア開発",
-        "ブランドキャンペーン",
-        "人心操作",
-        "コピーライティング",
-        "ソーシャル・コンテンツ",
-        "脚本・ナレーション",
-        "コンセプト開発"
-      ],
-      experience: [
-        {
-          role: "シニアコピーライター",
-          org: "Yango（MENA）",
-          time: "2024年6月 – 2025年7月"
-        },
-        {
-          role: "コピーライター",
-          org: "Ducklife, ドバイ（パートタイム）",
-          time: "2024年2月 – 2025年7月"
-        },
-        {
-          role: "コピーライター",
-          org: "We Are Social, ドバイ",
-          time: "2023年7月 – 2024年6月"
-        },
-        {
-          role: "クリエイティブコピーライター",
-          org: "Social Nuts, カイロ",
-          time: "2019年2月 – 2023年6月"
-        }
-      ],
-      _from: {
-        heading: "A little about me.",
-        paragraphs: [
-          "More than 5 years of writing for people who skip the ads, and a few more years writing just because I like to.",
-          "An entire life having fun being serious about making ordinary things look superficially good (my room included).",
-          "Award-losing copywriter so far. Designed in Egypt, put to work in the UAE, and licensed in Madrid, which makes my buffet of ideas accidentally intercontinental.",
-          "I fought the AI and the AI won, so I moved to easier fights now: managing my MacBook's storage to open one more Adobe file.",
-          "Give me a mic connected to the whole world, and my take would be: \"No one who uses noise-canceling headphones can say human connection is the most powerful.\""
-        ],
-        skills: [
-          "Big idea development",
-          "Brand campaigns",
-          "Manipulating",
-          "Copywriting",
-          "Social & content",
-          "Scripting & VO",
-          "Concept Development"
-        ],
-        experience: [
-          {
-            role: "Senior Copywriter",
-            org: "Yango, MENA",
-            time: "Jun 2024 – Jul 2025"
-          },
-          {
-            role: "Copywriter",
-            org: "Ducklife, Dubai (part-time)",
-            time: "Feb 2024 – Jul 2025"
-          },
-          {
-            role: "Copywriter",
-            org: "We Are Social, Dubai",
-            time: "Jul 2023 – Jun 2024"
-          },
-          {
-            role: "Creative Copywriter",
-            org: "Social Nuts, Cairo",
-            time: "Feb 2019 – Jun 2023"
-          }
-        ]
-      }
-    }
+    ]
   },
   manipulating: {
     label: "The skill you clicked",

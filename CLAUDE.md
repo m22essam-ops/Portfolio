@@ -564,112 +564,51 @@ all-work page, so listing "All work" under it said the same thing twice.
 - `work.ranNote` is the line under the Work-that-worked heading. It is his to
   write and currently holds a placeholder.
 
-### A second language (a feasibility test)
+### A second language (built 22 Aug 2026, REMOVED 26 Aug 2026)
 
-Not a translated site. **Two things carry Japanese**: the About page
-(`about.ja`) and the Rivan Tower project (`work.projects[].ja`). `i18n.ja`
-holds the furniture round them, meaning the words a page prints itself as
-opposed to the words he wrote.
+The site carried Japanese on two pages for four days: the About page
+(`about.ja`) and the Rivan Tower project (`work.projects[].ja`), with
+`i18n.ja` holding the furniture round them and an EN | JA switch drawn only
+where a translation actually existed.
 
-**All the plumbing is in `site.js`** — `langWanted`, `applyLang`, `langSwitch`,
-`langPick`, `langRows` — because both pages need the same four moves and a
-second copy of this is a second copy to get wrong. Adding a third translated
-page should not add a fifth copy of it either.
+**He asked for all of it out on 26 Aug and it is gone.** Not disabled, not
+left dormant: the content, the plumbing, the typesetting and the admin
+warning were all deleted. Do not rebuild any of it speculatively.
 
-- **THE RULE THAT MAKES IT SAFE: a switch is only ever drawn for content that
-  actually HAS the other language.** It can never be a door into a page that is
-  still in English. Delete a `ja` block and its switch disappears with it.
-- Every field is taken one at a time (`langPick`), so a half-finished
-  translation shows his English for whatever it has not reached.
-- **Parallel lists are merged by position, and dropped whole if the two stop
-  being the same length** (`langRows`). Credits and jobs both go through it.
-  Add a credit in admin without touching the translation and the whole
-  translated list falls back to English, rather than sliding the wrong job
-  title onto a real person's name or the wrong dates onto a real employer.
-  All three cases were tested: matched, mismatched, and partly filled.
-- **Credit and company NAMES are never translated, cities are.** Japanese
-  credits carry foreign names in Latin as a matter of course. Dates are
-  rewritten year-first, which is the order Japanese writes them in.
-- The next-project link carries the language only if the next project has it.
-- The nav stays in English on a translated page. It is global chrome and only
-  two things are translated; a Japanese nav pointing at English pages is worse
-  than an English one.
+What was removed, so nobody goes looking for a half of it that survived:
 
-**The jokes are rebuilt, not transcribed.** This matters more than the rest of
-it, because his copy is the site:
+- `content.js`: the `i18n` block, `about.ja`, and the one project `ja` block.
+- `site.js`: `langWanted`, `applyLang`, `langSwitch`, `langPick`, `langRows`.
+- `about.html` / `work.html`: the switch, and every `say()` indirection. Both
+  pages read their fields straight off the object again.
+- `styles.css`: the whole `body.lang-ja` block, `.lang-switch`, and
+  `body.page-work.has-lang::before`. **The work page's registration cross is
+  therefore back at its default `top:96px`** on every project, because the
+  only reason it ever moved was to dodge the switch.
+- `admin.html`: the `_from` drift warning, 201 lines of it.
 
-- "award-losing" is a coinage against "award-winning", so the Japanese is a
-  coinage against 受賞歴 (a record of winning): **落選歴**, a record of losing.
-- "buttlines are just headlines done butt first" keeps the head/butt pair
-  literally (ヘッドライン / 尻), because that IS the joke and it survives.
-- "he who was born in a city can't be named a farmer" is a fake proverb, so
-  the Japanese is written in the classical register real proverbs use
-  (生まれし者 … 呼ばれず). It has to sound like a proverb to be funny that it is
-  not one.
+**`.exp-row` stacking under 900px was NOT removed and must not be.** It was
+written for Japanese job titles but it fixes the English rows too: beside the
+title the dates took a third of a phone's width. It lives in a plain
+`@media (max-width:900px)`, not in the language block, and it stays.
 
-**Japanese typesetting, all of it in `body.lang-ja` in styles.css:**
+Worth keeping from the exercise, if a second language is ever asked for again:
 
-- **Noto Sans JP goes at the END of every stack, never the front.** Font
-  fallback is per character, so Latin still comes out of Syne, Bricolage and
-  Barlow and only the Japanese falls through to Noto. It is fetched only when
-  Japanese is actually on screen; verified absent on the English pages.
-- The display tracking comes off. `-.03em` is a Latin fix for gaps between
-  capitals and it pushes kana into each other. Same for the `.95` leading.
-- **The measure has to be re-set.** `62ch` is 62 zeroes wide and a kanji is
-  about two of those, so an English column comes out at 22 Japanese characters
-  a line. Set on the paragraph and in `em`, which is one character square, so
-  the number in the rule IS the characters per line. 34 on a project, 32 on
-  About.
-- **The page heading comes down to `7.4vw` from `11vw`.** Every Japanese
-  character is a full em where a Latin one averages about half, so the same
-  size buys roughly a fifth less line.
-- **`word-break:keep-all` on headings and job titles.** Japanese may break
-  between almost any two characters, which is right in body copy and wrong in
-  a headline: 少し came apart across two lines, and クリエイティブコピーライター
-  broke before its long-vowel mark, which is a character a Japanese typesetter
-  may not begin a line with. `overflow-wrap:anywhere` is the escape hatch so a
-  longer heading can still never push off the side of a phone.
-- **`.exp-row` stacks under 900px** and the dates move above the job. Beside
-  it they took a third of a phone's width and left the title a column too
-  narrow to hold it. This fixes the English rows too.
-- Verified by walking every text node character by character and reporting
-  which character starts each visual line: **zero forbidden line starts** at
-  both 388px and 1360px.
+- **The rule that made it safe** was that a switch is only ever drawn for
+  content that actually HAS the other language, so it could never be a door
+  into a page still in English. Start there again.
+- **The jokes had to be rebuilt, not transcribed.** "award-losing" is a
+  coinage against "award-winning", so the Japanese was a coinage against
+  受賞歴: 落選歴, a record of losing. Machine translation returns a description
+  of the joke instead of the joke, which is why it was rejected.
+- **Nothing about it was automatic**, and `ja._from` (a copy of the English
+  each line was written from) was what stopped that being dangerous. Without
+  it, editing a line in admin left the site quietly showing new words under EN
+  and old ones under JA, findable only by reading Japanese.
+- The typesetting notes (Noto Sans JP at the END of every stack, the measure
+  re-set in `em` rather than `ch`, `word-break:keep-all` on headings) are in
+  the git history at `8ab8637` and earlier if they are ever wanted.
 
-**NOTHING ABOUT THE TRANSLATION IS AUTOMATIC**, and the one thing that stops
-that being dangerous is `ja._from`. It is a copy of the English each Japanese
-line was written from. Admin compares it with the English as it stands now and
-prints a warning listing what has drifted, showing what the line said, what it
-says now, and what the Japanese still says. It never translates and never
-edits. Without it, changing a line in admin would leave the site quietly
-showing the new words under EN and the old ones under JA, and the only way to
-find out would be to read Japanese.
-
-- **Rewrite `_from` whenever the Japanese is rewritten.** A warning about a
-  change that has already been dealt with is a warning he learns to ignore.
-- The English itself, not a checksum, so admin can show the old line beside
-  the new one.
-- **`_from` declares what is watched.** The comparison only looks at the keys
-  `_from` lists, at every depth, so the credits watch the ROLES and ignore the
-  NAMES. Changing a colleague's name needs no new Japanese and correctly stays
-  silent; changing a role fires. Both were tested.
-- The warning is driven off `_from` itself, not a hard-coded list, so
-  translating another project adds nothing to admin: give its `ja` block a
-  `_from` and it is watched.
-- Only the entries that actually moved are shown, not the whole list.
-- Machine translation was considered and rejected. No API returns 落選歴 for
-  "award-losing"; it returns a description of the joke instead of the joke.
-  It also needs a network call and a key, which breaks the file:// workflow.
-
-**Both save paths handle it.** `b64encode` goes through `TextEncoder` before
-`btoa`, and `local-server.py` writes `content.js` as UTF-8. A round trip
-through admin preserves `i18n`, `about.ja` and the project's `ja`, because
-admin deep-clones the whole of `SITE_CONTENT` and serialises it whole rather
-than rebuilding its arrays from the form fields. Verified.
-
-**`work.note` still ends "None of them are in Japanese."** Two of them now are.
-That is his line and it is flagged, not changed. `about.label` is not
-translated because nothing renders it.
 
 ## Added 23 Aug 2026
 
@@ -885,8 +824,8 @@ edit was inside a 520px media query. Said so, then fixed it.
 the grid jump as a window is dragged across them.
 
 - **Only the container moves.** Every block of words already carries its own
-  measure (62ch on a project, 60ch under a heading, 44ch on a card, 32em in
-  Japanese), so nothing widens a line of text.
+  measure (62ch on a project, 60ch under a heading, 44ch on a card), so
+  nothing widens a line of text.
 - **The floor cannot hurt a phone**: `.wrap` takes the smaller of this and the
   screen less its margins, so 375px still comes out 331.
 - **Checked against the covers before doing it.** They are all 1800px, so at
@@ -928,8 +867,6 @@ one-liner.
 - **The preview he picked had dropped the cities**, but he had asked for
   "We are social - dubai" one message earlier, so they were kept and the
   difference was flagged rather than taken as a decision.
-- Verified in Japanese: still one line, because `word-break:keep-all` holds
-  the katakana job title together and the lead can wrap if it cannot.
 
 ### A skill you can click (added 25 Aug 2026)
 
@@ -943,11 +880,8 @@ close to verbatim.
 to the work. The manipulation actually manipulates rather than describing
 itself, which is the difference between the piece and a joke about a piece.
 
-- **`about.skillLinks` matches on the WORDS, not the index**, and that is what
-  keeps the translation rule intact: the Japanese list says 人心操作, which
-  does not match "Manipulating", so on the Japanese page it stays a plain
-  span. **A link is never drawn into a page that is still in English.**
-  Verified: zero `a.skill-tag` on `?lang=ja`.
+- **`about.skillLinks` matches on the WORDS, not the index**, so reordering
+  the skills list cannot move the door onto the wrong one.
 - **The tag is identical to the other six at rest.** No underline, no colour,
   no cursor hint beyond the pointer. The whole joke is that he reached for it
   without being told he could, so announcing it would kill it.
@@ -1020,10 +954,10 @@ page's ink.
 
 It carried two **Tuborg** images, which he spotted and deleted. That leaves the
 strongest project on the site with one Adobe-hosted video and no photographs
-at all. Second case of one project's content sitting inside another, after the
-Japanese block. Nothing in admin clones a project, so the cause is still
-unknown; admin's warning panel now shouts if two projects ever share a
-translation.
+at all. It was the second case of one project's content sitting inside
+another, after a translation block that has since been removed with the rest
+of the Japanese. Nothing in admin clones a project, so the cause is still
+unknown.
 
 ## Don't
 
@@ -1047,4 +981,6 @@ translation.
 - Don't try to set an og: tag from JavaScript. The scrapers do not run it.
 - Don't put copy in `PROJECT-NOTES.md`. It is a stub; `READ ME.md` is his
   handbook and the one to keep current.
-- Don't translate a colleague's name into another script.
+- Don't put the Japanese back. He had it for four days and asked for all of it
+  out on 26 Aug 2026. Removed means removed: content, plumbing, typesetting
+  and the admin warning. Don't leave dormant language machinery behind either.

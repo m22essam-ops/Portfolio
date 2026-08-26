@@ -114,14 +114,6 @@
      The plain work page is still everything, best first, one grid. */
   var ranOnly = qs.get('ran') === '1';
 
-  /* ---- language ----
-     A feasibility test, not a translated site. The shared helpers live in
-     site.js and the About page uses the same ones. The switch is drawn only
-     for a project that actually carries a `ja` block, so it can never be a
-     door into a page that is still in English. */
-  var LANGS = window.LANGS || {};
-  var want  = window.langWanted();
-
   /* ============ WORK INDEX ============ */
   function renderIndex() {
     var items = allWork();
@@ -198,47 +190,27 @@
   function renderProject(entry) {
     var p = entry.p;
 
-    /* the translation for this project, if it has one AND that is the language
-       being asked for. `say` takes one field at a time so a half-finished
-       translation shows his English for the rest instead of a hole. */
-    var alt  = (want && p[want] && typeof p[want] === 'object') ? p[want] : null;
-    var lang = alt ? want : '';
-    var say  = window.langPick(p, alt);
-    var L    = lang ? LANGS[lang] : null;
-
-    window.applyLang(lang);
-
-    document.getElementById('pageTitle').textContent = say('title') + ' · Mohammed Essam';
+    document.getElementById('pageTitle').textContent = p.title + ' · Mohammed Essam';
 
     var status = entry.ran
-      ? ((L && L.produced) || W.producedLabel || 'Produced')
-      : ((L && L.spec) || W.presentedLabel || 'Spec');
-
-    /* the switch, only where there is something to switch TO */
-    var others = Object.keys(LANGS).filter(function (k) {
-      return p[k] && typeof p[k] === 'object';
-    });
-    var switcher = window.langSwitch(
-      'work.html?slug=' + encodeURIComponent(p.slug), others, lang);
-    /* the page mark has to get out of its way: see .has-lang in styles.css */
-    if (switcher) document.body.classList.add('has-lang');
+      ? (W.producedLabel || 'Produced')
+      : (W.presentedLabel || 'Spec');
 
     var html = '<section class="project"><div class="wrap">' +
       '<div class="project-top">' +
-        '<a class="back-link" href="work.html">← ' + esc((L && L.allWork) || 'All work') + '</a>' +
-        switcher +
+        '<a class="back-link" href="work.html">← All work</a>' +
       '</div>' +
       /* same rule as the grid card: the brand is not printed twice on one page */
       '<p class="project-meta">' + esc([
-          String(say('title') || '').toLowerCase()
-            .indexOf(String(say('client') || '').toLowerCase()) === 0 ? '' : say('client'),
-          say('category'), p.year
+          String(p.title || '').toLowerCase()
+            .indexOf(String(p.client || '').toLowerCase()) === 0 ? '' : p.client,
+          p.category, p.year
         ].filter(Boolean).join(' · ')) +
       ' · <span class="' + (entry.ran ? 'status-produced' : 'status-pitched') + '">' + esc(status) + '</span>' +
-      (say('sticker') ? ' · ' + esc(say('sticker')) : '') + '</p>' +
-      '<h1 class="project-title">' + esc(say('title')) + '</h1>';
+      (p.sticker ? ' · ' + esc(p.sticker) : '') + '</p>' +
+      '<h1 class="project-title">' + esc(p.title) + '</h1>';
 
-    var story = (say('story') || []).filter(function (t) { return t && String(t).trim(); });
+    var story = (p.story || []).filter(function (t) { return t && String(t).trim(); });
     if (story.length) {
       html += '<div class="project-body">' +
         story.map(function (t) { return '<p>' + esc(t) + '</p>'; }).join('') + '</div>';
@@ -285,20 +257,14 @@
       }).join('') + '</div>';
     }
 
-    /* Credits are merged by position rather than swapped wholesale: the ROLES
-       translate, the NAMES do not. Japanese credits carry foreign names in
-       Latin as a matter of course, and inventing a katakana spelling of a real
-       colleague's name is a mistake with their name on it. langRows() in
-       site.js drops the translation entirely if the two lists stop being the
-       same length, which is what stops a job title sliding onto the wrong
-       person after a credit is added or deleted in admin. */
-    var credits = window.langRows(p.credits, alt && alt.credits, ['role', 'name'])
+    /* An empty row is a row he cleared in admin but has not deleted yet. */
+    var credits = (p.credits || [])
       .filter(function (c) {
         return (c.role && String(c.role).trim()) || (c.name && String(c.name).trim());
       });
     if (credits.length) {
       html += '<div class="credits"><h2 class="credits-head">' +
-        esc((L && L.credits) || 'Credits') + '</h2><ul class="credits-list">' +
+        'Credits</h2><ul class="credits-list">' +
         credits.map(function (c) {
           return '<li><span>' + esc(c.role) + '</span>' + esc(c.name) + '</li>';
         }).join('') + '</ul></div>';
@@ -309,21 +275,16 @@
     var idx = -1;
     for (var k = 0; k < all.length; k++) if (all[k].p.slug === p.slug) { idx = k; break; }
     var next = (idx > -1 && idx < all.length - 1) ? all[idx + 1] : null;
-    var label = (L && L.next) || J.nextLabel || 'Next';
+    var label = J.nextLabel || 'Next';
     if (next) {
-      /* the next project carries the language only if it HAS it. Following the
-         link out of a translated page into a page that has no translation
-         would otherwise leave the switch on and nothing behind it. */
-      var carry = (lang && next.p[lang]) ? '&lang=' + encodeURIComponent(lang) : '';
-      var nextTitle = (lang && next.p[lang] && next.p[lang].title) || next.p.title;
-      html += '<a class="next-project" href="work.html?slug=' + encodeURIComponent(next.p.slug) + carry + '">' +
+      html += '<a class="next-project" href="work.html?slug=' + encodeURIComponent(next.p.slug) + '">' +
         '<span class="next-label">' + esc(label) + '</span>' +
-        '<span class="next-title">' + esc(nextTitle) + '</span>' +
+        '<span class="next-title">' + esc(next.p.title) + '</span>' +
         '<span class="next-arrow">→</span></a>';
     } else {
       html += '<a class="next-project" href="work.html">' +
-        '<span class="next-label">' + esc((L && L.backTo) || 'Back to') + '</span>' +
-        '<span class="next-title">' + esc((L && L.allWork) || 'All work') + '</span>' +
+        '<span class="next-label">Back to</span>' +
+        '<span class="next-title">All work</span>' +
         '<span class="next-arrow">→</span></a>';
     }
 

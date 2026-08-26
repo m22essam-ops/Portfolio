@@ -878,74 +878,6 @@ body.has-won .tk-badge{background:var(--ink)}
   gap:20px;margin-bottom:44px;
 }
 .project-top .back-link{margin-bottom:0}
-.lang-switch{
-  margin:0;display:flex;align-items:baseline;gap:9px;flex:none;
-  font-family:var(--mono);font-size:12px;font-weight:600;
-  letter-spacing:.16em;text-transform:uppercase;
-}
-.lang-switch a{text-decoration:none;color:var(--fg-faint);transition:color .15s var(--ease)}
-.lang-switch a:hover{color:var(--red)}
-.lang-switch a.on{color:var(--fg);cursor:default}
-.lang-switch .bar{color:var(--fg-faint);opacity:.5}
-/* Above a page heading rather than beside a back link, which is where the
-   About page needs it. On its own line and right-aligned: that heading runs
-   to 138px and a 12px switch set alongside it reads as debris. */
-.page-head .lang-switch{justify-content:flex-end;margin:0 0 20px}
-/* the page's registration cross is fixed at right:34px top:96px, which is
-   exactly where the switch lands, and the two were printed on top of each
-   other. Only a page that HAS a switch moves its mark, so every other work
-   page keeps the cross where it has always been. Down beside the title, where
-   the right-hand side of a left-aligned headline is empty anyway. */
-body.page-work.has-lang::before{top:196px}
-
-/* ---- Japanese ----
-   Noto Sans JP is added to the END of each stack, never the front, so Latin
-   glyphs still come out of Syne, Bricolage and Barlow and only the Japanese
-   falls through to Noto. Font fallback is per character, so one stack does
-   both scripts without either one being told to imitate the other.
-
-   The display tracking has to come off. -0.03em is a Latin fix for the gaps
-   between capitals; on kana and kanji, which are drawn to fill their own
-   square, it pushes the characters into each other. Same for the .95 leading:
-   Japanese carries a taller face inside the line and needs the room. */
-body.lang-ja{
-  --display:"Bricolage Grotesque","Noto Sans JP","Hanken Grotesk",sans-serif;
-  --mono:"Barlow Condensed","Noto Sans JP","Hanken Grotesk",sans-serif;
-  font-family:"Hanken Grotesk","Noto Sans JP",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-}
-body.lang-ja h1,body.lang-ja h2,body.lang-ja h3{letter-spacing:0;line-height:1.2}
-body.lang-ja .project-title{line-height:1.16}
-/* Japanese wraps between characters and has its own rules about which ones
-   may not start or end a line. Say so, or the browser guesses. */
-/* and the measure has to be re-set. 62ch is 62 ZEROES wide, and a kanji is
-   about two of those, so the English column comes out at roughly 22 Japanese
-   characters a line: a newspaper column, not a paragraph. Set on the paragraph
-   itself and in em, which is one character square in a Japanese face, so the
-   number in this rule is literally the characters per line. Measured: 34,
-   which lands the column within a few pixels of the English one beside it. */
-body.lang-ja .project-body{max-width:none}
-body.lang-ja .project-body p{
-  max-width:34em;
-  line-height:1.85;line-break:strict;text-align:justify;
-}
-body.lang-ja .credits-list li{line-break:strict}
-
-/* the About page. Same three problems as the project page and the same three
-   answers: a measure counted in characters rather than in zeroes, room in the
-   line, and the Latin tracking taken back off the display face. */
-body.lang-ja .about-text{
-  max-width:32em;              /* 32 characters a line, set at the paragraph's own size */
-  line-height:1.9;line-break:strict;text-align:justify;
-}
-body.lang-ja .exp-role{
-  letter-spacing:0;line-height:1.4;
-  /* a job title is a single katakana run with no punctuation in it, so left
-     to itself the browser breaks it wherever it runs out of room, including
-     before the long-vowel mark. Hold the run together; the row stacks under
-     900px so there is width for it. */
-  word-break:keep-all;overflow-wrap:anywhere;
-}
-body.lang-ja .exp-org{line-height:1.55}
 
 /* ---- the résumé button ----
    Under the experience list, which is where a CV belongs: he has just read
@@ -978,23 +910,6 @@ body.lang-ja .exp-org{line-height:1.55}
    large empty space under the list */
 @media (max-width:560px){
   .resume-btn{display:flex;justify-content:space-between;width:100%}
-}
-
-/* And the page heading has to come down. Every Japanese character is one full
-   em wide, where a Latin one averages about half, so the same point size buys
-   roughly a fifth less line. At the English 11vw the heading broke in the
-   middle of a word, which is normal in Japanese body text and unforgivable in
-   a headline. This lands it on one line on a wide screen and lets it break at
-   the comma below that. */
-body.lang-ja .page-head h1{
-  font-size:clamp(32px,7.4vw,100px);
-  /* Japanese may break between almost any two characters, which is right in
-     body copy and unforgivable in a headline: 少し came apart across two
-     lines. keep-all holds a run together so the break lands on the comma
-     instead, and overflow-wrap is the escape hatch for a run that genuinely
-     cannot fit, so a longer heading can never push off the side of a phone. */
-  word-break:keep-all;
-  overflow-wrap:anywhere;
 }
 
 .project-meta{font-size:11.5px;color:var(--fg-faint);margin:0 0 16px}
@@ -1247,10 +1162,8 @@ a.skill-tag:focus-visible{color:var(--red);border-color:var(--red)}
 .exp-org{font-family:var(--display);font-weight:800;letter-spacing:-.02em;font-size:20px;line-height:1.2;color:var(--fg)}
 .exp-org b{font-weight:800}
 /* The city rides along with the agency but does not compete with it: same
-   face, no weight, no tracking, quieter colour, a size down.
-   It INHERITS the family rather than naming one. Naming a stack here would
-   drop Noto Sans JP off the end of it, and the Japanese cities (ドバイ, カイロ)
-   would fall through to whatever the system happened to have instead. */
+   face, no weight, no tracking, quieter colour, a size down. It INHERITS the
+   family rather than naming one, so it can never drift off the row's face. */
 .exp-place{font-family:inherit;font-weight:400;font-size:16px;letter-spacing:0;color:var(--fg-dim)}
 .exp-role{font-size:15px;line-height:1.2;color:var(--fg-dim)}
 .exp-time{font-size:11.5px;color:var(--fg-faint);white-space:nowrap}
