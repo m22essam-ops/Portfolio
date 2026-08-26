@@ -683,16 +683,24 @@
   function shrinkToBox(el) {
     var base = el.dataset.baseSize;
     if (base) el.style.fontSize = base;
-    var box = el.clientWidth;
-    if (!box) return false;
+    if (!el.clientWidth) return false;
     var rng = document.createRange();
     var shrunk = false;
     /* more than one pass: display faces with an optical-size axis change
        width as the point size changes, so the first sum lands short */
     for (var i = 0; i < 4; i++) {
+      /* THESE TWO MUST BE READ IN THE SAME SPACE. The artboard scales the
+         whole ticket with a CSS transform, so `clientWidth` comes back in
+         layout pixels while any client rect comes back in scaled ones. This
+         compared 352 against 351 and concluded the headline fitted, while the
+         real content width was 386 and "Award-losing" hung 13px off the side
+         of the paper onto the red. It only ever showed on a phone, because
+         the scale is 1 on a desktop and the two numbers agree there. */
+      var k = el.offsetWidth ? el.getBoundingClientRect().width / el.offsetWidth : 1;
+      var box = el.clientWidth * k;
       rng.selectNodeContents(el);
       var wide = rng.getBoundingClientRect().width;
-      if (!wide || wide <= box) break;
+      if (!box || !wide || wide <= box) break;
       el.style.fontSize = (parseFloat(getComputedStyle(el).fontSize) * box / wide).toFixed(2) + 'px';
       shrunk = true;
     }

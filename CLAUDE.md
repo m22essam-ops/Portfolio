@@ -1123,6 +1123,55 @@ He owns mohammedessam.com. `hello@mohammedessam.com` at that size would read
 considerably better than `m22essam@gmail.com`. Not changed, because it needs
 mail on the domain first.
 
+### The headline hung off the ticket on a phone (fixed 26 Aug 2026)
+
+"Award-losing" was 13px past the right edge of the paper, printed on the red.
+`fitTitle()` was not the culprit; on the artboard the fitting is done by
+`shrinkToBox()`, and it had a **unit bug that only a scaled ticket could
+expose**:
+
+```
+var box = el.clientWidth;                        // LAYOUT pixels
+var wide = rng.getBoundingClientRect().width;    // SCALED pixels
+```
+
+The artboard scales the whole ticket with a CSS transform, so those two are in
+different spaces. On the phone it compared 352 against 351, decided the
+headline fitted and broke out of the loop, while the true content width was
+386 (`scrollWidth` said so all along). **On a desktop the scale is 1 and the
+two numbers agree, which is why this never showed there and why it survived
+every desktop check.**
+
+Now both are read in the same space: `k = getBoundingClientRect().width /
+offsetWidth` converts, and `box = clientWidth * k`. `clientWidth` is kept
+rather than switching to the bounding rect, because the rect is the border
+box and the badge has padding; changing that would alter what "fits" means
+for a slot that was not broken.
+
+Checked at 320 / 360 / 375 / 390 / 414 / 430 / 768 / 1024 / 1440 / 1920 /
+2560: the title is inside the paper at every one, no slot spills, and nothing
+scrolls in either direction. Desktop is byte-identical to before.
+
+**The lesson worth keeping: never compare a client rect with an offset or
+client dimension on the home page.** One is scaled and one is not.
+
+### Removing the caption left a hole in the mobile artboard
+
+Consequence of the scratch caption going. `layout.mobile` stacks the three
+punches, and `scratchNote` had sat between nav1 and nav2. With it gone the gap
+above the covered punch was 8.43% against the 1.00% between the other two, and
+it read as a missing element, which is exactly what it was.
+
+`nav2` moved to y 53.52 so all three gaps are 1.00, and `stamp` and `barcode`
+came up 4.32 each to re-centre the lower block in the space that freed up
+rather than leaving one large void under the punches and none above the terms.
+
+**Desktop needed nothing**: the three punches are a row at one y there, so the
+caption's removal left no hole. Only the stacked layout was affected.
+
+If he reopens `design.html` and drags anything, these numbers are his to
+overwrite. They are a repair of his composition, not a new one.
+
 ### preview-footer.html
 
 Three footers side by side, built out of the real one: site.js fills a hidden

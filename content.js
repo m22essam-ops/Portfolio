@@ -1605,7 +1605,7 @@ window.SITE_CONTENT = {
         {
           slot: "nav2",
           x: 4.86,
-          y: 60.95,
+          y: 53.52,
           w: 90.27,
           h: 10.67,
           size: 1.753
@@ -1613,14 +1613,14 @@ window.SITE_CONTENT = {
         {
           slot: "stamp",
           x: 61.68,
-          y: 76.5,
+          y: 72.18,
           w: 27.77,
           h: 13.37
         },
         {
           slot: "barcode",
           x: 6.75,
-          y: 85.81,
+          y: 81.49,
           w: 35.68,
           h: 4.06
         },
