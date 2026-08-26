@@ -107,11 +107,30 @@
 (function () {
   var built = document.getElementById('siteFoot');
   var host  = document.getElementById('pvOptions');
-  if (!built || !host) return;
+  if (!host) return;
 
-  var line   = built.querySelector('.foot-in > p');
-  var social = built.querySelector('.foot-social');
-  if (!line) { host.textContent = 'The footer did not build.'; return; }
+  /* THIS PAGE CANNOT TRAVEL ON ITS OWN. It needs styles.css, content.js and
+     site.js sitting beside it, because the whole point is that the footers
+     are built out of the real ones rather than mocked up. Opened as a lone
+     file somewhere else it has no stylesheet and no content and would
+     otherwise just be a blank page, which is exactly what it looked like the
+     first time. Say so, in inline styles that do not need the stylesheet. */
+  var line   = built && built.querySelector('.foot-in > p');
+  var social = built && built.querySelector('.foot-social');
+  if (!line) {
+    host.setAttribute('style',
+      'font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;' +
+      'max-width:640px;margin:60px auto;padding:22px 24px;' +
+      'border:2px solid #E3261A;border-radius:4px;color:#111;background:#fff');
+    host.innerHTML =
+      '<b style="color:#E3261A">This page has to be opened from the Portfolio folder.</b>' +
+      '<p style="margin:10px 0 0">It builds the three footers out of the real one, so it needs ' +
+      '<code>styles.css</code>, <code>content.js</code> and <code>site.js</code> next to it. ' +
+      'On its own it has nothing to build from.</p>' +
+      '<p style="margin:10px 0 0">Open <b>http://127.0.0.1:8888/preview-footer.html</b>, ' +
+      'or double-click <b>preview-footer.html</b> inside the Portfolio folder.</p>';
+    return;
+  }
 
   var C = window.SITE_CONTENT || {};
   var links = (C.contact && C.contact.links) || [];

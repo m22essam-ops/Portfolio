@@ -19,7 +19,7 @@ window.SITE_CONTENT = {
     titleTop: "Award-losing",
     titleBottom: "copywriter",
     sub: "I write headlines in English and Arabic to sell just about anything.",
-    scratchNote: "...think you can give it a shot?",
+    scratchNote: "",
     badge: "I WON NOTHING",
     terms: "Odds of winning awards: Historically low. The ticket has no cash value, but the headlines do.",
     stampArc: "VALID UNTIL HIRED",
@@ -47,7 +47,7 @@ window.SITE_CONTENT = {
         url: "work.html?ran=1"
       },
       {
-        label: "Hire me?",
+        label: "YOU WON A COPYWRITER",
         num: "03",
         url: "mailto:m22essam@gmail.com",
         "scratch": true,
@@ -1453,16 +1453,6 @@ window.SITE_CONTENT = {
           size: 2.705
         },
         {
-          slot: "scratchNote",
-          x: 56.41,
-          y: 66.9,
-          w: 25.11,
-          h: 2.2,
-          size: 2.33,
-          weight: "600",
-          color: "muted"
-        },
-        {
           slot: "nav2",
           x: 56.41,
           y: 69.92,
@@ -1611,16 +1601,6 @@ window.SITE_CONTENT = {
           w: 90.27,
           h: 8.9,
           size: 1.753
-        },
-        {
-          slot: "scratchNote",
-          x: 4.86,
-          y: 58.69,
-          w: 90.27,
-          h: 1.37,
-          size: 0.969,
-          weight: "700",
-          color: "muted"
         },
         {
           slot: "nav2",

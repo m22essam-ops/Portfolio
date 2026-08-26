@@ -1018,6 +1018,70 @@ slow answer from an older keystroke landing after a newer one.
   1800px convention. Flagged to him, NOT resized: "don't assume that i still
   have the master files" means his originals are not ours to overwrite.
 
+### The scratch pays a prize, not a plea (26 Aug 2026)
+
+The covered punch said **"Hire me?"** with **"...think you can give it a shot?"**
+captioned under it. His teacher at Miami Ad School hated the wording and was
+right, for reasons worth keeping written down:
+
+- **It broke character at the one moment character mattered.** The whole
+  ticket refuses to ask for anything: award-losing, I won nothing, odds
+  historically low. Then it makes you scratch a panel with your finger and
+  the reward for that work is him asking you for a job.
+- **It abandoned the metaphor at the payoff.** You scratch a lottery ticket to
+  learn an OUTCOME. "Hire me?" stops being a ticket and becomes a button.
+- **The question mark was asking permission to ask**, and the caption asked a
+  second time, so the moment was two petitions in a row.
+
+It now reads **"YOU WON A COPYWRITER"**: a valid lottery outcome, funny
+because a person is an absurd prize, and still functionally the hire-me while
+asking for nothing. It also closes the site's arc, since everything else on
+that card says he has never won and the one thing you scratch says you did.
+Measured at 220px in the 306px label box, so it sets on one line.
+
+**The caption is gone entirely, and that is the point.** `ticket.scratchNote`
+is now empty and the element is never built.
+
+- A punchline followed by a caption is **a sentence explaining the sentence
+  above it**, which is the exact crime he was pulled up on in his own award
+  boards and the reason the manipulating piece was rewritten.
+- The caption only ever existed to prop up "Hire me?", which was not funny on
+  its own. The punch carries the joke now, so the crutch goes.
+- **The affordance was never the caption.** `scratchHint` ("Scratch to
+  reveal") is painted onto the foil itself, so nothing about discoverability
+  depended on the line underneath.
+- `ticket.terms` already does the small-print voice at the foot of the card,
+  so a second line of small print beside the punch was a stutter.
+
+**The layout box had to go with it, and this is the part that could bite.**
+`applyLayout()` drops the WHOLE artboard when `got < want * 0.75`. The
+designer had placed `scratchNote` in both `layout.desktop` and
+`layout.mobile`, and index.html only builds that element when the text is
+non-empty, so blanking the copy alone would have left a box in the layout
+naming an element that no longer exists. At 14 of 15 slots that still cleared
+the threshold, but it is dead weight that accumulates: two or three more
+removals and the home page would silently fall back to the flow layout with
+no clue why. Both boxes are removed, so want and got are 14 and 14.
+
+Verified before and after against the pre-change file at 1440x900 and
+390x844: identical placement, identical ticket height, same two slots
+(`serial`, `won`) unplaced in both. **Those two are pre-existing and were not
+caused by this change.** Note also that measuring the ticket inside an iframe
+is unreliable for the reasons in the designer notes; the real pane is the
+only honest measurement.
+
+### preview-footer.html
+
+Three footers side by side, built out of the real one: site.js fills a hidden
+host and each option is assembled from those actual nodes, so the type, the
+icons, the colours and the reveal are the ones that ship. Not linked from the
+site, same as `preview-intro.html`.
+
+**It cannot travel on its own.** Sent to him as a lone file it rendered blank,
+because it has no stylesheet and nothing to build from without `styles.css`,
+`content.js` and `site.js` beside it. It now says so in inline styles that do
+not need the stylesheet. Open it from the folder or off the local server.
+
 ### Rivan Tower has no stills
 
 It carried two **Tuborg** images, which he spotted and deleted. That leaves the
