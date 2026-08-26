@@ -950,6 +950,74 @@ page's ink.
   occludes what is behind it. The chairs are turned three quarters so the
   seats read as planes rather than lines.
 
+## Added 26 Aug 2026
+
+### The manipulating page is capped and centred
+
+It was the only single-column page sitting in the site's 1240px container,
+which is built for pages that FILL it: the work grid has two columns, About
+has a photo beside its text. This one is a reading column and nothing else,
+so at 1440px it sat hard left with about 460px of dead paper down the right,
+reading as a page that had failed to load its other half.
+
+`body.page-manipulating` now caps the page head's wrap and the article's wrap
+at **860px** and lets `.wrap`'s existing `margin-inline:auto` centre them.
+
+- **860 is set by the heading, not chosen.** "Manipulating." runs 779px of ink
+  at the 138px ceiling of `clamp(52px,11vw,138px)`, and the ceiling means it
+  can never exceed that at any width. Checked at 375 / 768 / 1024 / 1440 /
+  1920 / 2560: the heading never overflows and nothing scrolls sideways.
+- **The nav deliberately keeps the full 1240.** It is chrome, it is identical
+  on every page, and re-centring it here would make this page look like a
+  different site.
+- Below about 900px the wrap's own `100% - 44px` is already the smaller
+  number, so phones never meet the cap.
+
+**The measure moved off `.manip` and onto `.manip > p`.** It used to sit on the
+article, which capped everything inside at 62ch. Two consequences, both fixed:
+
+- **The documented parity with About was false.** The note says the piece uses
+  "the same 62ch the About bio uses". It did not: `ch` resolves against the
+  element's own font-size, and the article inherits 16px while the paragraphs
+  are 19px, so the column came out 590px against About's 658px. Both are now
+  ~659px and the claim is true for the first time.
+- **The cartoon's `max-width` had never once applied.** It is inside `.manip`,
+  so the 620px was always clipped to the article's 590. The note above it,
+  saying the drawing is "wider than the 62ch reading column" and "grows to the
+  right only", described something that was not happening. It is now 760px
+  against a 660px column: 100px past the words, 100px inside the block.
+  620 would have made it NARROWER than the widened column, which is the
+  squeezed look that note exists to prevent.
+
+`.manip-creed` is capped at 62ch so its two rules stay tied to the prose
+rather than running the full 860 and reading as a page divider.
+
+### Two About photos were dead, and nothing said so
+
+He added four photos and two went in without their `.JPG`, so
+`imgSrc` pointed at files that were not there. Fixed in content.js.
+
+**The portraits box was the one image field in admin with no existence check.**
+A project cover gets "File not found in images/" under its preview; this got
+nothing, and it is the worst field to get nothing in, because the photos are a
+**shuffle**: a broken one is not a visible hole, it is one step of six that
+quietly shows nothing. You would have to hover five times to find it.
+
+`renderPortraitNote()` now loads each name and lists the ones that fail. It
+asks the browser rather than the server for a listing, so it behaves the same
+opened from the folder as over the local server, and a `run` counter stops a
+slow answer from an older keystroke landing after a newer one.
+
+- **It names the extension explicitly**, because the trap that is coming is
+  case: macOS is case-insensitive and GitHub Pages is not, so `img_5550.jpg`
+  would load on his machine and 404 live. All 63 image and video references in
+  content.js were checked for exact-case matches: all 63 pass, today.
+- **The About page preloads the whole roll**, so its weight is the sum of all
+  six, currently 5.5MB. Two of his new ones are straight off a phone
+  (3024x4032 at 2.7MB, 2160x3840 at 1.3MB) against the site's documented
+  1800px convention. Flagged to him, NOT resized: "don't assume that i still
+  have the master files" means his originals are not ours to overwrite.
+
 ### Rivan Tower has no stills
 
 It carried two **Tuborg** images, which he spotted and deleted. That leaves the

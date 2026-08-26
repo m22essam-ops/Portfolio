@@ -499,7 +499,7 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
       <label class="field"><span>Heading</span><input data-path="about.heading"></label>
     </div>
     <label class="field"><span>Portrait file name (put the file in images/)</span><input data-path="about.portrait"><small>Used on its own if the box below is empty.</small></label>
-    <label class="field"><span>More photos, one file name per line</span><textarea data-path="about.portraits" data-type="textlist" rows="4" placeholder="about-photo.jpg&#10;me-in-cairo.jpg&#10;me-in-madrid.jpg"></textarea><small>Two or more and the About picture becomes a shuffle: hover it, tap it or press Enter on it and it steps to the next. Put the one you want seen first at the top. Leave this empty and it stays a single photo.</small></label>
+    <label class="field"><span>More photos, one file name per line</span><textarea data-path="about.portraits" data-type="textlist" rows="4" placeholder="about-photo.jpg&#10;me-in-cairo.jpg&#10;me-in-madrid.jpg"></textarea><small>Two or more and the About picture becomes a shuffle: hover it, tap it or press Enter on it and it steps to the next. Put the one you want seen first at the top. Leave this empty and it stays a single photo.</small><small id="portraitNote"></small></label>
     <label class="field"><span>Bio (one paragraph per line)</span><textarea data-path="about.paragraphs" data-type="textlist" rows="5"></textarea></label>
     <label class="field"><span>Skills (one per line)</span><textarea data-path="about.skills" data-type="textlist" rows="4"></textarea></label>
     <div class="subhead">Work experience</div>
@@ -1018,6 +1018,7 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
     renderVideoHosts();
     renderMailLen();
     renderSkillLinkNote();
+    renderPortraitNote();
   }
 
   /* The clickable skill is matched on the words, so a typo does not error, it
@@ -1048,6 +1049,53 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
       el.textContent = '"' + want + '" is in your skills list, so it opens ' + url + '.';
       el.style.color = '';
     }
+  }
+
+  /* THE PORTRAITS WERE THE ONE IMAGE FIELD WITH NO EXISTENCE CHECK, which is
+     how two of them sat in the list with their ".JPG" missing off the end and
+     nothing anywhere said so. A cover image gets "File not found in images/"
+     under its preview; this box got nothing, and it is the worst place to get
+     nothing: the photos are a SHUFFLE, so a broken one is not a hole you can
+     see, it is one step of six that quietly shows nothing. You would have to
+     hover five times to find it.
+
+     It asks the browser to load each one rather than asking the server for a
+     listing, so it works the same opened from the folder as it does over the
+     local server. `run` guards against a slow answer from an older keystroke
+     landing after a newer one. */
+  var portraitRun = 0;
+  function renderPortraitNote() {
+    var el = document.getElementById('portraitNote');
+    if (!el) return;
+    var names = (M.about.portraits || []).slice();
+    if (M.about.portrait) names.unshift(M.about.portrait);
+    names = names.map(function (s) { return String(s == null ? '' : s).trim(); })
+                 .filter(Boolean)
+                 .filter(function (s, i, a) { return a.indexOf(s) === i; });
+    if (!names.length) { el.textContent = ''; el.style.color = ''; return; }
+
+    var run = ++portraitRun, bad = [], left = names.length;
+    el.style.color = '';
+    el.textContent = 'Checking ' + names.length + ' file' + (names.length === 1 ? '' : 's') + '…';
+    names.forEach(function (n) {
+      var im = new Image();
+      im.onload = im.onerror = function () {
+        if (run !== portraitRun) return;      /* a newer keystroke has taken over */
+        if (!im.naturalWidth) bad.push(n);
+        if (--left) return;
+        if (!bad.length) {
+          el.style.color = '';
+          el.textContent = 'All ' + names.length + ' found in images/.';
+        } else {
+          el.style.color = '#B4451F';
+          el.textContent = 'WARNING: ' + bad.join(', ') + ' ' +
+            (bad.length === 1 ? 'is' : 'are') + ' not in your images folder, so ' +
+            (bad.length === 1 ? 'that photo shows' : 'those photos show') +
+            ' nothing. Check the ending: .jpg and .JPG are different on the live site.';
+        }
+      };
+      im.src = imgUrl(n);
+    });
   }
 
   /* How long the finished mailto link actually is, which is not how long the
@@ -1179,6 +1227,8 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
     if (el.dataset.path.indexOf('contact.mailTemplates') === 0) renderMailLen();
     if (el.dataset.path.indexOf('about.skillLinks') === 0 ||
         el.dataset.path === 'about.skills') renderSkillLinkNote();
+    if (el.dataset.path === 'about.portraits' ||
+        el.dataset.path === 'about.portrait') renderPortraitNote();
   }
   document.addEventListener('input', updateFromPath);
   document.addEventListener('change', updateFromPath);

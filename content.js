@@ -1232,11 +1232,11 @@ window.SITE_CONTENT = {
     portrait: "portrait-studio.jpg",
     portraits: [
       "portrait-studio.jpg",
-      "9f2ce999-469a-4e3c-b379-5856eccb8354",
+      "9f2ce999-469a-4e3c-b379-5856eccb8354.JPG",
       "about-photo.jpg",
       "50da4f9f-3782-490a-89a1-97954ff5833c.JPG",
       "IMG_5550.JPG",
-      "C065B224-605D-4FA3-A1AA-0702A3FB0095"
+      "C065B224-605D-4FA3-A1AA-0702A3FB0095.JPG"
     ],
     portraitAlt: "Mohammed Essam",
     paragraphs: [

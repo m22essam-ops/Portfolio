@@ -1069,12 +1069,37 @@ body.page-about #aboutResume{max-width:1200px;margin-inline:auto}
    read is what you did and the second is what it was called */
 .manip-label{font-family:var(--mono);font-size:11px;letter-spacing:.2em;
   text-transform:uppercase;color:var(--fg-faint);margin:0 0 10px}
-.manip{max-width:62ch;margin:0 0 40px;padding-bottom:80px}
+
+/* THE PAGE IS CAPPED AND CENTRED, unlike every other page on the site.
+   The site's 1240px container is built for pages that FILL it: the work grid
+   has two columns, About has a photo beside its text. This page is one column
+   of reading and nothing else, so in that container it sat hard left with
+   about 460px of dead paper down the right at 1440px, which read as a page
+   that had failed to load its other half rather than as a narrow column.
+
+   The nav deliberately keeps the full width. It is chrome, it is the same on
+   every page, and re-centring it here would make this page look like a
+   different site.
+
+   860px is set by the heading, not chosen: "Manipulating." runs 779px of ink
+   at the 138px ceiling of its clamp, and the clamp means it can never get
+   bigger than that at any screen width. Below about 900px the wrap's own
+   `100% - 44px` is already the smaller number, so phones never see this. */
+body.page-manipulating .page-head .wrap,
+body.page-manipulating > .wrap{max-width:860px}
+
+/* The measure moved OFF the article and onto the paragraphs. It used to sit
+   on .manip, which capped everything inside it at 62ch, including the drawing
+   below: that is why the cartoon's own max-width never once applied and it
+   never actually broke out of the column the way the note below says it
+   should. The words still read at 62ch; the article is just no longer a lid
+   on top of them. */
+.manip{max-width:none;margin:0 0 40px;padding-bottom:80px}
 /* Direct children only. The manifesto's paragraphs are nested inside
    .manip-creed, and a bare `.manip p` reaches them too: at the same
    specificity the later rule wins, so the phone override further down
    this file was quietly resetting the manifesto back to body size. */
-.manip > p{font-size:19px;line-height:1.62;margin:0 0 26px;color:var(--fg-dim)}
+.manip > p{font-size:19px;line-height:1.62;margin:0 0 26px;color:var(--fg-dim);max-width:62ch}
 /* the last line before the way out lands on its own, so it gets the weight */
 .manip > p:nth-last-child(2){color:var(--fg)}
 /* ---- the cartoon ----
@@ -1085,8 +1110,15 @@ body.page-about #aboutResume{max-width:1200px;margin-inline:auto}
    only has 30px of margin to borrow at 1300px wide. Growing rightwards
    cannot overflow anything.
    `currentColor` on the strokes means the ink is the page's ink: change the
-   text colour and the drawing follows it. */
-.manip-fig{margin:46px 0;max-width:620px}
+   text colour and the drawing follows it.
+
+   760, not the old 620. That number was written to beat a 590px column and
+   was never reached anyway, because .manip capped everything inside it at
+   62ch. With the measure now resolving against the paragraph's own 19px the
+   column is 660, so 620 would have quietly turned the drawing into the
+   squeezed thing this note exists to prevent. 760 puts it 100px past the
+   words and still 100px inside the 860 block. */
+.manip-fig{margin:46px 0;max-width:760px}
 .manip-fig svg{width:100%;height:auto;display:block;color:var(--fg)}
 .manip-fig figcaption{
   margin-top:14px;font-size:16px;line-height:1.5;color:var(--fg-dim);
@@ -1103,7 +1135,9 @@ body.page-about #aboutResume{max-width:1200px;margin-inline:auto}
    heading announcing that a manifesto is coming. A manifesto that introduces
    itself is a mission statement. */
 .manip-creed{
-  margin:44px 0;padding:34px 0;
+  margin:44px 0;padding:34px 0;max-width:62ch;
+  /* the rules are capped with the prose rather than running the full 860,
+     so they read as a pause in the column and not as a page divider */
   border-top:1px solid var(--line);border-bottom:1px solid var(--line)
 }
 .manip-creed p{
