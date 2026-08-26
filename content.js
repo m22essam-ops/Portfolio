@@ -18,10 +18,10 @@ window.SITE_CONTENT = {
     serial: "No. 131313 . Exp. never",
     titleTop: "Award-losing",
     titleBottom: "copywriter",
-    sub: "I write headlines in English and Arabic to sell just about anything, yet I can’t rewrite my destiny...",
+    sub: "I write headlines in English and Arabic to sell just about anything.",
     scratchNote: "...think you can give it a shot?",
     badge: "I WON NOTHING",
-    terms: "Odds of winning: historically High. Ticket has no cash value and neither did the awards. Keep this as proof of participation or share it with your loved ones.",
+    terms: "Odds of winning awards: Historically low. The ticket has no cash value, but the headlines do.",
     stampArc: "VALID UNTIL HIRED",
     stampName: "As seen on TV",
     stampValue: "",
@@ -1224,7 +1224,7 @@ window.SITE_CONTENT = {
       }
     ],
     ranHeading: "Work that worked.",
-    ranNote: "Produced work I concepted, wrote, and sometimes stepped in to direct."
+    ranNote: "Work that fought its way to production. I concepted, wrote, and occasionally hijacked the director's chair."
   },
   about: {
     label: "Don't take it personally (it seems so)",
@@ -1232,8 +1232,11 @@ window.SITE_CONTENT = {
     portrait: "portrait-studio.jpg",
     portraits: [
       "portrait-studio.jpg",
-      "portrait-rooftop.jpg",
-      "about-photo.jpg"
+      "9f2ce999-469a-4e3c-b379-5856eccb8354",
+      "about-photo.jpg",
+      "50da4f9f-3782-490a-89a1-97954ff5833c.JPG",
+      "IMG_5550.JPG",
+      "C065B224-605D-4FA3-A1AA-0702A3FB0095"
     ],
     portraitAlt: "Mohammed Essam",
     paragraphs: [
@@ -1352,8 +1355,8 @@ window.SITE_CONTENT = {
     ]
   },
   footer: {
-    line: "Someone has to win eventually, feel lucky today?",
-    linkText: "feel lucky today?",
+    line: "Someone has to win eventually, right?",
+    linkText: "right?",
     linkUrl: "mailto:m22essam@gmail.com"
   },
   layout: {
