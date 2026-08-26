@@ -1070,107 +1070,61 @@ caused by this change.** Note also that measuring the ticket inside an iframe
 is unreliable for the reasons in the designer notes; the real pane is the
 only honest measurement.
 
-### The footer is the claim counter (26 Aug 2026)
+### The footer: his line big, the contact details in the gap (26 Aug 2026)
 
-It was one big joke and four small icons. The joke is his and it stays; it was
-in the wrong position. Now: **the address is the headline and his sentence is
-the small print under it**, with the CV and the icons on the right.
+It was one joke and four 23px icons, with 370px of nothing between them. The
+thing actually missing was never the size of anything: **his email address
+existed on no page in any readable form.** The only mailto down here was one
+word inside the joke, and the icon row skips mail on purpose, with the comment
+"the email is the line".
 
-Why, because he asked for the right answer rather than a menu:
+So the sentence keeps the stage at 58px on the left, and the empty right-hand
+side becomes the address, the CV and the icons, right-aligned and stacked.
 
-- **The lottery gag had been told four times before anyone reached a footer**:
-  the whole home page, the badge, the terms, and the scratch that now says YOU
-  WON A COPYWRITER. A fifth telling at the point of action is not a payoff, it
-  is a tic.
-- **The site now HAS its closing line and it is on the home page.** If the
-  ticket hands you a prize, the footer is where you claim it. That is the one
-  job down here that does not repeat something above it.
-- **site.js already said so.** The icon row skips any mailto with the comment
-  "the email is the line". The address was always meant to BE the footer. A
-  joke took the slot and the address left the site completely: before this it
-  appeared on no page in any readable form, only as an href on one word.
-- **Demoting the sentence to small print is not a demotion.** This site sets
-  its jokes as small print already: `ticket.terms` is a gag in 10px capitals
-  along the bottom of the card. The line is going into the register this site
-  keeps for exactly that, in the place a real ticket keeps it.
+**The address was tried as the headline at 56px for exactly one pass and it
+was wrong.** Recorded because the reasoning for it sounded good and was not:
+
+- The argument was that the lottery gag had been told four times before anyone
+  reached a footer, so a fifth telling was a tic, and that the footer should
+  be the claim counter instead. Structurally that holds. The execution did
+  not.
+- **An email address is data, not a design element.** This one is a gmail with
+  a number in it. Set at 56px in the display face it magnified the least
+  premium thing on the site and made the second-loudest element on a project
+  page an email address, under the project title.
+- It traded the site's voice for a contact card. The last thing anyone read on
+  every page was an address.
+
+The address is therefore in the **system voice** (Barlow Condensed, 16px), the
+same register as the serial and the small print, because that is what it is.
+Big enough to read and copy, quiet enough not to be the first thing seen.
 
 Things worth knowing if this is touched:
 
-- **The address link is built BARE and `sweepMail()` fills it in.** A link that
-  arrives already carrying a query is marked hands-off for the life of the
-  page, so pre-filling here would leave the footer stuck on whichever draft was
-  dealt first while every other address on the page rotated. Verified: all
-  three mailtos on a page carry the same draft at the same moment, it rotates
-  after 7s, and the href does not compound.
-- **The reveal animation moved from `.foot-in > p` to `.foot-claim`**, so the
-  address and the small print arrive as one object. The
-  `prefers-reduced-motion` override had to move with it. Miss that and people
-  who asked for less motion get the animation, which is the opposite of the
-  point.
-- **`.foot-side` returns to `align-items:flex-start` under 900px.** The row
-  stacks there, so a right-aligned column would sit right-aligned in a
-  left-aligned stack.
-- The address is `clamp(26px,4.4vw,56px)` and was checked at 1440 / 900 / 390 /
-  360: one line every time, never overflowing, no sideways scroll. The footer
-  is 216px at desktop, 32px SHORTER than the version it replaced.
+- **The address link is built BARE and `sweepMail()` fills it in.** A link
+  arriving with a query already on it is marked hands-off for the life of the
+  page, so pre-filling here would leave the footer stuck on whichever draft
+  was dealt first while every other address rotated. Verified: all three
+  mailtos carry the same draft at the same moment, it rotates after 7s, and
+  the href does not compound.
+- **The reveal targets `.foot-in > p`.** It briefly moved to a `.foot-claim`
+  wrapper during the headline experiment and had to move back; the
+  `prefers-reduced-motion` override moves with it every time. Miss that and
+  people who asked for less motion get the animation.
+- **`.foot-side` returns to `align-items:flex-start` under 900px**, where the
+  row stacks, or a right-aligned column would sit inside a left-aligned stack.
+- Checked at 1920 / 1440 / 1024 / 900 / 768 / 414 / 375 / 360 / 320: the
+  address never overflows, nothing scrolls sideways, and the column stacks to
+  the page's left edge below 900.
 - **The CV is in the footer now.** It existed on the About page alone, so a CD
   who had just finished a project page had no way to reach it.
 - `awards.html` has no `#siteFoot` and never has, so it has no footer. It
   carries its own CTA. Pre-existing, flagged, not changed.
 
-**Open question for him:** the address is now set at 56px, and it is a gmail.
-He owns mohammedessam.com. `hello@mohammedessam.com` at that size would read
-considerably better than `m22essam@gmail.com`. Not changed, because it needs
-mail on the domain first.
-
-### The headline hung off the ticket on a phone (fixed 26 Aug 2026)
-
-"Award-losing" was 13px past the right edge of the paper, printed on the red.
-`fitTitle()` was not the culprit; on the artboard the fitting is done by
-`shrinkToBox()`, and it had a **unit bug that only a scaled ticket could
-expose**:
-
-```
-var box = el.clientWidth;                        // LAYOUT pixels
-var wide = rng.getBoundingClientRect().width;    // SCALED pixels
-```
-
-The artboard scales the whole ticket with a CSS transform, so those two are in
-different spaces. On the phone it compared 352 against 351, decided the
-headline fitted and broke out of the loop, while the true content width was
-386 (`scrollWidth` said so all along). **On a desktop the scale is 1 and the
-two numbers agree, which is why this never showed there and why it survived
-every desktop check.**
-
-Now both are read in the same space: `k = getBoundingClientRect().width /
-offsetWidth` converts, and `box = clientWidth * k`. `clientWidth` is kept
-rather than switching to the bounding rect, because the rect is the border
-box and the badge has padding; changing that would alter what "fits" means
-for a slot that was not broken.
-
-Checked at 320 / 360 / 375 / 390 / 414 / 430 / 768 / 1024 / 1440 / 1920 /
-2560: the title is inside the paper at every one, no slot spills, and nothing
-scrolls in either direction. Desktop is byte-identical to before.
-
-**The lesson worth keeping: never compare a client rect with an offset or
-client dimension on the home page.** One is scaled and one is not.
-
-### Removing the caption left a hole in the mobile artboard
-
-Consequence of the scratch caption going. `layout.mobile` stacks the three
-punches, and `scratchNote` had sat between nav1 and nav2. With it gone the gap
-above the covered punch was 8.43% against the 1.00% between the other two, and
-it read as a missing element, which is exactly what it was.
-
-`nav2` moved to y 53.52 so all three gaps are 1.00, and `stamp` and `barcode`
-came up 4.32 each to re-centre the lower block in the space that freed up
-rather than leaving one large void under the punches and none above the terms.
-
-**Desktop needed nothing**: the three punches are a row at one y there, so the
-caption's removal left no hole. Only the stacked layout was affected.
-
-If he reopens `design.html` and drags anything, these numbers are his to
-overwrite. They are a repair of his composition, not a new one.
+**Open question for him:** the address is a gmail and he owns
+mohammedessam.com. At 16px it no longer shouts, so this is much less pressing
+than it was at 56px, but `hello@mohammedessam.com` would still read better.
+Needs mail on the domain first.
 
 ### preview-footer.html
 

@@ -48,16 +48,22 @@
         meant to BE this. A joke moved into the slot and the address left
         the site altogether: it appears on no page, in no readable form.
 
-     So the address is the headline and his sentence is the small print under
-     it. That is not a demotion. This site already sets its jokes as small
-     print: `ticket.terms` is a gag in 10px capitals at the foot of the card.
-     The sentence is simply going into the register this site keeps for
-     exactly that, in the place a real ticket keeps it.
+     HIS LINE KEEPS THE STAGE. The address was tried as the headline at 56px
+     for exactly one pass and it was wrong: an email address is data, not a
+     design element, and this one is a gmail with a number in it, so setting
+     it enormous magnified the least premium thing on the site and made the
+     second-loudest element on a project page an email address. It also
+     traded the site's voice for a contact card.
 
-     `footer.line` is still his whole sentence and `footer.linkText` still
-     picks the words that carry the mailto, so nothing he edits in admin
-     changes meaning. Built here rather than in each page's HTML so there is
-     one copy of it. */
+     What was actually wrong was never the size of the address. It was that
+     the address did not exist anywhere, and that the right-hand half of this
+     row was carrying nothing while a CD hunted for a way to get in touch.
+     So the sentence stays big on the left and the empty side becomes the
+     address, the CV and the icons, in the system voice at system size.
+
+     `footer.line` is his whole sentence and `footer.linkText` picks the words
+     that carry the mailto, so nothing he edits in admin changes meaning.
+     Built here rather than in each page's HTML so there is one copy of it. */
   var foot = document.getElementById('siteFoot');
   if (foot) {
     var F = C.footer || {};
@@ -135,6 +141,7 @@
          it without going looking for one. */
       var cv = (C.contact && C.contact.resume) || {};
       var side =
+        (mailUrl ? '<a class="foot-mail" href="' + esc(mailUrl) + '">' + esc(mailText) + '</a>' : '') +
         (cv.url ? '<a class="foot-cv" href="' + esc(cv.url) + '" target="_blank" rel="noopener">' +
                   esc(cv.label || 'Résumé') + '<span aria-hidden="true">&darr;</span></a>' : '') +
         (social ? '<div class="foot-social">' + social + '</div>' : '');
@@ -142,10 +149,7 @@
       foot.className = 'foot';
       foot.innerHTML =
         '<div class="wrap foot-in">' +
-          '<div class="foot-claim">' +
-            (mailUrl ? '<a class="foot-mail" href="' + esc(mailUrl) + '">' + esc(mailText) + '</a>' : '') +
-            '<p>' + out + '</p>' +
-          '</div>' +
+          '<p>' + out + '</p>' +
           (side ? '<div class="foot-side">' + side + '</div>' : '') +
         '</div>';
     } else {
