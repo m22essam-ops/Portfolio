@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Footer options · Mohammed Essam</title>
+<title>The footer, four ways · Mohammed Essam</title>
 <meta name="robots" content="noindex">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,75 +12,95 @@
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="stylesheet" href="styles.css">
 
-<!-- NOT LINKED FROM THE SITE. Same job as preview-intro.html: three versions
-     of one thing, side by side, built out of the REAL footer so nothing here
-     flatters itself. site.js builds the live footer into a hidden host below
-     and each option is assembled from those actual nodes, so the type, the
-     icons, the colours and the reveal animation are the ones that ship. -->
+<!-- NOT LINKED FROM THE SITE. Rewritten 29 Aug 2026.
+     The previous three options in this file were the ones that led to what
+     ships now; they are in the git history if ever wanted.
+
+     This round is one question: how LOUD should the bottom of the page be.
+     Written after looking at 14 real portfolios (working agency copywriters
+     from moderncopywriter.com, and the design-curated end from siteinspire).
+     Not one of them sets a line of copy at display size down there.
+
+     Every option below is built out of the REAL footer. site.js fills a
+     hidden host and each option is assembled from those actual nodes, so the
+     type, the icons, the colours and the reveal are the ones that ship. -->
 <style>
   body{padding:0 0 120px}
   .pv-head{padding:54px 0 10px}
-  .pv-head h1{font-size:clamp(30px,5vw,54px);margin:0 0 10px}
-  .pv-head p{max-width:62ch;font-size:17px;line-height:1.6;color:var(--fg-dim);margin:0 0 6px}
-  .pv-opt{margin:0 0 26px;border-top:2px solid var(--fg);padding-top:14px}
+  .pv-head h1{font-size:clamp(30px,5vw,54px);margin:0 0 12px}
+  .pv-head p{max-width:66ch;font-size:17px;line-height:1.6;color:var(--fg-dim);margin:0 0 10px}
+  .pv-head .pv-src{font-family:var(--mono);font-size:13px;letter-spacing:.06em;color:var(--fg-faint)}
+
+  .pv-opt{margin:0 0 30px;border-top:2px solid var(--fg);padding-top:14px}
   .pv-tag{
     font-family:var(--mono);font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;
     color:var(--fg);margin:0 0 4px;font-weight:700;
   }
-  .pv-why{font-size:15px;line-height:1.55;color:var(--fg-dim);max-width:74ch;margin:0 0 4px}
-  .pv-verdict{font-size:15px;line-height:1.55;color:var(--red);max-width:74ch;margin:0}
-  /* each option gets the page's own ground so the footer sits on what it
-     will really sit on, and the reveal is forced on: these are not scrolled
-     into view one at a time the way the real one is */
-  .pv-stage{background:var(--bg);margin-top:6px}
+  .pv-why{font-size:15px;line-height:1.55;color:var(--fg-dim);max-width:76ch;margin:0 0 4px}
+  .pv-verdict{font-size:15px;line-height:1.55;color:var(--red);max-width:76ch;margin:0}
+  /* each option gets the page's own ground, and the reveal is forced on:
+     these are all on screen together rather than scrolled into one at a time */
+  .pv-stage{background:var(--bg);margin-top:8px;border:1px solid var(--line)}
   .pv-stage .foot{margin-top:0}
   #pvHost{position:absolute;left:-9999px;top:0;width:1200px}
 
-  /* ---- option B: the dead space carries the contact details ----
-     Nothing here overrides the footer's own type or colour. It only adds a
-     right-hand column and lets the existing flex row do the work. */
-  .pv-b .foot-col{
-    display:flex;flex-direction:column;align-items:flex-end;gap:11px;
-    flex:none;padding-bottom:6px;
+  /* ---------- B: the quiet row ----------
+     Nothing is removed. The sentence changes register: out of the display
+     face at 58px and into the system voice at 16px, where the serial and the
+     small print already live. The stack turns into a row because at this size
+     there is no reason for it to be a column. */
+  .pv-b .foot{padding:34px 0 38px}
+  .pv-b .foot-in{align-items:baseline;gap:30px}
+  .pv-b .foot p{
+    font-family:var(--mono);font-weight:600;
+    font-size:16px;letter-spacing:.03em;line-height:1.45;
+    max-width:none;color:var(--fg);
   }
-  .pv-b .foot-col a.pv-mail{
-    font-family:var(--mono);font-size:16px;font-weight:600;letter-spacing:.09em;
-    text-transform:none;color:var(--fg);text-decoration:none;
-    border-bottom:1px solid var(--line);padding-bottom:2px;
-  }
-  .pv-b .foot-col a.pv-mail:hover{color:var(--red);border-bottom-color:var(--red)}
-  .pv-b .foot-col a.pv-cv{
-    font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.16em;
-    text-transform:uppercase;color:var(--fg-dim);text-decoration:none;
-  }
-  .pv-b .foot-col a.pv-cv:hover{color:var(--red)}
-  .pv-b .foot-social{padding-bottom:0}
+  .pv-b .foot p a{border-bottom-width:1px}
+  .pv-b .foot-side{flex-direction:row;align-items:baseline;gap:26px;padding-bottom:0}
+  .pv-b .foot-social{padding-bottom:0;gap:15px;align-self:center}
+  .pv-b .foot-social svg{width:19px;height:19px}
 
-  /* ---- option C: the address is its own beat under the line ---- */
-  .pv-c .foot-in{flex-direction:column;align-items:stretch;gap:0}
-  .pv-c .pv-row{
-    display:flex;align-items:flex-end;justify-content:space-between;
-    gap:34px;margin-top:26px;
+  /* ---------- C: ticket furniture ----------
+     B, plus the serial. The bottom of a real ticket is a row of small print
+     with a number on it, so this is the same move made all the way. */
+  .pv-c .foot{padding:34px 0 38px}
+  .pv-c .foot-in{align-items:baseline;gap:30px}
+  .pv-c .pv-left{display:flex;align-items:baseline;gap:22px;flex-wrap:wrap;min-width:0}
+  .pv-c .pv-serial{
+    font-family:var(--mono);font-weight:600;font-size:11px;
+    letter-spacing:.2em;text-transform:uppercase;color:var(--fg-faint);
+    flex:none;white-space:nowrap;
   }
-  .pv-c a.pv-mail{
-    font-family:var(--mono);font-size:clamp(20px,2.4vw,30px);font-weight:600;
-    letter-spacing:.06em;color:var(--fg);text-decoration:none;
-    border-bottom:2px solid var(--line);padding-bottom:3px;
+  .pv-c .foot p{
+    font-family:var(--mono);font-weight:600;
+    font-size:16px;letter-spacing:.03em;line-height:1.45;
+    max-width:none;color:var(--fg);
   }
-  .pv-c a.pv-mail:hover{color:var(--red);border-bottom-color:var(--red)}
-  .pv-c .pv-side{
-    display:flex;align-items:center;gap:22px;flex:none;padding-bottom:4px;
-  }
-  .pv-c a.pv-cv{
-    font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.16em;
-    text-transform:uppercase;color:var(--fg-dim);text-decoration:none;
-  }
-  .pv-c a.pv-cv:hover{color:var(--red)}
-  .pv-c .foot-social{padding-bottom:0}
+  .pv-c .foot p a{border-bottom-width:1px}
+  .pv-c .foot-side{flex-direction:row;align-items:baseline;gap:26px;padding-bottom:0}
+  .pv-c .foot-social{padding-bottom:0;gap:15px;align-self:center}
+  .pv-c .foot-social svg{width:19px;height:19px}
 
-  @media (max-width:760px){
-    .pv-b .foot-in,.pv-c .pv-row{flex-direction:column;align-items:flex-start;gap:20px}
-    .pv-b .foot-col{align-items:flex-start}
+  /* ---------- D: nothing ----------
+     What 6 of the 14 do, and 3 of 3 at the design-curated end. Shown as the
+     air it actually is, with the page's last rule and then the edge. */
+  .pv-d .pv-end{border-top:1px solid var(--line);height:150px;position:relative}
+  .pv-d .pv-end span{
+    position:absolute;left:0;top:18px;
+    font-family:var(--mono);font-size:11px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--fg-faint);
+  }
+
+  /* On a phone the quiet ROW has to become a quiet STACK, which is what the
+     shipped footer already does at 900px. Forcing the row at every width put
+     the address, the CV and four icons on one line inside 344px: measured
+     435px of content in a 344px box, with the icons off the right edge. */
+  @media (max-width:860px){
+    .pv-b .foot-in,.pv-c .foot-in{flex-direction:column;align-items:flex-start;gap:20px}
+    .pv-b .foot-side,.pv-c .foot-side{flex-direction:column;align-items:flex-start;gap:15px}
+    .pv-b .foot-social,.pv-c .foot-social{align-self:flex-start}
+    .pv-c .pv-left{flex-direction:column;align-items:flex-start;gap:10px}
   }
 </style>
 </head>
@@ -88,10 +108,14 @@
 
 <header class="pv-head">
   <div class="wrap">
-    <h1>Three footers.</h1>
-    <p>Built out of the real one, so the type, the icons and the colours are
-       the ones that ship. Not linked from the site. Pick one, or tell me what
-       is wrong with all three.</p>
+    <h1>The footer, four ways.</h1>
+    <p>One question: how loud should the bottom of the page be. Built out of
+       the real footer, so the type, the icons and the colours are the ones
+       that ship. Not linked from the site.</p>
+    <p class="pv-src">Read against 14 real portfolios. Working agency copywriters
+       from moderncopywriter.com (McCann, BBDO, Ogilvy, 72andSunny, R/GA, Huge)
+       and the design-curated end from siteinspire. None of the 14 sets copy at
+       display size down there.</p>
   </div>
 </header>
 
@@ -111,12 +135,15 @@
 
   /* THIS PAGE CANNOT TRAVEL ON ITS OWN. It needs styles.css, content.js and
      site.js sitting beside it, because the whole point is that the footers
-     are built out of the real ones rather than mocked up. Opened as a lone
+     are built out of the real one rather than mocked up. Opened as a lone
      file somewhere else it has no stylesheet and no content and would
-     otherwise just be a blank page, which is exactly what it looked like the
-     first time. Say so, in inline styles that do not need the stylesheet. */
+     otherwise be a blank page, which is exactly what it looked like the
+     first time it was sent as an attachment. Say so, in inline styles that
+     do not need the stylesheet. */
   var line   = built && built.querySelector('.foot-in > p');
   var social = built && built.querySelector('.foot-social');
+  var mail   = built && built.querySelector('.foot-mail');
+  var cv     = built && built.querySelector('.foot-cv');
   if (!line) {
     host.setAttribute('style',
       'font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;' +
@@ -124,7 +151,7 @@
       'border:2px solid #E3261A;border-radius:4px;color:#111;background:#fff');
     host.innerHTML =
       '<b style="color:#E3261A">This page has to be opened from the Portfolio folder.</b>' +
-      '<p style="margin:10px 0 0">It builds the three footers out of the real one, so it needs ' +
+      '<p style="margin:10px 0 0">It builds the footers out of the real one, so it needs ' +
       '<code>styles.css</code>, <code>content.js</code> and <code>site.js</code> next to it. ' +
       'On its own it has nothing to build from.</p>' +
       '<p style="margin:10px 0 0">Open <b>http://127.0.0.1:8888/preview-footer.html</b>, ' +
@@ -133,88 +160,95 @@
   }
 
   var C = window.SITE_CONTENT || {};
-  var links = (C.contact && C.contact.links) || [];
-  var mail = '';
-  links.forEach(function (l) {
-    if (!mail && l && /^mailto:/i.test(String(l.url || ''))) mail = l.label || l.url.replace(/^mailto:/i, '');
-  });
-  mail = mail || 'm22essam@gmail.com';
-  var mailUrl = 'mailto:' + mail;
-  var cv = (C.contact && C.contact.resume) || {};
+  var serial = String((C.ticket && C.ticket.serial) || '').trim();
 
-  function esc(s) {
-    return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  /* the contact stack, rebuilt from the real nodes so the hrefs, the words
+     and the half-written email draft are all the ones that ship */
+  function side() {
+    var d = document.createElement('div');
+    d.className = 'foot-side';
+    if (mail)   d.appendChild(mail.cloneNode(true));
+    if (cv)     d.appendChild(cv.cloneNode(true));
+    if (social) d.appendChild(social.cloneNode(true));
+    return d;
   }
 
   var OPTS = [
     {
       key: 'a',
-      tag: 'Option A — what is there now',
-      why: 'Your line on the left, four 23px icons on the right. They are bottom-aligned ' +
-           'to the last line, so nothing is broken. It is thin because 370px between the ' +
-           'end of the sentence and the first icon is carrying nothing.',
-      verdict: 'The real cost: your email address is not written anywhere on the site. ' +
-               'The only way to reach you from a project page is a nav link saying "Say hi" ' +
-               'and four small marks.',
-      build: function (stage) {
+      tag: 'A — what ships today',
+      why: 'Your sentence in the display face at 58px, the address, the CV and the ' +
+           'icons stacked on the right. Everything works. Nothing is broken.',
+      verdict: 'The problem is register, not layout. 58px at the bottom of a page is ' +
+               'the call-to-action band every marketing site has, and on a project page ' +
+               'it makes a joke the second-loudest thing after the project title. It is ' +
+               'also the fifth time the site tells this joke.',
+      build: function (f) {
         var row = document.createElement('div');
         row.className = 'wrap foot-in';
         row.appendChild(line.cloneNode(true));
-        if (social) row.appendChild(social.cloneNode(true));
-        stage.appendChild(row);
+        row.appendChild(side());
+        f.appendChild(row);
       }
     },
     {
       key: 'b',
-      tag: 'Option B — the gap carries the contact details',
-      why: 'Same row, same alignment, same line. The empty right-hand side becomes the ' +
-           'address, the CV and the icons, right-aligned and stacked. Set in Barlow ' +
-           'Condensed because on this site that is the system voice: serials, labels, ' +
-           'small print. An address is system information, not a headline.',
-      verdict: 'My pick. It fixes the hole without touching a word you wrote, and it puts ' +
-               'the two things a CD is actually looking for where the eye already ends up.',
-      build: function (stage) {
+      tag: 'B — the quiet row  ·  my pick',
+      why: 'Same words, same links, same icons. The sentence moves out of the display ' +
+           'face and into Barlow Condensed at 16px, next to the address instead of ' +
+           'above it. Nothing is deleted. Nothing shouts.',
+      verdict: 'This is where your funny already lives. "Odds of winning awards: ' +
+               'Historically low" is the best line on the home page and it is set at ' +
+               '11px. Small print is your register, and it is the one the 14 portfolios ' +
+               'use at the bottom of a page.',
+      build: function (f) {
         var row = document.createElement('div');
         row.className = 'wrap foot-in';
         row.appendChild(line.cloneNode(true));
-        var col = document.createElement('div');
-        col.className = 'foot-col';
-        col.innerHTML =
-          '<a class="pv-mail" href="' + esc(mailUrl) + '">' + esc(mail) + '</a>' +
-          (cv.url ? '<a class="pv-cv" href="' + esc(cv.url) + '" target="_blank" rel="noopener">' +
-                    esc(cv.label || 'Résumé') + ' &darr;</a>' : '');
-        if (social) col.appendChild(social.cloneNode(true));
-        row.appendChild(col);
-        stage.appendChild(row);
+        row.appendChild(side());
+        f.appendChild(row);
       }
     },
     {
       key: 'c',
-      tag: 'Option C — the address is its own beat',
-      why: 'The line keeps the whole width, and the address drops underneath it at ' +
-           'display size with the CV and the icons on the far side. Two beats instead ' +
-           'of one: the joke, then the way to act on it.',
-      verdict: 'Louder, and taller by about 90px. Right if you want the footer to be the ' +
-               'contact page this site does not have. Wrong if the joke should stay the ' +
-               'last thing anyone reads.',
-      build: function (stage) {
-        var inner = document.createElement('div');
-        inner.className = 'wrap foot-in';
-        inner.appendChild(line.cloneNode(true));
+      tag: 'C — ticket furniture',
+      why: 'B, with the serial pulled in beside it: ' + (serial || 'the ticket serial') +
+           '. The bottom edge of a real ticket is a row of small print with a number ' +
+           'on it, so this is the same move made all the way.',
+      verdict: 'Buys back some of the character the red stub had, without rebuilding ' +
+               'the stub you killed. Costs one more thing to read at the end of every ' +
+               'page. Take it if the row in B feels too plain.',
+      build: function (f) {
         var row = document.createElement('div');
-        row.className = 'pv-row';
-        row.innerHTML = '<a class="pv-mail" href="' + esc(mailUrl) + '">' + esc(mail) + '</a>';
-        var side = document.createElement('div');
-        side.className = 'pv-side';
-        if (cv.url) {
-          side.innerHTML = '<a class="pv-cv" href="' + esc(cv.url) + '" target="_blank" rel="noopener">' +
-                           esc(cv.label || 'Résumé') + ' &darr;</a>';
+        row.className = 'wrap foot-in';
+        var left = document.createElement('div');
+        left.className = 'pv-left';
+        if (serial) {
+          var s = document.createElement('span');
+          s.className = 'pv-serial';
+          s.textContent = serial;
+          left.appendChild(s);
         }
-        if (social) side.appendChild(social.cloneNode(true));
-        row.appendChild(side);
-        inner.appendChild(row);
-        stage.appendChild(inner);
+        left.appendChild(line.cloneNode(true));
+        row.appendChild(left);
+        row.appendChild(side());
+        f.appendChild(row);
+      }
+    },
+    {
+      key: 'd',
+      tag: 'D — nothing at all',
+      why: 'What 6 of the 14 actually do, and 3 out of 3 at the design-curated end. ' +
+           'The page ends after the work. Contact lives in the top nav, which yours ' +
+           'already has ("Say hi") on every page.',
+      verdict: 'The purest read of the research, and I am not recommending it for you. ' +
+               'Those six are image-led. You are a writer, and the one place a writer ' +
+               'is expected to have written something is the small print.',
+      build: function (f) {
+        var row = document.createElement('div');
+        row.className = 'wrap';
+        row.innerHTML = '<div class="pv-end"><span>the page just ends</span></div>';
+        f.appendChild(row);
       }
     }
   ];
@@ -223,9 +257,11 @@
     var block = document.createElement('section');
     block.className = 'pv-opt';
     block.innerHTML =
-      '<p class="pv-tag">' + esc(o.tag) + '</p>' +
-      '<p class="pv-why">' + esc(o.why) + '</p>' +
-      '<p class="pv-verdict">' + esc(o.verdict) + '</p>';
+      '<p class="pv-tag"></p><p class="pv-why"></p><p class="pv-verdict"></p>';
+    block.querySelector('.pv-tag').textContent = o.tag;
+    block.querySelector('.pv-why').textContent = o.why;
+    block.querySelector('.pv-verdict').textContent = o.verdict;
+
     var stage = document.createElement('div');
     stage.className = 'pv-stage pv-' + o.key;
     var f = document.createElement('footer');
