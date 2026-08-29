@@ -18,7 +18,7 @@ window.SITE_CONTENT = {
     serial: "No. 131313 . Exp. never",
     titleTop: "Award-losing",
     titleBottom: "copywriter",
-    sub: "I write headlines in English and Arabic to sell just about anything.",
+    sub: "I write headlines in English and Arabic to sell just about anything...",
     scratchNote: "",
     badge: "I WON NOTHING",
     terms: "Odds of winning awards: Historically low. The ticket has no cash value, but the headlines do.",
@@ -1377,11 +1377,11 @@ window.SITE_CONTENT = {
         },
         {
           slot: "band",
-          x: 80.45,
+          x: 82.23,
           y: 4.29,
-          w: 14.32,
+          w: 12.54,
           h: 4.48,
-          size: 2.01,
+          size: 1.8,
           weight: "400"
         },
         {
@@ -1415,8 +1415,8 @@ window.SITE_CONTENT = {
         {
           slot: "sub",
           x: 3.79,
-          y: 59.31,
-          w: 58.38,
+          y: 58.97,
+          w: 39.84,
           h: 4.95,
           size: 2.33,
           weight: "700",
@@ -1448,26 +1448,26 @@ window.SITE_CONTENT = {
         },
         {
           slot: "stamp",
-          x: 80.42,
-          y: 48.03,
-          w: 13.2,
-          h: 33.39,
+          x: 79.22,
+          y: 43.08,
+          w: 15.79,
+          h: 36.73,
           rotate: 7
         },
         {
           slot: "barcode",
-          x: 5.13,
-          y: 88.48,
-          w: 12.49,
-          h: 4.98
+          x: 4.04,
+          y: 93.73,
+          w: 12.35,
+          h: 3.66
         },
         {
           slot: "terms",
-          x: 22.02,
-          y: 92.7,
+          x: 19.31,
+          y: 93.22,
           w: 74.19,
           h: 4.69,
-          size: 1.9,
+          size: 1,
           color: "deep"
         },
         {
@@ -1493,18 +1493,17 @@ window.SITE_CONTENT = {
         },
         {
           type: "text",
-          text: "Listen to your gut",
-          size: 2.26,
+          text: "... this included",
+          size: 2.33,
           color: "muted",
-          font: "display",
-          w: 13.2,
-          h: 3.15,
-          x: 5.13,
-          y: 93.47,
-          tracking: 0.149
+          w: 26,
+          h: 6,
+          x: 56.41,
+          y: 64.72,
+          weight: "700"
         }
       ],
-      aspect: 1.9548
+      aspect: 1.7385
     },
     mobile: {
       items: [
@@ -1591,22 +1590,22 @@ window.SITE_CONTENT = {
         {
           slot: "nav2",
           x: 4.86,
-          y: 53.52,
+          y: 61.51,
           w: 90.27,
           h: 10.67,
           size: 1.753
         },
         {
           slot: "stamp",
-          x: 61.68,
+          x: 52,
           y: 72.18,
-          w: 27.77,
-          h: 13.37
+          w: 35.77,
+          h: 21.36
         },
         {
           slot: "barcode",
           x: 6.75,
-          y: 81.49,
+          y: 89.48,
           w: 35.68,
           h: 4.06
         },
