@@ -48,21 +48,29 @@
         meant to BE this. A joke moved into the slot and the address left
         the site altogether: it appears on no page, in no readable form.
 
-     HIS LINE KEEPS THE STAGE. The address was tried as the headline at 56px
-     for exactly one pass and it was wrong: an email address is data, not a
-     design element, and this one is a gmail with a number in it, so setting
-     it enormous magnified the least premium thing on the site and made the
-     second-loudest element on a project page an email address. It also
-     traded the site's voice for a contact card.
+     NOTHING DOWN HERE SHOUTS ANY MORE (29 Aug 2026). The sentence spent five
+     days set at 58px in the display face, and it was read against 14 real
+     portfolios: working agency copywriters from moderncopywriter.com (McCann,
+     BBDO, Ogilvy, 72andSunny, R/GA, Huge) and the design-curated end from
+     siteinspire. Six have no footer at all. Six are small print. One is a
+     Squarespace credit nobody switched off. NOT ONE of the fourteen sets a
+     line of copy at display size at the bottom of a page.
 
-     What was actually wrong was never the size of the address. It was that
-     the address did not exist anywhere, and that the right-hand half of this
-     row was carrying nothing while a CD hunted for a way to get in touch.
-     So the sentence stays big on the left and the empty side becomes the
-     address, the CV and the icons, in the system voice at system size.
+     58px down there is the call-to-action band every marketing site has,
+     which is the exact thing he kept objecting to ("it still looks like a
+     website not a creative portfolio"). Making it bigger had made it more
+     of a website, not less. On a project page it also made a joke the
+     second-loudest thing after the project title, and it was the fifth time
+     the site told that joke.
 
-     `footer.line` is his whole sentence and `footer.linkText` picks the words
-     that carry the mailto, so nothing he edits in admin changes meaning.
+     So this is now a copyright line, in his words, in the system voice, at
+     the size the ticket's own small print is set. That is where his funny
+     already lives: `ticket.terms` is the best-written line on the home page
+     and it is 10.5px.
+
+     `footer.line` is the sentence. `linkText` / `linkUrl` still work and are
+     still read, so a link can be put back inside it without touching code,
+     but both are empty now: a copyright line is not a call to action.
      Built here rather than in each page's HTML so there is one copy of it. */
   var foot = document.getElementById('siteFoot');
   if (foot) {
@@ -75,7 +83,14 @@
 
     var line = String(F.line || '').trim();
     if (line) {
-      var url = F.linkUrl || (C.contact && C.contact.ctaUrl) || '';
+      /* NO FALLBACK TO contact.ctaUrl HERE. There used to be one, and with
+         the line rewritten as a copyright notice it quietly turned the whole
+         of "designed by luck. all copywriters reserved" into a mailto: red,
+         underlined, and carrying the half-written email draft. A footer line
+         is only a link if he says so, in the two boxes next to it in admin.
+         `ctaUrl` is still the fallback for finding the ADDRESS further down,
+         which is a different job and still the right one. */
+      var url = String(F.linkUrl || '').trim();
       var bit = String(F.linkText || '').trim();
       var at  = bit ? line.toLowerCase().indexOf(bit.toLowerCase()) : -1;
       var out;
@@ -136,20 +151,25 @@
         if (/^mailto:/i.test(fb)) { mailUrl = fb.split('?')[0]; mailText = mailUrl.replace(/^mailto:/i, ''); }
       }
 
-      /* The CV sits down here too. It used to exist on the About page alone,
-         so a CD who had just finished reading a project had no way to reach
-         it without going looking for one. */
-      var cv = (C.contact && C.contact.resume) || {};
+      /* THE CV IS NOT DOWN HERE ANY MORE (29 Aug 2026, his call). It lived in
+         the footer for five days so a CD finishing a project page could reach
+         it. It still exists, on the About page, straight out of
+         `contact.resume` — this only stops it printing at the foot of every
+         page. Do not delete the field: About builds its button from it. */
       var side =
         (mailUrl ? '<a class="foot-mail" href="' + esc(mailUrl) + '">' + esc(mailText) + '</a>' : '') +
-        (cv.url ? '<a class="foot-cv" href="' + esc(cv.url) + '" target="_blank" rel="noopener">' +
-                  esc(cv.label || 'Résumé') + '<span aria-hidden="true">&darr;</span></a>' : '') +
         (social ? '<div class="foot-social">' + social + '</div>' : '');
 
+      /* THE © IS DRAWN HERE, NOT STORED IN THE COPY. So `footer.line` stays
+         a plain sentence he can rewrite in admin without having to remember
+         to type a symbol, and the mark is furniture, the same way the arrow
+         on the résumé button was. It is aria-hidden because a screen reader
+         announcing "copyright" before the joke lands on the wrong beat, and
+         the line reads perfectly without it. */
       foot.className = 'foot';
       foot.innerHTML =
         '<div class="wrap foot-in">' +
-          '<p>' + out + '</p>' +
+          '<p><span class="foot-c" aria-hidden="true">&copy;</span>' + out + '</p>' +
           (side ? '<div class="foot-side">' + side + '</div>' : '') +
         '</div>';
     } else {

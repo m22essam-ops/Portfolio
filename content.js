@@ -1341,9 +1341,9 @@ window.SITE_CONTENT = {
     ]
   },
   footer: {
-    line: "Someone has to win eventually, right?",
-    linkText: "right?",
-    linkUrl: "mailto:m22essam@gmail.com"
+    line: "designed by luck. all copywriters reserved",
+    linkText: "",
+    linkUrl: ""
   },
   layout: {
     desktop: {

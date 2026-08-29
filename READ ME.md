@@ -102,7 +102,11 @@ first is still free and still the right habit.
    stops being a link, and the editor warns you when it does not match.
 6. **Contact.** Your links, your résumé button, and **the email that writes
    itself** (below).
-7. **Top bar and footer.** The menu labels and the footer line.
+7. **Top bar and footer.** The menu labels, and **your copyright line** at the
+   foot of every page except the home. A **©** is drawn in front of it for
+   you, so don't type one. Your email and your icons sit on the same line, on
+   the right, and come from section 6. Empty the line and the whole footer
+   goes, email and icons with it.
 
 Above section 1 there are two panels that are not editing: how this works,
 and the GitHub connection.
@@ -191,6 +195,10 @@ One limit: **every project page shares the same preview picture**, because
 `work.html` is a single file serving all of them. Giving each project its own
 would mean a separate file per project, which is the thing this site is built
 to avoid.
+
+**The résumé button moved.** It used to sit in the footer of every page as
+well as on About. It is now on the **About page only**. Nothing changed about
+the file or the link, and you still edit both in section 6.
 
 **The site is English only.** The Japanese About page and the Japanese Rivan
 Tower page were taken off on 26 Aug 2026 at your request, along with the

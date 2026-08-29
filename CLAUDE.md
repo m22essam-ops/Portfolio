@@ -1215,6 +1215,85 @@ Things that will bite anyone changing this:
   working link on the strength of a check that may not have run is the worse
   mistake.
 
+### The footer is a copyright line now (29 Aug 2026)
+
+He asked twice whether the footer was any good, so it was read against **14
+real portfolios** rather than against web-design principle: working agency
+copywriters from **moderncopywriter.com** (McCann, BBDO, Ogilvy, 72andSunny,
+R/GA, Doner, Media.Monks, Huge) and the design-curated end from
+**siteinspire**. The tally is worth keeping, because it is the argument:
+
+- **6 have no footer at all** (robhall.work, quitefrankie.com,
+  david-lieberman.com, jackentee.com, alexzarour.com, austen.fun).
+- **2 are a platform default nobody switched off** — garicruze.com, an ACD at
+  Huge with 15 years on Google and Slack, ends with "Powered by Squarespace 6".
+- **5 are a row of small print** — an email, some icons, a copyright line.
+- **NOT ONE of the fourteen sets a line of copy at display size.**
+
+The one joke in the sample is adiachaney.com's "© 2026 My footer only wears
+designer", and it is inside the copyright line at about 12px.
+
+So the 58px setting went. **58px at the bottom of a page is the
+call-to-action band every marketing site has**, which is the exact thing he
+kept objecting to ("it still looks like a website not a creative portfolio").
+Making it bigger had made it more of a website, not less. On a project page it
+also made a joke the second-loudest thing after the project title, and it was
+the fifth telling of that joke on one visit.
+
+**The line is now his: "designed by luck. all copywriters reserved."** He
+wrote it as a copyright line and it replaces "Someone has to win eventually,
+right?". His `desinged` was read as a slip and set to `designed`, and flagged.
+Set in Barlow Condensed at 11.5px, `--fg-faint`, **sentence case as he typed
+it**: "all copywriters reserved" shouted is a slogan, and the joke only works
+if it looks like boilerplate nobody wrote.
+
+The whole footer is one baseline row above 900px (102px tall, was ~230) and a
+stack below it (172px). Options A/B/C/D are preserved in `preview-footer.html`
+the same way `preview-intro.html` keeps all four intros.
+
+Things that will bite anyone changing this:
+
+- **`site.js` had a fallback to `contact.ctaUrl` for the line's link**, so
+  emptying `footer.linkUrl` was NOT enough: the whole copyright line silently
+  became a mailto, red and underlined, carrying the half-written email draft.
+  Removed. `ctaUrl` is still the fallback for finding the ADDRESS lower down,
+  which is a different job. **A footer line is only a link if he says so.**
+- **The clip-path reveal on the line is gone**, because it was written for a
+  58px headline and on an 11.5px line it animates eleven pixels nobody can
+  see. Its `prefers-reduced-motion` override went in the same edit. That pair
+  has been separated twice and each time the only people still getting the
+  animation were the ones who asked for less motion.
+- **`.foot-social` is `align-self:center`, not baseline.** A box of icons has
+  no text baseline, so baseline hangs them off the bottom of the row.
+- **Below 900px `.foot-side` must go back to a column.** Left as a row it put
+  the address and four icons on one line inside 344px: 435px of content in a
+  344px box, icons off the right edge. Measured, not guessed.
+- **The résumé is off the footer** (his call). `contact.resume` is untouched
+  and still builds `.resume-btn` on the About page. `.foot-cv` CSS deleted.
+- **`jokes.footer` prints nowhere.** It holds "No copywriters reserved." and
+  is genuinely unused, so the old "two footer lines say the same thing" note
+  is resolved: only one of them was ever printing.
+
+### The email address stays written out
+
+He asked whether it could be an icon like the others. No, and the reasons are
+worth keeping:
+
+- **You cannot copy an icon.** A CD is looking at thirty portfolios that week;
+  the common action is "save him for later", not "email him now".
+- **A mailto icon depends on their machine** having a working default mail
+  client. A written address never fails.
+- It would undo the one real gain the footer rebuild made: before it, his
+  address existed on no page in readable form. The nav's "Say hi" is already
+  a mailto, so an envelope would mean two links and zero readable addresses.
+- **The half-written email draft only fires on a mailto click.** If that is
+  the only path and their client is broken, they never see the best thing on
+  the site.
+
+What he was actually reacting to is real, but it is the address, not the
+display: `m22essam@gmail.com` is the least premium string on the site.
+**The fix is the domain email, not hiding it.** Still open.
+
 ## Don't
 
 - Don't add a build step or framework.
@@ -1237,6 +1316,14 @@ Things that will bite anyone changing this:
 - Don't try to set an og: tag from JavaScript. The scrapers do not run it.
 - Don't put copy in `PROJECT-NOTES.md`. It is a stub; `READ ME.md` is his
   handbook and the one to keep current.
+- Don't set the footer line at display size again. Fourteen real portfolios
+  were checked and not one does it; 58px down there is the CTA band, which is
+  the thing he keeps objecting to.
+- Don't make the email address an icon. You cannot copy an icon, a mailto
+  depends on their mail client working, and the half-written draft only fires
+  on a mailto click.
+- Don't let `contact.ctaUrl` become the footer line's link again. A copyright
+  line is not a call to action.
 - Don't put `admin.html`, or an alias to it, inside `Edit the site/`. Relative
   paths break and a Finder alias opens it over `file://`, where it cannot save
   to GitHub. The launcher is the only correct form of it.
