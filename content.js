@@ -214,18 +214,6 @@ window.SITE_CONTENT = {
           {
             role: "Client",
             name: "Domino's, Miami Ad School Madrid"
-          },
-          {
-            role: "Art director",
-            name: "James Young"
-          },
-          {
-            role: "Account director",
-            name: "Rhea Samuel"
-          },
-          {
-            role: "Account managers",
-            name: "Mo Awkel, Marwa Elkhateeb"
           }
         ],
         next: {},
@@ -292,13 +280,11 @@ window.SITE_CONTENT = {
           {
             role: "Brand director",
             name: "Viktoria Nikulnikova"
-          },
-          {
-            role: "Agency",
-            name: "Social Nuts"
           }
         ],
-        next: {},
+        next: {
+          title: ""
+        },
         "draft": false,
         "ran": true
       },
