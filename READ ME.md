@@ -10,15 +10,38 @@ that one is old.
 
 ## Start here, every time
 
-Double-click **`Start Site.command`** in this folder. A black window opens and
-stays open. That window IS the server: close it and the site stops working
-locally.
+There is a folder called **`Edit the site`** inside this one. It holds the two
+things you need and nothing else:
 
-Then open:
+- **`Open the editor.command`** — double-click it. It starts the server and
+  opens the editor.
+- **`The links.html`** — double-click it. Every address on this site, live and
+  local, clickable, plus these instructions. It tells you at the top whether
+  your server is running.
+
+That launcher does one thing `Start Site.command` does not: it checks first,
+and it will **not** start a second server. The server takes the next free port
+if 8888 is busy, so a second one lands on 8889 and opens the site there.
+Nothing looks wrong. But your browser keeps the GitHub connection per
+*address*, so the editor on 8889 has never heard of your token and **Save to
+GitHub sits there dead**. That reads exactly like a broken save and is not one.
+
+This is not hypothetical. On 29 August a server was found squatting on 8888
+that answered just enough to look alive and returned "not found" for every
+actual page. It had been there since 25 August, so every time you double-clicked
+`Start Site.command` in those four days you were put on 8889. It is gone now,
+and the launcher checks for that exact thing.
+
+`Start Site.command` still works and is still fine when nothing else is running.
+
+The addresses, if you want to type them:
 
 - the site: **http://127.0.0.1:8888/**
 - the editor: **http://127.0.0.1:8888/admin.html**
 - the home designer: **http://127.0.0.1:8888/design.html**
+
+If any of those say "not found", something is wrong with the server, not with
+your site. Close every black window and double-click the launcher again.
 
 **Always open the editor through that address, never by double-clicking
 `admin.html`.** Opened as a file it cannot read the folder, which means it
@@ -199,6 +222,7 @@ list in the editor counts how many are left. It turns green at zero.
 | `email-prompt.md` | The brief for rewriting the pre-filled emails. Paste it into a writing AI. |
 | `make-og.html` | Looks at that picture, and saves it by hand if ever needed. |
 | `local-server.py` | The little server behind `Start Site.command`. |
+| `Edit the site/` | The launcher and the list of links. Start here. |
 | `images/` | Your pictures. `images/live/` are the ones pulled off your old site. |
 
 The copies in this folder are the current ones and match GitHub exactly.

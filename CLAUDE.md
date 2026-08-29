@@ -1147,6 +1147,74 @@ another, after a translation block that has since been removed with the rest
 of the Japanese. Nothing in admin clones a project, so the cause is still
 unknown.
 
+## Added 29 Aug 2026
+
+### `Edit the site/` — the front door
+
+He asked for "a folder inside the folder with the admin file and a doc file
+with the updated links to work the edits live". The portfolio folder has 55
+items in it and `admin.html` is buried among `word-pools-2.html` and
+`hero-sets-mine.html`, so the ask is really: one place to go.
+
+It holds two files:
+
+- **`Open the editor.command`** — starts the server and opens the editor.
+- **`The links.html`** — every address, local and live, clickable, plus the
+  steps and the traps. It reports at the top whether the server is up.
+
+**`admin.html` itself is NOT in there and must not be**, nor an alias to it.
+It reads `content.js`, `og-draw.js` and `images/` by relative path, so a copy
+in a subfolder is broken and, worse, is a second editor that goes stale. And a
+Finder alias opens it over `file://`, which is the one way `READ ME.md` tells
+him never to open it. A launcher is the only correct form of "the admin file
+in another folder".
+
+`The links.html` is **self-contained on purpose**: no stylesheet, no webfont,
+no `content.js`. It is the page he opens when something is not working, so it
+cannot need anything to be working. `preview-footer.html` taught that lesson
+by rendering blank when sent on its own.
+
+### A dead server had been holding port 8888 for four days
+
+Found while building the above. `local-server.py` takes **the next free port**
+if 8888 is busy, and `admin.html` keeps the GitHub token in `localStorage`,
+which is **per origin**. So `http://127.0.0.1:8889` is a different origin with
+an empty token store, and the editor there cannot publish. Admin says so in
+its own comment at the `file://` warning.
+
+An orphaned server (PPID 1, output to `/tmp/portfolio-server.log`, started
+25 Aug by a sandboxed background command — ours, not his) was sitting on 8888
+returning **404 for every file**, `index.html` included, while `/api/version`
+answered 200 with the correct timestamp. It could `stat` the folder but not
+`open` anything in it. So for four days every `Start Site.command` landed him
+on 8889, and `http://127.0.0.1:8888/admin.html` — the address printed in
+`READ ME.md`, in admin's own warning and in the server's startup banner — was
+returning "not found". Killed; his own Terminal server on 8889 left alone.
+
+Things that will bite anyone changing this:
+
+- **`/api/version` is not proof a server works.** It reads a modification
+  time, and a timestamp is a `stat`, not a read. The launcher's liveness check
+  therefore asks for **`/admin.html` and requires 200**, which proves the
+  server can actually serve the folder. A check that the zombie passed is not
+  a check.
+- **The launcher refuses to start a second server**, and when something is
+  squatting it prints `pkill -f local-server.py` rather than quietly taking
+  8889. Landing him on a port he cannot publish from is worse than not
+  starting.
+- **The doc's status check loads an image, it does not `fetch`.** A fetch has
+  to clear CORS, and from `file://` (how he will usually open it) that is
+  browser-dependent; a preview pane serving the file as a `data:` URL blocked
+  it outright and the page said "your server is not running" while two were.
+  An `Image` fires load/error with no CORS involved, so it behaves the same
+  however the page was opened. `renderPortraitNote()` in admin does the same
+  thing for the same reason. It probes `favicon.png`, a real file, for the
+  `/api/version` reason above.
+- **A failed check says "no answer", never "it is off", and greys nothing
+  out.** The check can be blocked rather than answered, and greying out a
+  working link on the strength of a check that may not have run is the worse
+  mistake.
+
 ## Don't
 
 - Don't add a build step or framework.
@@ -1169,6 +1237,11 @@ unknown.
 - Don't try to set an og: tag from JavaScript. The scrapers do not run it.
 - Don't put copy in `PROJECT-NOTES.md`. It is a stub; `READ ME.md` is his
   handbook and the one to keep current.
+- Don't put `admin.html`, or an alias to it, inside `Edit the site/`. Relative
+  paths break and a Finder alias opens it over `file://`, where it cannot save
+  to GitHub. The launcher is the only correct form of it.
+- Don't use `/api/version` to decide whether the local server is working. It
+  answers from a `stat` and a dead server passed it for four days.
 - Don't put the Japanese back. He had it for four days and asked for all of it
   out on 26 Aug 2026. Removed means removed: content, plumbing, typesetting
   and the admin warning. Don't leave dormant language machinery behind either.

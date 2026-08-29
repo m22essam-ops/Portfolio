@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Working on the site · Mohammed Essam</title>
+<meta name="robots" content="noindex">
+
+<!-- THIS FILE IS DELIBERATELY SELF-CONTAINED.
+     No stylesheet, no webfont, no content.js, no site.js. It is the page you
+     open when something is not working, so it must not need anything to be
+     working. preview-footer.html learned that the hard way: sent on its own
+     it rendered a blank page, because it builds itself out of the real site
+     and had nothing to build from.
+     System fonts throughout for the same reason: it has to render on a plane. -->
+<style>
+  :root{
+    --paper:#F2EEE5; --ink:#0B0A09; --dim:#5C574E;
+    --red:#E3261A; --line:#D8D1C4; --ok:#1B7A3D;
+    --sys:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;padding:0 24px 90px;background:var(--paper);color:var(--ink);
+    font-family:var(--sys);font-size:16px;line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:820px;margin:0 auto}
+
+  header{padding:56px 0 6px}
+  h1{font-size:clamp(30px,6vw,46px);line-height:1.05;letter-spacing:-.02em;margin:0 0 10px;font-weight:800}
+  header p{margin:0;color:var(--dim);max-width:62ch}
+
+  h2{
+    font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;
+    margin:48px 0 4px;padding-top:14px;border-top:2px solid var(--ink);
+  }
+  h2 .note{
+    display:block;letter-spacing:0;text-transform:none;font-weight:400;
+    font-size:15px;color:var(--dim);margin-top:6px;
+  }
+
+  /* ---- the status pill ----
+     It asks the server directly. From file:// the browser sends Origin: null,
+     and local-server.py answers every request with Access-Control-Allow-Origin: *,
+     so this works whether you opened this page from the folder or from
+     http://127.0.0.1:8888/. admin.html's Save locally button relies on the
+     same thing. */
+  .pill{
+    margin:26px 0 0;padding:16px 18px;border-radius:8px;border:2px solid var(--line);
+    background:#fff;
+  }
+  .pill b{display:block;font-size:17px;margin-bottom:2px}
+  .pill p{margin:0;color:var(--dim);font-size:15px}
+  .pill.is-up{border-color:var(--ok)}
+  .pill.is-up b{color:var(--ok)}
+  .pill.is-down{border-color:var(--red)}
+  .pill.is-down b{color:var(--red)}
+  .pill.is-warn{border-color:var(--red);background:#FDF2F1}
+  .pill.is-warn b{color:var(--red)}
+
+  ol.steps{margin:16px 0 0;padding-left:20px}
+  ol.steps li{margin:0 0 14px;max-width:66ch}
+  ol.steps b{font-weight:700}
+
+  ul.links{list-style:none;margin:14px 0 0;padding:0}
+  ul.links li{
+    display:flex;gap:18px;align-items:baseline;
+    padding:9px 0;border-bottom:1px solid var(--line);
+  }
+  ul.links li:last-child{border-bottom:0}
+  ul.links .what{flex:1 1 auto;min-width:0}
+  ul.links .what span{display:block;color:var(--dim);font-size:14px;line-height:1.45}
+  ul.links a{
+    font-family:var(--mono);font-size:13.5px;color:var(--red);
+    text-decoration:none;border-bottom:1px solid rgba(227,38,26,.35);
+    flex:0 1 auto;word-break:break-all;text-align:right;
+  }
+  ul.links a:hover{border-bottom-color:var(--red)}
+
+  code,kbd{font-family:var(--mono);font-size:.92em;background:#fff;
+    border:1px solid var(--line);border-radius:4px;padding:1px 5px}
+
+  .bite{margin:14px 0 0;max-width:66ch}
+  .bite p{margin:0 0 16px}
+  .bite p b{color:var(--red)}
+
+  footer{margin-top:54px;padding-top:16px;border-top:1px solid var(--line);
+    color:var(--dim);font-size:14px}
+
+  @media (max-width:640px){
+    ul.links li{flex-direction:column;gap:4px}
+    ul.links a{text-align:left}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Working on the site.</h1>
+  <p>Every link you need, and the order to use them in. This file lives in the
+     portfolio folder and does not need the internet to open.</p>
+</header>
+
+<div class="pill" id="status">
+  <b>Checking your server…</b>
+  <p>One moment.</p>
+</div>
+
+<h2>Do this
+  <span class="note">Start to finish, from nothing on screen to words on
+    mohammedessam.com.</span>
+</h2>
+<ol class="steps">
+  <li><b>Double-click <code>Open the editor.command</code></b>, in this folder.
+      A black window opens and stays open. That window <i>is</i> the server:
+      close it and everything below stops working. Two browser tabs open by
+      themselves, the site and the editor.</li>
+  <li><b>If the editor was already open, reload it</b> before you start typing.
+      It holds the whole site's text in memory. A tab you opened this morning
+      still believes it is this morning.</li>
+  <li><b>Write.</b> Then press one of the two buttons at the top.
+      <b>Save locally</b> writes this folder only, so your preview updates and
+      the live site does not. <b>Save to GitHub</b> writes both, and that is
+      the one that publishes.</li>
+  <li><b>Read the line under the buttons.</b> It says what happened to each
+      destination. If something went wrong, that is where it says so.</li>
+  <li><b>Wait a minute or two</b>, then check the live site. GitHub rebuilds it
+      after every save.</li>
+</ol>
+
+<h2>On your machine
+  <span class="note">These only answer while the server is running.</span>
+</h2>
+<ul class="links" id="localLinks">
+  <li><div class="what">The editor<span>All the words, all the projects, both save buttons</span></div>
+      <a href="http://127.0.0.1:8888/admin.html">127.0.0.1:8888/admin.html</a></li>
+  <li><div class="what">The home designer<span>Drag the ticket around. Desktop and phone are two separate layouts</span></div>
+      <a href="http://127.0.0.1:8888/design.html">127.0.0.1:8888/design.html</a></li>
+  <li><div class="what">The site<span>Refreshes itself every time you save</span></div>
+      <a href="http://127.0.0.1:8888/index.html">127.0.0.1:8888/index.html</a></li>
+  <li><div class="what">The home page, intro forced<span>The tear only plays once per tab, so this is how to watch it again</span></div>
+      <a href="http://127.0.0.1:8888/index.html?intro=1">127.0.0.1:8888/index.html?intro=1</a></li>
+  <li><div class="what">All work</div>
+      <a href="http://127.0.0.1:8888/work.html">127.0.0.1:8888/work.html</a></li>
+  <li><div class="what">Work that worked<span>Everything with <i>It got produced</i> ticked</span></div>
+      <a href="http://127.0.0.1:8888/work.html?ran=1">127.0.0.1:8888/work.html?ran=1</a></li>
+  <li><div class="what">Who I am</div>
+      <a href="http://127.0.0.1:8888/about.html">127.0.0.1:8888/about.html</a></li>
+  <li><div class="what">The awards cabinet</div>
+      <a href="http://127.0.0.1:8888/awards.html">127.0.0.1:8888/awards.html</a></li>
+  <li><div class="what">Manipulating<span>The page behind the skill</span></div>
+      <a href="http://127.0.0.1:8888/manipulating.html">127.0.0.1:8888/manipulating.html</a></li>
+  <li><div class="what">The link-preview picture<span>Redraws itself on save. This is only for looking at it, or fixing it by hand</span></div>
+      <a href="http://127.0.0.1:8888/make-og.html">127.0.0.1:8888/make-og.html</a></li>
+</ul>
+
+<h2>Live
+  <span class="note">The real thing. A minute or two behind your last
+    <i>Save to GitHub</i>.</span>
+</h2>
+<ul class="links">
+  <li><div class="what">Home</div>
+      <a href="https://www.mohammedessam.com/">www.mohammedessam.com</a></li>
+  <li><div class="what">All work</div>
+      <a href="https://www.mohammedessam.com/work.html">www.mohammedessam.com/work.html</a></li>
+  <li><div class="what">Work that worked</div>
+      <a href="https://www.mohammedessam.com/work.html?ran=1">www.mohammedessam.com/work.html?ran=1</a></li>
+  <li><div class="what">Who I am</div>
+      <a href="https://www.mohammedessam.com/about.html">www.mohammedessam.com/about.html</a></li>
+  <li><div class="what">The awards cabinet</div>
+      <a href="https://www.mohammedessam.com/awards.html">www.mohammedessam.com/awards.html</a></li>
+  <li><div class="what">Manipulating</div>
+      <a href="https://www.mohammedessam.com/manipulating.html">www.mohammedessam.com/manipulating.html</a></li>
+</ul>
+
+<h2>GitHub
+  <span class="note">Where the site actually lives. You rarely need these, but
+    when a save has not landed, this is where you find out why.</span>
+</h2>
+<ul class="links">
+  <li><div class="what">The repository<span>Every file, and the history of every change</span></div>
+      <a href="https://github.com/m22essam-ops/Portfolio">github.com/m22essam-ops/Portfolio</a></li>
+  <li><div class="what">Is it publishing?<span>A green tick on the top row means your save is live. A yellow dot means wait</span></div>
+      <a href="https://github.com/m22essam-ops/Portfolio/actions">github.com/m22essam-ops/Portfolio/actions</a></li>
+  <li><div class="what">The last few saves<span>Each one shows exactly what changed</span></div>
+      <a href="https://github.com/m22essam-ops/Portfolio/commits/main">github.com/m22essam-ops/Portfolio/commits/main</a></li>
+  <li><div class="what">Domain and HTTPS settings</div>
+      <a href="https://github.com/m22essam-ops/Portfolio/settings/pages">github.com/m22essam-ops/Portfolio/settings/pages</a></li>
+  <li><div class="what">A new access token<span>Only if the editor ever says the connection expired. Repo access, this repo</span></div>
+      <a href="https://github.com/settings/tokens?type=beta">github.com/settings/tokens</a></li>
+</ul>
+
+<h2>Not on the site
+  <span class="note">Option pages, built so you could choose between things.
+    Nothing links to them.</span>
+</h2>
+<ul class="links" id="previewLinks">
+  <li><div class="what">The four intros<span>You picked the perforation. The other three are still in there</span></div>
+      <a href="http://127.0.0.1:8888/preview-intro.html">127.0.0.1:8888/preview-intro.html</a></li>
+  <li><div class="what">The three footers</div>
+      <a href="http://127.0.0.1:8888/preview-footer.html">127.0.0.1:8888/preview-footer.html</a></li>
+  <li><div class="what">The headline in two faces</div>
+      <a href="http://127.0.0.1:8888/preview-font.html">127.0.0.1:8888/preview-font.html</a></li>
+</ul>
+
+<h2>Three things that bite</h2>
+<div class="bite">
+  <p><b>Only ever 8888.</b> The server takes the next free port if 8888 is
+     busy, so it can end up on 8889 without saying anything is wrong. It looks
+     completely normal. But your browser keeps the GitHub connection per
+     <i>address</i>, so the editor on 8889 has never heard of your token and
+     <i>Save to GitHub</i> just sits there. Two ways it happens: you start a
+     second one while one is running, or something dead is still holding 8888.
+     The second one is what had happened on 29 August, since 25 August. The
+     launcher in this folder checks for both and says so instead of starting
+     a server you cannot publish from.</p>
+  <p><b>Never open <code>admin.html</code> by double-clicking it.</b> Opened as
+     a file it gets its own private storage, so your GitHub connection is
+     invisible to it, and Safari will not let it publish. Always go through
+     <code>127.0.0.1:8888</code>.</p>
+  <p><b>Words update fast, looks update slow.</b> Your text is fetched with a
+     stamp that changes every minute. The stylesheet is not. So if you change
+     how something <i>looks</i> and the live site seems not to have noticed, it
+     has: hold <kbd>Shift</kbd> and reload.</p>
+</div>
+
+<footer>
+  Longer version in <code>READ ME.md</code>, in the folder above this one.
+  The brief for rewriting the pre-filled emails is <code>email-prompt.md</code>.
+</footer>
+
+</div>
+
+<script>
+(function () {
+  var box = document.getElementById('status');
+
+  /* Ask both ports. 8888 is the one everything is built around; 8889 only
+     ever has a server on it because a second one got started by accident,
+     and that is worth saying out loud rather than leaving him to discover it
+     when a save appears to do nothing.
+
+     ASK BY LOADING AN IMAGE, NOT BY FETCHING. A fetch has to get past CORS,
+     and from a file:// page (which is how this will usually be opened) that
+     is browser-dependent: Safari is strict, and a preview pane that serves
+     this as a data: URL blocks it outright. Both were seen returning "not
+     running" while two servers were up. An image fires load or error with no
+     CORS involved at all, so it behaves the same however this page was
+     opened. admin.html checks the About photos the same way and for the same
+     reason. */
+  function ask(port) {
+    return new Promise(function (done) {
+      var im = new Image(), settled = false;
+      var end = function (up) { if (!settled) { settled = true; done(up); } };
+      im.onload  = function () { end(true); };
+      im.onerror = function () { end(false); };
+      setTimeout(function () { end(false); }, 2500);
+      im.src = 'http://127.0.0.1:' + port + '/favicon.png?probe=' + Date.now();
+    });
+  }
+
+  function say(cls, title, body) {
+    box.className = 'pill ' + cls;
+    box.innerHTML = '<b></b><p></p>';
+    box.querySelector('b').textContent = title;
+    box.querySelector('p').innerHTML = body;
+  }
+
+  Promise.all([ask(8888), ask(8889)]).then(function (r) {
+    var main = r[0], stray = r[1];
+
+    if (main && stray) {
+      say('is-warn', 'Two servers are running.',
+        'One on 8888 and a stray on 8889. If your browser is sitting on ' +
+        '<b>8889</b>, Save to GitHub will not work there, because the token is ' +
+        'kept per address. Close the extra Terminal window, then use ' +
+        '<a href="http://127.0.0.1:8888/admin.html">127.0.0.1:8888/admin.html</a>.');
+      return;
+    }
+    if (main) {
+      say('is-up', 'Your server is running.',
+        'Everything below works. Go to ' +
+        '<a href="http://127.0.0.1:8888/admin.html">the editor</a>.');
+      return;
+    }
+    if (stray) {
+      say('is-warn', 'Your server is on the wrong port.',
+        'It is on 8889, not 8888. The editor there has no GitHub connection. ' +
+        'Close that Terminal window and double-click ' +
+        '<b>Open the editor.command</b> in this folder.');
+      return;
+    }
+    /* No answer is not the same as "it is off": a browser can refuse to make
+       the check at all. So this suggests rather than rules, and the links
+       below are left alive, because greying out a working link on the
+       strength of a check that may not have run is the worse mistake. */
+    say('is-down', 'No answer from your server.',
+      'Either it is not running, or this page was not allowed to ask. Double-click ' +
+      '<b>Open the editor.command</b>, in this folder, and the black window will ' +
+      'tell you which. The live links work either way.');
+  });
+})();
+</script>
+</body>
+</html>
