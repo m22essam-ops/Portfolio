@@ -1192,20 +1192,29 @@ window.SITE_CONTENT = {
         "ran": false
       },
       {
-        slug: "murder-your-thirst",
+        slug: "murder-whats-next",
         title: "Liquid Death - Murder What's Next",
         client: "Liquid Death",
         category: "Radio",
         year: "2026",
-        image: "",
+        image: "71OjfNNqSVL.jpg",
         alt: "",
-        sticker: "Concept only",
+        sticker: "Thirsty for fame",
         tagline: "",
-        story: [],
-        media: [],
+        story: [
+          "When you murder your thirst with Liquid Death, you might like it so much that you start thinking of your next murder.",
+          "In this radio campaign, Liquid Death shows how the taste of its water makes people feel like killing. But, as the suits probably say, it’s better to just “murder” your thirst. Way more legal, safe, and super refreshing!"
+        ],
+        media: [
+          {
+            type: "video",
+            src: "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/q2Wa7VXfJeY?si=mNmOs_qwjPKpUsbc\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+            caption: ""
+          }
+        ],
         credits: [],
         next: {},
-        "draft": true,
+        "draft": false,
         "ran": false
       }
     ],
