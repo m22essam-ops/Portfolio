@@ -23,7 +23,7 @@ window.SITE_CONTENT = {
     badge: "I WON NOTHING",
     terms: "Odds of winning awards: Historically low. The ticket has no cash value, but the headlines do.",
     stampArc: "VALID UNTIL HIRED",
-    stampName: "As seen on TV",
+    stampName: "Who am I ",
     stampValue: "",
     stampFoot: "",
     stampPhoto: "portrait-rooftop.jpg",
