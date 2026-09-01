@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The link card, two ways · Mohammed Essam</title>
+<meta name="robots" content="noindex">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Syne:wght@400..800&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="stylesheet" href="styles.css">
+
+<!-- NOT LINKED FROM THE SITE, and it does not touch og-draw.js or
+     images/og.jpg. A is the REAL drawing, called through window.drawOg, so it
+     is exactly the file that ships today. B is drawn here only.
+
+     The question: his teacher says the page has to read as a lottery ticket
+     fast, or "Award-losing" lands as a deficit before the joke arrives. He
+     answered that he always introduces the site himself. Both are true, but
+     the LINK CARD is the one surface where nobody is introduced: it is what
+     WhatsApp, LinkedIn and Slack render before anyone clicks.
+
+     B applies one rule taken from his own reference images (1970s New York
+     and Connecticut State Lottery tickets): what makes those read as tickets
+     is TYPOGRAPHIC AND STRUCTURAL, not decorative. Labelled data fields,
+     variable data overprinted in another colour and a machine face, a prize
+     legend, flat spot colour. Five of the six devices are type and rules.
+     Only the security tint is texture.
+
+     So B keeps his palette and his typefaces and adds the ANATOMY. The thing
+     that dates those tickets is the fat rounded 70s display faces and the
+     mustard palette, and neither is anywhere near this. -->
+<style>
+  body{padding:0 0 120px}
+  .pv-head{padding:54px 0 10px}
+  .pv-head h1{font-size:clamp(30px,5vw,54px);margin:0 0 12px}
+  .pv-head p{max-width:70ch;font-size:17px;line-height:1.6;color:var(--fg-dim);margin:0 0 10px}
+
+  .pv-opt{margin:0 0 44px;border-top:2px solid var(--fg);padding-top:14px}
+  .pv-tag{font-family:var(--mono);font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--fg);margin:0 0 6px;font-weight:700}
+  .pv-why{font-size:15px;line-height:1.55;color:var(--fg-dim);max-width:78ch;margin:0 0 14px}
+  .pv-card{background:#111;padding:18px;border-radius:2px}
+  .pv-card canvas{display:block;width:100%;height:auto}
+
+  .pv-notes{margin:18px 0 0;padding:0;list-style:none;max-width:78ch}
+  .pv-notes li{position:relative;padding-left:22px;margin:0 0 9px;font-size:15px;line-height:1.55;color:var(--fg-dim)}
+  .pv-notes li::before{content:"";position:absolute;left:0;top:8px;width:9px;height:9px;background:var(--red)}
+  .pv-notes b{color:var(--fg)}
+  .pv-flag{border-left:3px solid var(--red);padding:2px 0 2px 16px;margin:20px 0 0;max-width:78ch;
+    font-size:15px;line-height:1.55;color:var(--fg-dim)}
+  .pv-flag b{color:var(--red)}
+</style>
+</head>
+<body class="page page-about">
+
+<header class="pv-head">
+  <div class="wrap">
+    <h1>The link card, two ways.</h1>
+    <p>This is the picture people see when the link is pasted into a message,
+       before anyone has clicked anything. It is the one surface where nobody
+       gets your introduction, so it is where your teacher's note actually
+       bites.</p>
+    <p><b>A is the real drawing</b>, called through the same <code>drawOg()</code>
+       the editor uses, so it is the file that ships today. B is drawn only on
+       this page. Nothing here changes the site.</p>
+  </div>
+</header>
+
+<div class="wrap" id="pvOut"></div>
+
+<script src="content.js"></script>
+<script src="og-draw.js"></script>
+<script>
+(function () {
+  var host = document.getElementById('pvOut');
+  var C = window.SITE_CONTENT;
+
+  if (!C || !window.drawOg) {
+    host.setAttribute('style',
+      'font:16px/1.55 -apple-system,BlinkMacSystemFont,sans-serif;max-width:640px;' +
+      'margin:60px auto;padding:22px 24px;border:2px solid #E3261A;border-radius:4px;background:#fff;color:#111');
+    host.innerHTML = '<b style="color:#E3261A">Open this from the Portfolio folder.</b>' +
+      '<p style="margin:10px 0 0">It needs <code>content.js</code> and <code>og-draw.js</code> ' +
+      'beside it, because A is the real drawing rather than a mock-up.</p>' +
+      '<p style="margin:10px 0 0">Use <b>http://127.0.0.1:8888/preview-og.html</b>.</p>';
+    return;
+  }
+
+  var W = 1200, H = 630;
+  var RED = '#E3261A', PAPER = '#F6F3EE', INK = '#0B0A09';
+  var MONO = '"Barlow Condensed", sans-serif';
+  /* the overprint face: a machine typeface, deliberately NOT the form's face.
+     On a real ticket the form is offset-printed and the numbers are added
+     later by a different machine, which is exactly why they never match. */
+  var MACHINE = 'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
+
+  function tracked(x, text, px, weight, family, spacing) {
+    x.font = weight + ' ' + px + 'px ' + family;
+    x.letterSpacing = (spacing || 0) + 'px';
+    return x.measureText(text).width;
+  }
+
+  /* ---------------------------------------------------------------
+     B: the same card with a ticket's ANATOMY on it.
+     Palette unchanged. Typefaces unchanged. What is added is structure.
+     --------------------------------------------------------------- */
+  function drawAnatomy(content) {
+    var T = (content && content.ticket) || {};
+    var c = document.createElement('canvas');
+    c.width = W; c.height = H;
+    var x = c.getContext('2d');
+
+    var TX = 46, TY = 40, TW = 1108, TH = 550, BH = 54;
+    var L = TX + 30, R = TX + TW - 30;
+
+    x.fillStyle = RED; x.fillRect(0, 0, W, H);
+    x.fillStyle = PAPER; x.fillRect(TX, TY, TW, TH);
+
+    /* ---- the security tint: THE ONLY TEXTURE IN HERE ----
+       Every ticket in his references has one, and on the New York ones it is
+       the state's own name repeated across the stock. So this repeats HIS.
+       At 4% it is under the threshold where it can fight anything: the
+       smallest type on this card is 14px, not the 7.9px on the home page,
+       which is why a tint is safe here and would not be there. */
+    x.save();
+    x.beginPath(); x.rect(TX, TY + BH, TW, TH - BH); x.clip();
+    /* IF YOU CAN READ IT, IT IS TOO STRONG. First pass ran this at 4% and
+       30px and the words were plainly legible straight through the headline,
+       which is texture doing damage rather than texture doing work. A real
+       security tint is a pattern you notice only when you look for it. */
+    x.fillStyle = 'rgba(11,10,9,.028)';
+    x.font = '600 19px ' + MONO; x.letterSpacing = '3px';
+    for (var ty = TY + BH + 26; ty < TY + TH + 20; ty += 30) {
+      var off = ((ty / 30) % 2) * 96;
+      x.fillText('MOHAMMED ESSAM · MOHAMMED ESSAM · MOHAMMED ESSAM · MOHAMMED ESSAM · MOHAMMED ESSAM · MOHAMMED ESSAM',
+                 TX - 60 - off, ty);
+    }
+    x.restore();
+
+    /* the perforated bite, punched out of the paper */
+    x.globalCompositeOperation = 'destination-out';
+    for (var yy = TY + BH + 24; yy < TY + TH - 10; yy += 26) {
+      x.beginPath(); x.arc(TX, yy, 6, 0, 7); x.fill();
+      x.beginPath(); x.arc(TX + TW, yy, 6, 0, 7); x.fill();
+    }
+    x.globalCompositeOperation = 'source-over';
+
+    /* ---- the black band, unchanged ---- */
+    x.fillStyle = INK; x.fillRect(TX, TY, TW, BH);
+    x.textBaseline = 'middle';
+    x.fillStyle = PAPER;
+    x.font = '600 17px ' + MONO; x.letterSpacing = '2.4px';
+    x.fillText(String(T.band || '').toUpperCase(), L, TY + BH / 2 + 1);
+
+    var badge = String(T.badge || '').toUpperCase();
+    if (badge) {
+      var bw = tracked(x, badge, 15, 700, MONO, 2.2) + 30;
+      x.fillStyle = RED; x.fillRect(R - bw, TY + 13, bw, BH - 26);
+      x.fillStyle = PAPER;
+      x.font = '700 15px ' + MONO; x.letterSpacing = '2.2px';
+      x.fillText(badge, R - bw + 15, TY + BH / 2 + 1);
+    }
+
+    /* ---- game line + name ---- */
+    x.fillStyle = 'rgba(11,10,9,.58)';
+    x.font = '500 14px ' + MONO; x.letterSpacing = '2.1px';
+    x.fillText(String(T.game || '').toUpperCase(), L, TY + BH + 32);
+
+    x.fillStyle = INK;
+    x.font = '700 27px ' + MONO; x.letterSpacing = '4.6px';
+    x.fillText(String(T.name || '').toUpperCase(), L, TY + BH + 74);
+
+    /* ---- the headline ---- */
+    /* 88px, not the 132 the shipping card uses. The card has to carry a play
+       area and a field band now, and the vertical budget is 630px total. At
+       132 the play-area labels collided with the field rule with 6px between
+       them. 88 is still enormous at this size and it is what buys the
+       structure underneath. */
+    var top = String(T.titleTop || ''), bot = String(T.titleBottom || '');
+    var size = 88;
+    for (var i = 0; i < 40; i++) {
+      var w = Math.max(
+        tracked(x, top, size, 800, '"Syne", sans-serif', -size * 0.035),
+        tracked(x, bot, size, 800, '"Syne", sans-serif', -size * 0.035));
+      if (w <= TW - 60 || size < 24) break;
+      size = size * ((TW - 60) / w) * 0.995;
+    }
+    x.font = '800 ' + size + 'px "Syne", sans-serif';
+    x.letterSpacing = (-size * 0.035) + 'px';
+    x.textBaseline = 'alphabetic';
+    var base = TY + BH + 74 + 30 + size * 0.9;
+    x.fillStyle = INK; x.fillText(top, TX + 28, base);
+    x.fillStyle = RED; x.fillText(bot, TX + 28, base + size * 0.88);
+
+    /* =========================================================
+       THE PLAY AREA. On the Connecticut tickets this is three boxed
+       numbers with a tiny label under each. Here the numbers are true, and
+       the third one is the joke landing INSIDE the ticket rather than
+       beside it: on a lottery ticket a zero is not a confession, it is a
+       result. That is the whole of his teacher's note, executed as
+       structure instead of decoration.
+       ========================================================= */
+    var playY = base + size * 0.88 + 32;
+    var cols = [
+      { n: String((content.work && content.work.projects || []).filter(function (p) { return !p.draft; }).length), label: 'PIECES' },
+      { n: '02', label: 'LANGUAGES' },
+      { n: '00', label: 'AWARDS' }
+    ];
+    var cw = 150, gap = 16;
+    cols.forEach(function (col, i) {
+      var bx = L + i * (cw + gap);
+      x.strokeStyle = 'rgba(11,10,9,.30)'; x.lineWidth = 1.5;
+      x.strokeRect(bx + .75, playY + .75, cw - 1.5, 48);
+      /* OVERPRINTED: another colour, a machine face, and a quarter-degree
+         off true. A real ticket's numbers never sit square to its form. */
+      x.save();
+      x.translate(bx + cw / 2, playY + 24);
+      x.rotate(-0.004);
+      x.textAlign = 'center'; x.textBaseline = 'middle';
+      x.fillStyle = RED;
+      x.font = '700 30px ' + MACHINE; x.letterSpacing = '2px';
+      x.fillText(col.n, 1, 1);
+      x.restore();
+      x.textAlign = 'left'; x.textBaseline = 'middle';
+      x.fillStyle = 'rgba(11,10,9,.62)';
+      x.font = '600 12px ' + MONO; x.letterSpacing = '1.9px';
+      var lw = tracked(x, col.label, 12, 600, MONO, 1.9);
+      x.fillText(col.label, bx + (cw - lw) / 2, playY + 62);
+    });
+
+    /* =========================================================
+       THE FIELD BAND. His serial is one string today:
+       "No. 131313 . Exp. never". Every ticket in his references breaks that
+       into separate labelled boxes, and it is the single most ticket-like
+       device available to him. The label sits UNDER the value, as it does
+       on all six New York tickets.
+       ========================================================= */
+    var fieldY = TY + TH - 96;
+    x.strokeStyle = 'rgba(11,10,9,.30)'; x.lineWidth = 1.5;
+    x.beginPath(); x.moveTo(L, fieldY - 14); x.lineTo(R, fieldY - 14); x.stroke();
+
+    var fields = [
+      { label: 'SERIES', v: '13' },
+      { label: "ACCT'G NO.", v: '131313' },
+      { label: 'ISSUED', v: 'CAIRO 2019' },
+      { label: 'EXPIRES', v: 'NEVER' }
+    ];
+    var fw = (R - L) / fields.length;
+    fields.forEach(function (f, i) {
+      var fx = L + i * fw;
+      if (i) {
+        x.strokeStyle = 'rgba(11,10,9,.18)';
+        x.beginPath(); x.moveTo(fx - 12, fieldY - 6); x.lineTo(fx - 12, fieldY + 40); x.stroke();
+      }
+      x.save();
+      x.translate(fx, fieldY + 14);
+      x.rotate(-0.003);
+      x.fillStyle = RED;
+      x.font = '700 20px ' + MACHINE; x.letterSpacing = '1.4px';
+      x.fillText(f.v, 0, 0);
+      x.restore();
+      x.fillStyle = 'rgba(11,10,9,.62)';
+      x.font = '600 11px ' + MONO; x.letterSpacing = '1.8px';
+      x.fillText(f.label, fx, fieldY + 38);
+    });
+
+    /* ---- foot ---- */
+    x.fillStyle = 'rgba(11,10,9,.55)';
+    x.font = '500 15px ' + MONO; x.letterSpacing = '2px';
+    x.fillText(String(T.stampArc || '').toUpperCase(), L, TY + TH - 26);
+    var site = 'MOHAMMEDESSAM.COM';
+    var ws = tracked(x, site, 15, 600, MONO, 2);
+    x.fillStyle = RED;
+    x.font = '600 15px ' + MONO; x.letterSpacing = '2px';
+    x.fillText(site, R - ws, TY + TH - 26);
+
+    x.letterSpacing = '0px';
+    return c;
+  }
+
+  function block(tag, why, canvas, notes, flag) {
+    var s = document.createElement('section');
+    s.className = 'pv-opt';
+    var t = document.createElement('p'); t.className = 'pv-tag'; t.textContent = tag;
+    var w = document.createElement('p'); w.className = 'pv-why'; w.textContent = why;
+    var card = document.createElement('div'); card.className = 'pv-card';
+    card.appendChild(canvas);
+    s.appendChild(t); s.appendChild(w); s.appendChild(card);
+    if (notes && notes.length) {
+      var ul = document.createElement('ul'); ul.className = 'pv-notes';
+      notes.forEach(function (n) {
+        var li = document.createElement('li'); li.innerHTML = n; ul.appendChild(li);
+      });
+      s.appendChild(ul);
+    }
+    if (flag) {
+      var f = document.createElement('p'); f.className = 'pv-flag'; f.innerHTML = flag;
+      s.appendChild(f);
+    }
+    host.appendChild(s);
+  }
+
+  window.drawOg(C).then(function (real) {
+    block('A — the card that ships today',
+      'Drawn by the real og-draw.js. This is the exact image sitting at images/og.jpg right now.',
+      real,
+      ['The only thing on it that says <b>lottery ticket</b> is the row of perforation dots down the two edges.',
+       '<b>"Award-losing" is about 40% of the frame</b> with almost nothing framing it, so a reader who has not been introduced meets the deficit before the device.',
+       'The serial is one unlabelled string in the top right, which reads as a caption rather than as ticket data.']);
+
+    block('B — the same card with a ticket’s anatomy',
+      'Same palette, same two typefaces, same headline, same band. Nothing decorative was added. What was added is the structure those 1970s tickets actually use.',
+      drawAnatomy(C),
+      ['<b>A play area.</b> Three boxed values with the label under each, the way the Connecticut Money Tree tickets do it. The numbers are true, and the third one is <b>00 AWARDS</b> — which is your teacher’s point solved as structure: on a lottery ticket a zero is not a confession, it is a result.',
+       '<b>A field band.</b> Your serial is one string today. Here it is SERIES / ACCT’G NO. / ISSUED / EXPIRES in separate ruled fields with the labels underneath, exactly as on all six New York tickets you sent.',
+       '<b>Overprinted variable data.</b> Every value is in a different colour, a machine typeface, and a quarter of a degree off true. On a real ticket the form is printed first and the numbers added later by another machine, which is why they never line up. This one detail is what makes a ticket read as a document instead of a picture of one.',
+       '<b>A security tint</b> repeating your name at 4%, the way the New York stock repeats NEW YORK STATE. This is the only texture in the whole card.',
+       '<b>What was deliberately not taken:</b> the fat rounded 70s display faces and the mustard-and-orange palette. Those are what date the references — not the structure. Strip them and you get the recognition without the pastiche you have killed twice.'],
+      '<b>The copy in the play area and the field band is mine and is a draft.</b> "02 LANGUAGES" and "00 AWARDS" are safe because you already say both on the ticket. "ISSUED CAIRO 2019" is taken from your experience list and is the one to check — content.js says Feb 2019, your old site says 2018.');
+  });
+})();
+</script>
+</body>
+</html>
