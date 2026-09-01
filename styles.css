@@ -575,6 +575,27 @@ body.has-won .stamp-value{color:var(--ink)}
 a.barcode:hover,a.barcode:focus-visible{opacity:.62;transform:translateY(-2px)}
 .tk-terms{font-size:10.5px;line-height:1.55;color:var(--ink-30);letter-spacing:.09em;margin:0;text-align:right}
 
+/* ---- TAP TARGETS ON A PHONE ----
+   Two of the ticket's links are real links and neither is big enough to hit.
+   On the mobile artboard the badge (to the awards cabinet) comes out 93x22
+   and the barcode (to the playlist) 132x31, against the 44px a finger needs.
+
+   They are the right SIZE to look at; it is only the hit area that is wrong.
+   So the area is extended with a pseudo-element and not one pixel of the
+   drawing moves. VERTICAL ONLY, and no wider than the element already is:
+   every box on the artboard is absolutely positioned, so growing these
+   sideways would reach across whatever is beside them.
+
+   Coarse pointers only, because on a mouse a 22px target is already fine and
+   an invisible 44px box would just make the cursor change early. */
+@media (pointer:coarse){
+  .tk-badge,a.barcode{position:relative}
+  .tk-badge::after,a.barcode::after{
+    content:"";position:absolute;left:0;right:0;top:50%;
+    transform:translateY(-50%);height:44px;
+  }
+}
+
 /* the awards switch: when he finally wins something */
 body.has-won .tk-badge{background:var(--ink)}
 .won-list{margin:0 0 30px;padding:0;list-style:none}

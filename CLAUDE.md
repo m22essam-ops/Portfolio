@@ -251,11 +251,19 @@ is display elsewhere (section headings, card titles, nav punches). **Barlow
 Condensed** is the system voice (labels, serials, small print, stickers, and the
 name in the ticket band). **Hanken Grotesk** is body copy.
 
-Moniqa (Rajesh Rajput, SIL OFL 1.1) is first in the home headline stack and will
-silently take over if anyone drops a font file into `fonts/`. It is deliberately
-not committed: the download is script-gated and the mirrors repackage fonts.
-The owner rejected Bodoni Moda as the stand-in; Syne replaced it and is the
-intended look, not a placeholder.
+**Moniqa is NOT in the stack and this file used to say it was** (corrected
+29 Aug 2026 by reading the page rather than this note). The home headline
+computes as `Syne, "Bricolage Grotesque", sans-serif`, and there is no
+`@font-face` rule for Moniqa anywhere, so dropping a file into `fonts/` would
+do nothing on its own. Moniqa (Rajesh Rajput, SIL OFL 1.1) was once first in
+that stack and is deliberately not committed: the download is script-gated and
+the mirrors repackage fonts. The owner rejected Bodoni Moda as the stand-in;
+Syne replaced it and is the intended look, not a placeholder.
+
+Barlow Condensed is loaded at weights 500/600/700 only. **`document.fonts.check()`
+at the default weight 400 therefore reports it missing, which is not a bug** and
+was briefly filed as one: measured properly it sets "HISTORICALLY LOW ODDS" at
+346px against 476px for the fallback, so it is really rendering.
 
 The logo is plain text with **no red dot**. The trailing period used to be
 wrapped in an `<em>` by site.js and coloured red. Removed 20 Aug 2026. Note
@@ -296,9 +304,17 @@ image of mine, my face illustrated, something". It is a lottery validation
 stamp, drawn as inline SVG in index.html: two rings, a line of type turning
 slowly round the outside on an SVG `textPath`, and a mark in the middle.
 
-It is vectors and not a picture on purpose. There is no photograph of him in the
-repo except the childhood one on the About page, nothing to download, and it
-stays sharp at any size. It obeys `prefers-reduced-motion` by standing still.
+**It now carries his photograph in the middle**, with "AS SEEN ON TV" on the
+label under it. The note below is kept because the reasoning still applies to
+the rings and the type, and because this slot is exactly where a portrait was
+always going to go if one arrived. What follows was true until he put his face
+in it: it is vectors and not a picture on purpose, there is no photograph of
+him in the repo except the childhood one on the About page, nothing to
+download, and it stays sharp at any size. It obeys `prefers-reduced-motion` by
+standing still. The rings and the ring text are still vectors.
+
+Gotcha carried over: the ring type is `--paper` on `--red`, which measures
+**4.16:1 against a 4.5 requirement**. Same failure as the badge, same cause.
 
 All of it reads from content.js: `sealRing`, `sealTop`, `sealMark`, and the won
 variants `wonSealRing` / `wonSealTop` / `wonSealMark`. **Blank the ring and the
@@ -1273,6 +1289,59 @@ Things that will bite anyone changing this:
 - **`jokes.footer` prints nowhere.** It holds "No copywriters reserved." and
   is genuinely unused, so the old "two footer lines say the same thing" note
   is resolved: only one of them was ever printing.
+
+### Home page audit, and what it fixed (29 Aug 2026)
+
+Measured at 1440x900, 390x844 and 320x700. Four things were wrong and are now
+fixed; two are his composition and were left alone.
+
+**Fixed:**
+
+- **The small print was at contrast 2.02:1 on a phone, against a 4.5
+  requirement.** `ticket.terms` is his best-written line and most people could
+  not physically read it. The cause was not the stylesheet: the DESKTOP
+  artboard sets `color:"deep"` on that item and the MOBILE one set no colour
+  at all, so mobile fell through to `--ink-30`, which is 30% black on paper.
+  Mobile now carries the same `color:"deep"` and measures 6.07:1. **When a
+  slot's appearance is set per artboard, fixing it in `styles.css` fixes
+  neither artboard.**
+- **The two halves of the headline came out at two sizes on a phone**, 35.81px
+  and 41.62px, a sixth apart, on two lines sitting on top of each other.
+  `shrinkToBox()` measures each box on its own and "Award-losing" is two
+  characters longer than "copywriter", so it shrank further. `matchTitleHalves()`
+  now takes the smaller and gives it to both. **It only runs when something
+  actually shrank**, so his deliberate desktop pair (15.328 / 15.728) is
+  untouched. Verified: desktop still renders 136.73 and 140.29.
+- **The "..." joke had no punchline on mobile.** `sub` ends "sell just about
+  anything..." and the payoff "... this included" was a free text box in
+  `layout.desktop` only, so on a phone the ellipsis set up nothing. Added to
+  `layout.mobile` under the sub, which meant moving `nav0` (33.72 -> 36.70)
+  and `nav1` (43.62 -> 46.60). `nav2` and everything below it were not moved.
+- **Two real links were half the size a finger needs.** The badge (to the
+  cabinet) was 93x22 and the barcode (to the playlist) 132x31. Extended to
+  44px with a pseudo-element under `@media (pointer:coarse)`, so nothing in
+  the drawing moved. **Vertical only**: every box on the artboard is
+  absolutely positioned, so growing them sideways would reach across whatever
+  sits beside them.
+
+**Left alone, because they are his:**
+
+- The gap above the scratch punch is still larger than the gaps between the
+  other two. It reads as deliberate separation before the special one.
+- His name is 12.92px on a phone, smaller than the sub-line under it, on a
+  page with no nav bar where it is the only thing identifying whose site it
+  is. Worth raising; it is one number in the designer.
+- `terms` is still 7.91px on mobile. The contrast failure is fixed; the size
+  is his artboard.
+
+**Checked and NOT a problem**, so nobody re-files them:
+
+- `applyLayout()`'s 75% fallback has healthy margin. `want` counts only named,
+  non-hidden items, so the three free boxes and the hidden `serial` correctly
+  do not count against it: desktop wants 13, floor is 9.75, all 13 land.
+- `serial` is `display:none` on desktop because the item carries `hidden:true`.
+  His choice, not a missing element.
+- No vertical or horizontal overflow at any width tested.
 
 ### The email address stays written out
 

@@ -707,13 +707,39 @@
     return shrunk;
   }
 
+  /* THE TWO HALVES OF THE HEADLINE ARE ONE HEADLINE, so they cannot come out
+     at two sizes. shrinkToBox measures each box on its own, and "Award-losing"
+     is two characters longer than "copywriter", so it has to come down further
+     to fit the same width: on a phone they landed at 35.81px and 41.62px, a
+     sixth apart, on two lines sitting directly on top of each other. Whichever
+     had to shrink further wins and the other joins it.
+
+     ONLY WHEN SOMETHING ACTUALLY SHRANK. On a screen where both halves fit,
+     this does not run, so the two sizes he set in the designer stay exactly as
+     he set them: on desktop they are deliberately 15.328 and 15.728, which is
+     his composition and not ours to flatten. */
+  function matchTitleHalves() {
+    var a = document.querySelector('[data-slot="titleTop"]');
+    var b = document.querySelector('[data-slot="titleBottom"]');
+    if (!a || !b) return;
+    var fa = parseFloat(getComputedStyle(a).fontSize);
+    var fb = parseFloat(getComputedStyle(b).fontSize);
+    if (!fa || !fb || fa === fb) return;
+    a.style.fontSize = b.style.fontSize = Math.min(fa, fb).toFixed(2) + 'px';
+  }
+
   function fitCanvas() {
     var out = [];
+    var titleShrank = false;
     var els = document.querySelectorAll('.ticket.is-canvas [data-placed], .ticket.is-canvas .tk-free');
     [].forEach.call(els, function (el) {
       if (getComputedStyle(el).whiteSpace !== 'nowrap') return;
-      if (shrinkToBox(el)) out.push(el.getAttribute('data-slot') || 'added text');
+      if (!shrinkToBox(el)) return;
+      var slot = el.getAttribute('data-slot');
+      out.push(slot || 'added text');
+      if (slot === 'titleTop' || slot === 'titleBottom') titleShrank = true;
     });
+    if (titleShrank) matchTitleHalves();
     window.homeShrunk = out;
     return out;
   }
