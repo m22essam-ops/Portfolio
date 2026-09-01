@@ -1457,26 +1457,26 @@ window.SITE_CONTENT = {
         },
         {
           slot: "stamp",
-          x: 79.22,
-          y: 43.08,
-          w: 15.79,
-          h: 36.73,
+          x: 79,
+          y: 43.06,
+          w: 17.21,
+          h: 43.32,
           rotate: 7
         },
         {
           slot: "barcode",
-          x: 4.04,
-          y: 93.73,
-          w: 12.35,
+          x: 3.79,
+          y: 91.4,
+          w: 20.67,
           h: 3.66
         },
         {
           slot: "terms",
-          x: 19.31,
-          y: 93.22,
-          w: 74.19,
+          x: 56.41,
+          y: 91.4,
+          w: 38.29,
           h: 4.69,
-          size: 1,
+          size: 1.2,
           color: "deep"
         },
         {
@@ -1512,7 +1512,7 @@ window.SITE_CONTENT = {
           weight: "700"
         }
       ],
-      aspect: 1.7385
+      aspect: 1.9408
     },
     mobile: {
       items: [
@@ -1581,9 +1581,20 @@ window.SITE_CONTENT = {
           size: 1.66
         },
         {
+          type: "text",
+          text: "... this included",
+          x: 4.86,
+          y: 32.6,
+          w: 90.27,
+          h: 2.4,
+          size: 1.66,
+          color: "muted",
+          weight: "700"
+        },
+        {
           slot: "nav0",
           x: 4.86,
-          y: 33.72,
+          y: 36.7,
           w: 90.27,
           h: 8.9,
           size: 1.753
@@ -1591,7 +1602,7 @@ window.SITE_CONTENT = {
         {
           slot: "nav1",
           x: 4.86,
-          y: 43.62,
+          y: 46.6,
           w: 90.27,
           h: 8.9,
           size: 1.753
@@ -1624,7 +1635,8 @@ window.SITE_CONTENT = {
           y: 93.54,
           w: 90.27,
           h: 4.69,
-          size: 0.969
+          size: 0.969,
+          color: "deep"
         }
       ],
       aspect: 0.4621
