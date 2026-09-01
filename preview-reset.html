@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hard reset, three ways · Mohammed Essam</title>
+<meta name="robots" content="noindex">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Syne:wght@400..800&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="stylesheet" href="styles.css">
+
+<!-- NOT LINKED FROM THE SITE, and it changes nothing. index.html, styles.css
+     and content.js are untouched.
+
+     Brief: hard reset. New layout and composition, ONE graphic element, and
+     that element is his photograph, stylised.
+
+     THE PHOTOGRAPH does the concept's work before any type arrives: the
+     expression is unimpressed and he is holding a pen the way you hold a
+     cigarette. "Award-losing copywriter" under that face needs no help.
+
+     THE STYLISATION was chosen by building all four candidates on the real
+     photograph and looking at them side by side, not from taste:
+       - screen, which is what .about-portrait uses, WASHES OUT at this size.
+         It works on the About page because that picture is a small stamp; at
+         half a screen it goes pale pink and stops being loud.
+       - multiply goes muddy and loses the face in the shadows.
+       - hard 2-tone posterises well but takes his eyes with it, and the
+         expression IS the joke, so it cannot go.
+       - LUMINOSITY over the flat red is the one: two inks, the hair reads
+         near-black, the shirt reads red, and the face keeps its form.
+
+     THE ASPECT is the constraint nobody can design around. The photograph is
+     1400x1800. In a 16:10 screen the whole figure occupies about 49% of the
+     width, so every one of these is a picture column and a type column. A
+     full-bleed landscape crop was tried first and it cropped to a close-up
+     that threw away the pen, which is half the joke. -->
+<style>
+  body{padding:0 0 140px}
+  .pv-head{padding:54px 0 10px}
+  .pv-head h1{font-size:clamp(30px,5vw,54px);margin:0 0 12px}
+  .pv-head p{max-width:72ch;font-size:17px;line-height:1.6;color:var(--fg-dim);margin:0 0 10px}
+
+  .pv-opt{margin:0 0 56px;border-top:2px solid var(--fg);padding-top:14px}
+  .pv-tag{font-family:var(--mono);font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--fg);margin:0 0 6px;font-weight:700}
+  .pv-why{font-size:15px;line-height:1.55;color:var(--fg-dim);max-width:78ch;margin:0 0 14px}
+  .pv-notes{margin:16px 0 0;padding:0;list-style:none;max-width:78ch}
+  .pv-notes li{position:relative;padding-left:22px;margin:0 0 9px;font-size:15px;line-height:1.55;color:var(--fg-dim)}
+  .pv-notes li::before{content:"";position:absolute;left:0;top:8px;width:9px;height:9px;background:var(--red)}
+  .pv-notes b{color:var(--fg)}
+  .pv-cost{border-left:3px solid var(--red);padding:2px 0 2px 16px;margin:16px 0 0;max-width:78ch;
+    font-size:15px;line-height:1.55;color:var(--fg-dim)}
+  .pv-cost b{color:var(--red)}
+
+  /* ---- the stage: the real home page's shape, one screen, no scroll ---- */
+  .screen{
+    position:relative;width:100%;aspect-ratio:16/10;overflow:hidden;
+    background:var(--red);color:var(--paper);
+    --pad:clamp(16px,2.5cqw,40px);
+    container-type:inline-size;
+  }
+  .screen *{box-sizing:border-box}
+
+  /* THE ONE GRAPHIC ELEMENT. Two inks: the red field underneath, his
+     luminosity on top. Nothing else on any of these screens is a picture. */
+  .shot{
+    position:absolute;display:block;
+    filter:grayscale(1) contrast(1.35);
+    mix-blend-mode:luminosity;
+  }
+
+  .kName{font-family:var(--mono);font-weight:700;text-transform:uppercase;
+    letter-spacing:.32em;font-size:clamp(9px,1.3cqw,18px);line-height:1;margin:0}
+  /* opacity .75 off-white on red measured too faint to read once it sat over
+     the photograph. The small print is his best-written line; it does not get
+     to be decoration. */
+  .kMicro{font-family:var(--mono);font-weight:600;text-transform:uppercase;
+    letter-spacing:.19em;font-size:clamp(7px,.92cqw,13px);line-height:1.55;margin:0;opacity:.95}
+  .kHead{font-family:"Syne","Bricolage Grotesque",sans-serif;font-weight:800;
+    letter-spacing:-.035em;line-height:.86;margin:0}
+  /* Each half of the headline is one line and is not allowed to break. Left
+     to wrap, "Award-losing" split into "Award-" / "losing" and the headline
+     became three lines of two different lengths, which reads as an accident. */
+  .kHead i{font-style:normal;display:block;white-space:nowrap}
+  .kNav{display:flex;gap:clamp(10px,2.2cqw,34px);margin:0;padding:0;list-style:none;flex-wrap:wrap}
+  .kNav a{font-family:var(--mono);font-weight:700;text-transform:uppercase;
+    letter-spacing:.15em;font-size:clamp(8px,1cqw,14px);color:var(--paper);
+    text-decoration:none;border-bottom:2px solid rgba(246,243,238,.4);padding-bottom:3px}
+  .kSub{font-family:"Hanken Grotesk",sans-serif;font-size:clamp(8px,1.15cqw,16px);
+    line-height:1.45;margin:clamp(8px,1.3cqw,18px) 0 0;max-width:26ch;opacity:.92}
+
+  /* ============ 1. SPLIT ============ */
+  .s1{display:grid;grid-template-columns:1.06fr .94fr}
+  .s1 .left{position:relative;padding:var(--pad);display:flex;flex-direction:column;justify-content:space-between;z-index:2}
+  .s1 .right{position:relative;overflow:hidden}
+  .s1 .shot{inset:0;width:100%;height:100%;object-fit:cover;object-position:52% 20%}
+  .s1 .kHead{font-size:clamp(20px,6.1cqw,88px)}
+
+  /* ============ 2. THE FIGURE ============ */
+  /* height:100%, width:auto keeps the photograph's own proportion, so the
+     hand and the pen survive instead of being cropped away. */
+  .s2 .shot{right:1.5%;bottom:0;height:100%;width:auto;object-fit:contain}
+  .s2 .lay{position:absolute;inset:0;padding:var(--pad);display:flex;flex-direction:column;
+    justify-content:space-between;z-index:2}
+  .s2 .col{width:52%}
+  .s2 .kHead{font-size:clamp(19px,5.5cqw,80px)}
+  /* both feet on the LEFT, stacked, because the right-hand side of this
+     composition is his arm and nothing legible can sit on it */
+  .s2 .foot{width:52%;display:flex;flex-direction:column;gap:clamp(8px,1.2cqw,16px);align-items:flex-start}
+  .s2 .foot .kMicro{max-width:40ch}
+
+  /* ============ 3. CROSSED ============ */
+  /* Same figure, centred, and the headline runs straight across it. Nothing
+     is masked or cut out: the overlap is the whole idea, which means it costs
+     nothing and cannot break when the words change. */
+  .s3 .shot{left:50%;transform:translateX(-50%);bottom:0;height:100%;width:auto;object-fit:contain}
+  .s3 .lay{position:absolute;inset:0;padding:var(--pad);display:flex;flex-direction:column;
+    justify-content:space-between;z-index:2}
+  .s3 .top{display:flex;justify-content:space-between;align-items:flex-start;gap:20px}
+  /* The crossing point matters more than the size. It sits below his eyes on
+     purpose: the type can take his mouth, but the expression is the joke and
+     the eyes have to stay above the line. */
+  .s3 .kHead{font-size:clamp(24px,8.8cqw,126px);text-align:center;margin-top:2cqw}
+  .s3 .foot{display:flex;justify-content:space-between;align-items:flex-end;gap:20px}
+  .s3 .foot .kMicro{max-width:24ch;text-align:right}
+
+  @media (max-width:700px){
+    .s1{grid-template-columns:1fr}
+    .s1 .right{display:none}
+  }
+</style>
+</head>
+<body class="page page-about">
+
+<header class="pv-head">
+  <div class="wrap">
+    <h1>Hard reset, three ways.</h1>
+    <p>New layout, new composition, one graphic element, and the element is
+       your photograph. All three keep the palette and both typefaces. What
+       differs is the composition, and how much of the ticket survives it.</p>
+    <p>Shown at the real home page's shape: one screen, no scroll. Nothing here
+       touches the site.</p>
+  </div>
+</header>
+
+<div class="wrap" id="pvOut"></div>
+
+<script src="content.js"></script>
+<script src="site.js"></script>
+<script>
+(function () {
+  var host = document.getElementById('pvOut');
+  var C = window.SITE_CONTENT;
+  if (!C || !host) {
+    if (host) {
+      host.setAttribute('style','font:16px/1.55 -apple-system,sans-serif;max-width:640px;margin:60px auto;padding:22px 24px;border:2px solid #E3261A;background:#fff;color:#111');
+      host.innerHTML = '<b style="color:#E3261A">Open this from the Portfolio folder.</b><p>It needs content.js and styles.css beside it. Use <b>http://127.0.0.1:8888/preview-reset.html</b>.</p>';
+    }
+    return;
+  }
+  var T = C.ticket || {};
+  var IMG = window.imgSrc ? window.imgSrc('portrait-studio.jpg') : 'images/portrait-studio.jpg';
+
+  function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  var NAV = (T.nav||[]).map(function(n){
+    return '<li><a href="'+esc(n.url||'#')+'">'+esc(n.label||'')+'</a></li>';
+  }).join('');
+  var HEAD = '<h2 class="kHead"><i>'+esc(T.titleTop||'')+'</i><i>'+esc(T.titleBottom||'')+'</i></h2>';
+  var SHOT = '<img class="shot" src="'+esc(IMG)+'" alt="Mohammed Essam">';
+
+  var OPTS = [
+    {
+      key:'s1',
+      tag:'1 — split',
+      why:'A hard vertical edge. Type gets one side, the photograph gets the other, and neither is asked to sit on top of the other. This is the plainest of the three and the closest to how the design-curated portfolios in that siteinspire set are built: flat colour, one image, enormous type, nothing else.',
+      html:
+        '<div class="left">' +
+          '<p class="kName">'+esc(T.name||'')+'</p>' +
+          '<div>' + HEAD + '<p class="kSub">'+esc(T.sub||'')+'</p></div>' +
+          '<ul class="kNav">'+NAV+'</ul>' +
+        '</div>' +
+        '<div class="right">'+SHOT+'</div>',
+      notes:[
+        '<b>The safest of the three and the fastest to read.</b> Nothing overlaps, so nothing can go wrong at any width or with any length of line.',
+        '<b>It is also the least like you.</b> This is a very good portfolio home page that could belong to a lot of people.',
+        'The sub-line comes back, because a half-width column finally gives it somewhere to live.'
+      ],
+      cost:'<b>This is the one that abandons the concept.</b> No ticket, no serial, no odds, no "I won nothing". "Award-losing" survives as a line but stops being a lottery joke and becomes a plain claim, which is the exact thing your teacher was worried about in the first place.'
+    },
+    {
+      key:'s2',
+      tag:'2 — the figure',
+      why:'Flat red field, the whole photograph standing in it at its own proportion, type down the left. Because nothing is cropped, the hand and the pen survive, and the pen is doing as much work as the face is.',
+      html:
+        SHOT +
+        '<div class="lay">' +
+          '<p class="kName">'+esc(T.name||'')+'</p>' +
+          '<div class="col">' + HEAD + '</div>' +
+          '<div class="foot">' +
+            '<ul class="kNav">'+NAV+'</ul>' +
+            '<p class="kMicro">'+esc(T.terms||'')+'</p>' +
+          '</div>' +
+        '</div>',
+      notes:[
+        '<b>The ticket survives as a voice rather than as furniture.</b> The small print is still at the foot in the same system face, so the odds line and the cabinet still make sense.',
+        '<b>One picture, four pieces of type.</b> The card, the punch boxes, the seal, the barcode and the scratch panel are all gone. That is the "one graphic element" note taken literally.',
+        '<b>He is standing on the bottom edge</b>, not floating in the middle, which is what stops a figure looking like a sticker.',
+        '<b>Known artefact:</b> the photograph still has its blue seamless, and under a duotone that blue becomes a slightly different red from the field, so you can see a faint rectangle around him. To have him stand on flat red with no panel, the picture needs its background removed and saved as a PNG. That is a two-minute job in Photoshop and it is yours, not something that can be done in the browser.'
+      ],
+      cost:'<b>Costs you the scratch panel, the seal and the barcode.</b> The awards cabinet and the playlist still exist as pages, but nothing on the home page points at them. The cabinet would need a door somewhere else, most obviously off the small print.'
+    },
+    {
+      key:'s3',
+      tag:'3 — crossed',
+      why:'The same figure, centred, with the headline running straight across him. Type and photograph interlock instead of sitting side by side. Nothing is masked or cut out: the overlap does all the work, so it costs nothing and cannot break when you rewrite the line.',
+      html:
+        SHOT +
+        '<div class="lay">' +
+          '<div class="top">' +
+            '<p class="kName">'+esc(T.name||'')+'</p>' +
+            '<p class="kMicro">'+esc(T.serial||'')+'</p>' +
+          '</div>' +
+          HEAD +
+          '<div class="foot">' +
+            '<ul class="kNav">'+NAV+'</ul>' +
+            '<p class="kMicro">'+esc(T.terms||'')+'</p>' +
+          '</div>' +
+        '</div>',
+      notes:[
+        '<b>The most graphic of the three and the one you would remember.</b> A headline crossing a face is a poster move, and it is the only one of these that could not be mistaken for a template.',
+        '<b>It keeps the ticket voice</b>, so the serial, the odds and the cabinet all still hold.',
+        'It is also the only one where the picture is centred, which means it holds on a very wide monitor instead of drifting to one side.',
+        '<b>Same artefact as option 2:</b> the blue seamless reads as a faint panel behind him. A background-removed PNG fixes it, and this composition is the one that most wants fixing, because a floating figure with a line across it is the whole idea.'
+      ],
+      cost:'<b>The riskiest to maintain.</b> The line has to cross him at the right height, so a much longer or shorter headline moves the crossing and the composition has to be re-judged by eye. The other two do not care what you write.'
+    }
+  ];
+
+  OPTS.forEach(function(o){
+    var s=document.createElement('section'); s.className='pv-opt';
+    var t=document.createElement('p'); t.className='pv-tag'; t.textContent=o.tag;
+    var w=document.createElement('p'); w.className='pv-why'; w.textContent=o.why;
+    var st=document.createElement('div'); st.className='screen '+o.key; st.innerHTML=o.html;
+    s.appendChild(t); s.appendChild(w); s.appendChild(st);
+    var ul=document.createElement('ul'); ul.className='pv-notes';
+    o.notes.forEach(function(n){var li=document.createElement('li');li.innerHTML=n;ul.appendChild(li);});
+    s.appendChild(ul);
+    var c=document.createElement('p'); c.className='pv-cost'; c.innerHTML=o.cost;
+    s.appendChild(c);
+    host.appendChild(s);
+  });
+})();
+</script>
+</body>
+</html>
