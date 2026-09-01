@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hard reset, three ways · Mohammed Essam</title>
+<title>Hard reset, still a lottery · Mohammed Essam</title>
 <meta name="robots" content="noindex">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,37 +12,42 @@
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="stylesheet" href="styles.css">
 
-<!-- NOT LINKED FROM THE SITE, and it changes nothing. index.html, styles.css
-     and content.js are untouched.
+<!-- NOT LINKED FROM THE SITE. index.html, styles.css and content.js untouched.
 
-     Brief: hard reset. New layout and composition, ONE graphic element, and
-     that element is his photograph, stylised.
+     Brief: hard reset on the layout and composition, ONE graphic element,
+     his photograph stylised, AND STILL INSIDE THE LOTTERY UNIVERSE.
 
-     THE PHOTOGRAPH does the concept's work before any type arrives: the
-     expression is unimpressed and he is holding a pen the way you hold a
-     cigarette. "Award-losing copywriter" under that face needs no help.
+     THE PROBLEM, stated properly: how do you say "lottery" in one second
+     using one graphic element, when that element has to be his face?
 
-     THE STYLISATION was chosen by building all four candidates on the real
-     photograph and looking at them side by side, not from taste:
-       - screen, which is what .about-portrait uses, WASHES OUT at this size.
-         It works on the About page because that picture is a small stamp; at
-         half a screen it goes pale pink and stops being loud.
-       - multiply goes muddy and loses the face in the shadows.
-       - hard 2-tone posterises well but takes his eyes with it, and the
-         expression IS the joke, so it cannot go.
-       - LUMINOSITY over the flat red is the one: two inks, the hair reads
-         near-black, the shirt reads red, and the face keeps its form.
+     THE ANSWER these three are built on: make the one graphic element a
+     LOTTERY OBJECT and put his face inside it. A silver scratch panel is the
+     most recognisable lottery object on earth. It is also the only ticket
+     device that is genuinely a texture rather than an ornament, so it does
+     not break the no-pastiche rule: a scratch card IS foil.
 
-     THE ASPECT is the constraint nobody can design around. The photograph is
-     1400x1800. In a 16:10 screen the whole figure occupies about 49% of the
-     width, so every one of these is a picture column and a type column. A
-     full-bleed landscape crop was tried first and it cropped to a close-up
-     that threw away the pen, which is half the joke. -->
+     So the picture is not decorated with ticket furniture. The picture is
+     under the foil. One element, doing both jobs.
+
+     THE FOIL IS ALREADY SCRATCHED and nothing is hidden. The scratch panels
+     that were killed in Aug 2026 were killed for demanding labour and paying
+     a joke, and for hiding the best fact on the site. These hide nothing:
+     they arrive open. The foil is a frame and a signal, not a gate.
+
+     Silver recipe lifted from the real foil in index.html: light silver base,
+     broad soft sheen, one angled highlight, faint diagonal brushing. Real
+     scratch foil is LIGHT silver and its texture is sparkle, not dirt.
+
+     Duotone is luminosity over the red, chosen by building all four
+     candidates on the real photograph: screen washes out at this size,
+     multiply goes muddy, hard 2-tone takes his eyes and the eyes are the
+     joke. -->
 <style>
   body{padding:0 0 140px}
   .pv-head{padding:54px 0 10px}
   .pv-head h1{font-size:clamp(30px,5vw,54px);margin:0 0 12px}
-  .pv-head p{max-width:72ch;font-size:17px;line-height:1.6;color:var(--fg-dim);margin:0 0 10px}
+  .pv-head p{max-width:74ch;font-size:17px;line-height:1.6;color:var(--fg-dim);margin:0 0 10px}
+  .pv-head b{color:var(--fg)}
 
   .pv-opt{margin:0 0 56px;border-top:2px solid var(--fg);padding-top:14px}
   .pv-tag{font-family:var(--mono);font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;
@@ -65,85 +70,73 @@
   }
   .screen *{box-sizing:border-box}
 
-  /* THE ONE GRAPHIC ELEMENT. Two inks: the red field underneath, his
-     luminosity on top. Nothing else on any of these screens is a picture. */
-  .shot{
-    position:absolute;display:block;
-    filter:grayscale(1) contrast(1.35);
-    mix-blend-mode:luminosity;
+  /* THE ONE GRAPHIC ELEMENT: a scratch panel with his face under it. */
+  .panel{position:absolute;overflow:hidden;background:var(--red-deep)}
+  .panel img{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+    filter:grayscale(1) contrast(1.35);mix-blend-mode:luminosity;
   }
+  .panel canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 
   .kName{font-family:var(--mono);font-weight:700;text-transform:uppercase;
     letter-spacing:.32em;font-size:clamp(9px,1.3cqw,18px);line-height:1;margin:0}
-  /* opacity .75 off-white on red measured too faint to read once it sat over
-     the photograph. The small print is his best-written line; it does not get
-     to be decoration. */
   .kMicro{font-family:var(--mono);font-weight:600;text-transform:uppercase;
     letter-spacing:.19em;font-size:clamp(7px,.92cqw,13px);line-height:1.55;margin:0;opacity:.95}
   .kHead{font-family:"Syne","Bricolage Grotesque",sans-serif;font-weight:800;
     letter-spacing:-.035em;line-height:.86;margin:0}
-  /* Each half of the headline is one line and is not allowed to break. Left
-     to wrap, "Award-losing" split into "Award-" / "losing" and the headline
-     became three lines of two different lengths, which reads as an accident. */
   .kHead i{font-style:normal;display:block;white-space:nowrap}
   .kNav{display:flex;gap:clamp(10px,2.2cqw,34px);margin:0;padding:0;list-style:none;flex-wrap:wrap}
   .kNav a{font-family:var(--mono);font-weight:700;text-transform:uppercase;
     letter-spacing:.15em;font-size:clamp(8px,1cqw,14px);color:var(--paper);
     text-decoration:none;border-bottom:2px solid rgba(246,243,238,.4);padding-bottom:3px}
-  .kSub{font-family:"Hanken Grotesk",sans-serif;font-size:clamp(8px,1.15cqw,16px);
-    line-height:1.45;margin:clamp(8px,1.3cqw,18px) 0 0;max-width:26ch;opacity:.92}
+  .lay{position:absolute;inset:0;padding:var(--pad);display:flex;flex-direction:column;
+    justify-content:space-between;z-index:3}
+  .top{display:flex;justify-content:space-between;align-items:flex-start;gap:20px}
+  .foot{display:flex;justify-content:space-between;align-items:flex-end;gap:20px}
 
-  /* ============ 1. SPLIT ============ */
-  .s1{display:grid;grid-template-columns:1.06fr .94fr}
-  .s1 .left{position:relative;padding:var(--pad);display:flex;flex-direction:column;justify-content:space-between;z-index:2}
-  .s1 .right{position:relative;overflow:hidden}
-  .s1 .shot{inset:0;width:100%;height:100%;object-fit:cover;object-position:52% 20%}
-  .s1 .kHead{font-size:clamp(20px,6.1cqw,88px)}
+  /* ============ A. THE PRIZE ============ */
+  .sA .panel{right:4%;top:8%;width:33%;height:84%}
+  .sA .col{width:56%}
+  .sA .kHead{font-size:clamp(20px,5.9cqw,86px)}
+  .sA .foot .kMicro{max-width:40ch}
 
-  /* ============ 2. THE FIGURE ============ */
-  /* height:100%, width:auto keeps the photograph's own proportion, so the
-     hand and the pen survive instead of being cropped away. */
-  .s2 .shot{right:1.5%;bottom:0;height:100%;width:auto;object-fit:contain}
-  .s2 .lay{position:absolute;inset:0;padding:var(--pad);display:flex;flex-direction:column;
-    justify-content:space-between;z-index:2}
-  .s2 .col{width:52%}
-  .s2 .kHead{font-size:clamp(19px,5.5cqw,80px)}
-  /* both feet on the LEFT, stacked, because the right-hand side of this
-     composition is his arm and nothing legible can sit on it */
-  .s2 .foot{width:52%;display:flex;flex-direction:column;gap:clamp(8px,1.2cqw,16px);align-items:flex-start}
-  .s2 .foot .kMicro{max-width:40ch}
+  /* ============ B. MATCH THREE ============ */
+  .sB .row{position:absolute;left:var(--pad);right:var(--pad);top:15%;height:41%;
+    display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(8px,1.6cqw,24px);z-index:2}
+  .sB .panel{position:relative;inset:auto;width:100%;height:100%}
+  .sB .kHead{font-size:clamp(16px,5.2cqw,76px);text-align:center}
+  /* The headline sits UNDER the row of symbols, not across it. Centred in the
+     flex column it landed on top of the middle panel and neither the type nor
+     the face survived it. A match row has to be read before the line that
+     tells you what you matched. */
+  .sB .mid{position:absolute;left:var(--pad);right:var(--pad);top:60%}
 
-  /* ============ 3. CROSSED ============ */
-  /* Same figure, centred, and the headline runs straight across it. Nothing
-     is masked or cut out: the overlap is the whole idea, which means it costs
-     nothing and cannot break when the words change. */
-  .s3 .shot{left:50%;transform:translateX(-50%);bottom:0;height:100%;width:auto;object-fit:contain}
-  .s3 .lay{position:absolute;inset:0;padding:var(--pad);display:flex;flex-direction:column;
-    justify-content:space-between;z-index:2}
-  .s3 .top{display:flex;justify-content:space-between;align-items:flex-start;gap:20px}
-  /* The crossing point matters more than the size. It sits below his eyes on
-     purpose: the type can take his mouth, but the expression is the joke and
-     the eyes have to stay above the line. */
-  .s3 .kHead{font-size:clamp(24px,8.8cqw,126px);text-align:center;margin-top:2cqw}
-  .s3 .foot{display:flex;justify-content:space-between;align-items:flex-end;gap:20px}
-  .s3 .foot .kMicro{max-width:24ch;text-align:right}
-
-  @media (max-width:700px){
-    .s1{grid-template-columns:1fr}
-    .s1 .right{display:none}
-  }
+  /* ============ C. THE PLAY AREA ============ */
+  .sC .panel{left:50%;transform:translateX(-50%);top:16%;width:29%;height:56%}
+  .sC .kHead{font-size:clamp(22px,7.4cqw,106px);text-align:center}
+  .sC .legend{display:flex;gap:clamp(10px,2.4cqw,36px);margin:0;padding:0;list-style:none}
+  .sC .legend div{text-align:left}
+  .sC .legend b{display:block;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    font-weight:700;font-size:clamp(12px,2.2cqw,32px);line-height:1;letter-spacing:.04em}
+  .sC .legend span{display:block;font-family:var(--mono);font-weight:600;text-transform:uppercase;
+    letter-spacing:.18em;font-size:clamp(6px,.85cqw,12px);opacity:.8;margin-top:.5em}
 </style>
 </head>
 <body class="page page-about">
 
 <header class="pv-head">
   <div class="wrap">
-    <h1>Hard reset, three ways.</h1>
-    <p>New layout, new composition, one graphic element, and the element is
-       your photograph. All three keep the palette and both typefaces. What
-       differs is the composition, and how much of the ticket survives it.</p>
-    <p>Shown at the real home page's shape: one screen, no scroll. Nothing here
-       touches the site.</p>
+    <h1>Hard reset, still a lottery.</h1>
+    <p>The problem stated properly: <b>how do you say "lottery" in one second
+       with one graphic element, when that element has to be your face?</b></p>
+    <p>What all three are built on: <b>make the one graphic element a lottery
+       object and put your face inside it.</b> A silver scratch panel is the
+       most recognisable lottery object there is, and it is the one ticket
+       device that is genuinely a texture rather than an ornament, so it does
+       not break the no-pastiche rule. A scratch card <i>is</i> foil.</p>
+    <p><b>Nothing is hidden and nothing has to be scratched.</b> The panels
+       arrive already open. The foil is a frame and a signal, not a gate, so
+       none of the reasons the old scratch panels were killed apply.</p>
   </div>
 </header>
 
@@ -164,79 +157,171 @@
   }
   var T = C.ticket || {};
   var IMG = window.imgSrc ? window.imgSrc('portrait-studio.jpg') : 'images/portrait-studio.jpg';
-
   function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
   var NAV = (T.nav||[]).map(function(n){
     return '<li><a href="'+esc(n.url||'#')+'">'+esc(n.label||'')+'</a></li>';
   }).join('');
   var HEAD = '<h2 class="kHead"><i>'+esc(T.titleTop||'')+'</i><i>'+esc(T.titleBottom||'')+'</i></h2>';
-  var SHOT = '<img class="shot" src="'+esc(IMG)+'" alt="Mohammed Essam">';
+  function PANEL(seed, pos){
+    return '<div class="panel" data-seed="'+seed+'"'+(pos?' style="'+pos+'"':'')+'>' +
+             '<img src="'+esc(IMG)+'" alt="Mohammed Essam">' +
+             '<canvas></canvas></div>';
+  }
+
+  /* deterministic, so the scratch is the same every load and he can judge a
+     composition rather than a different accident each time */
+  function rng(seed){ return function(){ seed=(seed*1664525+1013904223)%4294967296; return seed/4294967296; }; }
+
+  /* The silver, lifted from the real foil in index.html, and then MOSTLY
+     SCRATCHED AWAY so his face is open from the first frame. What is left is
+     foil clinging to the edges and corners, which is what a card actually
+     looks like once somebody has been at it with a coin. */
+  function paintFoil(cv, seed){
+    var host = cv.parentNode;
+    var w = host.clientWidth, h = host.clientHeight;
+    if (!w || !h) return;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = Math.round(w*dpr); cv.height = Math.round(h*dpr);
+    var x = cv.getContext('2d');
+    x.setTransform(dpr,0,0,dpr,0,0);
+    x.globalCompositeOperation = 'source-over';
+
+    x.fillStyle = '#bcc0c5'; x.fillRect(0,0,w,h);
+    var sh = x.createLinearGradient(0,0,0,h);
+    sh.addColorStop(0,'rgba(255,255,255,.16)');
+    sh.addColorStop(.32,'rgba(255,255,255,.58)');
+    sh.addColorStop(.55,'rgba(255,255,255,.22)');
+    sh.addColorStop(1,'rgba(120,124,130,.28)');
+    x.fillStyle = sh; x.fillRect(0,0,w,h);
+    var gl = x.createLinearGradient(0,h,w*.78,0);
+    gl.addColorStop(0,'rgba(255,255,255,0)');
+    gl.addColorStop(.42,'rgba(255,255,255,0)');
+    gl.addColorStop(.58,'rgba(255,255,255,.34)');
+    gl.addColorStop(.68,'rgba(255,255,255,.05)');
+    gl.addColorStop(1,'rgba(255,255,255,0)');
+    x.fillStyle = gl; x.fillRect(0,0,w,h);
+
+    var R = rng(seed);
+    x.lineWidth = 1;
+    for (var d=-h; d<w; d+=3){
+      x.strokeStyle = 'rgba(255,255,255,'+(.02+R()*.05).toFixed(3)+')';
+      x.beginPath(); x.moveTo(d,h); x.lineTo(d+h,0); x.stroke();
+    }
+    /* sparkle: isolated bright specks, not dirt */
+    for (var i=0;i<Math.round(w*h/220);i++){
+      var px=R()*w, py=R()*h, a=R();
+      x.fillStyle = a>.14 ? 'rgba(255,255,255,'+(.10+R()*.5).toFixed(2)+')'
+                          : 'rgba(90,94,100,'+(.05+R()*.16).toFixed(2)+')';
+      x.fillRect(px,py,1.1,1.1);
+    }
+
+    /* ---- the scratch itself ----
+       IN destination-out IT IS THE ALPHA THAT ERASES, NOT THE COLOUR. The
+       brushing loop above leaves strokeStyle at 2-7% alpha, so without
+       resetting it here the sweeps lifted about a twentieth of the foil and
+       the panel came back as an almost untouched silver rectangle with a few
+       pinholes in it. Solid black, alpha 1, erases properly. */
+    x.globalCompositeOperation = 'destination-out';
+    x.strokeStyle = '#000'; x.fillStyle = '#000';
+    x.lineCap = 'round'; x.lineJoin = 'round';
+    var brush = Math.min(w,h)*0.30;
+    /* four broad sweeps at a thumb's angle, biased to the middle so the foil
+       survives at the corners */
+    var sweeps = [ [0.06,0.30, 0.98,0.16], [0.02,0.52, 0.99,0.40],
+                   [0.04,0.74, 0.97,0.63], [0.10,0.92, 0.92,0.85] ];
+    sweeps.forEach(function(s){
+      x.lineWidth = brush*(0.82+R()*0.5);
+      x.beginPath();
+      var steps = 16;
+      for (var t=0;t<=steps;t++){
+        var k=t/steps;
+        var px=(s[0]+(s[2]-s[0])*k)*w + (R()-.5)*brush*0.24;
+        var py=(s[1]+(s[3]-s[1])*k)*h + (R()-.5)*brush*0.30;
+        t ? x.lineTo(px,py) : x.moveTo(px,py);
+      }
+      x.stroke();
+    });
+    /* a few flecks lifted at the ragged edge of the scratch */
+    for (var f=0; f<26; f++){
+      x.beginPath();
+      x.arc(R()*w, R()*h, brush*(0.05+R()*0.14), 0, 7);
+      x.fill();
+    }
+    x.globalCompositeOperation = 'source-over';
+  }
+
+  var LEGEND =
+    '<div class="legend">' +
+      '<div><b>' + (C.work&&C.work.projects||[]).filter(function(p){return !p.draft;}).length +
+        '</b><span>Pieces</span></div>' +
+      '<div><b>02</b><span>Languages</span></div>' +
+      '<div><b>00</b><span>Awards</span></div>' +
+    '</div>';
 
   var OPTS = [
     {
-      key:'s1',
-      tag:'1 — split',
-      why:'A hard vertical edge. Type gets one side, the photograph gets the other, and neither is asked to sit on top of the other. This is the plainest of the three and the closest to how the design-curated portfolios in that siteinspire set are built: flat colour, one image, enormous type, nothing else.',
+      key:'sA',
+      tag:'A — the prize',
+      why:'Flat red field. One object on it: a scratch panel, already opened, with your face under the foil. The type is all system voice down the left. The lottery is not described anywhere, it is the thing you are looking at.',
       html:
-        '<div class="left">' +
-          '<p class="kName">'+esc(T.name||'')+'</p>' +
-          '<div>' + HEAD + '<p class="kSub">'+esc(T.sub||'')+'</p></div>' +
-          '<ul class="kNav">'+NAV+'</ul>' +
-        '</div>' +
-        '<div class="right">'+SHOT+'</div>',
-      notes:[
-        '<b>The safest of the three and the fastest to read.</b> Nothing overlaps, so nothing can go wrong at any width or with any length of line.',
-        '<b>It is also the least like you.</b> This is a very good portfolio home page that could belong to a lot of people.',
-        'The sub-line comes back, because a half-width column finally gives it somewhere to live.'
-      ],
-      cost:'<b>This is the one that abandons the concept.</b> No ticket, no serial, no odds, no "I won nothing". "Award-losing" survives as a line but stops being a lottery joke and becomes a plain claim, which is the exact thing your teacher was worried about in the first place.'
-    },
-    {
-      key:'s2',
-      tag:'2 — the figure',
-      why:'Flat red field, the whole photograph standing in it at its own proportion, type down the left. Because nothing is cropped, the hand and the pen survive, and the pen is doing as much work as the face is.',
-      html:
-        SHOT +
+        PANEL(7) +
         '<div class="lay">' +
-          '<p class="kName">'+esc(T.name||'')+'</p>' +
+          '<div class="top" style="width:56%"><p class="kName">'+esc(T.name||'')+'</p></div>' +
           '<div class="col">' + HEAD + '</div>' +
-          '<div class="foot">' +
+          '<div class="foot" style="width:56%;flex-direction:column;align-items:flex-start;gap:1.2cqw">' +
             '<ul class="kNav">'+NAV+'</ul>' +
             '<p class="kMicro">'+esc(T.terms||'')+'</p>' +
           '</div>' +
         '</div>',
       notes:[
-        '<b>The ticket survives as a voice rather than as furniture.</b> The small print is still at the foot in the same system face, so the odds line and the cabinet still make sense.',
-        '<b>One picture, four pieces of type.</b> The card, the punch boxes, the seal, the barcode and the scratch panel are all gone. That is the "one graphic element" note taken literally.',
-        '<b>He is standing on the bottom edge</b>, not floating in the middle, which is what stops a figure looking like a sticker.',
-        '<b>Known artefact:</b> the photograph still has its blue seamless, and under a duotone that blue becomes a slightly different red from the field, so you can see a faint rectangle around him. To have him stand on flat red with no panel, the picture needs its background removed and saved as a PNG. That is a two-minute job in Photoshop and it is yours, not something that can be done in the browser.'
+        '<b>One graphic element that is doing two jobs.</b> It is your portrait and it is a scratch card, and neither needs the other explained.',
+        '<b>The foil solves the blue-background problem for free.</b> The panel has a hard edge, so the seamless behind you reads as the card rather than as an artefact. No cut-out needed.',
+        '<b>The composition is not a ticket any more.</b> No perforation, no card on a field, no punch boxes, no seal, no barcode. That is the hard reset, and the universe survives anyway.'
       ],
-      cost:'<b>Costs you the scratch panel, the seal and the barcode.</b> The awards cabinet and the playlist still exist as pages, but nothing on the home page points at them. The cabinet would need a door somewhere else, most obviously off the small print.'
+      cost:'<b>The badge and the barcode lose their home.</b> The awards cabinet and the playlist still exist as pages and would need doors elsewhere, most naturally off the small print at the foot.'
     },
     {
-      key:'s3',
-      tag:'3 — crossed',
-      why:'The same figure, centred, with the headline running straight across him. Type and photograph interlock instead of sitting side by side. Nothing is masked or cut out: the overlap does all the work, so it costs nothing and cannot break when you rewrite the line.',
+      key:'sB',
+      tag:'B — match three',
+      why:'A scratch card is won by matching symbols. Three panels, all scratched, and the symbol is you in all three. It is the only one of these that states the win condition rather than implying it, and it is the funniest, because the prize is a person.',
       html:
-        SHOT +
+        '<div class="row">'+PANEL(11)+PANEL(23)+PANEL(41)+'</div>' +
         '<div class="lay">' +
-          '<div class="top">' +
-            '<p class="kName">'+esc(T.name||'')+'</p>' +
-            '<p class="kMicro">'+esc(T.serial||'')+'</p>' +
-          '</div>' +
-          HEAD +
+          '<div class="top"><p class="kName">'+esc(T.name||'')+'</p><p class="kMicro">'+esc(T.serial||'')+'</p></div>' +
+          '<div class="mid">' + HEAD + '</div>' +
           '<div class="foot">' +
             '<ul class="kNav">'+NAV+'</ul>' +
-            '<p class="kMicro">'+esc(T.terms||'')+'</p>' +
+            '<p class="kMicro" style="max-width:26ch;text-align:right">'+esc(T.terms||'')+'</p>' +
           '</div>' +
         '</div>',
       notes:[
-        '<b>The most graphic of the three and the one you would remember.</b> A headline crossing a face is a poster move, and it is the only one of these that could not be mistaken for a template.',
-        '<b>It keeps the ticket voice</b>, so the serial, the odds and the cabinet all still hold.',
-        'It is also the only one where the picture is centred, which means it holds on a very wide monitor instead of drifting to one side.',
-        '<b>Same artefact as option 2:</b> the blue seamless reads as a faint panel behind him. A background-removed PNG fixes it, and this composition is the one that most wants fixing, because a floating figure with a line across it is the whole idea.'
+        '<b>Unmistakable in well under a second.</b> Three identical symbols in a row is the single most legible lottery grammar there is, and nobody needs to be told what it means.',
+        '<b>Three of a kind, and the kind is you.</b> "You won a copywriter" stops being a caption and becomes the result of the card.',
+        'One photograph used three times is still one graphic element, and the repetition is the idea rather than a shortcut.'
       ],
-      cost:'<b>The riskiest to maintain.</b> The line has to cross him at the right height, so a much longer or shorter headline moves the crossing and the composition has to be re-judged by eye. The other two do not care what you write.'
+      cost:'<b>It is the most literal of the three</b> and it spends the whole screen on the gag, so the headline has to be smaller than in A or C. If the joke does not land in the room, there is nothing else on the page carrying it.'
+    },
+    {
+      key:'sC',
+      tag:'C — the play area',
+      why:'A scratch card blown up until it is the whole screen. Game name at the top, one play area in the middle with your face in it, the prize legend under it, small print at the foot. The anatomy from those New York tickets, at full size, with no ornament anywhere.',
+      html:
+        PANEL(3) +
+        '<div class="lay">' +
+          '<div class="top"><p class="kName">'+esc(T.name||'')+'</p><p class="kMicro">'+esc(T.serial||'')+'</p></div>' +
+          '<div style="margin-top:auto">' + HEAD + '</div>' +
+          '<div class="foot" style="align-items:flex-end">' +
+            LEGEND +
+            '<p class="kMicro" style="max-width:24ch;text-align:right">'+esc(T.terms||'')+'</p>' +
+          '</div>' +
+        '</div>',
+      notes:[
+        '<b>The prize legend carries real information.</b> 16 pieces, 2 languages, 0 awards. The numbers are true and the last one is the joke landing inside the ticket rather than beside it: on a lottery card a zero is a result, not a confession.',
+        '<b>Closest to what your teacher asked for</b> without taking a single thing that dates those references. No fat 70s display face, no mustard, no gold.',
+        'The values are set in a machine face against the labels, the way overprinted ticket data always is.'
+      ],
+      cost:'<b>The busiest of the three.</b> It has a headline, a panel, a legend and small print all competing, and it is the one most likely to come back as "still too much".'
     }
   ];
 
@@ -253,6 +338,16 @@
     s.appendChild(c);
     host.appendChild(s);
   });
+
+  function paintAll(){
+    document.querySelectorAll('.panel').forEach(function(p){
+      var cv=p.querySelector('canvas');
+      if (cv) paintFoil(cv, parseInt(p.getAttribute('data-seed'),10)||1);
+    });
+  }
+  paintAll();
+  window.addEventListener('load', paintAll);
+  var rt; window.addEventListener('resize', function(){ clearTimeout(rt); rt=setTimeout(paintAll,180); });
 })();
 </script>
 </body>
