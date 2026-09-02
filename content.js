@@ -47,7 +47,7 @@ window.SITE_CONTENT = {
         url: "work.html?ran=1"
       },
       {
-        label: "YOU WON A COPYWRITER",
+        label: "you gotta win something",
         num: "03",
         url: "mailto:m22essam@gmail.com",
         "scratch": true,
