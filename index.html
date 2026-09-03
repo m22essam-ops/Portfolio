@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<!-- ============================================================
-     THE HOME PAGE  ·  the brutalist lottery ticket
-     Published 4 Sep 2026 at his instruction. The previous flow-layout home
-     page is kept whole as index-flow.html.
-     Words come from content.js. His design layer is ticket-design.js, written
-     by ticket-designer.html; delete it and the ticket is what this page draws.
-     ============================================================ -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mohammed Essam — Award-losing copywriter</title>
+
+<!-- THE CARD PEOPLE SEE WHEN THIS LINK IS PASTED SOMEWHERE.
+     WhatsApp, LinkedIn, Slack and the rest fetch the page and read these
+     tags. They do NOT run JavaScript, so none of this can come out of
+     content.js: it has to be sitting here as plain text, and the picture
+     has to be a real file at a real address. images/og.jpg is drawn by
+     make-og.html; re-run that if the headline ever changes. -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Mohammed Essam">
 <meta property="og:locale" content="en_GB">
@@ -24,1126 +24,1026 @@
 <meta property="og:image:alt" content="A lottery ticket that reads: Award-losing copywriter.">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="https://www.mohammedessam.com/">
+
 <meta name="description" content="Mohammed Essam, copywriter. Cairo, Dubai, Madrid. Work that ran, and work that didn't.">
-<link rel="icon" type="image/png" href="favicon.png">
-<link rel="apple-touch-icon" href="favicon.png">
-<title>Brutalist ticket system</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Doto:wght@400;700;900&family=Nova+Mono&family=Archivo+Black&family=Instrument+Serif:ital@0;1&family=Anton&display=swap" rel="stylesheet">
-<style>
-:root{
-  --red:#E3261A;
-  /* 5b. never pure black. Ink absorbed by cheap paper never reaches #000,
-     and #0B0A09 was close enough to read as digital. */
-  --ink:#1A1A18;
-  --paper:#EFE9DC;
-  --neon:#E8FF00;
-  --silver:#BFBCB4;
-  --silver-hi:#E4E2DC;
-
-  --mono:"Share Tech Mono",ui-monospace,monospace;
-  /* 4. heavy grotesque, and every fallback is one too */
-  --disp:"Archivo Black","Arial Black","Helvetica Neue Black",Impact,sans-serif;
-
-  --rule:3px;      /* the heavy weight: outer frames only */
-  --hair:1px;      /* the ledger weight: everything inside */
-  --grain:.34;
-  /* a variable rather than a number in the rule below, so the designer can
-     reach it. Written into the rule directly it would need !important to
-     beat `body.tex-grain svg.scuff`, and !important in a design tool is how
-     a stylesheet stops being readable. */
-  --scuff:.16;
-}
-body.ink1{--neon:var(--paper);--silver:var(--paper);--silver-hi:var(--paper)}
-
-*{box-sizing:border-box;border-radius:0 !important}
-body{margin:0;background:var(--red);color:var(--ink);font-family:var(--mono);
-     -webkit-font-smoothing:antialiased}
-a{color:inherit;text-decoration:none}
-img{display:block;max-width:100%}
-
-/* ============ 1b. THE GROUND: grain, then scuffs on top ============ */
-.paper{position:relative;background:var(--paper)}
-.paper::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
-               opacity:0;background-repeat:repeat}
-body.tex-grain .paper::before{
-  opacity:var(--grain);
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
-}
-body.tex-board .paper::before{
-  opacity:calc(var(--grain) * .95);
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='120'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.006 0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='120' filter='url(%23f)' opacity='0.6'/%3E%3C/svg%3E");
-}
-/* the scuff layer: long thin drags and specks, seeded so the wear does
-   not rearrange itself every reload */
-svg.scuff{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;
-          z-index:0;color:var(--ink);opacity:0}
-body.tex-grain svg.scuff,body.tex-board svg.scuff{opacity:var(--scuff)}
-svg.guil{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;
-         z-index:0;color:var(--ink);opacity:0}
-body.tex-guil svg.guil{opacity:.07}
-/* :not() is load-bearing. At equal specificity this rule beat the absolute
-   positioning above and turned the overlays into in-flow blocks that pushed
-   every ticket off the bottom of the screen. */
-.paper > *:not(.guil):not(.scuff){position:relative;z-index:1}
-
-/* ---- 2. FULL-FRAME PERFORATION ----
-   Was two overlay strips painting red circles on top of the card, which
-   could only ever hide what was under them and left the black bands looking
-   uncut. This is a real mask on the container, so the holes are cut out of
-   the element itself: the 3px border, the black header, the beige middle
-   and the black footer all lose the same bite, and the red field behind is
-   what shows through. One ticket torn off a roll.
-
-   Two gradients composited: the left column of holes AND the right. WebKit
-   spells the operator differently, so both are declared. */
-.perf{
-  --perfR:9px;      /* hole radius */
-  --perfP:24px;     /* one hole every 24px down the edge */
-  -webkit-mask-image:
-    radial-gradient(circle var(--perfR) at left center,transparent 96%,#000 97%),
-    radial-gradient(circle var(--perfR) at right center,transparent 96%,#000 97%);
-          mask-image:
-    radial-gradient(circle var(--perfR) at left center,transparent 96%,#000 97%),
-    radial-gradient(circle var(--perfR) at right center,transparent 96%,#000 97%);
-  -webkit-mask-size:100% var(--perfP);  mask-size:100% var(--perfP);
-  -webkit-mask-repeat:repeat-y;         mask-repeat:repeat-y;
-  -webkit-mask-composite:source-in;     mask-composite:intersect;
-}
-
-/* ============ 3. TYPOGRAPHY: two families, no third ============ */
-.lbl{font-family:var(--mono);font-size:11px;letter-spacing:.22em;
-     text-transform:uppercase;line-height:1}
-h1,h2,h3{font-family:var(--disp);font-weight:400;margin:0;line-height:.95;
-         letter-spacing:-.01em;text-transform:uppercase}
-/* every number, serial and unit of metadata is machine-set */
-.num,.qty,.serial,.meta,.lbl,.sticker,.field,.btn,.chip b{font-family:var(--mono)}
-
-/* ---- preview control bar ---- */
-.bar{position:fixed;top:0;left:0;right:0;z-index:99;display:flex;flex-wrap:wrap;
-     background:var(--ink);border-bottom:var(--rule) solid var(--neon)}
-.bar .grp{display:flex;align-items:center;border-right:1px solid rgba(255,255,255,.22)}
-.bar b{color:var(--neon);font-family:var(--mono);font-size:10px;letter-spacing:.2em;
-       padding:0 10px;text-transform:uppercase}
-.bar button{font-family:var(--mono);font-size:10px;letter-spacing:.14em;
-  text-transform:uppercase;background:none;border:0;
-  border-left:1px solid rgba(255,255,255,.18);color:#fff;padding:9px 11px;cursor:pointer}
-.bar button[aria-pressed="true"]{background:var(--neon);color:var(--ink)}
-
-.wrap{width:min(1400px,calc(100% - 80px));margin-inline:auto}
-section.screen{padding:60px 0 0}
-/* ---- ?only=home: the card takes the SCREEN'S shape ----
-
-   Not a fixed board scaled to fit. That was tried and it letterboxed: a
-   1.75:1 drawing on a 1.6:1 screen leaves red bands top and bottom, which is
-   dead space on the one page that should have none. 96vw by 96vh means the
-   card is whatever shape the window is, so there is nothing left over.
-
-   The card has a real height now, so the middle has to be the part that
-   absorbs it. Harmless elsewhere: with an auto height, flex:1 on the one
-   growable child does nothing. */
-/* ONLY when this page is the whole window. `.fills` is added by script and
-   only at top level.
-
-   Without that gate these rules also ran inside the designer's iframe, and an
-   iframe has no viewport height of its own until something gives it one: the
-   designer measures the document to size the frame, the document was
-   position:fixed with overflow hidden so it measured 10px, and 96vh of 10px
-   is 9.6px. The whole editor went black with a sliver of ticket in it. */
-body.only-home{padding:0}
-body.only-home section.screen{padding:0}
-body.only-home .wrap{width:calc(100% - 48px)}
-
-body.only-home.fills{overflow:hidden}
-body.only-home.fills section.screen{position:fixed;inset:0}
-body.only-home.fills .wrap{width:auto;margin:0}
-body.only-home.fills .ticket{position:absolute;left:50%;top:50%;
-  transform:translate(-50%,-50%);width:96vw;height:96vh}
-
-/* A PHONE IS NOT A LAPTOP AND MUST NOT BE HELD TO 96vh.
-   Stacked, the card is a column: rail, then the headline, then the legend,
-   then the scratch panel. Forced to the height of the screen it was cut off
-   at the legend and the scratch panel went with it, taking the only call to
-   action on the page. He asked for this to fill a LAPTOP. Here it is its own
-   height and the page scrolls, which is what every ticket in the hand does. */
-@media (max-width:1000px){
-  body.only-home.fills{overflow:auto}
-  body.only-home.fills section.screen{position:static;inset:auto;padding:14px 0}
-  body.only-home.fills .ticket{position:static;transform:none;
-    width:calc(100% - 26px);height:auto;margin:0 auto}
-}
-.ticket{display:flex;flex-direction:column}
-.tk-grid{flex:1 1 auto;min-height:0}
-.tk-band,.legal{flex:none}
-.screenlab{font-family:var(--mono);font-size:11px;letter-spacing:.28em;
-           text-transform:uppercase;color:var(--paper);padding:0 0 12px}
-
-/* ============ THE HOME TICKET ============ */
-.ticket{border:var(--rule) solid var(--ink)}
-.tk-band{background:var(--ink);color:var(--paper);display:flex;
-         justify-content:space-between;align-items:center;gap:20px;padding:9px 18px}
-.tk-band .lbl{color:var(--paper)}
-/* 1. bookends. He wrote "1fr 2.5fr 1fr (or roughly 20/60/20)" and those are
-   two different grids: 2.5fr is 22/56/22, which is a NARROWER centre than the
-   190px/1fr/260px it had. 3fr is the 20/60/20 he named and the one that
-   actually gives the middle more room. */
-.tk-grid{display:grid;grid-template-columns:1fr 3fr 1fr}
-.tk-rail{border-right:var(--hair) solid var(--ink);padding:18px;
-         display:flex;flex-direction:column;gap:14px}
-.chip{border:var(--hair) solid var(--ink);padding:9px 8px;text-align:center}
-.chip .lbl{opacity:.75;display:block;margin-bottom:5px}
-.chip b{font-size:26px;letter-spacing:.02em;display:block}
-.chip:hover{background:var(--neon)}
-/* 3a. VALOR is neon at rest, by his call. This is not a reversal of the
-   hover-only rule: that one was about the work grid's stickers, where a
-   coloured label invents a hierarchy between projects. A price chip is
-   furniture and there is only one of it. */
-.chip.valor{background:var(--neon)}
-
-/* ---- 1d. the halftone headshot ---- */
-.med{position:relative;width:100%;aspect-ratio:1;border:var(--hair) solid var(--ink);
-     overflow:hidden;background:var(--paper)}
-.med img,.med canvas{position:absolute;inset:0;width:100%;height:100%;
-                     object-fit:cover;display:block}
-/* hover lifts half the dot screen off in half a second, so the photograph
-   under the print shows through. The canvas is what carries the halftone, so
-   fading IT is the whole effect: the image beneath is already there. */
-.med canvas{transition:opacity .5s ease}
-.med:hover canvas,.med:focus-within canvas{opacity:.5}
-/* the fallback if the dot screen cannot run: still cheap print, just not
-   dotted. The canvas is drawn over the top when it succeeds. */
-.med img{filter:grayscale(1) contrast(2.1) brightness(1.06)}
-
-/* ---- 1. the rigid internal grid ----
-   Every line in this column is a grid item starting in the same column, so
-   the kicker, the name, the headline and the number block share one left
-   edge by construction rather than by four matching paddings. Optical side
-   bearings are corrected below, because a box edge and an ink edge are not
-   the same thing across two different typefaces. */
-/* 5d. multiply, so the grain and the scuffs read THROUGH the letterforms
-   the way ink sits in paper rather than on top of it. Scoped to this column
-   because it is the only block that is type and nothing else: multiplying a
-   container that also holds the neon chip would dirty the yellow. */
-/* 1. align-content:center, and the vertical padding is symmetrical (34/34,
-   not 34/30) so "equal space above and below" is true of the ink and not
-   just of the free space the grid had left to divide. */
-.tk-main{padding:34px;min-width:0;display:grid;justify-items:start;
-         align-content:center;mix-blend-mode:multiply}
-
-/* ---- 2. HIERARCHY: three steps, no argument between them ---- */
-.tk-kick{margin:0 0 14px}                      /* smallest, mono, utilitarian */
-/* the printed passenger name: mono, small, tracked out. It is data, not a
-   headline, and it was competing with the hero at 44px. */
-.tk-name{font-family:var(--mono);font-size:clamp(13px,1.3vw,18px);font-weight:400;
-         letter-spacing:.3em;line-height:1.2;margin:0}
-/* the hero. The only thing on the page allowed the display face.
-   Two lines, because content.js already stores it as two (titleTop /
-   titleBottom). Allowed to wrap on its own it broke after the hyphen and
-   left "AWARD-" hanging on a line by itself. Size is set by fitHead(). */
-.tk-head{margin:16px 0 0;line-height:.8;letter-spacing:-.035em;
-         text-shadow:0 0 1.5px rgba(26,26,24,.4);   /* 5a. ink bleed */
-         filter:url(#roughedge)}                    /* 5c. edge roughness */
-.tk-head span{display:block;white-space:nowrap}
-/* the footnote mark. Half size and lifted, so it reads as a reference and not
-   as a letter he forgot to delete. `letter-spacing:0` because the headline is
-   tracked to -.035em and a negative track on a lone asterisk pulls it back
-   under the G. */
-.tk-head .fn{font-style:normal;font-size:.40em;letter-spacing:0;
-             vertical-align:.95em;margin-left:.05em}
-
-/* ---- 1. the 00 data field is gone ----
-   The column keeps a floor so removing it leaves negative space under the
-   headline rather than letting the card collapse to the height of three
-   lines of type. */
-.tk-main{min-height:340px}
-
-.tk-side{border-left:var(--hair) solid var(--ink);display:flex;flex-direction:column}
-.tk-side > .lbl{padding:14px 16px 10px;border-bottom:var(--hair) solid var(--ink);display:block}
-.legrow{display:flex;align-items:baseline;gap:12px;padding:13px 16px;
-        border-bottom:var(--hair) solid var(--ink)}
-.legrow:hover,.legrow:focus-visible{background:var(--neon)}
-.legrow .qty{font-size:24px;line-height:1}
-.legrow .w{font-family:var(--mono);font-size:12px;letter-spacing:.16em;
-           text-transform:uppercase;flex:1}
-
-/* ---- 2b. the scratch panel ---- */
-.scratch{margin-top:auto;padding:16px;border-top:var(--hair) solid var(--ink)}
-.scratch-in{position:relative;border:2px dashed var(--ink);overflow:hidden;
-            min-height:104px;display:flex}
-.scratch-prize{flex:1;display:flex;flex-direction:column;align-items:center;
-               justify-content:center;gap:7px;padding:14px 10px;text-align:center}
-.scratch-prize b{font-family:var(--mono);font-size:15px;letter-spacing:.1em;
-                 text-transform:uppercase;line-height:1.2}
-.scratch-in canvas{position:absolute;inset:0;width:100%;height:100%;
-                   cursor:crosshair;touch-action:none;z-index:2}
-.scratch-in.done canvas{display:none}
-
-/* ---- 2. THE LEGAL FINE PRINT BAR ----
-   Nothing here moves. It spans the full width as a row: the small print
-   ranged hard left so a second line stacks under the first, and the barcode
-   pinned right. Centred, it read as a web paragraph in a black box. */
-/* ONE line, and it can never reach the barcode.
-
-   Three things do that and all three are needed. `nowrap` keeps it on one
-   line. `overflow:hidden` is the guarantee: nowrap text does not wrap, it
-   SPILLS, and a flex sibling does not stop it, so the small print was
-   printing straight over the bars. `min-width:0` lets the flex item shrink
-   at all, and fitLegal() below sizes the type so the clip never has to
-   happen in the first place. The barcode is flex:none and keeps its width. */
-.legal{background:var(--ink);color:var(--paper);
-       border-top:var(--rule) solid var(--ink);
-       display:flex;justify-content:space-between;align-items:center;gap:26px;
-       padding:9px 26px 8px}
-.legal p{margin:0;flex:1 1 auto;min-width:0;text-align:left;
-         white-space:nowrap;overflow:hidden;
-         font-family:var(--mono);font-size:9px;line-height:1.5;
-         letter-spacing:.14em;text-transform:uppercase}
-/* the barcode: one repeating gradient whose repeat unit carries bars of six
-   different widths, so it scans as printed rather than as a hatch */
-/* both of these are real links now: the barcode to the playlist and the
-   badge to the cabinet. Blank the url in content.js and each goes back to
-   being the ornament it was, which is how index.html already treats them. */
-.legal-code{display:block;flex:none;width:128px;height:20px;
-  transition:opacity .18s linear;
-  background-color:transparent;
-  background-image:repeating-linear-gradient(90deg,
-    var(--paper) 0 2px, transparent 2px 4px,
-    var(--paper) 4px 5px, transparent 5px 8px,
-    var(--paper) 8px 11px, transparent 11px 12px,
-    var(--paper) 12px 13px, transparent 13px 16px,
-    var(--paper) 16px 20px, transparent 20px 21px,
-    var(--paper) 21px 22px, transparent 22px 27px);
-}
-
-/* ============ 3. THE WORK GRID, LIGHTENED ============ */
-.workhead{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;
-          border-bottom:var(--rule) solid var(--ink);padding:16px 18px;flex-wrap:wrap}
-.workhead h2{font-size:clamp(26px,3.6vw,52px)}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:26px;padding:26px}
-/* 3a. no dividing slabs. The card is held by its ledger rules, not by a frame. */
-.card{display:block}
-.card .shot{display:block;position:relative;aspect-ratio:4/3;overflow:hidden;
-            background:var(--silver);border-bottom:var(--hair) solid var(--ink)}
-.card .shot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-                filter:contrast(1.05) saturate(.95)}
-/* 3c. the play affordance, only where there is film */
-.play{position:absolute;left:14px;bottom:14px;z-index:2;width:54px;height:54px;
-      background:var(--ink);display:flex;align-items:center;justify-content:center}
-.play::after{content:"";width:0;height:0;margin-left:4px;
-             border-left:19px solid var(--paper);
-             border-top:12px solid transparent;border-bottom:12px solid transparent}
-.card:hover .play{background:var(--neon)}
-.card:hover .play::after{border-left-color:var(--ink)}
-.card .meta{display:flex;justify-content:space-between;gap:12px;padding:9px 2px;
-            border-bottom:var(--hair) solid var(--ink);font-size:11px;
-            letter-spacing:.2em;text-transform:uppercase}
-.card h3{font-size:clamp(18px,1.8vw,26px);padding:11px 2px 7px}
-.card .tag{padding:0 2px 2px;display:flex;gap:7px;flex-wrap:wrap}
-/* 3b. rest state is the ticket colour. Neon is a hover, never a label. */
-.sticker{font-family:var(--mono);font-size:10px;letter-spacing:.16em;
-         text-transform:uppercase;border:var(--hair) solid var(--ink);padding:4px 8px 3px}
-.card:hover .sticker.hot,.sticker.hot:hover{background:var(--neon)}
-.card:hover h3{text-decoration:underline;text-decoration-thickness:3px;
-               text-underline-offset:4px}
-
-/* ============ 5. CONTROLS ============ */
-.btn{display:inline-flex;align-items:center;gap:10px;font-size:12px;letter-spacing:.18em;
-     text-transform:uppercase;background:var(--paper);color:var(--ink);
-     border:var(--rule) solid var(--ink);padding:12px 18px;cursor:pointer;
-     box-shadow:5px 5px 0 var(--ink);transition:transform .06s linear,box-shadow .06s linear}
-.btn:hover{background:var(--neon)}
-.btn:active{transform:translate(5px,5px);box-shadow:0 0 0 var(--ink)}
-.btn.solid{background:var(--ink);color:var(--paper);box-shadow:5px 5px 0 var(--ink)}
-.btn.solid:hover{background:var(--neon);color:var(--ink)}
-
-/* ---- 4c. the MS-DOS caret ---- */
-.inputwrap{position:relative;flex:1;min-width:230px}
-.field{font-family:var(--mono);font-size:14px;letter-spacing:.12em;text-transform:uppercase;
-       background:var(--paper);border:var(--rule) solid var(--ink);padding:12px 14px;
-       color:var(--ink);width:100%;caret-color:transparent}
-.field:focus{outline:0}
-.caret{position:absolute;top:50%;transform:translateY(-50%);width:.62em;height:1.05em;
-       background:var(--ink);font-size:14px;pointer-events:none;display:none;
-       animation:blink 1.06s steps(1) infinite}
-.inputwrap.on .caret{display:block}
-@keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
-
-/* ============ 4. THE FOOTER ============ */
-.stub{border-top:var(--rule) solid var(--ink);background:var(--ink);color:var(--paper);
-      padding:16px 18px 12px}
-.stub-top{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;
-          border-bottom:var(--hair) solid rgba(239,233,220,.4);
-          padding-bottom:10px;margin-bottom:12px}
-.terms{columns:4;column-gap:20px;column-rule:1px solid rgba(239,233,220,.32);
-       font-family:var(--mono);font-size:9.4px;line-height:1.42;letter-spacing:.028em;
-       text-transform:uppercase;text-align:justify;hyphens:auto}
-.terms p{margin:0 0 6px;break-inside:avoid}
-.terms b{color:var(--neon);font-weight:400}
-.stub-foot{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;
-           flex-wrap:wrap;border-top:var(--hair) solid rgba(239,233,220,.4);
-           margin-top:10px;padding-top:10px}
-/* 4b. the barcode encodes 131313 and prints it underneath */
-.code{text-align:right}
-.bars{display:flex;align-items:flex-end;gap:2px;height:34px;justify-content:flex-end}
-.bars i{display:block;background:var(--paper)}
-.codenum{font-family:var(--mono);font-size:13px;letter-spacing:.62em;
-         margin-top:5px;display:block;text-align:right;padding-right:.62em}
-
-/* ---- back arrow ---- */
-.back{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase}
-.back b{font-weight:400;border:2px solid currentColor;padding:1px 5px 0;margin-right:8px}
-.back:hover b{background:var(--neon);color:var(--ink);border-color:var(--neon)}
-
-@media (max-width:1000px){
-  .wrap{width:calc(100% - 40px)}
-  .tk-grid{grid-template-columns:1fr}
-  .tk-rail{border-right:0;border-bottom:var(--hair) solid var(--ink);
-           flex-direction:row;align-items:center}
-  .tk-rail .med{width:92px;height:92px;flex:none;aspect-ratio:auto}
-  .tk-rail .chip{flex:1}
-  .tk-side{border-left:0;border-top:var(--hair) solid var(--ink)}
-  .grid{grid-template-columns:1fr;gap:22px;padding:20px}
-  .terms{columns:2}
-  /* the barcode is a fixed 168px and will not shrink, so in a row it ate
-     the bar and squeezed the fine print into a 57px column with 44px of it
-     overflowing. Stacked, both get the full width. */
-  .legal{flex-direction:column;align-items:stretch;gap:12px;padding:14px 20px}
-  .legal-code{width:100%}
-  /* Stacked, the small print has the full width and the barcode is below it,
-     not beside it, so there is nothing left to run into: let it wrap. Left on
-     one line here, fitLegal() shrank it to 2.88px to fit 340px, solving a
-     collision that does not exist on a phone. */
-  .legal p{white-space:normal;overflow:visible;font-size:9.5px}
-}
-@media (max-width:560px){ .terms{columns:1} }
-@media (prefers-reduced-motion:reduce){
-  *{transition:none !important}
-  .caret{animation:none}
-}
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Syne:wght@400..800&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+<link rel="stylesheet" href="styles.css">
 </head>
-<body class="tex-grain">
+<body class="is-home">
 
-<!-- 5c. the roughness filter. feTurbulence makes noise, feDisplacementMap
-     pushes each pixel of the glyph by that noise, so the vector edge stops
-     being perfectly smooth. scale is deliberately tiny: past about 2 it
-     stops reading as bad printing and starts reading as a broken font. -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <filter id="roughedge" x="-2%" y="-2%" width="104%" height="104%">
-    <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2"
-                  seed="13" result="noise"/>
-    <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.3"
-                       xChannelSelector="R" yChannelSelector="G"/>
-  </filter>
-</svg>
+<!-- THE WAY IN
+     The ticket's own perforation is punched across the red field left to
+     right, and then the field tears along it and the two halves travel off.
+     Picked from preview-intro.html over a drawn rule, a validation stamp and
+     the game number set enormous.
 
+     An empty shell here and everything inside it built by the script below,
+     which is deliberate: with JavaScript off there is no overlay at all and
+     the page is exactly the page.
 
-<!-- ============ 01 HOME ============ -->
-<section class="screen">
-  <div class="wrap">
-    <p class="screenlab">01 / Home</p>
-    <div class="ticket perf paper">
-      <svg class="guil" aria-hidden="true"></svg>
-      <svg class="scuff" aria-hidden="true"></svg>
-
-      <div class="tk-band">
-        <span class="lbl" id="hMotto"></span>
-        <span class="lbl" id="hBadge"></span>
-      </div>
-
-      <div class="tk-grid">
-        <div class="tk-rail">
-          <div class="chip valor"><span class="lbl" id="hValorLbl">Valor</span><b id="hValorVal">FREE</b></div>
-          <div class="chip"><span class="lbl" id="hSerieLbl">Serie</span><b id="hSerieVal">13</b></div>
-          <div class="med" id="hMed"></div>
-        </div>
-
-        <div class="tk-main">
-          <p class="lbl tk-kick" id="hKick"></p>
-          <h1 class="tk-name" id="hName">MOHAMMED ESSAM</h1>
-          <h2 class="tk-head" id="hHead"></h2>
-        </div>
-
-        <div class="tk-side">
-          <span class="lbl" id="hPremios">Premios</span>
-          <div id="hLegend"></div>
-          <div class="scratch">
-            <div class="scratch-in" id="scratch">
-              <div class="scratch-prize">
-                <span class="lbl" id="hPrizeLbl">Prize</span>
-                <b id="hPrize"></b>
-                <a class="btn" id="hPrizeBtn" href="#" style="box-shadow:3px 3px 0 var(--ink);padding:8px 12px;font-size:11px">Claim &rarr;</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 3. static fine print. No moving elements on the home page. -->
-      <div class="legal">
-        <p id="hLegal"></p>
-        <a class="legal-code" id="hCode" href="#"></a>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-
-
-
-
-
-
-
-<script src="content.js"></script>
+     Note the ticket is never hidden. It sits behind the two halves from the
+     first frame and the tear uncovers it, so nothing here can leave a visitor
+     facing a page whose content is waiting on a class being removed. -->
+<div class="boot" id="boot" aria-hidden="true"></div>
 <script>
 (function () {
-  var C = window.SITE_CONTENT || {};
-  var T = C.ticket || {}, A = C.about || {}, W = C.work || {}, K = C.contact || {}, F = C.footer || {};
-  var $ = function (id) { return document.getElementById(id); };
-  function txt(id, s) { var e = $(id); if (e) e.textContent = s; }
-  var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var el = document.getElementById('boot');
+  if (!el) return;
 
-  /* ---------------- home ---------------- */
-  txt('hMotto', T.band || '');
-  txt('hBadge', T.badge || '');
+  /* Once per tab. He reloads this page all day from admin and the designer,
+     and auto-refresh.js reloads it for him every time content.js changes: a
+     two-second screen on every one of those is a tax on his own work. Someone
+     arriving fresh gets it. ?intro=1 forces it, which is how to look at it
+     again without opening a new window. */
+  var force = /[?&]intro=1\b/.test(location.search);
+  var still = false, seen = false;
+  try { still = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+  try { seen  = sessionStorage.getItem('bootSeen') === '1'; } catch (e) {}
 
-  /* ---- the two quiet links, same contract as index.html ----
-     "I won nothing" is a claim, so it opens the cabinet and shows you. The
-     barcode is where the playlist lives, because a barcode is the one part
-     of a ticket nobody expects to do anything. Blank either url in
-     content.js and it goes back to being a label. */
-  (function () {
-    var badge = $('hBadge'), url = String(T.badgeUrl || '').trim();
-    if (badge && url) {
-      var a = document.createElement('a');
-      a.href = url; a.className = badge.className; a.id = 'hBadge';
-      a.textContent = badge.textContent;
-      badge.parentNode.replaceChild(a, badge);
-    }
-    var bc = $('hCode'), burl = String(T.barcodeUrl || '').trim();
-    if (!bc) return;
-    if (burl) {
-      bc.href = burl;
-      bc.target = '_blank';
-      bc.rel = 'noopener';
-      bc.setAttribute('aria-label', T.barcodeLabel || 'Playlist');
-    } else {
-      bc.removeAttribute('href');
-      bc.setAttribute('aria-hidden', 'true');
-    }
-  })();
-  txt('hKick', T.game || '');
-  txt('hName', (T.name || '').toUpperCase());
-  /* the two halves carry ids so the designer can address a line rather than
-     the block. alignInk() already reads the first child, so nothing else
-     depends on them being anonymous.
+  /* Asking for less motion is not a preference to be overridden by a query
+     string. It wins over ?intro=1 too, which the once-per-tab rule does not:
+     the whole point of that flag is to see this again on demand. */
+  if (still)          { el.parentNode.removeChild(el); return; }
+  if (seen && !force) { el.parentNode.removeChild(el); return; }
+  try { sessionStorage.setItem('bootSeen', '1'); } catch (e) {}
 
-     The footnote mark rides on the first line and is answered by the first
-     clause of the fine print at the foot of the same card. It is an ELEMENT
-     and not a character in his copy, so it survives an edit in the designer
-     and never turns up inside the field he is typing into. */
-  $('hHead').innerHTML =
-    '<span id="hHeadTop">' + (T.titleTop || '').toUpperCase() + '<i class="fn">*</i></span>' +
-    '<span id="hHeadBot">' + (T.titleBottom || '').toUpperCase() + '</span>';
+  var punch = '<div class="boot-punch"><i></i></div>';
+  el.innerHTML =
+    '<div class="boot-half top">' + punch + '</div>' +
+    '<div class="boot-half bot">' + punch + '</div>';
+  document.documentElement.classList.add('is-booting');
+  /* THE PANIC EXIT, on the very next line and before anything else can run.
+     From here the page is under an overlay, and a throw anywhere below would
+     leave it there. This is the line that makes that impossible, so it goes
+     first and it never moves. */
+  setTimeout(off, 6000);
 
-  var awards = (T.awards || []).length;
-  var pad = (awards < 10 ? '0' : '') + awards;
-  /* the 00 block is removed; `pad` still feeds the legend and the work count */
+  el.classList.add('is-punching');
 
-  var projects = (W.projects || []);
-  [[projects.length, 'Work', 'work.html'],
-   [1, 'Who am I', 'about.html'],
-   [awards, 'Awards', T.badgeUrl || 'awards.html']
-  ].forEach(function (r, i) {
-    var a = document.createElement('a');
-    a.className = 'legrow'; a.href = r[2]; a.id = 'hLeg' + i;
-    a.innerHTML = '<span class="qty" id="hLeg' + i + 'q">' + (r[0] < 10 ? '0' : '') + r[0] +
-      '</span><span class="w" id="hLeg' + i + 'w">' + r[1] + '</span><span>&rarr;</span>';
-    $('hLegend').appendChild(a);
-  });
+  var torn = false, gone = false;
 
-  var cta = (T.nav || []).filter(function (n) { return /^mailto:/.test(n.url || ''); })[0] || {};
-  var mail = cta.url || K.ctaUrl || 'mailto:m22essam@gmail.com';
-  txt('hPrize', (cta.label || '').toUpperCase());
-  /* built BARE: sweepMail() fills the draft in, and a link that arrives
-     already carrying a query is marked hands-off for the life of the page */
-  $('hPrizeBtn').href = mail;
-  $('hPrizeBtn').setAttribute('data-mail-base', mail);
-
-  /* ---------------- 3. the fine print ----------------
-     His clauses, 4 Sep 2026, in his order. The first one carries the
-     asterisk and answers the mark on the headline: the card claims to have
-     lost every award, and the footnote is what makes that survive his
-     mother.
-
-     Not from ticket.terms any more. That field is one sentence and it is
-     still printed by the live index.html and by screen 05 below, so it is
-     left exactly as it is rather than being widened into a list that only
-     this card wants. If this ticket ships, these move into content.js and
-     admin gets them.
-
-     Plain text, no markup: it keeps the whole block editable as words in the
-     designer's Copy panel, and real ticket small print does not highlight
-     its own clause numbers anyway. */
-  var LEGAL = [
-    '* Any award from my mom is not counted.',
-    '1. This ticket has no cash value.',
-    '2. Bob Marley never won the Grammy, Amy Adams the Oscars, and now it’s me.',
-    '3. Subject to change without prior notice.'
-  ];
-  txt('hLegal', LEGAL.join('   ').toUpperCase());
-
-  /* ---------------- 1d. the halftone ----------------
-     A real dot screen: the photo is read at low resolution and each cell is
-     redrawn as a circle whose radius comes from that cell's darkness. A CSS
-     filter cannot vary dot SIZE, and varying dot size is the whole thing
-     that makes newsprint look like newsprint. */
-  function halftone(img, box, pitch, o) {
-    o = o || {};
-    try {
-      var w = box.clientWidth || 160, h = box.clientHeight || 160;
-      if (!w || !h) return false;
-      var dpr = Math.min(2, window.devicePixelRatio || 1);
-      var read = document.createElement('canvas');
-      var cols = Math.max(8, Math.round(w / pitch)), rows = Math.max(8, Math.round(h / pitch));
-      read.width = cols; read.height = rows;
-      var rx = read.getContext('2d');
-      /* Cover-crop the source into the low-res buffer, with a zoom and a
-         position on top of it. A dot screen this small is about 80 cells
-         across, so a subject that only fills a fifth of the frame gets about
-         sixteen dots and reads as nothing. Any photo that is not already a
-         tight portrait needs to be cropped into one. 1 and 0.5/0.5 is the
-         plain centred cover this had before. */
-      var zoom = Math.max(1, +o.zoom || 1);
-      var px = o.x === undefined ? 0.5 : +o.x, py = o.y === undefined ? 0.5 : +o.y;
-      var s = Math.max(cols / img.naturalWidth, rows / img.naturalHeight) * zoom;
-      var dw = img.naturalWidth * s, dh = img.naturalHeight * s;
-      rx.drawImage(img, (cols - dw) * px, (rows - dh) * py, dw, dh);
-      var data = rx.getImageData(0, 0, cols, rows).data;   /* taints on file:// */
-
-      var out = document.createElement('canvas');
-      out.width = w * dpr; out.height = h * dpr;
-      out.style.width = '100%'; out.style.height = '100%';
-      var g = out.getContext('2d');
-      g.scale(dpr, dpr);
-      var paper = getComputedStyle(document.documentElement)
-                    .getPropertyValue('--paper').trim() || '#EFE9DC';
-      var ink = getComputedStyle(document.documentElement)
-                    .getPropertyValue('--ink').trim() || '#0B0A09';
-      g.fillStyle = paper; g.fillRect(0, 0, w, h);
-      g.fillStyle = ink;
-      var cw = w / cols, ch = h / rows, max = Math.max(cw, ch) * 0.78;
-
-      /* Auto-levels first. His portrait is a backlit profile, so its raw
-         luminance sits in a narrow dark band and a fixed curve turned him
-         into a blob. Stretching the range this image actually uses makes
-         the screen read on any photo he drops in later. */
-      var lums = new Float32Array(cols * rows), lo = 1, hi = 0;
-      for (var n = 0; n < cols * rows; n++) {
-        var q = n * 4;
-        var L = (0.2126 * data[q] + 0.7152 * data[q + 1] + 0.0722 * data[q + 2]) / 255;
-        lums[n] = L;
-        if (L < lo) lo = L;
-        if (L > hi) hi = L;
-      }
-      var span = Math.max(0.12, hi - lo);
-
-      for (var y = 0; y < rows; y++) {
-        for (var x = 0; x < cols; x++) {
-          var lum = (lums[y * cols + x] - lo) / span;
-          /* push the midtones so it reads as cheap print, not as a photo */
-          var k = Math.pow(1 - lum, 1.12);
-          var r = k * max / 2;
-          if (r < 0.35) continue;
-          g.beginPath();
-          g.arc((x + 0.5) * cw, (y + 0.5) * ch, r, 0, 6.2832);
-          g.fill();
-        }
-      }
-      box.appendChild(out);
-      return true;
-    } catch (e) {
-      /* getImageData throws on a tainted canvas, which is exactly what
-         happens if this page is opened over file://. The grayscale image
-         underneath is already a reasonable cheap-print fallback. */
-      return false;
-    }
+  function tear() {
+    if (torn) return;
+    torn = true;
+    el.classList.add('is-tearing');
+    /* the halves are clear of the screen at .713s; a breath after that the
+       overlay has no reason to exist */
+    setTimeout(off, 783);
   }
 
-  var med = $('hMed');
-  var DEFPHOTO = T.stampPhoto || A.portrait || 'portrait-rooftop.jpg';
-  /* One function rather than a straight line of setup, because the designer
-     has to be able to change the picture and the screen ruling, and neither
-     can be done by setting src: the face you see is a canvas drawn ONCE from
-     the image, so a new src under it changes nothing at all. */
-  function setPhoto(name, pitch, o) {
-    o = o || {};
-    med.textContent = '';
-    var photo = new Image();
-    photo.alt = A.portraitAlt || 'Mohammed Essam';
-    /* the fallback under the dots gets the same crop, so the two never
-       disagree about which part of the picture this is */
-    photo.style.objectPosition =
-      ((o.x === undefined ? 0.5 : +o.x) * 100) + '% ' +
-      ((o.y === undefined ? 0.5 : +o.y) * 100) + '%';
-    photo.style.transform = 'scale(' + Math.max(1, +o.zoom || 1) + ')';
-    /* NOT requestAnimationFrame, which is what this used to be. A hidden tab
-       never runs one, and neither does a frame the browser thinks is not on
-       screen, so the dot screen was simply never drawn and the page sat there
-       showing the grey CSS-filter fallback with nothing in the console to say
-       why. It looked exactly like a photo that had failed. A timeout always
-       fires; the retry is what waits for the box to have a size. */
-    function draw(tries) {
-      if (!med.contains(photo)) return;   /* a newer photo has replaced this one */
-      if (med.clientWidth < 4 && tries < 25) {
-        setTimeout(function () { draw(tries + 1); }, 60);
-        return;
-      }
-      /* pitch 3, not 5. At 5 the screen was coarser than the face: on a 150px
-         box that is 30 cells across and he came out as a silhouette. */
-      halftone(photo, med, +pitch || 3, o);
-    }
-    photo.addEventListener('load', function () { setTimeout(function () { draw(0); }, 0); });
-    photo.src = 'images/' + (name || DEFPHOTO);
-    med.appendChild(photo);
-  }
-  setPhoto();
-  window.__ticketSetPhoto = setPhoto;
-  window.__ticketPhotoDefault = DEFPHOTO;
-
-  /* ---------------- 2b. the scratch panel ----------------
-     Every escape hatch the home page's own scratch has, kept:
-       a click without any drag opens it
-       keyboard focus opens it
-       it stays open on later visits
-       it never covers at all without canvas, or under reduced motion
-     A panel that can lock somebody out of the only call to action is not
-     a joke, it is a door with no handle. */
-  (function () {
-    var host = $('scratch');
-    if (!host) return;
-    var KEY = 'brutalScratched';
-    var open = function () {
-      host.classList.add('done');
-      try { localStorage.setItem(KEY, '1'); } catch (e) {}
-    };
-    var supported = !!document.createElement('canvas').getContext;
-    var seen = false;
-    try { seen = localStorage.getItem(KEY) === '1'; } catch (e) {}
-    if (!supported || reduced || seen) { host.classList.add('done'); return; }
-
-    var cv = document.createElement('canvas');
-    cv.setAttribute('aria-hidden', 'true');
-    host.appendChild(cv);
-    var g = cv.getContext('2d');
-
-    function paint() {
-      var r = host.getBoundingClientRect();
-      var dpr = Math.min(2, window.devicePixelRatio || 1);
-      cv.width = Math.max(1, r.width * dpr);
-      cv.height = Math.max(1, r.height * dpr);
-      g.setTransform(dpr, 0, 0, dpr, 0, 0);
-      var grad = g.createLinearGradient(0, 0, r.width, r.height);
-      grad.addColorStop(0, '#B7B4AC'); grad.addColorStop(.22, '#E6E4DE');
-      grad.addColorStop(.46, '#B2AFA7'); grad.addColorStop(.68, '#E2E0DA');
-      grad.addColorStop(1, '#AFACA4');
-      g.fillStyle = grad; g.fillRect(0, 0, r.width, r.height);
-      g.fillStyle = 'rgba(11,10,9,.55)';
-      g.font = '600 11px "Share Tech Mono", monospace';
-      g.textAlign = 'center';
-      g.fillText('SCRATCH HERE', r.width / 2, r.height / 2 + 4);
-    }
-    paint();
-    addEventListener('resize', function () { if (!host.classList.contains('done')) paint(); });
-
-    var down = false, moved = 0, last = null;
-    function pos(e) {
-      var r = cv.getBoundingClientRect();
-      var p = e.touches ? e.touches[0] : e;
-      return { x: p.clientX - r.left, y: p.clientY - r.top };
-    }
-    function rub(p) {
-      /* destination-out erases by ALPHA, not by colour, so the stroke has
-         to be fully opaque or the foil barely lifts */
-      g.globalCompositeOperation = 'destination-out';
-      g.strokeStyle = '#000'; g.fillStyle = '#000';
-      g.lineWidth = 26; g.lineCap = 'round'; g.lineJoin = 'round';
-      if (last) { g.beginPath(); g.moveTo(last.x, last.y); g.lineTo(p.x, p.y); g.stroke(); }
-      g.beginPath(); g.arc(p.x, p.y, 13, 0, 6.2832); g.fill();
-      last = p;
-    }
-    function cleared() {
-      var r = cv.getBoundingClientRect();
-      var d = g.getImageData(0, 0, cv.width, cv.height).data;
-      var gone = 0;
-      for (var i = 3; i < d.length; i += 64) { if (d[i] < 40) gone++; }
-      return gone / (d.length / 64) > 0.5;
-    }
-    cv.addEventListener('pointerdown', function (e) {
-      down = true; moved = 0; last = null;
-      cv.setPointerCapture(e.pointerId); rub(pos(e)); e.preventDefault();
-    });
-    cv.addEventListener('pointermove', function (e) {
-      if (!down) return;
-      moved++; rub(pos(e));
-      if (moved > 6) { try { if (cleared()) open(); } catch (err) { } }
-    });
-    cv.addEventListener('pointerup', function () {
-      down = false;
-      if (moved < 3) open();     /* a click with no drag still opens it */
-      last = null;
-    });
-    cv.addEventListener('pointercancel', function () { down = false; last = null; });
-    /* keyboard: the panel must never be the only way in */
-    host.addEventListener('focusin', open);
-  })();
-
-  /* ---------------- work index ---------------- */
-  txt('wHead', (W.heading || 'The work.').toUpperCase());
-  txt('wCount', projects.length + ' pieces / ' + pad + ' awards');
-  /* null on the home page, where screens 02-05 do not exist. An unguarded
-     appendChild here throws and takes every line below it with it. */
-  var grid = $('wGrid');
-  /* the whole grid, not a slice: the first six projects all happen to have
-     film, so a six-card preview showed six identical play badges and the
-     affordance looked like decoration. 13 of the 18 carry film. */
-  if (grid) projects.forEach(function (p, i) {
-    /* 3c. film is media[].type === "video" */
-    var hasFilm = (p.media || []).some(function (m) { return m && m.type === 'video'; });
-    var a = document.createElement('a');
-    a.className = 'card';
-    a.href = 'work.html?slug=' + (p.slug || '');
-    a.innerHTML =
-      '<span class="shot">' +
-        (p.image ? '<img alt="" loading="lazy" src="images/' + p.image + '">' : '') +
-        (hasFilm ? '<span class="play" aria-hidden="true"></span>' : '') +
-      '</span>' +
-      '<span class="meta"><span>' + String(i + 1).padStart(2, '0') + ' / ' +
-        (p.client || '') + '</span><span>' + (p.year || '') + '</span></span>' +
-      '<h3>' + (p.title || '') + '</h3>' +
-      '<span class="tag">' +
-        (p.sticker ? '<span class="sticker hot">' + p.sticker + '</span>' : '') +
-        (p.category ? '<span class="sticker">' + p.category + '</span>' : '') +
-      '</span>';
-    grid.appendChild(a);
-  });
-
-  /* ---------------- project ---------------- */
-  var p0 = projects[0] || {};
-  txt('pSerial', T.serial || '');
-  txt('pTitle', (p0.title || '').toUpperCase());
-  txt('pTag', p0.tagline || '');
-  var pMeta = $('pMeta');
-  if (pMeta) ['client', 'category', 'year', 'sticker'].forEach(function (k) {
-    if (!p0[k]) return;
-    var s = document.createElement('span');
-    s.className = 'sticker' + (k === 'sticker' ? ' hot' : '');
-    s.textContent = p0[k];
-    pMeta.appendChild(s);
-  });
-
-  /* ---------------- footer ---------------- */
-  txt('fSerial', T.serial || '');
-  txt('fLine', F.line || '');
-  if ($('fTerms')) $('fTerms').innerHTML = [
-    '<b>1.</b> ' + (T.terms || ''),
-    '<b>2.</b> This ticket entitles the bearer to one (1) copywriter, subject to availability, mood, and the bearer having read this far.',
-    '<b>3.</b> ' + (T.stampArc || 'Valid until hired') + '. No cash alternative is offered and none has ever been requested.',
-    '<b>4.</b> Prizes are drawn from ' + projects.length + ' entries. Odds of any single piece having won an award are, at the time of printing, exactly zero.',
-    '<b>5.</b> The holder accepts that headlines are written in English and Arabic and that neither is a guarantee of anything.',
-    '<b>6.</b> Claims must be submitted by electronic mail. The draft arrives already written. The bearer may change it.',
-    '<b>7.</b> Ticket void if altered, defaced, laminated, framed, or screenshotted out of context.',
-    '<b>8.</b> Serial ' + (T.serial || '') + '. Series 13. Issued Cairo. Redeemable in Madrid.',
-    '<b>9.</b> ' + (F.line || '') + ' All other rights are frankly negotiable.'
-  ].map(function (t) { return '<p>' + t + '</p>'; }).join('');
-
-  /* ---- 4b. a barcode that is actually 131313 ----
-     Each digit becomes a fixed 4-bar group, so the pattern IS the number
-     printed under it rather than decoration that happens to sit above it. */
-  (function () {
-    var CODE = '131313';
-    var GLYPH = ['3211','2221','2122','1411','1132','1231','1114','1312','1213','3112'];
-    var bars = $('fBars');
-    if (!bars) return;
-    var wide = [];
-    CODE.split('').forEach(function (d) {
-      GLYPH[+d].split('').forEach(function (n, i) { wide.push([+n, i % 2 === 0]); });
-    });
-    wide.forEach(function (b) {
-      var i = document.createElement('i');
-      i.style.width = (b[0] * 1.7) + 'px';
-      i.style.height = '100%';
-      i.style.opacity = b[1] ? '1' : '0';   /* space bars: the gaps carry data too */
-      bars.appendChild(i);
-    });
-  })();
-
-  /* ---- 4c. the MS-DOS caret ----
-     caret-color cannot make a block, so the native caret is hidden and a
-     blinking block is parked after the text. Only honest in a monospace
-     field, where every character is exactly 1ch wide. */
-  (function () {
-    var wrap = $('mailWrap'), f = $('mailField'), c = $('caret');
-    if (!wrap || !f || !c) return;
-    var cs = getComputedStyle(f);
-    function place() {
-      var pad = parseFloat(cs.paddingLeft) + parseFloat(cs.borderLeftWidth);
-      var ch = f.value.length;
-      c.style.left = 'calc(' + pad + 'px + ' + ch + 'ch + ' + (ch * 0.12) + 'em)';
-    }
-    f.addEventListener('focus', function () { wrap.classList.add('on'); place(); });
-    f.addEventListener('blur', function () { wrap.classList.remove('on'); });
-    f.addEventListener('input', place);
-    f.addEventListener('keyup', place);
-  })();
-
-  /* ---- the scuff layer, seeded ---- */
-  var NS = 'http://www.w3.org/2000/svg';
-  function mk(n, a) { var e = document.createElementNS(NS, n);
-    for (var k in a) e.setAttribute(k, a[k]); return e; }
-  var seed = 20260903;
-  function rnd() { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; }
-  [].forEach.call(document.querySelectorAll('svg.scuff'), function (svg) {
-    svg.setAttribute('viewBox', '0 0 1000 600');
-    svg.setAttribute('preserveAspectRatio', 'none');
-    for (var i = 0; i < 22; i++) {
-      var x = rnd() * 1000, y = rnd() * 600;
-      var len = 40 + rnd() * 300, ang = (rnd() - .5) * 0.5;
-      svg.appendChild(mk('line', {
-        x1: x, y1: y, x2: x + len, y2: y + len * ang,
-        stroke: 'currentColor', 'stroke-width': (rnd() * 0.9 + 0.25).toFixed(2),
-        opacity: (0.25 + rnd() * 0.6).toFixed(2)
-      }));
-    }
-    for (var j = 0; j < 40; j++) {
-      svg.appendChild(mk('circle', {
-        cx: rnd() * 1000, cy: rnd() * 600, r: (rnd() * 1.5 + 0.3).toFixed(2),
-        fill: 'currentColor', opacity: (0.2 + rnd() * 0.5).toFixed(2)
-      }));
-    }
-  });
-
-  /* ---- guilloche, for the ground switch ---- */
-  function sine(lam, amp, ph, y, w) {
-    var d = '';
-    for (var x = 0; x <= w; x += 5)
-      d += (x ? 'L' : 'M') + x + ' ' + (y + amp * Math.sin((x / lam) * 6.2832 + ph)).toFixed(2);
-    return d;
-  }
-  [].forEach.call(document.querySelectorAll('svg.guil'), function (svg, n) {
-    svg.setAttribute('viewBox', '0 0 1200 900');
-    svg.setAttribute('preserveAspectRatio', 'none');
-    var defs = mk('defs');
-    var pat = mk('pattern', { id: 'wv' + n, width: 300, height: 56, patternUnits: 'userSpaceOnUse' });
-    for (var i = 0; i < 4; i++) {
-      pat.appendChild(mk('path', { d: sine(150, 7, (i / 4) * 6.2832, 14 * i + 7, 300),
-        fill: 'none', stroke: 'currentColor', 'stroke-width': .9 }));
-      pat.appendChild(mk('path', { d: sine(100, 5, -(i / 4) * 6.2832, 14 * i + 7, 300),
-        fill: 'none', stroke: 'currentColor', 'stroke-width': .7 }));
-    }
-    defs.appendChild(pat); svg.appendChild(defs);
-    svg.appendChild(mk('rect', { x: 0, y: 0, width: 1200, height: 900, fill: 'url(#wv' + n + ')' }));
-  });
-
-  /* ================= 1. OPTICAL FLUSH LEFT =================
-     Setting four elements to the same padding makes their BOXES flush, not
-     their ink. Measured: the kicker's ink starts 0.50px inside its box, the
-     headline 0.73, his name 2.64, and the 00 a full 8.24, because Share Tech
-     Mono's zero carries a big left side bearing at 90px. That 7.7px spread
-     is exactly the "floating" look.
-
-     So each line is measured on a canvas and pulled back by its own bearing.
-     Done at runtime rather than hardcoded because the control bar swaps both
-     families, and every face has different bearings.
-     ========================================================= */
-  var inkCtx = document.createElement('canvas').getContext('2d');
-  function alignInk(ids) {
-    var rows = [];
-    ids.forEach(function (id) {
-      var e = $(id.slice(1));
-      if (!e) return;
-      e.style.marginLeft = '';
-      var s = getComputedStyle(e);
-      /* the headline is two block spans, so textContent would hand the canvas
-         "AWARD-LOSINGCOPYWRITER" and measure the bearing of a string that is
-         never drawn. The left edge is set by the FIRST line. */
-      var t = (e.firstElementChild ? e.firstElementChild.textContent
-                                   : e.textContent).trim();
-      /* the canvas measures the string it is given, so uppercase it here or
-         the bearing measured is the lowercase one and the correction is wrong */
-      if (s.textTransform === 'uppercase') t = t.toUpperCase();
-      inkCtx.font = s.fontWeight + ' ' + parseFloat(s.fontSize) + 'px ' + s.fontFamily;
-      inkCtx.letterSpacing = (parseFloat(s.letterSpacing) || 0) + 'px';
-      inkCtx.textAlign = 'left';
-      var m = inkCtx.measureText(t);
-      if (!isFinite(m.actualBoundingBoxLeft)) return;
-      rows.push({ e: e, off: -m.actualBoundingBoxLeft });
-    });
-    if (!rows.length) return;
-    var min = Math.min.apply(null, rows.map(function (r) { return r.off; }));
-    rows.forEach(function (r) {
-      r.e.style.marginLeft = (-(r.off - min)).toFixed(2) + 'px';
-    });
-  }
-  /* ---- the hero is set as large as its column allows ----
-     Measured rather than clamped, because the size that fills the column
-     depends on the display face, and the control bar swaps that. Same job
-     as fitTitle() on the live home page and for the same reason. */
-  function fitHead() {
-    var h = $('hHead'), main = document.querySelector('.tk-main');
-    if (!h || !main) return;
-    /* the designer can pin a size by hand. An inline font-size set here would
-       outrank the sheet that carries his number, so when he has chosen one
-       this stands down rather than fighting it every resize. */
-    if (window.__ticketHeadFixed) { h.style.fontSize = ''; return; }
-    var cs = getComputedStyle(main);
-    var avail = main.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
-    if (avail <= 0) return;
-    var hs = getComputedStyle(h);
-    var probe = 100;
-    inkCtx.font = hs.fontWeight + ' ' + probe + 'px ' + hs.fontFamily;
-    inkCtx.letterSpacing = (-0.035 * probe).toFixed(2) + 'px';
-    var widest = 0;
-    [].forEach.call(h.children, function (s) {
-      widest = Math.max(widest, inkCtx.measureText(s.textContent).width);
-    });
-    if (!widest) return;
-    var size = Math.min(150, probe * (avail / widest) * 0.995);
-    h.style.fontSize = size.toFixed(2) + 'px';
+  function off() {
+    if (gone) return;
+    gone = true;
+    document.documentElement.classList.remove('is-booting');
+    if (el.parentNode) el.parentNode.removeChild(el);
   }
 
-  /* ---- the small print, on one line, never over the barcode ----
-     Measured against the width the flex row actually gave it, so the barcode
-     is accounted for by construction. Shrinks only, and gives back tracking
-     before size: tight small print still reads as small print, tiny does
-     not. Skipped where the text is allowed to wrap. */
-  function fitLegal() {
-    var p = $('hLegal');
-    if (!p) return;
-    p.style.fontSize = ''; p.style.letterSpacing = '';
-    var cs = getComputedStyle(p);
-    if (cs.whiteSpace !== 'nowrap') return;
-    var size = parseFloat(cs.fontSize), track = parseFloat(cs.letterSpacing) || 0;
-    var t = p.textContent.replace(/\s+/g, ' ').trim();
-    var avail = p.clientWidth;
-    if (!t || avail <= 0) return;
-    inkCtx.font = cs.fontWeight + ' ' + size + 'px ' + cs.fontFamily;
-    inkCtx.letterSpacing = track + 'px';
-    var w = inkCtx.measureText(t).width;
-    if (w <= avail) return;
-    var floor = size * 0.05;
-    if (track > floor) {                       /* tracking first */
-      track = Math.max(floor, track - (w - avail) / t.length);
-      inkCtx.letterSpacing = track + 'px';
-      w = inkCtx.measureText(t).width;
-    }
-    if (w > avail) {                           /* then size */
-      var k = (avail / w) * 0.995;
-      size *= k; track *= k;
-    }
-    p.style.fontSize = size.toFixed(2) + 'px';
-    p.style.letterSpacing = track.toFixed(3) + 'px';
-  }
+  /* It tears once the perforation is complete AND the page has actually
+     finished loading, whichever is later: a loading screen that lets go while
+     the fonts are still arriving is worse than none. The hard cap is the
+     safety net, so one slow embed can never hold the ticket behind it. */
+  var timeUp = false, ready = document.readyState === 'complete';
+  var maybe = function () { if (timeUp && ready) tear(); };
+  /* 1460 divided by 1.15, at his request. This and the two durations in
+     styles.css are one piece of choreography: change one and the punch stops
+     landing before the tear starts. The 3400 cap below is NOT scaled, because
+     it is a safety net rather than a beat. */
+  setTimeout(function () { timeUp = true; maybe(); }, 1270);
+  window.addEventListener('load', function () { ready = true; maybe(); });
+  setTimeout(function () { ready = timeUp = true; maybe(); }, 3400);
 
-  var FLUSH = ['#hKick', '#hName', '#hHead'];
-  function realign() { fitHead(); alignInk(FLUSH); fitLegal(); }
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(realign);
-  realign();
-  addEventListener('resize', realign);
-  /* the designer changes words and families from outside this document, and
-     both invalidate every measurement in here */
-  window.__ticketRealign = realign;
-
-  /* ---- ?only=home ----
-     The designer shows this page in an iframe and edits screen 01. The other
-     four screens and the control bar are not wrong, they are just not what
-     he is looking at, and scrolling past them to reach the ticket would make
-     the ruler origin move. */
-  if (true) {
-    document.body.classList.add('only-home');
-    [].forEach.call(document.querySelectorAll('section.screen'), function (s, i) {
-      if (i > 0) s.remove();
-    });
-    var b0 = $('bar'); if (b0) b0.remove();
-    [].forEach.call(document.querySelectorAll('.screenlab'), function (s) { s.remove(); });
-    var sp = document.querySelector('body > div[style*="height:44px"]');
-    if (sp) sp.remove();
-
-    /* Fill the frame, whatever the frame is. In the designer that frame is
-       an iframe the editor sizes to his screen's shape, so what he composes
-       is what the live page draws. It was gated to top-level for a while and
-       that was wrong twice over: the designer then showed a short card while
-       the real page showed a full-screen one, so he was designing against a
-       layout that does not exist.
-
-       This is only safe because the designer sets the iframe's height
-       EXPLICITLY. It used to measure the document instead, and a
-       position:fixed document measures nothing, which is how the whole
-       editor went black. */
-    document.body.classList.add('fills');
-    /* the card's height changes with the window, so the headline and the
-       small print are re-measured. That is the trade he chose over a fixed
-       board that held its ratio but letterboxed. */
-    addEventListener('resize', realign);
-  }
-
-  /* ---- preview controls ---- */
-  var GROUPS = [
-    ['Ground', 'tex', [['Grain', 'tex-grain'], ['Board', 'tex-board'],
-                       ['Guilloche', 'tex-guil'], ['None', 'tex-none']]],
-    ['Inks', 'ink', [['2', 'ink2'], ['1', 'ink1']]],
-    ['Machine', 'mono', [['Share Tech', '"Share Tech Mono",monospace'],
-                         ['Doto', '"Doto",monospace'], ['Nova', '"Nova Mono",monospace']]],
-    ['Display', 'disp', [['Archivo Black', '"Archivo Black",sans-serif'],
-                         /* 4. the serif is off the list. He has chosen the
-                            heavy grotesque, so the only alternative offered
-                            is another heavy grotesque. */
-                         ['Anton', '"Anton",sans-serif']]]
-  ];
-  var bar = $('bar');
-  /* ?only=home takes the control bar away, and the loop below used to append
-     into it regardless, which threw and killed every line after it. */
-  if (bar) GROUPS.forEach(function (g) {
-    var wrap = document.createElement('div');
-    wrap.className = 'grp';
-    wrap.innerHTML = '<b>' + g[0] + '</b>';
-    g[2].forEach(function (opt, i) {
-      var b = document.createElement('button');
-      b.type = 'button'; b.textContent = opt[0];
-      b.setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
-      b.addEventListener('click', function () {
-        if (g[1] === 'tex') {
-          document.body.className =
-            document.body.className.replace(/tex-\S+/g, '').trim() + ' ' + opt[1];
-        } else if (g[1] === 'ink') {
-          document.body.classList.toggle('ink1', opt[1] === 'ink1');
-        } else {
-          document.documentElement.style
-            .setProperty('--' + (g[1] === 'mono' ? 'mono' : 'disp'), opt[1]);
-          /* a new family means new side bearings, so the flush-left
-             correction has to be recomputed, not kept */
-          if (document.fonts) document.fonts.ready.then(realign);
-          requestAnimationFrame(realign);
-        }
-        [].forEach.call(wrap.querySelectorAll('button'), function (o) {
-          o.setAttribute('aria-pressed', String(o === b));
-        });
-      });
-      wrap.appendChild(b);
-    });
-    bar.appendChild(wrap);
+  /* and anyone who does not want to watch tears it themselves. The row of
+     holes is completed first, so what they get is the same gesture early
+     rather than a different one. */
+  ['click', 'touchstart', 'keydown', 'wheel'].forEach(function (ev) {
+    window.addEventListener(ev, function () {
+      if (torn) return;
+      el.classList.add('is-skipped');
+      tear();
+    }, { once: true, passive: true });
   });
 })();
 </script>
-<script src="site.js"></script>
-<!-- His design, and the one applier that reads it. Both are loaded LAST: the
-     script above prints the ticket from content.js, and these two put his
-     changes on top of that. An empty or missing ticket-design.js leaves the
-     page exactly as it is. -->
-<script src="ticket-design.js"></script>
-<script src="ticket-design-apply.js"></script>
+
+<main class="ticket">
+  <div class="perf top" aria-hidden="true"></div>
+
+  <div class="tk-body">
+    <div class="tk-top">
+      <span id="tkGame" data-slot="game"></span>
+      <span id="tkSerial" data-slot="serial"></span>
+    </div>
+
+    <!-- The name is the logo here: the home page has no nav bar, so this is
+         the only thing that says whose site this is. Same lockup as the other
+         pages, name in capitals with the job under it and not bold. His line
+         and the award count sit on the opposite side of the same row, which
+         is what the black band used to hold. -->
+    <div class="tk-namerow">
+      <p class="tk-name" id="tkName" data-slot="name"></p>
+      <div class="tk-aside">
+        <span id="tkBand" data-slot="band"></span>
+        <a class="tk-badge" id="tkBadge" data-slot="badge"></a>
+      </div>
+    </div>
+
+    <h1 class="tk-title"><span id="tkTitleTop" data-slot="titleTop"></span><span id="tkTitleBottom" data-slot="titleBottom"></span></h1>
+
+    <!-- The sub-line and the tabs share the left column, the stamp holds the
+         right and spans both. Before this the stamp sat in a row of its own
+         beside a one-line paragraph, so 188px of empty paper opened up under
+         the copy while the stamp floated on the other side of it. -->
+    <div class="tk-mid">
+      <div class="tk-midleft">
+      <p class="tk-sub" id="tkSub" data-slot="sub"></p>
+
+        <ul class="won-list" id="wonList" data-slot="won" hidden></ul>
+        <nav class="tk-nav" id="tkNav"></nav>
+      </div>
+
+      <!-- THE STAMP. A postage stamp, not a rubber one: perforated edge, a
+           duotone portrait, the issuing department curved round it, a value
+           and the name along the bottom. It is the only image on the page and
+           the only thing that is not type, and the whole of it is a link to
+           the About page. Every word comes from content.js. -->
+      <a class="stamp" id="tkStamp" data-slot="stamp" href="about.html">
+        <span class="stamp-perf" aria-hidden="true"></span>
+        <span class="stamp-in">
+          <svg class="stamp-arc" viewBox="0 0 200 200" aria-hidden="true"
+               xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <defs>
+              <!-- 9 o'clock, clockwise, so the letters sit upright over the top -->
+              <path id="stampArcPath" fill="none"
+                    d="M100,102 m-91,0 a91,91 0 1,1 182,0 a91,91 0 1,1 -182,0"/>
+            </defs>
+            <text class="stamp-arc-t">
+              <textPath id="stampArc" href="#stampArcPath" xlink:href="#stampArcPath"
+                        startOffset="0" textLength="571" lengthAdjust="spacing"></textPath>
+            </text>
+          </svg>
+          <span class="stamp-photo"><img id="stampImg" src="" alt=""></span>
+        </span>
+        <span class="stamp-band">
+          <span class="stamp-value" id="stampValue"></span>
+          <span class="stamp-names">
+            <span class="stamp-name" id="stampName"></span>
+            <span class="stamp-foot" id="stampFoot"></span>
+          </span>
+        </span>
+      </a>
+    </div>
+
+    <div class="tk-foot">
+      <a class="barcode" id="tkBarcode" data-slot="barcode" aria-label="Playlist"></a>
+      <p class="tk-terms" id="tkTerms" data-slot="terms"></p>
+    </div>
+  </div>
+
+  <div class="perf bot" aria-hidden="true"></div>
+</main>
+
+<!-- content.js is fetched with a stamp that changes every minute.
+     GitHub Pages serves it with cache-control: max-age=600, so for ten
+     minutes after a save the live site kept handing out the previous
+     words and the save looked as though it had done nothing. A plain
+     request was measured returning a fifty-minute-old copy while the
+     same file, asked for with a query, came back current.
+     Only on a real web server: a query string on a file URL is not
+     reliably understood and the owner previews by double-clicking. -->
+<script>
+(function () {
+  /* only on a real web server. Anything else (file://, and the data: URLs
+     some preview panes use) gets exactly the tag this always had, so the
+     double-click workflow cannot regress. */
+  var v = /^https?:$/.test(location.protocol) ? '?v=' + Math.floor(Date.now() / 60000) : '';
+  document.write('<scr' + 'ipt src="content.js' + v + '"><\/scr' + 'ipt>');
+})();
+</script>
+<script src="auto-refresh.js"></script>
+<script>
+(function () {
+  var C = window.SITE_CONTENT || {};
+  var T = C.ticket || {};
+  var J = C.jokes || {};
+
+  /* His email opens with the message already in it, written as if by the
+     person sending it, and one of the drafts is picked at random per visit.
+     site.js does this for every other page; this one has no site.js, so the
+     same few lines are here. Blank a field and that half is not sent; blank
+     the lot and it is a plain mailto again. A link that already carries its
+     own query is left alone. */
+  var MAILT = (function () {
+    var K = C.contact || {};
+    var list = (K.mailTemplates || []).filter(function (t) {
+      return t && (String(t.subject || '').trim() || String(t.body || '').trim());
+    });
+    if (!list.length && (K.mailSubject || K.mailBody)) {
+      list = [{ subject: K.mailSubject, body: K.mailBody }];
+    }
+    /* shuffled once, then dealt in order: re-rolling at random hands out the
+       same draft twice in a row often enough to look broken */
+    for (var i = list.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = list[i]; list[i] = list[j]; list[j] = t;
+    }
+    return list;
+  })();
+  var mailAt = 0;
+
+  function mailPrefill(url) {
+    var href = String(url || '');
+    if (!/^mailto:/i.test(href) || !MAILT.length) return href;
+    var pick = MAILT[mailAt % MAILT.length];
+    var subj = String(pick.subject || '').trim();
+    var body = String(pick.body || '').trim();
+    var q = [];
+    if (subj) q.push('subject=' + encodeURIComponent(subj));
+    if (body) q.push('body=' + encodeURIComponent(body.replace(/\r?\n/g, '\r\n')));
+    return q.length ? href + '?' + q.join('&') : href;
+  }
+
+  /* The covered punch is the only mailto on this page, and it deals itself
+     the same way the rest of the site does. The bare address is kept on the
+     element so each rewrite is built from THAT and never from the last one,
+     which would staple a second query onto the first. */
+  function sweepMail() {
+    Array.prototype.forEach.call(
+      document.querySelectorAll('a[href^="mailto:" i]'),
+      function (a) {
+        var base = a.getAttribute('data-mail-base');
+        if (base === null) {
+          var here = a.getAttribute('href') || '';
+          base = here.indexOf('?') > -1 ? '' : here;
+          a.setAttribute('data-mail-base', base);
+        }
+        if (base) a.setAttribute('href', mailPrefill(base));
+      }
+    );
+  }
+  /* Not gated on document.hidden: see the note in site.js. A hidden tab never
+     fires visibilitychange, so that guard can fail to a rotation that silently
+     never starts, and browsers already throttle background timers anyway. */
+  var mailTick = null, mailHeld = false;
+  function mailStart() {
+    if (mailTick || mailHeld || MAILT.length < 2) return;
+    mailTick = setInterval(function () { mailAt++; sweepMail(); }, 7000);
+  }
+  function mailStop() { if (mailTick) { clearInterval(mailTick); mailTick = null; } }
+  if (MAILT.length > 1) {
+    document.addEventListener('pointerover', function (e) {
+      if (e.target && e.target.closest && e.target.closest('a[href^="mailto:" i]')) {
+        mailHeld = true; mailStop();
+      }
+    }, true);
+    document.addEventListener('pointerout', function (e) {
+      if (e.target && e.target.closest && e.target.closest('a[href^="mailto:" i]')) {
+        mailHeld = false; mailStart();
+      }
+    }, true);
+  }
+
+  /* Has he won something yet? The whole home page hangs off this. */
+  var won = (T.awards || []).filter(function (a) { return a && String(a).trim(); });
+  var hasWon = won.length > 0;
+  if (hasWon) document.body.classList.add('has-won');
+
+  function set(id, val) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = val == null ? '' : val;
+  }
+
+  set('tkBand',        hasWon ? (T.wonBand      || T.band)      : T.band);
+  set('tkBadge',       hasWon ? (T.wonBadge     || T.badge)     : T.badge);
+  set('tkTitleTop',    hasWon ? (T.wonTitleTop  || T.titleTop)  : T.titleTop);
+  set('tkTitleBottom', hasWon ? (T.wonTitleBottom || T.titleBottom) : T.titleBottom);
+  set('tkGame', T.game);
+  set('tkSerial', T.serial);
+  /* when he has won something, the retraction line takes over the sub slot */
+  set('tkSub', hasWon ? (T.wonLine || T.sub) : T.sub);
+  set('tkTerms', T.terms);
+  /* the home page has no nav bar, so this band is the only thing on the
+     screen that says whose site this is. Always upper case. */
+  set('tkName', (T.name || 'MOHAMMED ESSAM').toUpperCase());
+
+  /* ---- the stamp ----
+     The arc text repeats until it nearly closes the circle and textLength
+     stretches it the rest of the way, so any line he writes fits the ring.
+     Blank the arc and the photo and the whole stamp removes itself. */
+  (function () {
+    var st = document.getElementById('tkStamp');
+    if (!st) return;
+    var arc = String((hasWon ? (T.wonStampArc || T.stampArc) : T.stampArc) || '').trim();
+    var photo = String(T.stampPhoto || '').trim();
+    if (!arc && !photo) { st.remove(); return; }
+
+    if (arc) {
+      if (!/[·•|,\/-]\s*$/.test(arc)) arc += ' · ';
+      else if (!/\s$/.test(arc)) arc += ' ';
+      /* exactly three laps, his call. textLength then spaces them to close
+         the circle, so the ring stays even however long the line is. */
+      set('stampArc', (arc + arc + arc).toUpperCase());
+    }
+    var img = document.getElementById('stampImg');
+    if (photo) {
+      img.src = /^https?:\/\//i.test(photo) ? photo : 'images/' + photo.replace(/^images\//, '');
+      img.alt = T.stampName || T.name || '';
+    } else {
+      img.parentNode.remove();
+    }
+    set('stampValue', T.stampValue);
+    set('stampName', (T.stampName || T.name || '').toUpperCase());
+    set('stampFoot', T.stampFoot);
+    if (T.stampUrl) {
+      st.href = T.stampUrl;
+      /* anything off this site opens in its own tab, so a visitor reading the
+         ticket does not lose it to a playlist */
+      if (/^https?:\/\//i.test(T.stampUrl) &&
+          T.stampUrl.indexOf(location.origin) !== 0) {
+        st.target = '_blank';
+        st.rel = 'noopener';
+      }
+    }
+  })();
+
+  /* ---- the award badge ----
+     "Won nothing" is a claim, so it opens the cabinet and shows you. Blank
+     `badgeUrl` and it goes back to being a label that does nothing. */
+  (function () {
+    var bd = document.getElementById('tkBadge');
+    if (!bd) return;
+    var url = String(T.badgeUrl || '').trim();
+    if (url) bd.href = url;
+  })();
+
+  /* ---- the barcode ----
+     It was a decoration. It is a door now: the strip of bars is where the
+     playlist lives, which is a better joke than the stamp holding it,
+     because a barcode is the one part of a ticket nobody expects to do
+     anything. Blank `barcodeUrl` and it goes back to being an ornament. */
+  (function () {
+    var bc = document.getElementById('tkBarcode');
+    if (!bc) return;
+    var url = String(T.barcodeUrl || '').trim();
+    if (!url) { bc.removeAttribute('aria-label'); bc.setAttribute('aria-hidden', 'true'); return; }
+    bc.href = url;
+    bc.setAttribute('aria-label', T.barcodeLabel || 'Playlist');
+    if (/^https?:\/\//i.test(url) && url.indexOf(location.origin) !== 0) {
+      bc.target = '_blank';
+      bc.rel = 'noopener';
+    }
+  })();
+
+  /* ---- THE HOME CANVAS -------------------------------------------------
+     If he has laid the ticket out in the designer, `content.layout` holds
+     one artboard per shape of screen and every box in it is a PERCENTAGE
+     of the ticket, never a pixel: the ticket then scales as one piece and
+     the composition holds its proportions at any window size.
+
+     `layout.desktop` is used on a wide landscape screen, `layout.mobile`
+     below that. An artboard with no items falls through to the hand-built
+     flow layout in the stylesheet, so an untouched phone keeps the layout
+     that was tested down to 360px, and deleting `layout` puts everything
+     back. With no layout saved, none of this runs.
+     ---------------------------------------------------------------------- */
+  var COLOR = {
+    ink: 'var(--ink)', red: 'var(--red)', deep: 'var(--red-deep)',
+    paper: 'var(--paper)', muted: 'var(--ink-60)', faint: 'var(--ink-30)'
+  };
+  var FONT = {
+    home: 'var(--display-home)', display: 'var(--display)', mono: 'var(--mono)',
+    body: '"Hanken Grotesk",-apple-system,sans-serif'
+  };
+
+  /* WHICH artboard, decided by the DEVICE rather than by the window.
+     It used to be `(orientation:landscape) and (min-width:900px)`, so any
+     desktop window dragged narrow or tall fell through to the phone
+     composition and the ticket stood up vertically on a laptop. That is only
+     safe to change because the ticket now scales as one piece: a small
+     desktop window shows a smaller desktop ticket instead of breaking.
+     A touch screen with no mouse is a phone. Everything else is a desktop,
+     at every window size. */
+  var TOUCH = window.matchMedia('(hover: none) and (pointer: coarse)');
+  function artboard() {
+    var L = C.layout || {};
+    var phone = TOUCH.matches;
+    var a = phone ? L.mobile : L.desktop;
+    /* if the one it wants is empty, the other is better than the flow layout */
+    if (!(a && a.items && a.items.length)) a = phone ? L.desktop : L.mobile;
+    return (a && a.items && a.items.length) ? a : null;
+  }
+
+  function imgPath(src) {
+    src = String(src || '');
+    return /^https?:\/\//i.test(src) ? src : 'images/' + src.replace(/^images\//, '');
+  }
+
+  /* an element he added in the designer: a text box, a picture, or a plain
+     rectangle of colour. The flow layout has no place for these, so they
+     exist only while an artboard is on. */
+  function makeFree(it, body) {
+    var el = document.createElement(it.url ? 'a' : (it.type === 'text' ? 'p' : 'div'));
+    el.className = 'tk-free free-' + (it.type || 'text');
+    if (it.url) {
+      el.href = it.url;
+      if (/^https?:\/\//i.test(it.url) && it.url.indexOf(location.origin) !== 0) {
+        el.target = '_blank';
+        el.rel = 'noopener';
+      }
+    }
+    if (it.type === 'image') {
+      var im = document.createElement('img');
+      im.src = imgPath(it.src);
+      im.alt = it.alt || '';
+      if (it.fit) im.style.objectFit = it.fit;
+      el.appendChild(im);
+    } else if (it.type !== 'box') {
+      el.textContent = it.text || '';
+    }
+    body.appendChild(el);
+    return el;
+  }
+
+  /* Which boxes hold their words in the middle. text-align only ever moved
+     type across, never down, so a box dragged taller left its line stuck to
+     the top edge. Text sits in the middle of its box unless he says
+     otherwise. The punches keep their own grid (number in one corner, label
+     in the other) and the stamp and barcode are not type at all. */
+  var VALIGN = { top: 'flex-start', middle: 'center', bottom: 'flex-end' };
+  var NO_VALIGN = { stamp: 1, barcode: 1, won: 1 };
+  function valignFor(it) {
+    if (it.valign) return VALIGN[it.valign] || null;
+    if (it.slot) {
+      if (NO_VALIGN[it.slot] || /^nav\d+$/.test(it.slot)) return null;
+    } else if (it.type === 'image' || it.type === 'box') {
+      return null;
+    }
+    return VALIGN.middle;
+  }
+
+  /* H is the ticket's height in pixels: type is stored as a percentage of it
+     so the headline keeps its proportion to the ticket on every screen */
+  function styleItem(el, it, H) {
+    var s = el.style;
+    var va = valignFor(it);
+    if (va) { s.display = 'flex'; s.flexDirection = 'column'; s.justifyContent = va; }
+    if (it.x != null) s.left = it.x + '%';
+    if (it.y != null) s.top = it.y + '%';
+    if (it.w != null) s.width = it.w + '%';
+    if (it.h != null) s.height = it.h + '%';
+    if (it.size) {
+      var px = (H * it.size / 100).toFixed(2) + 'px';
+      s.fontSize = px;
+      el.dataset.baseSize = px;   /* fitTitle shrinks from here, never grows past it */
+    }
+    if (it.align) s.textAlign = it.align;
+    if (it.color) s.color = COLOR[it.color] || it.color;
+    if (it.fill) s.background = COLOR[it.fill] || it.fill;
+    if (it.font && FONT[it.font]) s.fontFamily = FONT[it.font];
+    if (it.weight) s.fontWeight = it.weight;
+    if (it.tracking != null) s.letterSpacing = it.tracking + 'em';
+    if (it.leading != null) s.lineHeight = it.leading;
+    if (it.upper) s.textTransform = 'uppercase';
+    if (it.rotate) s.transform = 'rotate(' + it.rotate + 'deg)';
+    if (it.opacity != null && it.opacity !== 1) s.opacity = it.opacity;
+    if (it.z != null) s.zIndex = it.z;
+    if (it.radius) s.borderRadius = it.radius + 'px';
+  }
+
+  /* The ticket's natural size while it is locked, and the one number that
+     changes as the window is dragged. Kept out here so the resize handler can
+     reach it without re-running the whole layout. */
+  var NAT = null;
+  function scaleTicket() {
+    var tk = document.querySelector('.ticket');
+    if (!tk || !NAT) return;
+    var cs = getComputedStyle(document.body);
+    var padX = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+    var padY = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+    var availW = Math.max(120, window.innerWidth - padX);
+    var availH = Math.max(120, (window.innerHeight || document.documentElement.clientHeight) - padY);
+    var k = Math.min(availW / NAT[0], availH / NAT[1]);
+    tk.style.setProperty('--tk-k', k.toFixed(4));
+  }
+  window.scaleHomeTicket = scaleTicket;
+
+  function applyLayout() {
+    var tk = document.querySelector('.ticket');
+    var body = document.querySelector('.tk-body');
+    if (!tk || !body) return;
+
+    /* wipe the previous pass first, so a resize across the breakpoint lands
+       cleanly on the other artboard or back in the flow */
+    [].forEach.call(body.querySelectorAll('.tk-free'), function (n) { n.remove(); });
+    [].forEach.call(body.querySelectorAll('[data-slot]'), function (n) {
+      n.removeAttribute('data-placed');
+      n.removeAttribute('style');
+      delete n.dataset.baseSize;
+    });
+
+    var art = artboard();
+    if (!art) {
+      tk.classList.remove('is-canvas', 'is-locked');
+      document.body.classList.remove('home-locked');
+      NAT = null;
+      tk.style.removeProperty('--tk-nat-w');
+      tk.style.removeProperty('--tk-nat-h');
+      tk.style.removeProperty('--tk-k');
+      return;
+    }
+    tk.classList.add('is-canvas');
+
+    /* Lock the ticket to the shape the artboard was drawn at, BEFORE anything
+       is measured: H below is read off the laid-out box, so the shape has to
+       be settled first or every type size is computed against the wrong
+       height. An artboard with no aspect keeps the old stretch behaviour.
+
+       The ticket is laid out ONCE at a fixed natural size and then scaled with
+       a transform to fit the window. That is what makes dragging the window
+       smooth: sizing it in vw/vh meant every position, every type size and the
+       headline fit had to be recomputed, which only happened 120ms after the
+       drag stopped, so nothing moved and then everything jumped. A transform
+       is one number, it costs no layout, and the composition scales in the
+       compositor as the mouse moves. */
+    var ratio = parseFloat(art.aspect);
+    if (ratio > 0) {
+      var natW = parseFloat(art.w) > 0 ? parseFloat(art.w) : (TOUCH.matches ? 390 : 1600);
+      var natH = Math.round(natW / ratio);
+      tk.style.setProperty('--tk-nat-w', natW + 'px');
+      tk.style.setProperty('--tk-nat-h', natH + 'px');
+      tk.classList.add('is-locked');
+      document.body.classList.add('home-locked');
+      NAT = [natW, natH];
+      scaleTicket();
+    } else {
+      tk.classList.remove('is-locked');
+      document.body.classList.remove('home-locked');
+      NAT = null;
+      tk.style.removeProperty('--tk-nat-w');
+      tk.style.removeProperty('--tk-nat-h');
+      tk.style.removeProperty('--tk-k');
+    }
+
+    var H = body.clientHeight;
+    var want = 0, got = 0;
+    art.items.forEach(function (it) {
+      if (!it || it.hidden) return;
+      if (it.slot) want++;
+      var el = it.slot ? body.querySelector('[data-slot="' + it.slot + '"]') : makeFree(it, body);
+      if (!el) return;
+      styleItem(el, it, H);
+      if (it.slot) { el.setAttribute('data-placed', ''); got++; }
+    });
+
+    /* A layout that names boxes this page does not have is a layout from a
+       different version of the page. Placing the half of it that still
+       matches would leave a ticket with most of its words missing, which is
+       far worse than ignoring it: an unplaced box is hidden, and the ones
+       that did match would sit alone on an otherwise empty card. So if much
+       of it fails to land, drop the whole thing and let the stylesheet lay
+       the page out as it always did. Nothing is lost, the file still holds
+       his layout, and the designer migrates it when he next opens it. */
+    if (want && got < want * 0.75) {
+      [].forEach.call(body.querySelectorAll('.tk-free'), function (n) { n.remove(); });
+      [].forEach.call(body.querySelectorAll('[data-slot]'), function (n) {
+        n.removeAttribute('data-placed');
+        n.removeAttribute('style');
+        delete n.dataset.baseSize;
+      });
+      tk.classList.remove('is-canvas', 'is-locked');
+      document.body.classList.remove('home-locked');
+      NAT = null;
+      tk.style.removeProperty('--tk-nat-w');
+      tk.style.removeProperty('--tk-nat-h');
+      tk.style.removeProperty('--tk-k');
+    }
+  }
+  window.applyHomeLayout = applyLayout;   /* the designer re-runs this as he drags */
+
+  /* ---- keep the headline inside the ticket ----
+     The headline is his to rewrite from admin, and one long word ("copywriter"
+     already) runs off the edge of a narrow ticket. Rather than tune a font
+     size to one particular sentence, measure the longest line and shrink
+     until it fits. Runs again once the webfont lands and on resize. */
+  function fitTitle() {
+    var h = document.querySelector('.tk-title');
+    if (!h || !h.children.length) return;
+    h.style.fontSize = h.dataset.baseSize || '';
+    var box = h.clientWidth;
+    if (!box) return;
+    var rng = document.createRange();
+    /* more than one pass: display faces with an optical-size axis change
+       width as the point size changes, so the first sum lands short */
+    for (var i = 0; i < 4; i++) {
+      var fs = parseFloat(getComputedStyle(h).fontSize);
+      var widest = 0;
+      [].forEach.call(h.children, function (sp) {
+        rng.selectNodeContents(sp);
+        widest = Math.max(widest, rng.getBoundingClientRect().width);
+      });
+      if (!widest || widest <= box) break;
+      h.style.fontSize = (fs * box / widest).toFixed(2) + 'px';
+    }
+  }
+  /* The sub-line is held to one line on a wide screen. It is his to rewrite,
+     so rather than trust a font size to suit one sentence, measure it against
+     the room left beside the stamp and shrink it if it does not fit. Below the
+     landscape breakpoint it is allowed to wrap and this does nothing. */
+  function fitSub() {
+    var p = document.querySelector('.tk-sub');
+    if (!p) return;
+    p.style.fontSize = '';
+    if (getComputedStyle(p).whiteSpace !== 'nowrap') return;
+    var room = p.parentNode.clientWidth;
+    var stamp = document.getElementById('tkStamp');
+    if (stamp) {
+      room -= stamp.getBoundingClientRect().width;
+      room -= parseFloat(getComputedStyle(p.parentNode).columnGap) || 0;
+    }
+    var rng = document.createRange();
+    for (var i = 0; i < 3; i++) {
+      rng.selectNodeContents(p);
+      var wide = rng.getBoundingClientRect().width;
+      if (!wide || wide <= room) break;
+      p.style.fontSize = (parseFloat(getComputedStyle(p).fontSize) * room / wide).toFixed(2) + 'px';
+    }
+  }
+
+  /* ---- fitting type on the canvas ----
+     On an artboard each headline line is its own box, so the flow's fitTitle
+     has nothing left to measure: `.tk-title` is display:contents there. What
+     is wanted instead is per box, and shrink ONLY. The size he set in the
+     designer is the size he gets, unless the words genuinely do not fit the
+     box he drew, in which case the type comes down rather than running off
+     the edge. Anything shrunk is recorded so the designer can say so, rather
+     than quietly making the number he typed a lie. */
+  function shrinkToBox(el) {
+    var base = el.dataset.baseSize;
+    if (base) el.style.fontSize = base;
+    if (!el.clientWidth) return false;
+    var rng = document.createRange();
+    var shrunk = false;
+    /* more than one pass: display faces with an optical-size axis change
+       width as the point size changes, so the first sum lands short */
+    for (var i = 0; i < 4; i++) {
+      /* THESE TWO MUST BE READ IN THE SAME SPACE. The artboard scales the
+         whole ticket with a CSS transform, so `clientWidth` comes back in
+         layout pixels while any client rect comes back in scaled ones. This
+         compared 352 against 351 and concluded the headline fitted, while the
+         real content width was 386 and "Award-losing" hung 13px off the side
+         of the paper onto the red. It only ever showed on a phone, because
+         the scale is 1 on a desktop and the two numbers agree there. */
+      var k = el.offsetWidth ? el.getBoundingClientRect().width / el.offsetWidth : 1;
+      var box = el.clientWidth * k;
+      rng.selectNodeContents(el);
+      var wide = rng.getBoundingClientRect().width;
+      if (!box || !wide || wide <= box) break;
+      el.style.fontSize = (parseFloat(getComputedStyle(el).fontSize) * box / wide).toFixed(2) + 'px';
+      shrunk = true;
+    }
+    return shrunk;
+  }
+
+  /* THE TWO HALVES OF THE HEADLINE ARE ONE HEADLINE, so they cannot come out
+     at two sizes. shrinkToBox measures each box on its own, and "Award-losing"
+     is two characters longer than "copywriter", so it has to come down further
+     to fit the same width: on a phone they landed at 35.81px and 41.62px, a
+     sixth apart, on two lines sitting directly on top of each other. Whichever
+     had to shrink further wins and the other joins it.
+
+     ONLY WHEN SOMETHING ACTUALLY SHRANK. On a screen where both halves fit,
+     this does not run, so the two sizes he set in the designer stay exactly as
+     he set them: on desktop they are deliberately 15.328 and 15.728, which is
+     his composition and not ours to flatten. */
+  function matchTitleHalves() {
+    var a = document.querySelector('[data-slot="titleTop"]');
+    var b = document.querySelector('[data-slot="titleBottom"]');
+    if (!a || !b) return;
+    var fa = parseFloat(getComputedStyle(a).fontSize);
+    var fb = parseFloat(getComputedStyle(b).fontSize);
+    if (!fa || !fb || fa === fb) return;
+    a.style.fontSize = b.style.fontSize = Math.min(fa, fb).toFixed(2) + 'px';
+  }
+
+  function fitCanvas() {
+    var out = [];
+    var titleShrank = false;
+    var els = document.querySelectorAll('.ticket.is-canvas [data-placed], .ticket.is-canvas .tk-free');
+    [].forEach.call(els, function (el) {
+      if (getComputedStyle(el).whiteSpace !== 'nowrap') return;
+      if (!shrinkToBox(el)) return;
+      var slot = el.getAttribute('data-slot');
+      out.push(slot || 'added text');
+      if (slot === 'titleTop' || slot === 'titleBottom') titleShrank = true;
+    });
+    if (titleShrank) matchTitleHalves();
+    window.homeShrunk = out;
+    return out;
+  }
+
+  function onCanvas() {
+    var tk = document.querySelector('.ticket');
+    return !!tk && tk.classList.contains('is-canvas');
+  }
+  function fitText() { if (onCanvas()) fitCanvas(); else { fitTitle(); fitSub(); } }
+  function fitAll() { applyLayout(); fitText(); }
+  /* the designer moves a box and then asks the page to refit the type in it,
+     without re-running the whole layout underneath itself */
+  window.fitHomeText = fitText;
+  window.repaintHomeFoil = function () {
+    (window.homeFoils || []).forEach(function (f) { f(); });
+  };
+  fitAll();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll);
+  /* Two speeds. The scale is one custom property and no layout, so it runs on
+     every resize event and the ticket tracks the mouse. Everything else (the
+     headline fit, repainting the foil bitmap) is expensive and waits for the
+     drag to stop. While the ticket is locked the slow half has nothing to do
+     anyway, because the composition is laid out once at its natural size. */
+  var fitWait;
+  window.addEventListener('resize', function () {
+    scaleTicket();
+    clearTimeout(fitWait);
+    fitWait = setTimeout(fitAll, 140);
+  }, { passive: true });
+
+  /* plugging in a mouse, or picking the tablet up, can change the answer to
+     "is this a phone", and that swaps the whole composition */
+  var onDeviceChange = function () { applyLayout(); fitAll(); };
+  if (TOUCH.addEventListener) TOUCH.addEventListener('change', onDeviceChange);
+  else if (TOUCH.addListener) TOUCH.addListener(onDeviceChange);
+
+  if (hasWon) {
+    var ul = document.getElementById('wonList');
+    ul.hidden = false;
+    won.forEach(function (a) {
+      var li = document.createElement('li');
+      li.textContent = a;
+      ul.appendChild(li);
+    });
+  }
+
+  /* nav punches. The scratch one gets a small note sitting directly above
+     it, so the line reads as the caption on that box rather than as another
+     paragraph competing in the middle of the ticket. */
+  var nav = document.getElementById('tkNav');
+  (T.nav || []).forEach(function (item, ix) {
+    if (item.scratch && T.scratchNote) {
+      var cap = document.createElement('span');
+      cap.className = 'scratch-cap';
+      cap.setAttribute('data-slot', 'scratchNote');
+      cap.textContent = T.scratchNote;
+      nav.appendChild(cap);
+    }
+    var a = document.createElement('a');
+    /* each punch is addressable on its own, so the designer can move and
+       size them separately instead of shifting all three as one block */
+    a.setAttribute('data-slot', 'nav' + ix);
+    /* The BARE address goes on here. sweepMail() fills it in a moment, and
+       keeps filling it as the drafts rotate. Pre-filling it at this point is
+       what broke the rotation once: the sweep saw a link that already carried
+       a query, took that to mean somebody had written it by hand, and marked
+       it hands-off for the life of the page. One code path only. */
+    a.href = item.url || '#';
+    /* the label goes in its own element: as a bare text node it becomes an
+       anonymous grid item and cannot be placed in the box */
+    var b = document.createElement('b');
+    b.textContent = item.label || '';
+    var i = document.createElement('i');
+    i.textContent = item.num || '';
+    a.appendChild(i);
+    a.appendChild(b);
+    nav.appendChild(a);
+    if (item.scratch) makeScratch(a, item);
+  });
+  sweepMail();
+  mailStart();
+
+  /* ---- the covered box ----------------------------------------
+     The last punch is under foil. They scratch it expecting a prize
+     and the prize is the ask. This is the one place a scratch panel
+     earns its keep: it hides a punchline, not information.
+
+     It can never lock anyone out of contacting him:
+       - a plain click (no drag) uncovers it immediately
+       - keyboard focus uncovers it
+       - once uncovered it stays uncovered on later visits
+       - no canvas support, or reduced motion, and it never covers at all
+     -------------------------------------------------------------- */
+  function makeScratch(link, item) {
+    /* The foil comes back on every visit. It used to remember, through
+       localStorage, that it had already been scratched: he wants the gag
+       fresh every refresh, so nothing is stored any more. The other escape
+       hatches all stay, so it can still never lock anyone out. */
+    var canScratch = !!document.createElement('canvas').getContext &&
+      !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!canScratch) { link.classList.add('scratched'); return; }
+
+    link.classList.add('covered');
+    var foil = document.createElement('canvas');
+    foil.className = 'foil';
+    foil.setAttribute('aria-hidden', 'true');
+    link.appendChild(foil);
+
+    var ctx = foil.getContext('2d', { willReadFrequently: true });
+    var drawing = false, moved = 0, open = false;
+
+    /* Third go. The first was a flat fill, the second a linear gradient that
+       came out as brushed aluminium, the third was mid grey with heavy dark
+       speckle and read as asphalt. The dark speckle was the mistake: real
+       scratch foil is LIGHT silver and its texture is sparkle, which is
+       isolated bright specks catching the light, not dirt. So: a light silver
+       base, a broad soft sheen, bright grain with only a little dark in it to
+       keep it from going flat, and the darkening kept to the very edge. */
+    function paint() {
+      /* the punch's own unscaled box, NOT its rect. The ticket is laid out at
+         a natural size and scaled by a transform, so the rect shrinks and
+         grows with the window while the box never moves: drawing to the rect
+         re-rasterised the whole sparkle on every resize and made the brush a
+         different size at every window width. */
+      var w = link.offsetWidth, h = link.offsetHeight;
+      if (!w || !h) return;
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      foil.width = Math.round(w * dpr);
+      foil.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.globalCompositeOperation = 'source-over';
+
+      /* light silver, very slightly cool */
+      ctx.fillStyle = '#bcc0c5';
+      ctx.fillRect(0, 0, w, h);
+
+      /* the sheen: a wide soft band across the middle, brighter than the base */
+      var sh = ctx.createLinearGradient(0, 0, 0, h);
+      sh.addColorStop(0,   'rgba(255,255,255,.16)');
+      sh.addColorStop(.32, 'rgba(255,255,255,.58)');
+      sh.addColorStop(.55, 'rgba(255,255,255,.22)');
+      sh.addColorStop(1,   'rgba(120,124,130,.28)');
+      ctx.fillStyle = sh;
+      ctx.fillRect(0, 0, w, h);
+
+      /* a second, angled highlight so the panel reads as a surface catching
+         light from one side rather than as a flat grey strip. It does not
+         move: he asked for brighter, not for something running about. */
+      var gl = ctx.createLinearGradient(0, h, w * .78, 0);
+      gl.addColorStop(0,   'rgba(255,255,255,0)');
+      gl.addColorStop(.42, 'rgba(255,255,255,0)');
+      gl.addColorStop(.58, 'rgba(255,255,255,.34)');
+      gl.addColorStop(.68, 'rgba(255,255,255,.05)');
+      gl.addColorStop(1,   'rgba(255,255,255,0)');
+      ctx.fillStyle = gl;
+      ctx.fillRect(0, 0, w, h);
+
+      /* brushed direction, very faint, on the diagonal */
+      ctx.lineWidth = 1;
+      for (var d = -h; d < w; d += 3) {
+        ctx.strokeStyle = 'rgba(255,255,255,' + (.02 + Math.random() * .05).toFixed(3) + ')';
+        ctx.beginPath();
+        ctx.moveTo(d, h);
+        ctx.lineTo(d + h * .55, 0);
+        ctx.stroke();
+      }
+
+      /* SPARKLE. Mostly bright, a little dark. This is the tell, and getting
+         the ratio wrong is what made the last one look like tarmac. */
+      var grains = Math.round(w * h / 7);
+      for (var i = 0; i < grains; i++) {
+        var bright = Math.random() < .80;
+        ctx.fillStyle = bright
+          ? 'rgba(255,255,255,' + (.16 + Math.random() * .62).toFixed(3) + ')'
+          : 'rgba(96,100,106,'  + (.05 + Math.random() * .18).toFixed(3) + ')';
+        ctx.fillRect(Math.random() * w | 0, Math.random() * h | 0,
+                     Math.random() < .26 ? 2 : 1, 1);
+      }
+
+      /* a scattering of bigger glints. Foil catches the light in points, and
+         a field of even grain reads as texture rather than as metal. */
+      var glints = Math.round(w * h / 900);
+      for (var g = 0; g < glints; g++) {
+        var gx = Math.random() * w, gy = Math.random() * h;
+        var rad = 1.6 + Math.random() * 2.4;
+        var sp = ctx.createRadialGradient(gx, gy, 0, gx, gy, rad);
+        sp.addColorStop(0, 'rgba(255,255,255,' + (.55 + Math.random() * .4).toFixed(2) + ')');
+        sp.addColorStop(1, 'rgba(255,255,255,0)');
+        ctx.fillStyle = sp;
+        ctx.fillRect(gx - rad, gy - rad, rad * 2, rad * 2);
+      }
+
+      /* only the very edge darkens, so the panel sits on the paper */
+      var eg = ctx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * .42,
+                                        w / 2, h / 2, Math.max(w, h) * .62);
+      eg.addColorStop(0, 'rgba(0,0,0,0)');
+      eg.addColorStop(1, 'rgba(70,73,78,.34)');
+      ctx.fillStyle = eg;
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.strokeStyle = 'rgba(88,92,97,.5)';
+      ctx.strokeRect(.5, .5, w - 1, h - 1);
+
+      ctx.fillStyle = 'rgba(46,48,52,.85)';
+      ctx.font = '700 11px "Barlow Condensed", sans-serif';
+      ctx.textAlign = 'center';
+      try { ctx.letterSpacing = '2.4px'; } catch (e) {}
+      ctx.fillText((item.scratchHint || 'Scratch to reveal').toUpperCase(),
+        w / 2, h / 2 + 4);
+    }
+
+    function reveal() {
+      if (open) return;
+      open = true;
+      link.classList.remove('covered');
+      link.classList.add('scratched');
+      if (foil.parentNode) foil.parentNode.removeChild(foil);
+    }
+
+    /* The pointer arrives in screen pixels and the canvas is drawn in the
+       ticket's own unscaled pixels, so the parent's scale has to be divided
+       back out or the scratch lands away from the cursor on every screen
+       that is not exactly 1:1. */
+    function at(e) {
+      var r = foil.getBoundingClientRect();
+      var p = e.touches ? e.touches[0] : e;
+      var kx = r.width  ? foil.offsetWidth  / r.width  : 1;
+      var ky = r.height ? foil.offsetHeight / r.height : 1;
+      return [(p.clientX - r.left) * kx, (p.clientY - r.top) * ky];
+    }
+    function dig(x, y) {
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.beginPath();
+      ctx.arc(x, y, 17, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    function cleared() {
+      var d = ctx.getImageData(0, 0, foil.width, foil.height).data, c = 0, t = 0;
+      for (var i = 3; i < d.length; i += 4 * 160) { t++; if (d[i] < 26) c++; }
+      return t ? c / t : 0;
+    }
+    /* It opens when they have cleared 60% AND taken their hand off, not the
+       instant the threshold is crossed mid-stroke: it used to vanish out from
+       under the cursor half way through a scratch, which is not how a scratch
+       card behaves. Nothing checks during the drag any more.
+
+       The escape hatches all survive, and they have to: a click with no drag
+       opens it, keyboard focus opens it, and a browser without canvas or a
+       visitor who asked for less motion never sees the foil at all. Someone
+       who cannot drag must never be locked out of the only call to action on
+       the page. That also means a plain click still bypasses the 60%, by
+       design. */
+    var NEEDED = .6;
+    function settle() { if (!open && cleared() > NEEDED) reveal(); }
+
+    foil.addEventListener('mousedown', function (e) {
+      drawing = true; moved = 0; var c = at(e); dig(c[0], c[1]); e.preventDefault();
+    });
+    foil.addEventListener('mousemove', function (e) {
+      if (!drawing) return; moved++; var c = at(e); dig(c[0], c[1]); e.preventDefault();
+    });
+    window.addEventListener('mouseup', function () {
+      if (!drawing) return;
+      drawing = false;
+      /* a click with no drag: they tapped it, so just open it */
+      if (moved < 3) reveal(); else settle();
+    });
+    foil.addEventListener('touchstart', function (e) {
+      drawing = true; moved = 0; var c = at(e); dig(c[0], c[1]); e.preventDefault();
+    }, { passive: false });
+    foil.addEventListener('touchmove', function (e) {
+      if (!drawing) return; moved++; var c = at(e); dig(c[0], c[1]); e.preventDefault();
+    }, { passive: false });
+    foil.addEventListener('touchend', function () {
+      drawing = false;
+      if (moved < 3) reveal(); else settle();
+    });
+
+    /* keyboard users never meet the foil */
+    link.addEventListener('focus', reveal);
+    link.addEventListener('click', function (e) {
+      if (!open) { e.preventDefault(); reveal(); }
+    });
+
+    window.addEventListener('resize', function () { if (!open) paint(); });
+    /* the designer can resize this punch without the window changing size,
+       and the foil is a bitmap: without a repaint it would sit there
+       stretched. It is only called when a drag finishes, never during one:
+       the sparkle is drawn a pixel at a time and is far too slow per frame. */
+    (window.homeFoils = window.homeFoils || []).push(function () { if (!open) paint(); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(paint); else paint();
+  }
+
+  /* ---- the quiet jokes. each one is optional: blank it in
+          content.js and the slot simply goes silent. ---- */
+  if (J.tabAway) {
+    var realTitle = document.title;
+    document.addEventListener('visibilitychange', function () {
+      document.title = document.hidden ? J.tabAway : realTitle;
+    });
+  }
+  if (J.console && window.console) console.log('%c' + J.console, 'color:#E3261A;font-size:13px');
+})();
+</script>
+
 </body>
 </html>
