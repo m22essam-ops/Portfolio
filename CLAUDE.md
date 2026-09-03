@@ -1363,6 +1363,275 @@ What he was actually reacting to is real, but it is the address, not the
 display: `m22essam@gmail.com` is the least premium string on the site.
 **The fix is the domain email, not hiding it.** Still open.
 
+## Added 3 Sep 2026
+
+### The ticket designer (`ticket-designer.html`)
+
+A second editor, for the brutalist ticket's home screen only. He asked for
+"design HTML editable back end, similar to the one we have already, but it's
+two different ... with no access to GitHub ... please put some alignments,
+like rulers or guides ... only for the home page ... then we will save it
+locally, and then we can decide if we want to make it public".
+
+So the split is deliberate: **admin.html owns the words, this owns the look of
+one screen.** admin writes `content.js` and `images/`, the two things that get
+published. This writes exactly one file, `ticket-design.js`, and has no GitHub
+connection at all.
+
+**It edits the real page rather than a copy of it.** The middle of the screen
+is `preview-brutalist.html?only=home` in an iframe. Both documents load the
+same `ticket-design-apply.js`, so the editor and the page cannot disagree
+about what a design means. This is the lesson from every "two copies of a line
+drift apart" note above, applied before it could happen.
+
+`ticket-design-apply.js` holds the slot table, `TICKET_SLOTS`, and the editor
+builds its entire inspector from it. **Adding a row there is the only step
+needed to make a new thing editable.**
+
+Things that will bite anyone changing this:
+
+- **Geometry is emitted inside `@media (min-width:1001px)`; paint is not.**
+  A nudge, a padding or a column ratio is a decision about a 1400px
+  composition, and below 1000px `.tk-grid` is one column and `.legal` is
+  stacked. Without the split, one dragged element silently undoes the whole
+  mobile layout. `GEOMETRY` in the applier is that list.
+- **`kebab()` must leave custom properties alone.** `--perfR` kebabbed becomes
+  `---perf-r`, a property nothing reads and nothing warns about.
+- **`fitHead()` had to learn to stand down.** It sets an inline `font-size`,
+  which outranks any stylesheet, so pinning a headline size did nothing until
+  `window.__ticketHeadFixed` was added. The applier sets it and clears the
+  inline value in the same pass.
+- **The portrait cannot be changed by setting `src`.** What you see is a
+  canvas drawn once from the photo by the dot screen, so the old face stays
+  under a new image. `__ticketSetPhoto(name, pitch)` rebuilds it, and
+  `__ticketPhotoState` stops it rebuilding on every keystroke.
+- **`?only=home` removes the control bar, and the bar builder then appended
+  into null**, which threw and killed every line of script after it. Guarded.
+- **An element's original words are stashed on it as `data-orig`** the first
+  time the applier runs, before anything is overwritten. It is how the Copy
+  panel can say a line is no longer his, and how clearing a field puts
+  content.js's words back.
+- **Absent means untouched, everywhere.** `set()` deletes a key rather than
+  storing an empty string, so a field he cleared is not an override of "". No
+  `ticket-design.js`, or an empty one, and the ticket is exactly the ticket.
+  Deleting the file puts everything back. Verified both ways.
+- **The draft in localStorage is offered, never taken.** A banner asks. This
+  is the admin clobbering of 23 Aug in a different costume: a tab that
+  silently restores its own old state overwrites work done elsewhere.
+- Rulers read **zero at the card's top-left**, not the viewport's, because
+  that is the thing he is aligning inside. Guides are stored in that space too,
+  so they keep their meaning through zoom and a re-measured card.
+- Snapping catches guides, the card's edges and centre, **and every other
+  element's edges**, because "line this up with that" is the actual request
+  and guides alone cannot say it. Alt turns it off for one drag.
+- **`requestAnimationFrame` does not run in a background tab**, so the
+  halftone will not draw until the preview is looked at. It self-heals on
+  first paint. This was mistaken for a broken photo once already.
+
+### Three fixes the same day, all from him using it
+
+- **Elements moved on a bare hover, and this is the one worth remembering.**
+  The drag bound `pointermove` and `pointerup` to the PARENT window, but the
+  pointer is inside an iframe and **an iframe's pointer events do not reach
+  the parent**. So the release was never heard, the listeners were never
+  removed, and they accumulated: one per click, live for the rest of the
+  page. The moment the pointer crossed onto the rail or the ruler, a stale
+  handler fired and the element followed the mouse with no button held.
+  Two fixes, both needed. The listeners now go on **both windows**, and every
+  drag handler starts with `if (!ev.buttons) { up(); return; }`. The second
+  is not belt-and-braces: a lost pointerup is a real event in this layout,
+  and that line is what makes a hover physically incapable of moving anything.
+  The threshold went 3px to 4px in the same pass. `up()` is idempotent, or
+  one ruler gesture dropped two guides.
+- **The arrow keys did nothing the whole time you were looking at the ticket.**
+  `keydown` was bound to the parent document only, and clicking the ticket
+  puts focus inside the iframe, where a key is delivered to that document
+  alone. Bound to both now, plus tab and shift-tab to walk the elements and
+  cmd-0 to put one back. Tab's wrap-around had `+ length + 1` where it wanted
+  `+ length`, which stepped two forward and stood still going back.
+- **The photo is a dropdown, not a filename to be typed.** It reads
+  `images/` and `images/live/` off the server's own directory listing rather
+  than a hand-written list that would go stale the first time he adds a
+  photo, and the free-text field stays beside it for anything else. The dot
+  screen is reapplied to whichever picture is chosen, so swapping the photo
+  never costs the treatment, and the auto-levels means a darker one still
+  reads. 125 files offered, `live/` correctly prefixed.
+
+`local-server.py` gained `POST /api/design`. **The filename is hardcoded, not
+taken from the request:** a designer that could name a file could name
+content.js. An old server returns 404 there, and the editor says so in those
+words and downloads the file rather than reporting a failed save.
+
+The links page in `Edit the site/` lists it. `admin.html` is untouched.
+
+## Added 4 Sep 2026
+
+### The footnote, and his fine print
+
+The headline carries an asterisk, `AWARD-LOSING*`, answered by the first
+clause at the foot of the same card. His idea and his clauses.
+
+The mark is an **element** (`<i class="fn">`), not a character in his copy.
+So it survives an edit in the designer and never appears inside the field he
+is typing into. That needed the applier to learn that **an element's words are
+its text nodes and its element children are furniture** (`isWords`, `wordsOf`,
+`setWords`); before that, the Copy panel stashed "AWARD-LOSING*" as his
+original words and the first keystroke deleted the asterisk.
+
+The clauses are hardcoded in `preview-brutalist.html` as `LEGAL`, **not** in
+`ticket.terms`. That field is one sentence and is still printed by the live
+`index.html` and by screen 05, so widening it into a list only this card wants
+would have changed the live site. If the ticket ships, they move to content.js
+and admin gets them. Plain text and no markup, so the whole block stays
+editable as words in the designer.
+
+Two facts in clause 2 that are true today and are his to keep an eye on: Bob
+Marley never won a **competitive** Grammy but was given a posthumous Lifetime
+Achievement Award in 2001, and Amy Adams has six Oscar nominations and no
+wins. Clause 3 is "subject to change without prior notice", which covers both
+by accident and is the better for it.
+
+Fixed as slips and flagged: `marely`, `perior`, and `subjected to change`
+(the legal formula is "subject to").
+
+### Three bugs from him using it, all the same shape
+
+- **The font size field did nothing.** Typing `20` into a box labelled Size
+  is the obvious thing to do, and `font-size:20` is invalid CSS that the
+  browser drops in silence: the field kept the number and the page did not
+  move. `withUnit()` now adds the unit to a bare number on every field that
+  measures a length, and deliberately not on line-height, font-weight or
+  opacity, where a bare number is valid and means something else. **The
+  perforation sliders had the same bug and had never worked**: a range input
+  hands over a bare `9`, and `radial-gradient(circle 9 at ...)` is not a
+  gradient.
+- **The dot screen was never drawn in the designer.** It was scheduled with
+  `requestAnimationFrame`, and a hidden tab does not run one; neither does a
+  frame the browser thinks is off screen, which the designer's iframe reports
+  itself to be. Nothing appeared in the console. It looked exactly like a
+  photo that had failed to load. It is a timeout with a size-retry now, and
+  a `med.contains(photo)` guard so a slow load from an older photo cannot
+  paint over a newer one.
+- **A photo whose subject is small will not read at all.** The box is about
+  eighty dots across, so a face filling a fifth of the frame gets sixteen
+  dots. His childhood photo measured 8.7% ink coverage and came out blank.
+  `halftone()` takes a zoom and a position now, and the designer has Crop in
+  / Move across / Move down. The `<img>` fallback under the dots gets the
+  same crop so the two never disagree.
+
+### Resize handles, and the words field (4 Sep 2026)
+
+Eight handles on the selection, and clicking a line of type now puts its
+words in the panel focused and selected, both his asks.
+
+- **A width on a grid column does nothing**: the track owns the width, not
+  the item sitting in it. Dragging `rail`, `main` or `side` therefore rewrites
+  `.tk-grid`'s `grid-template-columns` and leaves the two columns it is not
+  touching as `fr`, so one explicit column does not freeze the whole ticket.
+  Vertically those three write `min-height`, not `height`, because a grid
+  column is stretched by its row and ignores a height. Everything else gets
+  plain width and height.
+- **The west and north handles move the element as well as size it**, through
+  the same `offset` the drag uses, so the far edge stays put. Suppressed for
+  the columns, where translating a column out of its own track is never what
+  was meant.
+- **Every inline style set during the drag is cleared on release.** The live
+  preview writes straight to the element for speed; leaving it there would
+  outrank the stylesheet the design is actually kept in, forever.
+- **The words field holds the live words now, not an empty box with them as a
+  placeholder behind it.** Clicking a line and finding an empty field is not
+  editing, it is retyping. Absent-means-untouched is kept in the DATA instead:
+  typing his own line back exactly deletes the override. It writes `D.text`
+  directly rather than through `set()`, which deletes on an empty string, so
+  blanking a line stays a real choice.
+- Focus is taken only on a **click**, never after a drag, or every nudge would
+  fight for the keyboard. **Escape leaves the field** and hands the arrows back
+  to the canvas without losing the selection.
+
+### The home ticket takes the SCREEN'S shape (4 Sep 2026)
+
+`?only=home` draws the card at **96vw by 96vh**. Its ratio is whatever the
+window's ratio is, so there is never a band of red left over.
+
+**A fixed artboard scaled to fit was built first and he rejected it on sight.**
+It was 1400x800 scaled by one multiplier, which held its proportions perfectly
+and needed no re-measuring on a resize. It also letterboxed: a 1.75:1 drawing
+on a 1.6:1 screen leaves dead red top and bottom, and it made the card 800 tall
+when its content is about 530, so the difference came out as empty space inside
+the columns. His words were that there is no way to have all that negative
+space. **Do not rebuild it.** The trade is real and he has made it: the card
+re-fits its type on a resize, and that is the price of filling the screen.
+
+- `.ticket` is `position:absolute; left/top:50%` with a translate. Not grid
+  centring: a grid item wider than its track clamps to the start instead of
+  centring, which put a 390px phone's card 28px off the right edge.
+- The card has a real height now, so `.ticket` is a flex column and
+  `.tk-grid` is `flex:1`. Harmless with an auto height elsewhere.
+- Measured at 1024x768, 1180x700, 1280x620, 1440x820, 1512x860, 1680x950,
+  1920x1080, 2560x1400, 900x1000 and 390x844: the card's ratio equals the
+  window's ratio to three decimals at every one, filling 96%/96%.
+
+### The fine print printed over the barcode
+
+Shipped broken and he found it. `white-space:nowrap` does not wrap, it
+**spills**, and a flex sibling does not stop it, so the small print ran
+straight across the bars.
+
+Three things fix it and all three are needed: `nowrap` for the one line,
+`min-width:0` so the flex item can shrink at all, and **`overflow:hidden` as
+the guarantee**, because a fit computed at load can always be stale. Then
+`fitLegal()` sizes the type so the clip never has to happen: it gives back
+**tracking before size**, and it stands down where the text may wrap.
+
+- **On a phone the footer stacks, and the nowrap has to be released there.**
+  Left on, `fitLegal()` shrank a 9.5px line to **2.88px** solving a collision
+  that does not exist once the barcode is on its own row.
+- **The bar's height was set by the barcode, not the type**: 34px of bars and
+  29px of padding made a 65px footer under a 9px line. At 20px and 9/8 it is
+  40px.
+- Checking for the overlap needs a **same-row test**. Comparing edges alone
+  reports a false overlap the moment the footer stacks.
+
+### The dot screen: measured, and left alone
+
+He asked whether the halftone was "clear or too much" and the honest answer is
+that it is **faint**: 7.7% ink, 85% of the canvas in the lightest band. The
+cause is the ceiling, `r = k * cell * 0.39`, and a circle that size covers only
+48% of its square, so absolute black renders as half grey.
+
+**It was raised to 0.72 and he rejected the result**, so the original is back.
+The finding stands and the lever exists if he ever wants it: 0.72 measures
+31.3% on the same photo. His setting is `photoDots: 2.5` and the old ceiling.
+Do not change it again without him asking.
+
+### Bold does not exist in Share Tech Mono
+
+He could not make his name bold and was right that the control was broken.
+Measured: `font-weight:700` on that face adds **1.2%** more ink, because
+Google serves it at one weight and the metrics are identical. A
+`-webkit-text-stroke` of 0.7px adds **27%**. The designer has a **Thicken**
+slider for it, kept separate from Weight so it is obvious which lever did it.
+
+### The fine print fits on one line by itself
+
+`fitLegal()`, the same idea as `fitHead()` and for the same reason: he owns
+the words. It gives back **tracking before size**, because small print that is
+tight still reads as small print and small print that is tiny does not. It
+only ever shrinks, and it **stands down entirely when the text is allowed to
+wrap** — on the stacked board it had taken a 10.5px line to 6px solving a
+problem that does not exist there.
+
+The bar's height was being set by the **barcode**, not by the type: 34px of
+bars plus 29px of padding made a 65px footer under a 9.7px line, 8% of the
+card given to its smallest element. At 24px and 11/10 it is 48px, or 6.0%.
+
+### preview-brutalist-v1.html
+
+A frozen copy of the ticket as it stood on 4 Sep 2026, before the artboard,
+reading a frozen `ticket-design-v1.js`. His request, so there is something to
+go back to. **The copy has to point at its own design file** or it changes
+whenever the live one does, which would make it useless as a reference.
+
 ## Don't
 
 - Don't add a build step or framework.
@@ -1401,3 +1670,7 @@ display: `m22essam@gmail.com` is the least premium string on the site.
 - Don't put the Japanese back. He had it for four days and asked for all of it
   out on 26 Aug 2026. Removed means removed: content, plumbing, typesetting
   and the admin warning. Don't leave dormant language machinery behind either.
+- Don't give `ticket-designer.html` a GitHub connection, or let it write
+  content.js. Its whole brief was an editor with neither.
+- Don't let the designer emit geometry outside the `min-width:1001px` block.
+  One nudge would rewrite the phone layout it was never made on.

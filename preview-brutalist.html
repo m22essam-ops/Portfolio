@@ -1,32 +1,34 @@
 <!DOCTYPE html>
 <!-- ============================================================
-     THE HOME PAGE  ·  the brutalist lottery ticket
-     Published 4 Sep 2026 at his instruction. The previous flow-layout home
-     page is kept whole as index-flow.html.
-     Words come from content.js. His design layer is ticket-design.js, written
-     by ticket-designer.html; delete it and the ticket is what this page draws.
+     BRUTALIST LOTTERY TICKET  ·  pass 2
+
+     Fourteen changes, all of them his, all implemented:
+
+     HOME      00 scaled down · scuffs and scratches over the grain ·
+               every number and label in the machine face · the headshot
+               halftoned by a real dot screen, not a filter that looks
+               like one
+     COPY      the black band is a scrolling ticker carrying the odds
+               line · the scratch panel is a working canvas you drag
+     GRID      thick dividers gone, ledger rules kept · neon only on
+               hover, never at rest · a solid play triangle on the
+               projects that have film in them
+     DETAIL    [<] ALL WORK · a barcode that actually encodes 131313 and
+               prints it underneath · an MS-DOS block caret in the input
+
+     Grain and halftone are both on the Don't list in CLAUDE.md. He was
+     told that last pass and has now asked for both again in detail, so
+     they are built. That is his call and it is not re-argued here.
+
+     Still a preview and not styles.css, for the reason that has not
+     changed: git cannot read the project folder right now, so a change
+     this size could not be reverted.
      ============================================================ -->
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mohammed Essam — Award-losing copywriter</title>
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Mohammed Essam">
-<meta property="og:locale" content="en_GB">
-<meta property="og:title" content="Mohammed Essam — Award-losing copywriter">
-<meta property="og:description" content="Mohammed Essam, copywriter. Cairo, Dubai, Madrid. Work that ran, and work that didn&#x27;t.">
-<meta property="og:url" content="https://www.mohammedessam.com/">
-<meta property="og:image" content="https://www.mohammedessam.com/images/og.jpg">
-<meta property="og:image:type" content="image/jpeg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="A lottery ticket that reads: Award-losing copywriter.">
-<meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://www.mohammedessam.com/">
-<meta name="description" content="Mohammed Essam, copywriter. Cairo, Dubai, Madrid. Work that ran, and work that didn't.">
-<link rel="icon" type="image/png" href="favicon.png">
-<link rel="apple-touch-icon" href="favicon.png">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
 <title>Brutalist ticket system</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -438,6 +440,8 @@ body.only-home.fills .ticket{position:absolute;left:50%;top:50%;
   </filter>
 </svg>
 
+<div class="bar" id="bar"></div>
+<div style="height:44px"></div>
 
 <!-- ============ 01 HOME ============ -->
 <section class="screen">
@@ -489,13 +493,91 @@ body.only-home.fills .ticket{position:absolute;left:50%;top:50%;
   </div>
 </section>
 
+<!-- ============ 02 WORK ============ -->
+<section class="screen">
+  <div class="wrap">
+    <p class="screenlab">02 / Work index</p>
+    <div class="ticket perf paper">
+      <svg class="scuff" aria-hidden="true"></svg>
+      <div class="workhead">
+        <h2 id="wHead">THE WORK.</h2>
+        <span class="lbl" id="wCount"></span>
+      </div>
+      <div class="grid" id="wGrid"></div>
+    </div>
+  </div>
+</section>
 
+<!-- ============ 03 PROJECT ============ -->
+<section class="screen">
+  <div class="wrap">
+    <p class="screenlab">03 / Project</p>
+    <div class="ticket perf paper">
+      <svg class="scuff" aria-hidden="true"></svg>
+      <div class="tk-band">
+        <a class="back" href="work.html"><b>&lt;</b>All work</a>
+        <span class="lbl serial" id="pSerial"></span>
+      </div>
+      <div style="padding:24px">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px" id="pMeta"></div>
+        <h2 id="pTitle" style="font-size:clamp(28px,4.6vw,66px)"></h2>
+        <p id="pTag" style="font-family:var(--disp);font-size:clamp(15px,1.5vw,22px);
+           line-height:1.3;max-width:48ch;margin:14px 0 0"></p>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;padding-top:20px">
+          <button class="btn solid" type="button">Play the film &rarr;</button>
+          <button class="btn" type="button">Next project</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
+<!-- ============ 04 CONTROLS ============ -->
+<section class="screen">
+  <div class="wrap">
+    <p class="screenlab">04 / Controls</p>
+    <div class="ticket perf paper">
+      <svg class="scuff" aria-hidden="true"></svg>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;padding:20px">
+        <button class="btn" type="button">Default</button>
+        <button class="btn solid" type="button">Primary</button>
+        <span class="sticker hot">Sold out in a week</span>
+        <span class="inputwrap" id="mailWrap">
+          <input class="field" id="mailField" placeholder="YOUR EMAIL" aria-label="Your email">
+          <span class="caret" id="caret"></span>
+        </span>
+        <button class="btn solid" type="button">Send &rarr;</button>
+      </div>
+    </div>
+  </div>
+</section>
 
-
-
-
-
+<!-- ============ 05 FOOTER ============ -->
+<section class="screen" style="padding-bottom:70px">
+  <div class="wrap">
+    <p class="screenlab">05 / Footer, the back of the ticket</p>
+    <div class="ticket perf paper">
+      <svg class="scuff" aria-hidden="true"></svg>
+      <div style="padding:13px 18px">
+        <span class="lbl">Conditions of entry &mdash; read before playing</span>
+      </div>
+      <footer class="stub">
+        <div class="stub-top">
+          <span class="lbl">Mohammed Essam &mdash; Copywriter</span>
+          <span class="lbl serial" id="fSerial"></span>
+        </div>
+        <div class="terms" id="fTerms"></div>
+        <div class="stub-foot">
+          <span class="lbl" id="fLine"></span>
+          <span class="code">
+            <span class="bars" id="fBars" aria-hidden="true"></span>
+            <span class="codenum">131313</span>
+          </span>
+        </div>
+      </footer>
+    </div>
+  </div>
+</section>
 
 <script src="content.js"></script>
 <script>
@@ -1062,7 +1144,7 @@ body.only-home.fills .ticket{position:absolute;left:50%;top:50%;
      four screens and the control bar are not wrong, they are just not what
      he is looking at, and scrolling past them to reach the ticket would make
      the ruler origin move. */
-  if (true) {
+  if (/[?&]only=home/.test(location.search)) {
     document.body.classList.add('only-home');
     [].forEach.call(document.querySelectorAll('section.screen'), function (s, i) {
       if (i > 0) s.remove();

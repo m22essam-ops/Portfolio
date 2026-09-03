@@ -1,0 +1,1765 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     TICKET DESIGNER  ·  the home page only
+
+     A second editor, deliberately separate from admin.html.
+
+     admin.html owns the WORDS: content.js and images/, the two things that
+     get published. This one owns the LOOK of one screen, writes exactly one
+     file, ticket-design.js, and has no GitHub connection of any kind. That
+     is not an oversight, it is the request: "no access to GitHub ... we will
+     save it locally, and then we can decide if we want to make it public".
+
+     It edits the real page. The ticket in the middle is
+     preview-brutalist.html?only=home in an iframe, not a copy of it, so this
+     tool cannot drift away from the thing it is editing. Both documents load
+     the same ticket-design-apply.js, so a design means one thing.
+
+     Needs the local server, for the same reason design.html does: an iframe
+     opened over file:// is a foreign document and nothing here could reach
+     inside it.   ->   http://127.0.0.1:8888/ticket-designer.html
+     ============================================================ -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Ticket designer</title>
+<style>
+:root{
+  --chrome:#17171A; --chrome2:#1F1F23; --line:#33333A;
+  --txt:#E7E5E0; --dim:#8E8C87; --hot:#E8FF00; --red:#E3261A;
+  --guide:#00C2FF; --snap:#FF2BD1;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --rail:346px; --rulr:24px; --top:46px;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--chrome);color:var(--txt);
+     font:12px/1.45 var(--mono);overflow:hidden;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+
+/* ---------- frame ---------- */
+#app{display:grid;grid-template-rows:var(--top) 1fr;
+     grid-template-columns:var(--rail) 1fr;height:100%}
+#top{grid-column:1/-1;display:flex;align-items:center;gap:10px;padding:0 12px;
+     background:var(--chrome2);border-bottom:1px solid var(--line)}
+#top h1{font-size:11px;letter-spacing:.18em;text-transform:uppercase;margin:0;font-weight:400}
+#top .sep{flex:1}
+.tag{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);
+     border:1px solid var(--line);padding:3px 7px}
+.tag.on{color:#0C0C0C;background:#7BE87B;border-color:#7BE87B}
+.tag.off{color:#0C0C0C;background:#FF8A7A;border-color:#FF8A7A}
+
+button.b{background:#26262B;border:1px solid var(--line);padding:6px 10px;cursor:pointer;
+         font-size:10px;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap}
+button.b:hover{background:#313138}
+button.b[aria-pressed="true"]{background:var(--hot);color:#111;border-color:var(--hot)}
+button.b.go{background:var(--hot);color:#111;border-color:var(--hot);font-weight:700}
+button.b.go:hover{filter:brightness(1.08)}
+button.b:disabled{opacity:.4;cursor:default}
+button.b.warn:hover{background:var(--red);border-color:var(--red);color:#fff}
+
+/* ---------- left rail ---------- */
+#rail{overflow-y:auto;overflow-x:hidden;background:var(--chrome2);
+      border-right:1px solid var(--line)}
+details.pan{border-bottom:1px solid var(--line)}
+details.pan > summary{list-style:none;cursor:pointer;padding:10px 12px;
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);
+  display:flex;align-items:center;gap:8px;user-select:none}
+details.pan > summary::-webkit-details-marker{display:none}
+details.pan > summary::before{content:"+";width:9px;color:var(--hot)}
+details.pan[open] > summary::before{content:"–"}
+details.pan[open] > summary{color:var(--txt)}
+.body{padding:2px 12px 14px}
+
+.row{display:flex;align-items:center;gap:8px;margin:0 0 7px}
+.row > label{flex:0 0 104px;color:var(--dim);font-size:10px;letter-spacing:.06em;
+             overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row > .in{flex:1;min-width:0;display:flex;gap:6px;align-items:center}
+input[type=text],input[type=number],select,textarea{
+  width:100%;min-width:0;background:#111114;border:1px solid var(--line);
+  padding:5px 7px;font-size:11px}
+input:focus,select:focus,textarea:focus{outline:1px solid var(--hot);outline-offset:-1px}
+input[type=text].dirty,textarea.dirty{border-color:var(--hot)}
+textarea{resize:vertical;line-height:1.5}
+input[type=color]{width:28px;height:26px;padding:0;border:1px solid var(--line);
+                  background:#111114;cursor:pointer;flex:none}
+input[type=range]{width:100%;accent-color:var(--hot)}
+.note{color:var(--dim);font-size:10px;line-height:1.5;margin:6px 0 10px}
+.note b{color:var(--txt);font-weight:400}
+.hint{color:var(--hot);font-size:10px;margin:4px 0 8px}
+.btnrow{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 4px}
+.mini{font-size:9.5px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;
+      margin:12px 0 6px;border-top:1px solid var(--line);padding-top:9px}
+.slotbtn{display:block;width:100%;text-align:left;background:none;border:0;
+  border-bottom:1px solid #26262B;padding:6px 4px;cursor:pointer;font-size:11px;color:var(--txt)}
+.slotbtn:hover{background:#26262B}
+.slotbtn[aria-current="true"]{background:var(--hot);color:#111}
+.slotbtn i{float:right;font-style:normal;color:var(--hot);font-size:9px}
+.slotbtn[aria-current="true"] i{color:#111}
+.guiderow{display:flex;align-items:center;gap:6px;margin-bottom:5px}
+.guiderow span{flex:0 0 18px;color:var(--dim)}
+.pill{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#111;
+      background:var(--hot);padding:1px 5px;margin-left:6px}
+
+/* ---------- stage ---------- */
+#stage{position:relative;overflow:hidden;background:#0E0E10;
+       display:grid;grid-template-columns:var(--rulr) 1fr;grid-template-rows:var(--rulr) 1fr}
+#corner{background:var(--chrome2);border-right:1px solid var(--line);
+        border-bottom:1px solid var(--line)}
+#rulerT,#rulerL{display:block;background:var(--chrome2)}
+#rulerT{border-bottom:1px solid var(--line);cursor:ns-resize}
+#rulerL{border-right:1px solid var(--line);cursor:ew-resize}
+#scroller{overflow:auto;position:relative}
+#wrap{transform-origin:0 0;position:relative}
+#frame{display:block;border:0;background:var(--red)}
+/* the overlay sits over the scroll viewport, not inside it, so a guide is
+   always one pixel wide however far the artboard is zoomed out */
+#overlay{position:absolute;left:var(--rulr);top:var(--rulr);right:0;bottom:0;
+         overflow:hidden;pointer-events:none}
+.gd{position:absolute;pointer-events:auto}
+.gd.v{top:0;bottom:0;width:9px;margin-left:-4px;cursor:ew-resize}
+.gd.h{left:0;right:0;height:9px;margin-top:-4px;cursor:ns-resize}
+.gd::after{content:"";position:absolute;background:var(--guide)}
+.gd.v::after{left:4px;top:0;bottom:0;width:1px}
+.gd.h::after{top:4px;left:0;right:0;height:1px}
+.gd:hover::after{background:#fff}
+#snapx,#snapy{position:absolute;background:var(--snap);display:none}
+#snapx{top:0;bottom:0;width:1px}
+#snapy{left:0;right:0;height:1px}
+#selbox{position:absolute;border:1px solid var(--hot);display:none;
+        box-shadow:0 0 0 1px rgba(0,0,0,.55)}
+#selbox b{position:absolute;left:0;top:-17px;background:var(--hot);color:#111;
+          font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:1px 5px;
+          white-space:nowrap;font-weight:400}
+/* the eight handles. pointer-events has to be turned back ON here: the
+   overlay above them is none, and that inherits. */
+.hdl{position:absolute;width:9px;height:9px;background:var(--hot);
+     border:1px solid #111;pointer-events:auto;z-index:4}
+.hdl.nw{left:-5px;top:-5px;cursor:nwse-resize}
+.hdl.ne{right:-5px;top:-5px;cursor:nesw-resize}
+.hdl.sw{left:-5px;bottom:-5px;cursor:nesw-resize}
+.hdl.se{right:-5px;bottom:-5px;cursor:nwse-resize}
+.hdl.n{left:50%;top:-5px;margin-left:-4.5px;cursor:ns-resize}
+.hdl.s{left:50%;bottom:-5px;margin-left:-4.5px;cursor:ns-resize}
+.hdl.w{left:-5px;top:50%;margin-top:-4.5px;cursor:ew-resize}
+.hdl.e{right:-5px;top:50%;margin-top:-4.5px;cursor:ew-resize}
+/* a box too small to hold them: keep the corners only, or the eight handles
+   cover the element and it can never be clicked again */
+#selbox.tiny .hdl.n,#selbox.tiny .hdl.s,
+#selbox.tiny .hdl.w,#selbox.tiny .hdl.e{display:none}
+#hovbox{position:absolute;outline:1px dashed rgba(232,255,0,.75);display:none}
+#readout{position:absolute;right:8px;bottom:8px;background:#000C;color:var(--hot);
+         padding:4px 8px;font-size:10px;letter-spacing:.08em;display:none}
+#blocked{position:absolute;inset:var(--rulr) 0 0 var(--rulr);background:#0E0E10;
+         display:none;place-items:center;padding:40px;text-align:center;z-index:5}
+#blocked div{max-width:460px;line-height:1.7;color:var(--dim)}
+#blocked b{color:var(--hot);display:block;margin-bottom:10px;letter-spacing:.16em;
+           text-transform:uppercase;font-weight:400}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:20;
+       background:#000;border:1px solid var(--hot);color:var(--txt);padding:9px 14px;
+       font-size:11px;display:none;max-width:70vw}
+#toast.bad{border-color:var(--red);color:#FFB9B2}
+#recover{display:none;gap:8px;align-items:center;padding:8px 12px;background:#332F00;
+         border-bottom:1px solid var(--line);font-size:10.5px;color:#FFF3A8}
+</style>
+</head>
+<body>
+
+<div id="app">
+  <header id="top">
+    <h1>Ticket designer</h1>
+    <span class="tag">Home page only</span>
+    <span class="tag" id="srv">checking server</span>
+    <span class="sep"></span>
+    <button class="b" id="undo" title="Cmd Z">Undo</button>
+    <button class="b" id="redo" title="Shift Cmd Z">Redo</button>
+    <button class="b" id="zoomOut">&minus;</button>
+    <span class="tag" id="zoomN">100%</span>
+    <button class="b" id="zoomIn">+</button>
+    <button class="b" id="zoomFit">Fit</button>
+    <button class="b warn" id="revert">Revert all</button>
+    <span class="tag" id="state">no changes</span>
+    <button class="b go" id="save">Save to folder</button>
+  </header>
+
+  <aside id="rail">
+    <div id="recover">
+      <span id="recoverTxt"></span>
+      <button class="b" id="recoverYes">Restore</button>
+      <button class="b" id="recoverNo">Discard</button>
+    </div>
+    <div id="panels"></div>
+  </aside>
+
+  <main id="stage">
+    <div id="corner"></div>
+    <canvas id="rulerT"></canvas>
+    <canvas id="rulerL"></canvas>
+    <div id="scroller">
+      <div id="wrap"><iframe id="frame" title="The ticket"></iframe></div>
+    </div>
+    <div id="overlay">
+      <div id="hovbox"></div>
+      <div id="selbox"><b></b></div>
+      <div id="snapx"></div><div id="snapy"></div>
+      <div id="readout"></div>
+    </div>
+    <div id="blocked"><div></div></div>
+  </main>
+</div>
+
+<div id="toast"></div>
+
+<script>
+(function () {
+'use strict';
+
+var $  = function (s) { return document.querySelector(s); };
+var $$ = function (s) { return [].slice.call(document.querySelectorAll(s)); };
+
+/* ============================================================
+   1. THE DESIGN OBJECT
+
+   Everything he changes lives in here and nowhere else. It is the whole
+   contents of ticket-design.js, and the only thing this page can write.
+   ============================================================ */
+var BLANK = { version: 1, vars: {}, body: {}, text: {}, style: {}, offset: {},
+              guides: { v: [], h: [] }, css: '' };
+var D = clone(BLANK);
+var SAVED = '';                 /* the design as it is on disk, for dirty state */
+var SLOTS = [], SEL = null;
+var frame, fdoc, fwin, ready = false;
+var LS = 'ticketDesigner.draft';
+
+function clone(o) { return JSON.parse(JSON.stringify(o)); }
+function eq(a, b) { return JSON.stringify(a) === JSON.stringify(b); }
+
+/* deep-set with pruning: writing '' or undefined REMOVES the key rather than
+   storing an empty string. An empty override still counts as an override and
+   would show up as a change he did not make, and the applier would have to
+   guess. Absent means untouched, everywhere, always. */
+function set(path, val) {
+  var p = path.split('.'), o = D, i;
+  for (i = 0; i < p.length - 1; i++) { if (!o[p[i]]) o[p[i]] = {}; o = o[p[i]]; }
+  var last = p[p.length - 1];
+  if (val === '' || val === null || val === undefined) delete o[last];
+  else o[last] = val;
+  prune(D);
+}
+function get(path, dflt) {
+  var p = path.split('.'), o = D, i;
+  for (i = 0; i < p.length; i++) { if (o == null) return dflt; o = o[p[i]]; }
+  return o === undefined ? dflt : o;
+}
+function prune(o) {
+  for (var k in o) {
+    if (!Object.prototype.hasOwnProperty.call(o, k)) continue;
+    var v = o[k];
+    if (v && typeof v === 'object' && !Array.isArray(v)) {
+      prune(v);
+      if (!Object.keys(v).length && k !== 'guides' && k !== 'vars' &&
+          k !== 'body' && k !== 'text' && k !== 'style' && k !== 'offset') delete o[k];
+    }
+  }
+}
+
+/* ============================================================
+   2. HISTORY
+   A snapshot per committed change. Cheap: the design is a few hundred bytes.
+   ============================================================ */
+var HIST = [clone(D)], HIDX = 0, HTIMER = null;
+function commit(immediate) {
+  clearTimeout(HTIMER);
+  var go = function () {
+    if (eq(HIST[HIDX], D)) return;
+    HIST = HIST.slice(0, HIDX + 1);
+    HIST.push(clone(D));
+    if (HIST.length > 80) HIST.shift();
+    HIDX = HIST.length - 1;
+    draftSave();
+    paintState();
+  };
+  if (immediate) go(); else HTIMER = setTimeout(go, 350);
+}
+function undo() { if (HIDX > 0) { HIDX--; D = clone(HIST[HIDX]); afterHistory(); } }
+function redo() { if (HIDX < HIST.length - 1) { HIDX++; D = clone(HIST[HIDX]); afterHistory(); } }
+function afterHistory() { apply(); buildPanels(); drawGuides(); paintState(); draftSave(); }
+
+function draftSave() {
+  try { localStorage.setItem(LS, JSON.stringify({ t: Date.now(), d: D })); } catch (e) {}
+}
+
+/* ============================================================
+   3. THE IFRAME
+   ============================================================ */
+function boot() {
+  frame = $('#frame');
+  frame.src = 'preview-brutalist.html?only=home';
+  frame.addEventListener('load', function () {
+    try {
+      fdoc = frame.contentDocument; fwin = frame.contentWindow;
+      if (!fdoc || !fdoc.body) throw new Error('no document');
+      SLOTS = fwin.TICKET_SLOTS || [];
+      if (!SLOTS.length) throw new Error('no slot table');
+    } catch (e) {
+      blocked();
+      return;
+    }
+    ready = true;
+    armFrame();
+    sizeFrame();
+    apply();
+    buildPanels();
+    fit();
+    /* the webfonts land after load and move every measurement in there */
+    if (fdoc.fonts && fdoc.fonts.ready) fdoc.fonts.ready.then(function () {
+      sizeFrame(); drawAll();
+    });
+  });
+}
+
+function blocked() {
+  $('#blocked').style.display = 'grid';
+  $('#blocked div').innerHTML =
+    '<b>Open this over the local server</b>' +
+    'This page edits the real ticket by reaching inside it, and a page opened ' +
+    'straight from the folder is not allowed to reach inside another one. ' +
+    'Start the server, then open:<br><br>' +
+    '<span style="color:#E8FF00">http://127.0.0.1:8888/ticket-designer.html</span>' +
+    '<br><br>Same rule as design.html. Nothing is broken.';
+}
+
+/* the iframe has real links and a scratch panel that wants your pointer.
+   In here a click means "select this", so the page is put in edit mode. */
+function armFrame() {
+  var s = fdoc.createElement('style');
+  s.textContent =
+    '*{cursor:default !important}' +
+    '.scratch-in canvas{pointer-events:none}' +
+    'a,button,input{pointer-events:auto}';
+  fdoc.head.appendChild(s);
+
+  fdoc.addEventListener('click', function (e) { e.preventDefault(); }, true);
+  fdoc.addEventListener('mousemove', onFrameHover);
+  fdoc.addEventListener('mouseleave', function () { $('#hovbox').style.display = 'none'; });
+  fdoc.addEventListener('pointerdown', onFrameDown);
+  fdoc.addEventListener('keydown', onKey);
+  fwin.addEventListener('resize', function () { sizeFrame(); drawAll(); });
+}
+
+/* The frame is given BOTH its width and its height explicitly.
+
+   It used to be measured: height 10px, read the document's scrollHeight,
+   grow to that. That works for a page in normal flow and fails completely
+   for the home ticket, which is `position:fixed` and fills its viewport. A
+   fixed document has no scrollHeight to speak of, so the frame stayed at
+   10px and the editor showed a black stage with a sliver of card in it.
+
+   Measured is also the wrong idea even when it works. The live home page is
+   96vw by 96vh of HIS SCREEN, so the only frame that shows him the truth is
+   one shaped like his screen. The height is the artboard width divided by
+   the aspect ratio of his own browser window. */
+var ARTW = 1400;
+function frameHeight() {
+  var a = window.innerWidth / Math.max(1, window.innerHeight);
+  /* clamped, so a freak window shape cannot hand the editor a frame that is
+     a strip or a tower */
+  a = Math.max(0.5, Math.min(3, a));
+  return Math.round(ARTW / a);
+}
+function sizeFrame() {
+  if (!ready) return;
+  var h = frameHeight();
+  frame.style.width = ARTW + 'px';
+  frame.style.height = h + 'px';
+  $('#wrap').style.width = ARTW + 'px';
+  $('#wrap').style.height = h + 'px';
+  var s = $('#scroller');
+  s.scrollLeft = s.scrollLeft;         /* keep it in range after a resize */
+}
+
+function apply() {
+  if (!ready) return;
+  try { fwin.applyTicketDesign(D, fdoc); } catch (e) {}
+  /* words and sizes change the height of the card */
+  requestAnimationFrame(function () { sizeFrame(); drawAll(); });
+}
+
+/* ============================================================
+   4. COORDINATES
+
+   Doc space  = pixels inside the iframe, origin at the iframe's top-left.
+   Card space = the same, minus the ticket's own top-left. The rulers read in
+                card space, because that is the thing he is aligning inside.
+   Screen     = pixels in the overlay, which is the scroll viewport.
+   ============================================================ */
+var zoom = 1;
+function origin() {
+  if (!ready) return { x: 0, y: 0 };
+  var t = fdoc.querySelector('.ticket');
+  if (!t) return { x: 0, y: 0 };
+  var r = t.getBoundingClientRect();
+  return { x: r.left, y: r.top };
+}
+function scr() { var s = $('#scroller'); return { x: s.scrollLeft, y: s.scrollTop }; }
+function docToScreen(x, y) { var s = scr(); return { x: x * zoom - s.x, y: y * zoom - s.y }; }
+function screenToDoc(x, y) { var s = scr(); return { x: (x + s.x) / zoom, y: (y + s.y) / zoom }; }
+
+function setZoom(z, keepCentre) {
+  var s = $('#scroller'), old = zoom;
+  zoom = Math.max(0.15, Math.min(2, z));
+  var cx = (s.scrollLeft + s.clientWidth / 2) / old;
+  var cy = (s.scrollTop + s.clientHeight / 2) / old;
+  $('#wrap').style.transform = 'scale(' + zoom + ')';
+  $('#wrap').style.width = (ARTW * zoom) + 'px';
+  $('#wrap').style.height = (parseFloat(frame.style.height || 0) * zoom) + 'px';
+  /* the wrap is scaled from its top-left, so it no longer reserves the room
+     it takes. Its box is set in scaled pixels and the iframe inside keeps its
+     own size; without this the scrollbars describe the wrong artboard. */
+  if (keepCentre !== false) {
+    s.scrollLeft = cx * zoom - s.clientWidth / 2;
+    s.scrollTop = cy * zoom - s.clientHeight / 2;
+  }
+  $('#zoomN').textContent = Math.round(zoom * 100) + '%';
+  drawAll();
+}
+function fit() {
+  var s = $('#scroller');
+  /* both axes: the frame is as tall as his screen's shape makes it, so
+     fitting on width alone put the footer below the fold */
+  var h = parseFloat(frame.style.height) || frameHeight();
+  setZoom(Math.min(1, (s.clientWidth - 24) / ARTW, (s.clientHeight - 24) / h), false);
+  s.scrollLeft = 0; s.scrollTop = 0;
+  drawAll();
+}
+
+/* ============================================================
+   5. RULERS
+   ============================================================ */
+function drawRulers() {
+  var dpr = Math.min(2, window.devicePixelRatio || 1);
+  var s = $('#scroller'), o = origin(), sc = scr();
+  [['#rulerT', true], ['#rulerL', false]].forEach(function (p) {
+    var c = $(p[0]), horiz = p[1];
+    var W = horiz ? s.clientWidth : 24, H = horiz ? 24 : s.clientHeight;
+    if (!W || !H) return;
+    c.width = W * dpr; c.height = H * dpr;
+    c.style.width = W + 'px'; c.style.height = H + 'px';
+    var g = c.getContext('2d');
+    g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    g.clearRect(0, 0, W, H);
+    g.fillStyle = '#1F1F23'; g.fillRect(0, 0, W, H);
+    g.font = '9px ui-monospace,monospace';
+    g.textBaseline = 'top';
+
+    /* the tick step is chosen in CARD pixels but drawn in screen pixels, so
+       zooming out thins the ladder instead of turning it into a grey bar */
+    var span = (horiz ? W : H) / zoom;
+    var step = 10;
+    [10, 20, 50, 100, 200, 500].some(function (n) { step = n; return span / n < 34; });
+    var big = step * 5;
+    var from = Math.floor(((horiz ? sc.x : sc.y) / zoom - (horiz ? o.x : o.y)) / step) * step;
+    var to = from + span + step;
+    for (var v = from; v <= to; v += step) {
+      var d = v + (horiz ? o.x : o.y);
+      var px = Math.round(d * zoom - (horiz ? sc.x : sc.y)) + 0.5;
+      if (px < 0 || px > (horiz ? W : H)) continue;
+      var major = Math.abs(v % big) < 0.001;
+      g.strokeStyle = v === 0 ? '#E8FF00' : (major ? '#5A5A63' : '#3A3A42');
+      g.beginPath();
+      if (horiz) { g.moveTo(px, major ? 8 : 16); g.lineTo(px, 24); }
+      else { g.moveTo(major ? 8 : 16, px); g.lineTo(24, px); }
+      g.stroke();
+      if (major) {
+        g.fillStyle = v === 0 ? '#E8FF00' : '#8E8C87';
+        if (horiz) g.fillText(String(v), px + 2, 1);
+        else {
+          g.save(); g.translate(1, px + 2); g.rotate(-Math.PI / 2);
+          g.textAlign = 'right'; g.fillText(String(v), 0, 0); g.restore();
+        }
+      }
+    }
+  });
+}
+
+/* ============================================================
+   6. GUIDES
+   Stored in CARD space, so a guide keeps its meaning when the artboard is
+   re-measured, zoomed, or the card changes height.
+   ============================================================ */
+function drawGuides() {
+  var ov = $('#overlay'), o = origin();
+  $$('.gd').forEach(function (g) { g.remove(); });
+  ['v', 'h'].forEach(function (axis) {
+    (D.guides[axis] || []).forEach(function (val, i) {
+      var el = document.createElement('div');
+      el.className = 'gd ' + axis;
+      var p = docToScreen(val + o.x, val + o.y);
+      if (axis === 'v') el.style.left = p.x + 'px'; else el.style.top = p.y + 'px';
+      el.dataset.axis = axis; el.dataset.i = i;
+      ov.appendChild(el);
+    });
+  });
+}
+function addGuide(axis, val) {
+  D.guides[axis] = (D.guides[axis] || []).concat([Math.round(val)]);
+  commit(true); drawGuides(); buildPanels();
+}
+function delGuide(axis, i) {
+  D.guides[axis].splice(i, 1);
+  commit(true); drawGuides(); buildPanels();
+}
+
+/* pull a guide out of a ruler */
+function armRulers() {
+  [['#rulerT', 'h'], ['#rulerL', 'v']].forEach(function (p) {
+    $(p[0]).addEventListener('pointerdown', function (e) {
+      var axis = p[1];
+      var ov = $('#overlay').getBoundingClientRect();
+      var move = function (ev) {
+        if (!ev.buttons) { up(ev); return; }   /* never on a bare hover */
+        var sx = ev.clientX - ov.left, sy = ev.clientY - ov.top;
+        var d = screenToDoc(sx, sy), o = origin();
+        preview(axis, axis === 'v' ? d.x - o.x : d.y - o.y);
+      };
+      var ended = false;
+      var up = function (ev) {
+        /* idempotent: move() calls this when it notices the button is no
+           longer down, and the real pointerup may still arrive after. Twice
+           through here would drop two guides for one gesture. */
+        if (ended) return;
+        ended = true;
+        window.removeEventListener('pointermove', move);
+        window.removeEventListener('pointerup', up);
+        clearPreview();
+        if (!ev || ev.clientX === undefined) return;
+        var sx = ev.clientX - ov.left, sy = ev.clientY - ov.top;
+        var d = screenToDoc(sx, sy), o = origin();
+        /* dropped back on the ruler: he changed his mind */
+        if (sx < 0 || sy < 0) return;
+        addGuide(axis, axis === 'v' ? d.x - o.x : d.y - o.y);
+      };
+      window.addEventListener('pointermove', move);
+      window.addEventListener('pointerup', up);
+      e.preventDefault();
+    });
+  });
+
+  /* move or delete an existing one */
+  $('#overlay').addEventListener('pointerdown', function (e) {
+    var g = e.target.closest ? e.target.closest('.gd') : null;
+    if (!g) return;
+    var axis = g.dataset.axis, i = +g.dataset.i;
+    var ov = $('#overlay').getBoundingClientRect();
+    var move = function (ev) {
+      if (!ev.buttons) { up(); return; }      /* never on a bare hover */
+      var d = screenToDoc(ev.clientX - ov.left, ev.clientY - ov.top), o = origin();
+      var v = Math.round(axis === 'v' ? d.x - o.x : d.y - o.y);
+      D.guides[axis][i] = v;
+      drawGuides(); readout(axis.toUpperCase() + ' ' + v);
+    };
+    var up = function () {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+      readout(null); commit(true); buildPanels();
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+    e.preventDefault();
+  });
+  $('#overlay').addEventListener('dblclick', function (e) {
+    var g = e.target.closest ? e.target.closest('.gd') : null;
+    if (g) delGuide(g.dataset.axis, +g.dataset.i);
+  });
+}
+function preview(axis, val) {
+  var o = origin(), p = docToScreen(val + o.x, val + o.y);
+  var el = $(axis === 'v' ? '#snapx' : '#snapy');
+  el.style.display = 'block';
+  if (axis === 'v') el.style.left = p.x + 'px'; else el.style.top = p.y + 'px';
+  readout(axis.toUpperCase() + ' ' + Math.round(val));
+}
+function clearPreview() {
+  $('#snapx').style.display = 'none'; $('#snapy').style.display = 'none';
+  readout(null);
+}
+function readout(t) {
+  var r = $('#readout');
+  if (t == null) { r.style.display = 'none'; return; }
+  r.style.display = 'block'; r.textContent = t;
+}
+
+/* ============================================================
+   7. SELECTION, HOVER, DRAG
+   ============================================================ */
+function slotOf(el) {
+  for (var i = 0; i < SLOTS.length; i++) {
+    var m = fdoc.querySelector(SLOTS[i].sel);
+    if (m && (m === el || m.contains(el))) return SLOTS[i];
+  }
+  return null;
+}
+/* the innermost slot wins: clicking the headline should give you the
+   headline, not the card that contains everything */
+function hitSlot(x, y) {
+  var best = null, bestA = Infinity;
+  for (var i = 0; i < SLOTS.length; i++) {
+    var m = fdoc.querySelector(SLOTS[i].sel);
+    if (!m) continue;
+    var r = m.getBoundingClientRect();
+    if (x < r.left || x > r.right || y < r.top || y > r.bottom) continue;
+    var a = r.width * r.height;
+    if (a < bestA) { bestA = a; best = SLOTS[i]; }
+  }
+  return best;
+}
+function rectOf(k) {
+  var s = SLOTS.filter(function (x) { return x.k === k; })[0];
+  if (!s || !ready) return null;
+  var m = fdoc.querySelector(s.sel);
+  return m ? m.getBoundingClientRect() : null;
+}
+function onFrameHover(e) {
+  if (dragging) return;
+  var s = hitSlot(e.clientX, e.clientY);
+  var b = $('#hovbox');
+  if (!s || (SEL && s.k === SEL)) { b.style.display = 'none'; return; }
+  var r = rectOf(s.k); if (!r) { b.style.display = 'none'; return; }
+  var p = docToScreen(r.left, r.top);
+  b.style.display = 'block';
+  b.style.left = p.x + 'px'; b.style.top = p.y + 'px';
+  b.style.width = (r.width * zoom) + 'px'; b.style.height = (r.height * zoom) + 'px';
+}
+function select(k) {
+  SEL = k;
+  buildPanels();
+  drawSel();
+}
+function drawSel() {
+  var b = $('#selbox');
+  var r = SEL ? rectOf(SEL) : null;
+  if (!r) { b.style.display = 'none'; return; }
+  var p = docToScreen(r.left, r.top);
+  b.style.display = 'block';
+  b.style.left = p.x + 'px'; b.style.top = p.y + 'px';
+  b.style.width = (r.width * zoom) + 'px'; b.style.height = (r.height * zoom) + 'px';
+  b.classList.toggle('tiny', r.width * zoom < 46 || r.height * zoom < 46);
+  var s = SLOTS.filter(function (x) { return x.k === SEL; })[0];
+  b.querySelector('b').textContent =
+    (s ? s.name : SEL) + '  ' + Math.round(r.width) + '×' + Math.round(r.height);
+}
+
+/* ---------------- RESIZE ----------------
+   Eight handles on the selection. What a drag WRITES depends on what the
+   element is, because setting a width on a grid column does nothing at all:
+   the track owns the width, not the item in it. So the three columns rewrite
+   .tk-grid's grid-template-columns instead, and keep the two they are not
+   touching as fr, so the ticket stays fluid. */
+var HANDLES = ['nw', 'n', 'ne', 'e', 'se', 's', 'sw', 'w'];
+var GRIDCOL = { rail: 0, main: 1, side: 2 };
+
+function buildHandles() {
+  var box = $('#selbox');
+  HANDLES.forEach(function (h) {
+    var i = document.createElement('i');
+    i.className = 'hdl ' + h;
+    i.dataset.h = h;
+    box.appendChild(i);
+  });
+  box.addEventListener('pointerdown', function (e) {
+    var h = e.target && e.target.dataset && e.target.dataset.h;
+    if (h) startResize(h, e);
+  });
+}
+
+function gridTemplate(idx, px) {
+  var cur = (get('style.grid.gridTemplateColumns', '') || '1fr 3fr 1fr').trim();
+  var parts = cur.split(/\s+/);
+  if (parts.length !== 3) parts = ['1fr', '3fr', '1fr'];
+  parts[idx] = Math.round(px) + 'px';
+  return parts.join(' ');
+}
+
+/* the edges available to snap to, in doc space, minus the element moving */
+function edgeLists() {
+  var o = origin(), vs = [], hs = [];
+  (D.guides.v || []).forEach(function (v) { vs.push(v + o.x); });
+  (D.guides.h || []).forEach(function (v) { hs.push(v + o.y); });
+  var t = fdoc.querySelector('.ticket');
+  if (t) {
+    var tr = t.getBoundingClientRect();
+    vs.push(tr.left, tr.right, tr.left + tr.width / 2);
+    hs.push(tr.top, tr.bottom, tr.top + tr.height / 2);
+  }
+  SLOTS.forEach(function (s) {
+    if (s.k === SEL) return;
+    var m = fdoc.querySelector(s.sel); if (!m) return;
+    var r = m.getBoundingClientRect();
+    if (r.width < 2 || r.height < 2) return;
+    vs.push(r.left, r.right); hs.push(r.top, r.bottom);
+  });
+  return { v: vs, h: hs };
+}
+function snapTo(list, value) {
+  var TOL = 6 / zoom, best = null;
+  list.forEach(function (v) {
+    var d = v - value;
+    if (Math.abs(d) <= TOL && (best === null || Math.abs(d) < Math.abs(best.d)))
+      best = { d: d, line: v };
+  });
+  return best;
+}
+
+function startResize(h, e) {
+  if (!SEL || e.button !== 0) return;
+  e.preventDefault(); e.stopPropagation();
+  var slot = SLOTS.filter(function (x) { return x.k === SEL; })[0];
+  var el = fdoc.querySelector(slot.sel);
+  if (!el) return;
+  var r0 = el.getBoundingClientRect();
+  var start = { x: e.clientX, y: e.clientY };
+  var off0 = get('offset.' + SEL, { x: 0, y: 0 });
+  var base = { x: +off0.x || 0, y: +off0.y || 0 };
+  var col = GRIDCOL[SEL] === undefined ? -1 : GRIDCOL[SEL];
+  var grid = fdoc.querySelector('.tk-grid');
+  var edges = edgeLists();
+  var horiz = h.indexOf('e') > -1 || h.indexOf('w') > -1;
+  var vert = h.indexOf('n') > -1 || h.indexOf('s') > -1;
+  var moved = false, ended = false;
+
+  var move = function (ev) {
+    if (!ev.buttons) { up(); return; }
+    var dx = (ev.clientX - start.x) / zoom, dy = (ev.clientY - start.y) / zoom;
+    if (!moved && Math.abs(dx) + Math.abs(dy) < 3) return;
+    moved = true; dragging = true;
+
+    /* snap the edge that is actually moving, not the box */
+    var sx = $('#snapx'), sy = $('#snapy');
+    sx.style.display = 'none'; sy.style.display = 'none';
+    if (horiz && !ev.altKey) {
+      var edgeX = (h.indexOf('e') > -1 ? r0.right : r0.left) + dx;
+      var gx = snapTo(edges.v, edgeX);
+      if (gx) {
+        dx += gx.d;
+        var px = docToScreen(gx.line, 0);
+        sx.style.display = 'block'; sx.style.left = px.x + 'px';
+      }
+    }
+    if (vert && !ev.altKey) {
+      var edgeY = (h.indexOf('s') > -1 ? r0.bottom : r0.top) + dy;
+      var gy = snapTo(edges.h, edgeY);
+      if (gy) {
+        dy += gy.d;
+        var py = docToScreen(0, gy.line);
+        sy.style.display = 'block'; sy.style.top = py.y + 'px';
+      }
+    }
+
+    var w = r0.width, ht = r0.height, ox = base.x, oy = base.y;
+    if (h.indexOf('e') > -1) w = r0.width + dx;
+    if (h.indexOf('w') > -1) { w = r0.width - dx; ox = base.x + dx; }
+    if (h.indexOf('s') > -1) ht = r0.height + dy;
+    if (h.indexOf('n') > -1) { ht = r0.height - dy; oy = base.y + dy; }
+    /* shift holds the shape on a corner */
+    if (ev.shiftKey && horiz && vert && r0.width && r0.height) {
+      var k = Math.max(w / r0.width, ht / r0.height);
+      w = r0.width * k; ht = r0.height * k;
+    }
+    w = Math.max(8, Math.round(w)); ht = Math.max(8, Math.round(ht));
+
+    if (horiz) {
+      if (col >= 0) {
+        /* a column: the track owns the width, and dragging it must not also
+           translate the column out of its own track */
+        var tpl = gridTemplate(col, w);
+        set('style.grid.gridTemplateColumns', tpl);
+        if (grid) grid.style.gridTemplateColumns = tpl;
+        ox = base.x;
+      } else {
+        set('style.' + SEL + '.width', w + 'px');
+        el.style.width = w + 'px';
+      }
+    }
+    if (vert) {
+      /* a grid column is stretched by its row, so `height` on it is ignored
+         and min-height is the honest lever. It is also the one the ticket's
+         own height already hangs off. */
+      var prop = col >= 0 ? 'minHeight' : 'height';
+      set('style.' + SEL + '.' + prop, ht + 'px');
+      el.style[prop] = ht + 'px';
+    }
+    if (ox !== base.x || oy !== base.y) {
+      set('offset.' + SEL, { x: Math.round(ox), y: Math.round(oy) });
+      el.style.transform = 'translate(' + Math.round(ox) + 'px,' + Math.round(oy) + 'px)';
+    }
+    drawSel();
+    readout(Math.round(w) + ' × ' + Math.round(ht));
+  };
+
+  var up = function () {
+    if (ended) return;
+    ended = true;
+    [fwin, window].forEach(function (wv) {
+      wv.removeEventListener('pointermove', move);
+      wv.removeEventListener('pointerup', up);
+      wv.removeEventListener('pointercancel', up);
+    });
+    dragging = false; clearPreview();
+    /* hand the element back to the stylesheet: everything set above is in
+       the design now, and an inline style would outrank it forever */
+    el.style.width = ''; el.style.height = '';
+    el.style.minHeight = ''; el.style.transform = '';
+    if (grid) grid.style.gridTemplateColumns = '';
+    if (moved) { apply(); commit(true); buildPanels(); }
+  };
+  [fwin, window].forEach(function (wv) {
+    wv.addEventListener('pointermove', move);
+    wv.addEventListener('pointerup', up);
+    wv.addEventListener('pointercancel', up);
+  });
+}
+
+var dragging = false;
+function onFrameDown(e) {
+  if (e.button !== 0) return;            /* right and middle click select only */
+  var s = hitSlot(e.clientX, e.clientY);
+  if (!s) return;
+  select(s.k);
+  $('#hovbox').style.display = 'none';
+
+  var start = { x: e.clientX, y: e.clientY };
+  var was = get('offset.' + s.k, { x: 0, y: 0 });
+  var base = { x: +was.x || 0, y: +was.y || 0 };
+  var el = fdoc.querySelector(s.sel);
+  var r0 = el.getBoundingClientRect();
+  var moved = false;
+
+  var move = function (ev) {
+    /* The one rule that makes a hover incapable of moving anything: no
+       button held, no drag, and the listeners come off. It is a real
+       condition and not a belt-and-braces check, because the pointer that
+       started this drag is inside the iframe and the pointerup that ends it
+       can land in the OTHER document, where a listener bound here would
+       never hear it. Without this the handlers stayed attached for the life
+       of the page and the element followed the mouse around the rail. */
+    if (!ev.buttons) { up(); return; }
+    var dx = (ev.clientX - start.x), dy = (ev.clientY - start.y);
+    if (!moved && Math.abs(dx) + Math.abs(dy) < 4) return;
+    moved = true; dragging = true;
+    var nx = base.x + dx, ny = base.y + dy;
+    if (!ev.altKey) {
+      var sn = snap(r0, base, { x: nx, y: ny });
+      nx = sn.x; ny = sn.y;
+    } else { clearPreview(); }
+    if (ev.shiftKey) {          /* one axis at a time */
+      if (Math.abs(dx) > Math.abs(dy)) ny = base.y; else nx = base.x;
+    }
+    /* the fast path: move the element itself while the pointer is down and
+       leave the stylesheet alone. Rebuilding the whole sheet on every
+       pointermove re-runs fitHead() and the ticket judders. */
+    el.style.transform = 'translate(' + Math.round(nx) + 'px,' + Math.round(ny) + 'px)';
+    set('offset.' + s.k, { x: Math.round(nx), y: Math.round(ny) });
+    drawSel();
+    readout('X ' + Math.round(nx) + '   Y ' + Math.round(ny));
+  };
+  var ended = false;
+  var up = function () {
+    if (ended) return;
+    ended = true;
+    [fwin, window].forEach(function (w) {
+      w.removeEventListener('pointermove', move);
+      w.removeEventListener('pointerup', up);
+      w.removeEventListener('pointercancel', up);
+    });
+    dragging = false; clearPreview();
+    el.style.transform = '';
+    var o = get('offset.' + s.k, null);
+    if (o && !o.x && !o.y) set('offset.' + s.k, null);
+    if (moved) { apply(); commit(true); buildPanels(); }
+    /* a click, not a drag: put the cursor in the words. Only on a plain
+       click, or every nudge of an element would fight for the keyboard. */
+    else focusWords(s.k);
+  };
+  /* Both documents. A pointer that goes down on the ticket can come up over
+     the rail, and each window only hears its own. */
+  [fwin, window].forEach(function (w) {
+    w.addEventListener('pointermove', move);
+    w.addEventListener('pointerup', up);
+    w.addEventListener('pointercancel', up);
+  });
+  e.preventDefault();
+}
+
+/* Snapping. Candidates are the guides, the ticket's own edges and centre,
+   and every other slot's edges: the thing he actually wants is "line this up
+   with that", and the guides alone cannot say that. */
+function snap(r0, base, want) {
+  var TOL = 6 / zoom, lists = edgeLists();
+  var vs = lists.v, hs = lists.h;
+  var out = { x: want.x, y: want.y };
+  var bestX = null, bestY = null;
+  /* the moving edges are the element's own left/right/centre at the offset
+     being tried, which is its rest rect plus the delta */
+  var dx = want.x - base.x, dy = want.y - base.y;
+  [r0.left + dx, r0.right + dx, r0.left + r0.width / 2 + dx].forEach(function (edge, n) {
+    vs.forEach(function (v) {
+      var d = v - edge;
+      if (Math.abs(d) <= TOL && (bestX === null || Math.abs(d) < Math.abs(bestX.d)))
+        bestX = { d: d, line: v };
+    });
+  });
+  [r0.top + dy, r0.bottom + dy, r0.top + r0.height / 2 + dy].forEach(function (edge) {
+    hs.forEach(function (v) {
+      var d = v - edge;
+      if (Math.abs(d) <= TOL && (bestY === null || Math.abs(d) < Math.abs(bestY.d)))
+        bestY = { d: d, line: v };
+    });
+  });
+  var sx = $('#snapx'), sy = $('#snapy');
+  if (bestX) { out.x += bestX.d; var p = docToScreen(bestX.line, 0);
+               sx.style.display = 'block'; sx.style.left = p.x + 'px'; }
+  else sx.style.display = 'none';
+  if (bestY) { out.y += bestY.d; var q = docToScreen(0, bestY.line);
+               sy.style.display = 'block'; sy.style.top = q.y + 'px'; }
+  else sy.style.display = 'none';
+  return out;
+}
+
+function nudge(dx, dy) {
+  if (!SEL) return;
+  var o = get('offset.' + SEL, { x: 0, y: 0 });
+  set('offset.' + SEL, { x: (+o.x || 0) + dx, y: (+o.y || 0) + dy });
+  var n = get('offset.' + SEL, null);
+  if (n && !n.x && !n.y) set('offset.' + SEL, null);
+  apply(); commit(); buildPanels();
+}
+
+function drawAll() { drawRulers(); drawGuides(); drawSel(); }
+
+/* ============================================================
+   8. THE PANELS
+   Rebuilt from the slot table, so a new row in ticket-design-apply.js is a
+   new control in here with no second edit.
+   ============================================================ */
+function computed(k, prop) {
+  var s = SLOTS.filter(function (x) { return x.k === k; })[0];
+  if (!s || !ready) return '';
+  var m = fdoc.querySelector(s.sel); if (!m) return '';
+  var v = fwin.getComputedStyle(m)[prop];
+  return v == null ? '' : String(v);
+}
+function origText(k) {
+  var s = SLOTS.filter(function (x) { return x.k === k; })[0];
+  if (!s || !ready) return '';
+  var m = fdoc.querySelector(s.sel); if (!m) return '';
+  return m.getAttribute('data-orig') || '';
+}
+
+function el(tag, cls, txt) {
+  var e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (txt != null) e.textContent = txt;
+  return e;
+}
+/* el() sets textContent, which is right for everything except the notes,
+   where a bold key name reads far better than a quoted one */
+function note(html) {
+  var p = el('p', 'note');
+  p.innerHTML = html;
+  return p;
+}
+function row(label, node) {
+  var r = el('div', 'row');
+  r.appendChild(el('label', null, label));
+  var i = el('div', 'in'); i.appendChild(node); r.appendChild(i);
+  return r;
+}
+
+/* Typing 20 into a box labelled Size is the obvious thing to do, and
+   `font-size:20` is invalid CSS that the browser drops without a word: the
+   field looked like it had taken the number and nothing moved. Any field
+   that measures a length now adds its unit to a bare number.
+
+   Not applied to line-height, font-weight or opacity, where a bare number is
+   valid and means something different from pixels. The field itself is left
+   exactly as typed while he types, or "1" on the way to "10" would fight
+   him; the unit is added to the value that is stored. */
+function withUnit(v, unit) {
+  v = String(v).trim();
+  if (!unit || !v) return v;
+  return /^-?(?:\d+\.?\d*|\.\d+)$/.test(v) ? v + unit : v;
+}
+
+/* a text field bound to a path, showing the live computed value as its
+   placeholder so an empty box always says what it would be */
+function fText(path, placeholder, unit) {
+  var i = document.createElement('input');
+  i.type = 'text';
+  i.value = get(path, '');
+  i.placeholder = placeholder || '';
+  if (i.value) i.className = 'dirty';
+  i.addEventListener('input', function () {
+    set(path, withUnit(i.value, unit));
+    i.className = i.value.trim() ? 'dirty' : '';
+    apply(); commit();
+  });
+  return i;
+}
+/* The words field.
+
+   It holds the LIVE words, not an empty box with the words as a ghost
+   behind it, because clicking a line on the ticket and finding an empty
+   field is not editing, it is retyping. "Absent means untouched" is kept in
+   the DATA instead: typing his own line back exactly removes the override,
+   so the file only ever carries what he actually changed.
+
+   It writes D.text directly rather than through set(), which deletes on an
+   empty string. Blanking the badge is a real choice and has to survive. */
+function fWords(k, rows) {
+  var t = document.createElement('textarea');
+  var orig = origText(k);
+  t.rows = rows || 2;
+  t.value = (k in D.text) ? D.text[k] : orig;
+  t.dataset.words = k;
+  t.className = ((k in D.text) && D.text[k] !== orig) ? 'dirty' : '';
+  t.addEventListener('input', function () {
+    if (t.value === orig) delete D.text[k]; else D.text[k] = t.value;
+    prune(D);
+    t.className = t.value === orig ? '' : 'dirty';
+    apply(); commit();
+  });
+  return t;
+}
+
+/* the other half of what he asked for: click a line, and the field for it is
+   focused with the words selected, so the next thing typed replaces them */
+function focusWords(k) {
+  var t = $('#panels textarea[data-words="' + k + '"]');
+  if (!t) return false;
+  var d = t.closest('details');
+  if (d && !d.open) { d.open = true; OPEN[d.dataset.t] = true; }
+  t.focus();
+  t.select();
+  if (t.scrollIntoView) t.scrollIntoView({ block: 'nearest' });
+  return true;
+}
+
+function fArea(path, placeholder, rows) {
+  var t = document.createElement('textarea');
+  t.rows = rows || 2;
+  t.value = get(path, '');
+  t.placeholder = placeholder || '';
+  if (t.value) t.className = 'dirty';
+  t.addEventListener('input', function () {
+    set(path, t.value);
+    t.className = t.value ? 'dirty' : '';
+    apply(); commit();
+  });
+  return t;
+}
+function fColour(path, fallback) {
+  var box = el('div', 'in');
+  var sw = document.createElement('input'); sw.type = 'color';
+  var tx = document.createElement('input'); tx.type = 'text';
+  var cur = get(path, '');
+  tx.value = cur; tx.placeholder = fallback || '';
+  if (cur) tx.className = 'dirty';
+  sw.value = hex(cur || fallback || '#000000');
+  function push(v) {
+    set(path, v);
+    tx.value = v; tx.className = v ? 'dirty' : '';
+    apply(); commit();
+  }
+  sw.addEventListener('input', function () { push(sw.value); });
+  tx.addEventListener('input', function () {
+    var v = tx.value.trim();
+    set(path, v); tx.className = v ? 'dirty' : '';
+    if (/^#[0-9a-f]{6}$/i.test(v)) sw.value = v;
+    apply(); commit();
+  });
+  box.appendChild(sw); box.appendChild(tx);
+  return box;
+}
+function hex(v) {
+  v = String(v).trim();
+  if (/^#[0-9a-f]{6}$/i.test(v)) return v;
+  if (/^#[0-9a-f]{3}$/i.test(v))
+    return '#' + v[1] + v[1] + v[2] + v[2] + v[3] + v[3];
+  return '#000000';
+}
+function fRange(path, min, max, step, fallback, unit) {
+  var box = el('div', 'in');
+  var r = document.createElement('input'); r.type = 'range';
+  r.min = min; r.max = max; r.step = step;
+  var n = document.createElement('input'); n.type = 'text';
+  n.style.flex = '0 0 62px';
+  var cur = get(path, '');
+  r.value = parseFloat(cur === '' ? fallback : cur);
+  n.value = cur; n.placeholder = String(fallback);
+  if (cur) n.className = 'dirty';
+  /* the slider hands over a bare number, so the perforation sliders were
+     writing `--perfR: 9` into a `radial-gradient(circle var(--perfR) ...)`
+     and the holes never changed size */
+  r.addEventListener('input', function () {
+    set(path, withUnit(r.value, unit));
+    n.value = withUnit(r.value, unit); n.className = 'dirty'; apply(); commit();
+  });
+  n.addEventListener('input', function () {
+    set(path, withUnit(n.value, unit)); n.className = n.value.trim() ? 'dirty' : '';
+    if (n.value !== '' && isFinite(parseFloat(n.value))) r.value = parseFloat(n.value);
+    apply(); commit();
+  });
+  box.appendChild(r); box.appendChild(n);
+  return box;
+}
+/* A slider that writes the text-stroke shorthand, because the value is a
+   width AND a colour and a bare number is not a stroke. currentColor so it
+   follows whatever ink the element already has. */
+function fStroke(path) {
+  var box = el('div', 'in');
+  var r = document.createElement('input'); r.type = 'range';
+  r.min = 0; r.max = 2; r.step = 0.05;
+  var n = document.createElement('input'); n.type = 'text';
+  n.style.flex = '0 0 62px';
+  var cur = parseFloat(get(path, '')) || 0;
+  r.value = cur; n.value = cur ? cur : ''; n.placeholder = '0';
+  if (cur) n.className = 'dirty';
+  function push(v) {
+    v = parseFloat(v) || 0;
+    set(path, v > 0 ? v + 'px currentColor' : null);
+    n.className = v > 0 ? 'dirty' : '';
+    apply(); commit();
+  }
+  r.addEventListener('input', function () { n.value = r.value; push(r.value); });
+  n.addEventListener('input', function () {
+    if (n.value !== '' && isFinite(parseFloat(n.value))) r.value = parseFloat(n.value);
+    push(n.value);
+  });
+  box.appendChild(r); box.appendChild(n);
+  return box;
+}
+
+function fSelect(path, opts, fallback) {
+  var s = document.createElement('select');
+  var blank = document.createElement('option');
+  blank.value = ''; blank.textContent = fallback ? '(' + fallback + ')' : '(as designed)';
+  s.appendChild(blank);
+  opts.forEach(function (o) {
+    var op = document.createElement('option');
+    op.value = o[1] == null ? o[0] : o[1]; op.textContent = o[0];
+    s.appendChild(op);
+  });
+  s.value = get(path, '');
+  s.addEventListener('change', function () { set(path, s.value); apply(); commit(true); });
+  return s;
+}
+function pan(title, open, build) {
+  var d = document.createElement('details');
+  d.className = 'pan'; d.open = !!open;
+  d.dataset.t = title;
+  var s = el('summary', null, title);
+  d.appendChild(s);
+  var b = el('div', 'body');
+  build(b);
+  d.appendChild(b);
+  return d;
+}
+
+var OPEN = { 'Selected': true, 'Copy': false, 'Palette': false, 'Ground': false,
+             'Type': false, 'Layout': false, 'Guides & grid': false, 'Extra CSS': false,
+             'Elements': false };
+
+function buildPanels() {
+  var host = $('#panels');
+  $$('#panels details.pan').forEach(function (d) { OPEN[d.dataset.t] = d.open; });
+  host.innerHTML = '';
+  if (!ready) return;
+
+  /* ---- SELECTED ---- */
+  host.appendChild(pan('Selected', OPEN['Selected'], function (b) {
+    if (!SEL) {
+      b.appendChild(note(
+        'Click anything on the ticket, or press <b>tab</b> to walk through it. ' +
+        'Nothing moves until you press and drag: hovering only outlines. ' +
+        'Click a line of type and its words land here, selected, ready to be ' +
+        'typed over.'));
+      b.appendChild(note(
+        'Drag the <b>eight handles</b> to resize. The three columns rewrite the ' +
+        'grid rather than their own width, because a column is sized by its track. ' +
+        '<b>Shift</b> on a corner holds the shape.'));
+      b.appendChild(note(
+        '<b>Arrows</b> nudge by 1, <b>shift + arrows</b> by 10. <b>Cmd 0</b> puts one ' +
+        'element back. <b>Alt</b> while dragging ignores snapping. <b>Esc</b> leaves a ' +
+        'field, and again deselects.'));
+      return;
+    }
+    var s = SLOTS.filter(function (x) { return x.k === SEL; })[0];
+    var h = el('p', 'note');
+    h.innerHTML = '<b>' + s.name + '</b> &nbsp;<span style="opacity:.6">' + s.sel + '</span>';
+    b.appendChild(h);
+
+    var m = fdoc.querySelector(s.sel);
+    var isText = m && m.hasAttribute('data-orig');
+    if (isText) {
+      b.appendChild(row('Words', fWords(SEL, 2)));
+      if (s.text) b.appendChild(el('p', 'note', 'Printed from ' + s.text +
+        '. Changing it here does not change content.js.'));
+    }
+
+    /* the portrait is a canvas drawn once from a photo, so it gets its own
+       controls: which photo, and how coarse the dot screen is. The screen is
+       reapplied to whatever picture is underneath, so swapping the photo
+       never costs you the treatment. */
+    if (SEL === 'hMed') {
+      var picker = document.createElement('select');
+      picker.innerHTML = '<option value="">(' +
+        (fwin.__ticketPhotoDefault || 'as content.js says') + ')</option>' +
+        '<option disabled>reading images/…</option>';
+      var txt = fText('photo', fwin.__ticketPhotoDefault || '');
+      picker.addEventListener('change', function () {
+        set('photo', picker.value);
+        txt.value = picker.value;
+        txt.className = picker.value ? 'dirty' : '';
+        apply(); commit(true);
+      });
+      b.appendChild(row('Photo', picker));
+      b.appendChild(row('…or type it', txt));
+      b.appendChild(row('Dot size', fRange('photoDots', 1.5, 9, .5, '3')));
+      b.appendChild(row('Ink', fRange('photoInk', .25, .95, .01, '0.72')));
+      b.appendChild(row('Crop in', fRange('photoZoom', 1, 4, .05, '1')));
+      b.appendChild(row('Move across', fRange('photoX', 0, 1, .01, '0.5')));
+      b.appendChild(row('Move down', fRange('photoY', 0, 1, .01, '0.5')));
+      b.appendChild(el('p', 'note', 'The dot screen is redrawn over whichever ' +
+        'picture you pick, so changing the photo keeps the treatment. It ' +
+        'stretches itself to the range each photo actually uses, so a dark one ' +
+        'still reads. Bigger dots are a coarser screen: past about 6 he stops ' +
+        'being a face.'));
+      b.appendChild(el('p', 'note', 'The box is about eighty dots across, so a ' +
+        'photo where the face is small has nothing to draw with. Crop in until ' +
+        'the face fills it.'));
+      imageList().then(function (groups) {
+        if (!picker.isConnected) return;
+        picker.innerHTML = '<option value="">(' +
+          (fwin.__ticketPhotoDefault || 'as content.js says') + ')</option>';
+        groups.forEach(function (g) {
+          if (!g.files.length) return;
+          var og = document.createElement('optgroup');
+          og.label = g.label;
+          g.files.forEach(function (f) {
+            var o = document.createElement('option');
+            o.value = f; o.textContent = f;
+            og.appendChild(o);
+          });
+          picker.appendChild(og);
+        });
+        picker.value = get('photo', '');
+      }, function () {
+        picker.innerHTML = '<option value="">(could not read images/ — type it below)</option>';
+      });
+    }
+
+    var o = get('offset.' + SEL, { x: 0, y: 0 });
+    var ox = document.createElement('input'); ox.type = 'number'; ox.value = +o.x || 0;
+    var oy = document.createElement('input'); oy.type = 'number'; oy.value = +o.y || 0;
+    function pushOff() {
+      var v = { x: +ox.value || 0, y: +oy.value || 0 };
+      set('offset.' + SEL, (v.x || v.y) ? v : null);
+      apply(); commit();
+    }
+    ox.addEventListener('input', pushOff); oy.addEventListener('input', pushOff);
+    var offbox = el('div', 'in');
+    offbox.appendChild(ox); offbox.appendChild(oy);
+    b.appendChild(row('Nudge X / Y', offbox));
+
+    b.appendChild(el('p', 'mini', 'Type'));
+    b.appendChild(row('Size', fText('style.' + SEL + '.fontSize', computed(SEL, 'fontSize'), 'px')));
+    b.appendChild(row('Tracking', fText('style.' + SEL + '.letterSpacing', computed(SEL, 'letterSpacing'), 'px')));
+    b.appendChild(row('Leading', fText('style.' + SEL + '.lineHeight', computed(SEL, 'lineHeight'))));
+    b.appendChild(row('Weight', fText('style.' + SEL + '.fontWeight', computed(SEL, 'fontWeight'))));
+    /* Share Tech Mono ships ONE weight. Measured: font-weight 700 on it adds
+       1.2% more ink, which is nothing, and that is why the Weight box above
+       looks broken on every machine-set line. A stroke thickens the real
+       letterforms and does not need a face that does not exist: 0.7px adds
+       27%. Kept as its own control rather than hidden inside Weight, so it
+       is obvious which lever did it. */
+    b.appendChild(row('Thicken', fStroke('style.' + SEL + '.WebkitTextStroke')));
+    b.appendChild(row('Case', fSelect('style.' + SEL + '.textTransform',
+      [['UPPER', 'uppercase'], ['lower', 'lowercase'], ['Title', 'capitalize'], ['As typed', 'none']],
+      computed(SEL, 'textTransform'))));
+    b.appendChild(row('Family', fSelect('style.' + SEL + '.fontFamily',
+      [['Machine (mono)', 'var(--mono)'], ['Display', 'var(--disp)']],
+      'as designed')));
+    b.appendChild(row('Ink', fColour('style.' + SEL + '.color', computed(SEL, 'color'))));
+    b.appendChild(row('Align', fSelect('style.' + SEL + '.textAlign',
+      [['Left', 'left'], ['Centre', 'center'], ['Right', 'right']], computed(SEL, 'textAlign'))));
+    b.appendChild(row('Opacity', fText('style.' + SEL + '.opacity', computed(SEL, 'opacity'))));
+
+    b.appendChild(el('p', 'mini', 'Box'));
+    b.appendChild(row('Padding', fText('style.' + SEL + '.padding', computed(SEL, 'padding'), 'px')));
+    b.appendChild(row('Ground', fColour('style.' + SEL + '.background', computed(SEL, 'backgroundColor'))));
+    b.appendChild(row('Min height', fText('style.' + SEL + '.minHeight', computed(SEL, 'minHeight'), 'px')));
+    b.appendChild(row('Width', fText('style.' + SEL + '.width', computed(SEL, 'width'), 'px')));
+    b.appendChild(row('Height', fText('style.' + SEL + '.height', computed(SEL, 'height'), 'px')));
+    b.appendChild(row('Gap', fText('style.' + SEL + '.gap', computed(SEL, 'gap'), 'px')));
+    b.appendChild(row('Border', fText('style.' + SEL + '.borderWidth', computed(SEL, 'borderWidth'), 'px')));
+
+    var br = el('div', 'btnrow');
+    var rst = el('button', 'b warn', 'Reset this element');
+    rst.addEventListener('click', function () {
+      set('style.' + SEL, null); set('offset.' + SEL, null); set('text.' + SEL, null);
+      apply(); commit(true); buildPanels();
+    });
+    br.appendChild(rst);
+    b.appendChild(br);
+  }));
+
+  /* ---- ELEMENTS: the list, so nothing is unreachable ---- */
+  host.appendChild(pan('Elements', OPEN['Elements'], function (b) {
+    var group = '';
+    SLOTS.forEach(function (s) {
+      if (s.group !== group) { group = s.group; b.appendChild(el('p', 'mini', group)); }
+      var btn = el('button', 'slotbtn', s.name);
+      btn.setAttribute('aria-current', String(s.k === SEL));
+      if (touched(s.k)) btn.appendChild(el('i', null, 'edited'));
+      btn.addEventListener('click', function () { select(s.k); });
+      b.appendChild(btn);
+    });
+  }));
+
+  /* ---- COPY ---- */
+  host.appendChild(pan('Copy', OPEN['Copy'], function (b) {
+    b.appendChild(el('p', 'note', 'Every line on the card, as it reads now. A yellow ' +
+      'border means you have replaced it here and content.js still holds the ' +
+      'original. Type the original back and the override goes away by itself.'));
+    SLOTS.forEach(function (s) {
+      var m = fdoc.querySelector(s.sel);
+      if (!m || !m.hasAttribute('data-orig')) return;
+      b.appendChild(row(s.name, fWords(s.k, s.k === 'hLegal' ? 5 : 2)));
+    });
+  }));
+
+  /* ---- PALETTE ---- */
+  host.appendChild(pan('Palette', OPEN['Palette'], function (b) {
+    [['Red field', '--red'], ['Ink', '--ink'], ['Paper', '--paper'],
+     ['Neon', '--neon'], ['Silver', '--silver'], ['Silver light', '--silver-hi']
+    ].forEach(function (p) {
+      b.appendChild(row(p[0], fColour('vars.' + p[1], rootVar(p[1]))));
+    });
+    b.appendChild(row('Inks', fSelect('body.inks',
+      [['Two colour', 'ink2'], ['One colour', 'ink1']], 'two colour')));
+  }));
+
+  /* ---- GROUND ---- */
+  host.appendChild(pan('Ground', OPEN['Ground'], function (b) {
+    var g = el('div', 'btnrow');
+    [['Grain', 'tex-grain'], ['Board', 'tex-board'],
+     ['Guilloche', 'tex-guil'], ['None', 'tex-none']].forEach(function (t) {
+      var btn = el('button', 'b', t[0]);
+      var cur = get('body.texture', 'tex-grain');
+      btn.setAttribute('aria-pressed', String(cur === t[1]));
+      btn.addEventListener('click', function () {
+        set('body.texture', t[1] === 'tex-grain' ? null : t[1]);
+        apply(); commit(true); buildPanels();
+      });
+      g.appendChild(btn);
+    });
+    b.appendChild(g);
+    b.appendChild(row('Grain', fRange('vars.--grain', 0, 1, .01, rootVar('--grain'))));
+    b.appendChild(row('Scuffs', fRange('vars.--scuff', 0, .6, .01, rootVar('--scuff'))));
+    b.appendChild(el('p', 'mini', 'Perforation'));
+    b.appendChild(row('Hole size', fRange('style.ticket.--perfR', 3, 18, .5, '9px', 'px')));
+    b.appendChild(row('Spacing', fRange('style.ticket.--perfP', 12, 60, 1, '24px', 'px')));
+    b.appendChild(el('p', 'mini', 'Rules'));
+    b.appendChild(row('Heavy', fText('vars.--rule', rootVar('--rule'), 'px')));
+    b.appendChild(row('Hairline', fText('vars.--hair', rootVar('--hair'), 'px')));
+  }));
+
+  /* ---- TYPE ---- */
+  host.appendChild(pan('Type', OPEN['Type'], function (b) {
+    b.appendChild(row('Machine', fSelect('vars.--mono', [
+      ['Share Tech Mono', '"Share Tech Mono",monospace'],
+      ['Doto', '"Doto",monospace'],
+      ['Nova Mono', '"Nova Mono",monospace']], 'Share Tech Mono')));
+    b.appendChild(row('Display', fSelect('vars.--disp', [
+      ['Archivo Black', '"Archivo Black",sans-serif'],
+      ['Anton', '"Anton",sans-serif']], 'Archivo Black')));
+    b.appendChild(el('p', 'note', 'Changing a family changes every side bearing on the ' +
+      'card, so the flush-left correction is measured again by itself.'));
+  }));
+
+  /* ---- LAYOUT ---- */
+  host.appendChild(pan('Layout', OPEN['Layout'], function (b) {
+    b.appendChild(row('Columns', fText('style.grid.gridTemplateColumns',
+      computed('grid', 'gridTemplateColumns'))));
+    b.appendChild(el('p', 'note', 'Three values. 1fr 3fr 1fr is the 20/60/20 it is drawn at.'));
+    b.appendChild(el('p', 'mini', 'Centre column'));
+    b.appendChild(row('Padding', fText('style.main.padding', computed('main', 'padding'))));
+    b.appendChild(row('Vertical', fSelect('style.main.alignContent',
+      [['Top', 'start'], ['Centre', 'center'], ['Bottom', 'end'],
+       ['Spread', 'space-between']], computed('main', 'alignContent'))));
+    b.appendChild(row('Min height', fText('style.main.minHeight', computed('main', 'minHeight'))));
+    b.appendChild(el('p', 'mini', 'Other columns'));
+    b.appendChild(row('Left padding', fText('style.rail.padding', computed('rail', 'padding'))));
+    b.appendChild(row('Left gap', fText('style.rail.gap', computed('rail', 'gap'))));
+    b.appendChild(row('Band padding', fText('style.band.padding', computed('band', 'padding'))));
+    b.appendChild(row('Fine print pad', fText('style.legal.padding', computed('legal', 'padding'))));
+    b.appendChild(el('p', 'note', 'Everything under Layout is written for screens wider ' +
+      'than 1000px only, so a phone keeps the stacked version it was built with.'));
+  }));
+
+  /* ---- GUIDES ---- */
+  host.appendChild(pan('Guides & grid', OPEN['Guides & grid'], function (b) {
+    b.appendChild(el('p', 'note', 'Drag out of the top ruler for a horizontal guide, ' +
+      'out of the left ruler for a vertical one. Drag a guide to move it, ' +
+      'double-click to delete. Zero is the top-left corner of the card.'));
+    var gr = el('div', 'btnrow');
+    var addV = el('button', 'b', '+ Vertical');
+    addV.addEventListener('click', function () { addGuide('v', 100); });
+    var addH = el('button', 'b', '+ Horizontal');
+    addH.addEventListener('click', function () { addGuide('h', 100); });
+    var clr = el('button', 'b warn', 'Clear all');
+    clr.addEventListener('click', function () {
+      D.guides = { v: [], h: [] }; commit(true); drawGuides(); buildPanels();
+    });
+    gr.appendChild(addV); gr.appendChild(addH); gr.appendChild(clr);
+    b.appendChild(gr);
+
+    ['v', 'h'].forEach(function (axis) {
+      (D.guides[axis] || []).forEach(function (val, i) {
+        var r = el('div', 'guiderow');
+        r.appendChild(el('span', null, axis === 'v' ? 'X' : 'Y'));
+        var n = document.createElement('input'); n.type = 'number'; n.value = val;
+        n.addEventListener('input', function () {
+          D.guides[axis][i] = +n.value || 0; drawGuides(); commit();
+        });
+        var x = el('button', 'b', '×');
+        x.addEventListener('click', function () { delGuide(axis, i); });
+        r.appendChild(n); r.appendChild(x);
+        b.appendChild(r);
+      });
+    });
+    if (!(D.guides.v || []).length && !(D.guides.h || []).length)
+      b.appendChild(el('p', 'note', 'No guides yet.'));
+
+    b.appendChild(el('p', 'mini', 'While dragging'));
+    b.appendChild(el('p', 'note', 'Elements snap to guides, to the card edges and centre, ' +
+      'and to the edges of every other element. The pink line shows what it caught. ' +
+      'Hold alt to switch it off for one drag.'));
+  }));
+
+  /* ---- EXTRA CSS ---- */
+  host.appendChild(pan('Extra CSS', OPEN['Extra CSS'], function (b) {
+    b.appendChild(el('p', 'note', 'An escape hatch for anything the panels above do not ' +
+      'reach. It is added last, so it wins.'));
+    b.appendChild(fArea('css', '.tk-head span:last-child{ ... }', 6));
+  }));
+
+  /* ---- WHERE THIS GOES ---- */
+  host.appendChild(pan('Where this goes', false, function (b) {
+    b.innerHTML =
+      '<p class="note">Save to folder writes one file, <b>ticket-design.js</b>, ' +
+      'next to index.html. Nothing here touches content.js, images, GitHub or the ' +
+      'live site.</p>' +
+      '<p class="note">It shows up on <b>preview-brutalist.html</b> straight away. ' +
+      'The real home page, index.html, is untouched until you say so.</p>' +
+      '<p class="note">Deleting ticket-design.js puts the ticket back exactly as it ' +
+      'was drawn.</p>';
+    var br = el('div', 'btnrow');
+    var op = el('button', 'b', 'Open the preview');
+    op.addEventListener('click', function () {
+      window.open('preview-brutalist.html', '_blank');
+    });
+    var cp = el('button', 'b', 'Copy the CSS');
+    cp.addEventListener('click', function () {
+      var css = '';
+      try { css = fwin.applyTicketDesign(D, fdoc); } catch (e) {}
+      navigator.clipboard.writeText(css || '/* nothing set */')
+        .then(function () { toast('CSS copied.'); },
+              function () { toast('Could not reach the clipboard.', true); });
+    });
+    br.appendChild(op); br.appendChild(cp);
+    b.appendChild(br);
+  }));
+
+  drawSel();
+}
+
+/* What is actually in images/, read once and kept.
+
+   The server lists a directory when there is no index.html in it, so this
+   asks it rather than keeping a hand-written list that would go stale the
+   first time he drops a photo in. Both folders, because content.js already
+   points at live/ for the agency work and those are legitimate choices here.
+   A failure is not fatal: the text field beside the picker still takes any
+   name at all. */
+var IMGCACHE = null;
+function imageList() {
+  if (IMGCACHE) return IMGCACHE;
+  var ok = /\.(jpe?g|png|webp|gif|avif)$/i;
+  var read = function (path, label, prefix) {
+    return fetch(path + '?t=' + Date.now())
+      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.text(); })
+      .then(function (html) {
+        var files = [], m, re = /href="([^"?]+)"/gi;
+        while ((m = re.exec(html))) {
+          var n = decodeURIComponent(m[1]).replace(/^.*\//, '');
+          if (ok.test(n) && files.indexOf(prefix + n) < 0) files.push(prefix + n);
+        }
+        files.sort(function (a, b) { return a.toLowerCase() < b.toLowerCase() ? -1 : 1; });
+        return { label: label, files: files };
+      })
+      .catch(function () { return { label: label, files: [] }; });
+  };
+  IMGCACHE = Promise.all([
+    read('images/', 'His own uploads', ''),
+    read('images/live/', 'From the old site', 'live/')
+  ]).then(function (gs) {
+    if (!gs[0].files.length && !gs[1].files.length) throw new Error('no listing');
+    return gs;
+  });
+  return IMGCACHE;
+}
+
+function touched(k) {
+  return !!(D.text[k] !== undefined || D.style[k] || (D.offset[k] &&
+            (D.offset[k].x || D.offset[k].y)));
+}
+function rootVar(name) {
+  if (!ready) return '';
+  return fwin.getComputedStyle(fdoc.documentElement).getPropertyValue(name).trim();
+}
+
+/* ============================================================
+   9. SAVE
+   ============================================================ */
+function source() {
+  return '/* Written by ticket-designer.html on ' +
+         new Date().toISOString().slice(0, 16).replace('T', ' ') + '.\n' +
+         '   Do not edit by hand: the next save from the designer replaces this\n' +
+         '   whole file. Empty, or deleted, means the ticket is exactly what\n' +
+         '   preview-brutalist.html draws. */\n' +
+         'window.TICKET_DESIGN = ' + JSON.stringify(D, null, 2) + ';\n';
+}
+function endpoint() {
+  return (location.protocol === 'http:' || location.protocol === 'https:')
+    ? location.origin + '/api/design'
+    : 'http://127.0.0.1:8888/api/design';
+}
+function save() {
+  var src = source();
+  $('#save').disabled = true;
+  fetch(endpoint(), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ source: src })
+  }).then(function (r) {
+    if (r.status === 404) throw new Error('old-server');
+    return r.json();
+  }).then(function (j) {
+    if (!j.ok) throw new Error(j.error || 'refused');
+    SAVED = JSON.stringify(D);
+    try { localStorage.removeItem(LS); } catch (e) {}
+    paintState();
+    toast('Saved. ticket-design.js, ' + j.bytes + ' bytes.');
+  }).catch(function (e) {
+    if (String(e.message) === 'old-server') {
+      /* the endpoint is new, so a server started before today does not have
+         it. Say exactly that rather than "save failed", and hand him the
+         file anyway so the work is never trapped in a tab. */
+      download(src);
+      toast('Your server is the old one and has no place to put this. The file ' +
+            'has downloaded instead: quit the server, run Start Site.command ' +
+            'again, and Save will write it properly.', true);
+    } else {
+      download(src);
+      toast('Could not reach the server, so the file downloaded instead. ' +
+            'Move ticket-design.js into the portfolio folder.', true);
+    }
+  }).then(function () { $('#save').disabled = false; });
+}
+function download(src) {
+  var b = new Blob([src], { type: 'text/javascript' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(b); a.download = 'ticket-design.js';
+  document.body.appendChild(a); a.click();
+  setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 4000);
+}
+function toast(msg, bad) {
+  var t = $('#toast');
+  t.textContent = msg; t.className = bad ? 'bad' : '';
+  t.style.display = 'block';
+  clearTimeout(toast._t);
+  toast._t = setTimeout(function () { t.style.display = 'none'; }, bad ? 10000 : 3200);
+}
+function paintState() {
+  var dirty = JSON.stringify(D) !== SAVED;
+  var n = 0;
+  ['text', 'style', 'offset', 'vars'].forEach(function (k) {
+    n += Object.keys(D[k] || {}).length;
+  });
+  n += (D.guides.v || []).length + (D.guides.h || []).length;
+  ['photo', 'photoDots', 'photoZoom', 'photoX', 'photoY'].forEach(function (k) {
+    if (D[k]) n++;
+  });
+  $('#state').textContent = dirty ? 'unsaved' : (n ? n + ' set' : 'no changes');
+  $('#state').className = 'tag' + (dirty ? ' off' : (n ? ' on' : ''));
+  $('#undo').disabled = HIDX <= 0;
+  $('#redo').disabled = HIDX >= HIST.length - 1;
+}
+
+/* ============================================================
+   10. WIRING
+   ============================================================ */
+function serverCheck() {
+  /* an image, not a fetch: from file:// a fetch has to clear CORS and a
+     blocked one reads exactly like a server that is down. Same reason
+     renderPortraitNote() in admin does it this way. */
+  var tag = $('#srv');
+  var im = new Image();
+  im.onload = function () { tag.textContent = 'server up'; tag.className = 'tag on'; };
+  im.onerror = function () { tag.textContent = 'no server'; tag.className = 'tag off'; };
+  im.src = (location.protocol.indexOf('http') === 0 ? '' : 'http://127.0.0.1:8888/') +
+           'favicon.png?t=' + Date.now();
+}
+
+function loadFromFile() {
+  /* the file on disk is the truth on open. A draft in this browser is only
+     ever offered, never taken: silently restoring one is how an old tab
+     overwrites work done somewhere else, which has already happened once on
+     this site through admin. */
+  var s = document.createElement('script');
+  s.src = 'ticket-design.js?t=' + Date.now();
+  s.onload = s.onerror = function () {
+    var fromFile = window.TICKET_DESIGN;
+    if (fromFile && typeof fromFile === 'object') {
+      D = Object.assign(clone(BLANK), fromFile);
+      D.guides = Object.assign({ v: [], h: [] }, fromFile.guides || {});
+    }
+    SAVED = JSON.stringify(D);
+    HIST = [clone(D)]; HIDX = 0;
+    offerDraft();
+    boot();
+    paintState();
+  };
+  document.head.appendChild(s);
+}
+
+function offerDraft() {
+  var raw = null;
+  try { raw = localStorage.getItem(LS); } catch (e) {}
+  if (!raw) return;
+  var j;
+  try { j = JSON.parse(raw); } catch (e) { return; }
+  if (!j || !j.d || eq(j.d, D)) { try { localStorage.removeItem(LS); } catch (e) {} return; }
+  var box = $('#recover');
+  box.style.display = 'flex';
+  /* formatted by hand: toLocaleString() here rendered "21:15:10 PM", a
+     24-hour clock with an am/pm on the end of it */
+  var t = new Date(j.t), p = function (n) { return (n < 10 ? '0' : '') + n; };
+  $('#recoverTxt').textContent = 'Unsaved changes from ' +
+    t.getDate() + '/' + (t.getMonth() + 1) + ' at ' +
+    p(t.getHours()) + ':' + p(t.getMinutes()) + ' are still here.';
+  $('#recoverYes').onclick = function () {
+    D = Object.assign(clone(BLANK), j.d);
+    D.guides = Object.assign({ v: [], h: [] }, j.d.guides || {});
+    box.style.display = 'none';
+    apply(); buildPanels(); drawAll(); commit(true);
+  };
+  $('#recoverNo').onclick = function () {
+    try { localStorage.removeItem(LS); } catch (e) {}
+    box.style.display = 'none';
+  };
+}
+
+$('#save').addEventListener('click', save);
+$('#undo').addEventListener('click', undo);
+$('#redo').addEventListener('click', redo);
+$('#zoomIn').addEventListener('click', function () { setZoom(zoom * 1.25); });
+$('#zoomOut').addEventListener('click', function () { setZoom(zoom / 1.25); });
+$('#zoomFit').addEventListener('click', fit);
+$('#revert').addEventListener('click', function () {
+  if (!confirm('Put every value back to the way the ticket was drawn?\n\n' +
+               'Your guides go too. This does not save; the file on disk is ' +
+               'unchanged until you press Save.')) return;
+  D = clone(BLANK);
+  apply(); buildPanels(); drawAll(); commit(true);
+});
+
+$('#scroller').addEventListener('scroll', drawAll);
+/* his window's shape IS the artboard's shape, so resizing the editor has to
+   reshape the frame, not just redraw the rulers over it */
+window.addEventListener('resize', function () { sizeFrame(); fit(); });
+
+/* Bound to BOTH documents. Clicking the ticket puts focus inside the iframe,
+   and a key pressed there is delivered to that document only, so a handler on
+   the parent alone meant the arrow keys did nothing for the entire time you
+   were actually looking at the thing you wanted to move. */
+function onKey(e) {
+  var t = e.target && e.target.tagName;
+  if (t === 'INPUT' || t === 'TEXTAREA' || t === 'SELECT') {
+    /* clicking a line puts the cursor in its words, which is what he asked
+       for, and that is also where the arrow keys then go. Escape hands the
+       keyboard back to the canvas without losing the selection, so nudging
+       is one key away rather than a hunt for somewhere neutral to click. */
+    if (e.key === 'Escape') { e.preventDefault(); e.target.blur(); drawSel(); }
+    return;
+  }
+  var meta = e.metaKey || e.ctrlKey;
+  if (meta && e.key.toLowerCase() === 'z') {
+    e.preventDefault(); e.shiftKey ? redo() : undo(); return;
+  }
+  if (meta && e.key.toLowerCase() === 's') { e.preventDefault(); save(); return; }
+
+  /* step through the elements without the mouse */
+  if (e.key === 'Tab') {
+    e.preventDefault();
+    var pickable = SLOTS.filter(function (s) { return fdoc.querySelector(s.sel); });
+    if (!pickable.length) return;
+    var at = pickable.map(function (s) { return s.k; }).indexOf(SEL);
+    /* + length only, to keep a backwards step positive. An extra +1 in here
+       made tab move two at a time and shift-tab stand still. */
+    var next = (at + (e.shiftKey ? -1 : 1) + pickable.length) % pickable.length;
+    if (at === -1) next = e.shiftKey ? pickable.length - 1 : 0;
+    select(pickable[next].k);
+    scrollSelIntoView();
+    return;
+  }
+  if (e.key === 'Escape') { SEL = null; buildPanels(); drawSel(); return; }
+  if (!SEL) return;
+
+  var d = e.shiftKey ? 10 : 1;
+  var map = { ArrowLeft: [-d, 0], ArrowRight: [d, 0], ArrowUp: [0, -d], ArrowDown: [0, d] };
+  if (map[e.key]) { e.preventDefault(); nudge(map[e.key][0], map[e.key][1]); return; }
+  /* put one element back where it was drawn, without hunting for the button */
+  if (e.key === '0' && meta) { e.preventDefault(); set('offset.' + SEL, null);
+                               apply(); commit(true); buildPanels(); }
+}
+document.addEventListener('keydown', onKey);
+
+/* keep a keyboard-selected element on screen */
+function scrollSelIntoView() {
+  var r = SEL ? rectOf(SEL) : null;
+  if (!r) return;
+  var s = $('#scroller');
+  var p = docToScreen(r.left, r.top);
+  if (p.y < 0) s.scrollTop += p.y - 20;
+  else if (p.y + r.height * zoom > s.clientHeight) {
+    s.scrollTop += (p.y + r.height * zoom) - s.clientHeight + 20;
+  }
+  drawAll();
+}
+
+window.addEventListener('beforeunload', function (e) {
+  if (JSON.stringify(D) !== SAVED) { e.preventDefault(); e.returnValue = ''; }
+});
+
+buildHandles();
+armRulers();
+serverCheck();
+loadFromFile();
+})();
+</script>
+</body>
+</html>

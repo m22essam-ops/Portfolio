@@ -1,33 +1,35 @@
 <!DOCTYPE html>
 <!-- ============================================================
-     THE HOME PAGE  ·  the brutalist lottery ticket
-     Published 4 Sep 2026 at his instruction. The previous flow-layout home
-     page is kept whole as index-flow.html.
-     Words come from content.js. His design layer is ticket-design.js, written
-     by ticket-designer.html; delete it and the ticket is what this page draws.
+     BRUTALIST LOTTERY TICKET  ·  pass 2
+
+     Fourteen changes, all of them his, all implemented:
+
+     HOME      00 scaled down · scuffs and scratches over the grain ·
+               every number and label in the machine face · the headshot
+               halftoned by a real dot screen, not a filter that looks
+               like one
+     COPY      the black band is a scrolling ticker carrying the odds
+               line · the scratch panel is a working canvas you drag
+     GRID      thick dividers gone, ledger rules kept · neon only on
+               hover, never at rest · a solid play triangle on the
+               projects that have film in them
+     DETAIL    [<] ALL WORK · a barcode that actually encodes 131313 and
+               prints it underneath · an MS-DOS block caret in the input
+
+     Grain and halftone are both on the Don't list in CLAUDE.md. He was
+     told that last pass and has now asked for both again in detail, so
+     they are built. That is his call and it is not re-argued here.
+
+     Still a preview and not styles.css, for the reason that has not
+     changed: git cannot read the project folder right now, so a change
+     this size could not be reverted.
      ============================================================ -->
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mohammed Essam — Award-losing copywriter</title>
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Mohammed Essam">
-<meta property="og:locale" content="en_GB">
-<meta property="og:title" content="Mohammed Essam — Award-losing copywriter">
-<meta property="og:description" content="Mohammed Essam, copywriter. Cairo, Dubai, Madrid. Work that ran, and work that didn&#x27;t.">
-<meta property="og:url" content="https://www.mohammedessam.com/">
-<meta property="og:image" content="https://www.mohammedessam.com/images/og.jpg">
-<meta property="og:image:type" content="image/jpeg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="A lottery ticket that reads: Award-losing copywriter.">
-<meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://www.mohammedessam.com/">
-<meta name="description" content="Mohammed Essam, copywriter. Cairo, Dubai, Madrid. Work that ran, and work that didn't.">
-<link rel="icon" type="image/png" href="favicon.png">
-<link rel="apple-touch-icon" href="favicon.png">
-<title>Brutalist ticket system</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Brutalist ticket system · v1 (frozen 4 Sep 2026)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Doto:wght@400;700;900&family=Nova+Mono&family=Archivo+Black&family=Instrument+Serif:ital@0;1&family=Anton&display=swap" rel="stylesheet">
@@ -133,49 +135,11 @@ h1,h2,h3{font-family:var(--disp);font-weight:400;margin:0;line-height:.95;
 
 .wrap{width:min(1400px,calc(100% - 80px));margin-inline:auto}
 section.screen{padding:60px 0 0}
-/* ---- ?only=home: the card takes the SCREEN'S shape ----
-
-   Not a fixed board scaled to fit. That was tried and it letterboxed: a
-   1.75:1 drawing on a 1.6:1 screen leaves red bands top and bottom, which is
-   dead space on the one page that should have none. 96vw by 96vh means the
-   card is whatever shape the window is, so there is nothing left over.
-
-   The card has a real height now, so the middle has to be the part that
-   absorbs it. Harmless elsewhere: with an auto height, flex:1 on the one
-   growable child does nothing. */
-/* ONLY when this page is the whole window. `.fills` is added by script and
-   only at top level.
-
-   Without that gate these rules also ran inside the designer's iframe, and an
-   iframe has no viewport height of its own until something gives it one: the
-   designer measures the document to size the frame, the document was
-   position:fixed with overflow hidden so it measured 10px, and 96vh of 10px
-   is 9.6px. The whole editor went black with a sliver of ticket in it. */
-body.only-home{padding:0}
+/* ?only=home, the designer's iframe: the ticket fills the frame so the frame
+   IS the artboard, and the ruler's zero can be the card's own left edge.
+   24px of red is kept each side, or the perforation has nothing to bite. */
 body.only-home section.screen{padding:0}
 body.only-home .wrap{width:calc(100% - 48px)}
-
-body.only-home.fills{overflow:hidden}
-body.only-home.fills section.screen{position:fixed;inset:0}
-body.only-home.fills .wrap{width:auto;margin:0}
-body.only-home.fills .ticket{position:absolute;left:50%;top:50%;
-  transform:translate(-50%,-50%);width:96vw;height:96vh}
-
-/* A PHONE IS NOT A LAPTOP AND MUST NOT BE HELD TO 96vh.
-   Stacked, the card is a column: rail, then the headline, then the legend,
-   then the scratch panel. Forced to the height of the screen it was cut off
-   at the legend and the scratch panel went with it, taking the only call to
-   action on the page. He asked for this to fill a LAPTOP. Here it is its own
-   height and the page scrolls, which is what every ticket in the hand does. */
-@media (max-width:1000px){
-  body.only-home.fills{overflow:auto}
-  body.only-home.fills section.screen{position:static;inset:auto;padding:14px 0}
-  body.only-home.fills .ticket{position:static;transform:none;
-    width:calc(100% - 26px);height:auto;margin:0 auto}
-}
-.ticket{display:flex;flex-direction:column}
-.tk-grid{flex:1 1 auto;min-height:0}
-.tk-band,.legal{flex:none}
 .screenlab{font-family:var(--mono);font-size:11px;letter-spacing:.28em;
            text-transform:uppercase;color:var(--paper);padding:0 0 12px}
 
@@ -206,11 +170,6 @@ body.only-home.fills .ticket{position:absolute;left:50%;top:50%;
      overflow:hidden;background:var(--paper)}
 .med img,.med canvas{position:absolute;inset:0;width:100%;height:100%;
                      object-fit:cover;display:block}
-/* hover lifts half the dot screen off in half a second, so the photograph
-   under the print shows through. The canvas is what carries the halftone, so
-   fading IT is the whole effect: the image beneath is already there. */
-.med canvas{transition:opacity .5s ease}
-.med:hover canvas,.med:focus-within canvas{opacity:.5}
 /* the fallback if the dot screen cannot run: still cheap print, just not
    dotted. The canvas is drawn over the top when it succeeds. */
 .med img{filter:grayscale(1) contrast(2.1) brightness(1.06)}
@@ -283,29 +242,16 @@ body.only-home.fills .ticket{position:absolute;left:50%;top:50%;
    Nothing here moves. It spans the full width as a row: the small print
    ranged hard left so a second line stacks under the first, and the barcode
    pinned right. Centred, it read as a web paragraph in a black box. */
-/* ONE line, and it can never reach the barcode.
-
-   Three things do that and all three are needed. `nowrap` keeps it on one
-   line. `overflow:hidden` is the guarantee: nowrap text does not wrap, it
-   SPILLS, and a flex sibling does not stop it, so the small print was
-   printing straight over the bars. `min-width:0` lets the flex item shrink
-   at all, and fitLegal() below sizes the type so the clip never has to
-   happen in the first place. The barcode is flex:none and keeps its width. */
 .legal{background:var(--ink);color:var(--paper);
        border-top:var(--rule) solid var(--ink);
-       display:flex;justify-content:space-between;align-items:center;gap:26px;
-       padding:9px 26px 8px}
-.legal p{margin:0;flex:1 1 auto;min-width:0;text-align:left;
-         white-space:nowrap;overflow:hidden;
-         font-family:var(--mono);font-size:9px;line-height:1.5;
-         letter-spacing:.14em;text-transform:uppercase}
+       display:flex;justify-content:space-between;align-items:center;gap:36px;
+       padding:15px 34px 14px}
+.legal p{margin:0;flex:1;min-width:0;text-align:left;
+         font-family:var(--mono);font-size:10.5px;line-height:1.8;
+         letter-spacing:.26em;text-transform:uppercase}
 /* the barcode: one repeating gradient whose repeat unit carries bars of six
    different widths, so it scans as printed rather than as a hatch */
-/* both of these are real links now: the barcode to the playlist and the
-   badge to the cabinet. Blank the url in content.js and each goes back to
-   being the ornament it was, which is how index.html already treats them. */
-.legal-code{display:block;flex:none;width:128px;height:20px;
-  transition:opacity .18s linear;
+.legal-code{flex:none;width:168px;height:34px;
   background-color:transparent;
   background-image:repeating-linear-gradient(90deg,
     var(--paper) 0 2px, transparent 2px 4px,
@@ -408,13 +354,8 @@ body.only-home.fills .ticket{position:absolute;left:50%;top:50%;
   /* the barcode is a fixed 168px and will not shrink, so in a row it ate
      the bar and squeezed the fine print into a 57px column with 44px of it
      overflowing. Stacked, both get the full width. */
-  .legal{flex-direction:column;align-items:stretch;gap:12px;padding:14px 20px}
+  .legal{flex-direction:column;align-items:stretch;gap:14px;padding:16px 20px}
   .legal-code{width:100%}
-  /* Stacked, the small print has the full width and the barcode is below it,
-     not beside it, so there is nothing left to run into: let it wrap. Left on
-     one line here, fitLegal() shrank it to 2.88px to fit 340px, solving a
-     collision that does not exist on a phone. */
-  .legal p{white-space:normal;overflow:visible;font-size:9.5px}
 }
 @media (max-width:560px){ .terms{columns:1} }
 @media (prefers-reduced-motion:reduce){
@@ -438,6 +379,8 @@ body.only-home.fills .ticket{position:absolute;left:50%;top:50%;
   </filter>
 </svg>
 
+<div class="bar" id="bar"></div>
+<div style="height:44px"></div>
 
 <!-- ============ 01 HOME ============ -->
 <section class="screen">
@@ -483,19 +426,97 @@ body.only-home.fills .ticket{position:absolute;left:50%;top:50%;
       <!-- 3. static fine print. No moving elements on the home page. -->
       <div class="legal">
         <p id="hLegal"></p>
-        <a class="legal-code" id="hCode" href="#"></a>
+        <span class="legal-code" id="hCode" aria-hidden="true"></span>
       </div>
     </div>
   </div>
 </section>
 
+<!-- ============ 02 WORK ============ -->
+<section class="screen">
+  <div class="wrap">
+    <p class="screenlab">02 / Work index</p>
+    <div class="ticket perf paper">
+      <svg class="scuff" aria-hidden="true"></svg>
+      <div class="workhead">
+        <h2 id="wHead">THE WORK.</h2>
+        <span class="lbl" id="wCount"></span>
+      </div>
+      <div class="grid" id="wGrid"></div>
+    </div>
+  </div>
+</section>
 
+<!-- ============ 03 PROJECT ============ -->
+<section class="screen">
+  <div class="wrap">
+    <p class="screenlab">03 / Project</p>
+    <div class="ticket perf paper">
+      <svg class="scuff" aria-hidden="true"></svg>
+      <div class="tk-band">
+        <a class="back" href="work.html"><b>&lt;</b>All work</a>
+        <span class="lbl serial" id="pSerial"></span>
+      </div>
+      <div style="padding:24px">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px" id="pMeta"></div>
+        <h2 id="pTitle" style="font-size:clamp(28px,4.6vw,66px)"></h2>
+        <p id="pTag" style="font-family:var(--disp);font-size:clamp(15px,1.5vw,22px);
+           line-height:1.3;max-width:48ch;margin:14px 0 0"></p>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;padding-top:20px">
+          <button class="btn solid" type="button">Play the film &rarr;</button>
+          <button class="btn" type="button">Next project</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
+<!-- ============ 04 CONTROLS ============ -->
+<section class="screen">
+  <div class="wrap">
+    <p class="screenlab">04 / Controls</p>
+    <div class="ticket perf paper">
+      <svg class="scuff" aria-hidden="true"></svg>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;padding:20px">
+        <button class="btn" type="button">Default</button>
+        <button class="btn solid" type="button">Primary</button>
+        <span class="sticker hot">Sold out in a week</span>
+        <span class="inputwrap" id="mailWrap">
+          <input class="field" id="mailField" placeholder="YOUR EMAIL" aria-label="Your email">
+          <span class="caret" id="caret"></span>
+        </span>
+        <button class="btn solid" type="button">Send &rarr;</button>
+      </div>
+    </div>
+  </div>
+</section>
 
-
-
-
-
+<!-- ============ 05 FOOTER ============ -->
+<section class="screen" style="padding-bottom:70px">
+  <div class="wrap">
+    <p class="screenlab">05 / Footer, the back of the ticket</p>
+    <div class="ticket perf paper">
+      <svg class="scuff" aria-hidden="true"></svg>
+      <div style="padding:13px 18px">
+        <span class="lbl">Conditions of entry &mdash; read before playing</span>
+      </div>
+      <footer class="stub">
+        <div class="stub-top">
+          <span class="lbl">Mohammed Essam &mdash; Copywriter</span>
+          <span class="lbl serial" id="fSerial"></span>
+        </div>
+        <div class="terms" id="fTerms"></div>
+        <div class="stub-foot">
+          <span class="lbl" id="fLine"></span>
+          <span class="code">
+            <span class="bars" id="fBars" aria-hidden="true"></span>
+            <span class="codenum">131313</span>
+          </span>
+        </div>
+      </footer>
+    </div>
+  </div>
+</section>
 
 <script src="content.js"></script>
 <script>
@@ -509,32 +530,6 @@ body.only-home.fills .ticket{position:absolute;left:50%;top:50%;
   /* ---------------- home ---------------- */
   txt('hMotto', T.band || '');
   txt('hBadge', T.badge || '');
-
-  /* ---- the two quiet links, same contract as index.html ----
-     "I won nothing" is a claim, so it opens the cabinet and shows you. The
-     barcode is where the playlist lives, because a barcode is the one part
-     of a ticket nobody expects to do anything. Blank either url in
-     content.js and it goes back to being a label. */
-  (function () {
-    var badge = $('hBadge'), url = String(T.badgeUrl || '').trim();
-    if (badge && url) {
-      var a = document.createElement('a');
-      a.href = url; a.className = badge.className; a.id = 'hBadge';
-      a.textContent = badge.textContent;
-      badge.parentNode.replaceChild(a, badge);
-    }
-    var bc = $('hCode'), burl = String(T.barcodeUrl || '').trim();
-    if (!bc) return;
-    if (burl) {
-      bc.href = burl;
-      bc.target = '_blank';
-      bc.rel = 'noopener';
-      bc.setAttribute('aria-label', T.barcodeLabel || 'Playlist');
-    } else {
-      bc.removeAttribute('href');
-      bc.setAttribute('aria-hidden', 'true');
-    }
-  })();
   txt('hKick', T.game || '');
   txt('hName', (T.name || '').toUpperCase());
   /* the two halves carry ids so the designer can address a line rather than
@@ -804,13 +799,11 @@ body.only-home.fills .ticket{position:absolute;left:50%;top:50%;
   /* ---------------- work index ---------------- */
   txt('wHead', (W.heading || 'The work.').toUpperCase());
   txt('wCount', projects.length + ' pieces / ' + pad + ' awards');
-  /* null on the home page, where screens 02-05 do not exist. An unguarded
-     appendChild here throws and takes every line below it with it. */
   var grid = $('wGrid');
   /* the whole grid, not a slice: the first six projects all happen to have
      film, so a six-card preview showed six identical play badges and the
      affordance looked like decoration. 13 of the 18 carry film. */
-  if (grid) projects.forEach(function (p, i) {
+  projects.forEach(function (p, i) {
     /* 3c. film is media[].type === "video" */
     var hasFilm = (p.media || []).some(function (m) { return m && m.type === 'video'; });
     var a = document.createElement('a');
@@ -836,19 +829,18 @@ body.only-home.fills .ticket{position:absolute;left:50%;top:50%;
   txt('pSerial', T.serial || '');
   txt('pTitle', (p0.title || '').toUpperCase());
   txt('pTag', p0.tagline || '');
-  var pMeta = $('pMeta');
-  if (pMeta) ['client', 'category', 'year', 'sticker'].forEach(function (k) {
+  ['client', 'category', 'year', 'sticker'].forEach(function (k) {
     if (!p0[k]) return;
     var s = document.createElement('span');
     s.className = 'sticker' + (k === 'sticker' ? ' hot' : '');
     s.textContent = p0[k];
-    pMeta.appendChild(s);
+    $('pMeta').appendChild(s);
   });
 
   /* ---------------- footer ---------------- */
   txt('fSerial', T.serial || '');
   txt('fLine', F.line || '');
-  if ($('fTerms')) $('fTerms').innerHTML = [
+  $('fTerms').innerHTML = [
     '<b>1.</b> ' + (T.terms || ''),
     '<b>2.</b> This ticket entitles the bearer to one (1) copywriter, subject to availability, mood, and the bearer having read this far.',
     '<b>3.</b> ' + (T.stampArc || 'Valid until hired') + '. No cash alternative is offered and none has ever been requested.',
@@ -867,7 +859,6 @@ body.only-home.fills .ticket{position:absolute;left:50%;top:50%;
     var CODE = '131313';
     var GLYPH = ['3211','2221','2122','1411','1132','1231','1114','1312','1213','3112'];
     var bars = $('fBars');
-    if (!bars) return;
     var wide = [];
     CODE.split('').forEach(function (d) {
       GLYPH[+d].split('').forEach(function (n, i) { wide.push([+n, i % 2 === 0]); });
@@ -1015,41 +1006,8 @@ body.only-home.fills .ticket{position:absolute;left:50%;top:50%;
     h.style.fontSize = size.toFixed(2) + 'px';
   }
 
-  /* ---- the small print, on one line, never over the barcode ----
-     Measured against the width the flex row actually gave it, so the barcode
-     is accounted for by construction. Shrinks only, and gives back tracking
-     before size: tight small print still reads as small print, tiny does
-     not. Skipped where the text is allowed to wrap. */
-  function fitLegal() {
-    var p = $('hLegal');
-    if (!p) return;
-    p.style.fontSize = ''; p.style.letterSpacing = '';
-    var cs = getComputedStyle(p);
-    if (cs.whiteSpace !== 'nowrap') return;
-    var size = parseFloat(cs.fontSize), track = parseFloat(cs.letterSpacing) || 0;
-    var t = p.textContent.replace(/\s+/g, ' ').trim();
-    var avail = p.clientWidth;
-    if (!t || avail <= 0) return;
-    inkCtx.font = cs.fontWeight + ' ' + size + 'px ' + cs.fontFamily;
-    inkCtx.letterSpacing = track + 'px';
-    var w = inkCtx.measureText(t).width;
-    if (w <= avail) return;
-    var floor = size * 0.05;
-    if (track > floor) {                       /* tracking first */
-      track = Math.max(floor, track - (w - avail) / t.length);
-      inkCtx.letterSpacing = track + 'px';
-      w = inkCtx.measureText(t).width;
-    }
-    if (w > avail) {                           /* then size */
-      var k = (avail / w) * 0.995;
-      size *= k; track *= k;
-    }
-    p.style.fontSize = size.toFixed(2) + 'px';
-    p.style.letterSpacing = track.toFixed(3) + 'px';
-  }
-
   var FLUSH = ['#hKick', '#hName', '#hHead'];
-  function realign() { fitHead(); alignInk(FLUSH); fitLegal(); }
+  function realign() { fitHead(); alignInk(FLUSH); }
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(realign);
   realign();
   addEventListener('resize', realign);
@@ -1062,7 +1020,7 @@ body.only-home.fills .ticket{position:absolute;left:50%;top:50%;
      four screens and the control bar are not wrong, they are just not what
      he is looking at, and scrolling past them to reach the ticket would make
      the ruler origin move. */
-  if (true) {
+  if (/[?&]only=home/.test(location.search)) {
     document.body.classList.add('only-home');
     [].forEach.call(document.querySelectorAll('section.screen'), function (s, i) {
       if (i > 0) s.remove();
@@ -1071,23 +1029,6 @@ body.only-home.fills .ticket{position:absolute;left:50%;top:50%;
     [].forEach.call(document.querySelectorAll('.screenlab'), function (s) { s.remove(); });
     var sp = document.querySelector('body > div[style*="height:44px"]');
     if (sp) sp.remove();
-
-    /* Fill the frame, whatever the frame is. In the designer that frame is
-       an iframe the editor sizes to his screen's shape, so what he composes
-       is what the live page draws. It was gated to top-level for a while and
-       that was wrong twice over: the designer then showed a short card while
-       the real page showed a full-screen one, so he was designing against a
-       layout that does not exist.
-
-       This is only safe because the designer sets the iframe's height
-       EXPLICITLY. It used to measure the document instead, and a
-       position:fixed document measures nothing, which is how the whole
-       editor went black. */
-    document.body.classList.add('fills');
-    /* the card's height changes with the window, so the headline and the
-       small print are re-measured. That is the trade he chose over a fixed
-       board that held its ratio but letterboxed. */
-    addEventListener('resize', realign);
   }
 
   /* ---- preview controls ---- */
@@ -1143,7 +1084,7 @@ body.only-home.fills .ticket{position:absolute;left:50%;top:50%;
      script above prints the ticket from content.js, and these two put his
      changes on top of that. An empty or missing ticket-design.js leaves the
      page exactly as it is. -->
-<script src="ticket-design.js"></script>
+<script src="ticket-design-v1.js"></script>
 <script src="ticket-design-apply.js"></script>
 </body>
 </html>

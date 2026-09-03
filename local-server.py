@@ -8,6 +8,12 @@ AND gives admin.html a way to save without downloading anything:
                             "files": {"name.jpg": "<base64>", ...}}
     -> writes content.js and any files into images/ right here in the folder.
 
+    POST /api/design body: {"source": "window.TICKET_DESIGN = {...};"}
+    -> writes ticket-design.js, and only ever that one name. This is the
+       ticket designer's save. It is kept apart from /api/save on purpose:
+       that endpoint owns content.js and images/, which are the files that
+       get published, and the designer must not be able to reach them.
+
     GET  /api/version  -> {"ok": true, "version": "<content.js mtime>"}
     -> the site polls this and reloads itself when content.js changes, so
        after "Save locally" the site tab updates with no Cmd+R.
@@ -136,6 +142,9 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             return False         # anything unexpected: fall back to the whole file
 
     def do_POST(self):
+        if self.path.rstrip('/') == '/api/design':
+            self.save_design()
+            return
         if self.path.rstrip('/') != '/api/save':
             self.send_json({'ok': False, 'error': 'Unknown endpoint'}, 404)
             return
@@ -166,6 +175,33 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             self.send_json({'ok': True, 'files': written})
         except Exception as e:
             self.send_json({'ok': False, 'error': str(e)}, 500)
+
+    def save_design(self):
+        """Write ticket-design.js, and nothing else.
+
+        The filename is hardcoded rather than taken from the request. The
+        designer has no reason to name a file and, more to the point, a
+        designer that could name one could name content.js. Deliberately no
+        base64 and no second file: this endpoint does one thing.
+        """
+        try:
+            length = int(self.headers.get('Content-Length', 0))
+            payload = json.loads(self.rfile.read(length).decode('utf-8'))
+        except Exception as e:
+            self.send_json({'ok': False, 'error': 'Bad request: %s' % e}, 400)
+            return
+        source = payload.get('source')
+        if not isinstance(source, str) or not source.strip():
+            self.send_json({'ok': False, 'error': 'No source to write'}, 400)
+            return
+        try:
+            with open(os.path.join(ROOT, 'ticket-design.js'), 'w', encoding='utf-8') as f:
+                f.write(source)
+        except Exception as e:
+            self.send_json({'ok': False, 'error': str(e)}, 500)
+            return
+        self.send_json({'ok': True, 'file': 'ticket-design.js',
+                        'bytes': len(source.encode('utf-8'))})
 
     def send_json(self, obj, code=200):
         data = json.dumps(obj).encode('utf-8')
