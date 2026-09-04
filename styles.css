@@ -1581,8 +1581,17 @@ body.page-awards #page{
   flex:1 1 auto;min-height:0;
   display:flex;justify-content:center;align-items:center;width:100%;
 }
-/* height first: the cabinet gives way, the words never do */
-.cab{width:auto;height:100%;max-width:min(100%,460px);max-height:100%;overflow:visible}
+/* height first: the cabinet gives way, the words never do.
+
+   The 460px cap was doing two bad things at once on a wide screen. It held
+   the case to 23% of a 2000px window, and because the box was then 460 wide
+   by 662 tall while the drawing inside is 520:560, the SVG letterboxed
+   itself: 460x495 of case with 83px of dead band above and below it, INSIDE
+   its own element. Measured, not guessed.
+
+   Height-driven with a generous cap, so the box matches the drawing's own
+   ratio and there is nothing left over. */
+.cab{width:auto;height:100%;max-width:min(100%,820px);max-height:100%;overflow:visible}
 
 .cab .ink-1{fill:var(--well)}
 .cab .ink-2{fill:#0B0A09}

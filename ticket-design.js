@@ -5,7 +5,7 @@
    Delete this file and the same is true. */
 window.TICKET_DESIGN = {
   "version": 1,
-  "photo": "portrait-rooftop.jpg",
+  "photo": "portrait-studio.jpg",
   "photoZoom": "1",
   "photoDots": "2.5",
   "vars": {},
