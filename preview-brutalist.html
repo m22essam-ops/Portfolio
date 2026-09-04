@@ -219,8 +219,15 @@ body.only-home.fills .ticket{backface-visibility:hidden}
    so the holes are revealed rather than stretched. Same trick as the intro.
    `--tearW` is the hole spacing; it matches the edge perforation's own
    pitch so the tear reads as part of the same ticket. */
+/* The rip runs down the BOUND edge, not through the middle.
+
+   Down the middle was tearing the ticket in half, which is not what anybody
+   does with a ticket. In a book the ticket is held along one perforated edge
+   and you pull the free side; the rip travels down the binding and the
+   ticket comes away in one piece. That edge is the left one, and the card
+   already has its perforation there, so the line has nothing to invent. */
 .tear{
-  position:absolute;left:50%;top:0;bottom:0;width:20px;margin-left:-10px;
+  position:absolute;left:0;top:0;bottom:0;width:17px;
   z-index:4;pointer-events:none;opacity:0;
   background-image:radial-gradient(circle 5.5px at center,
                    var(--red) 96%,transparent 97%);
@@ -230,7 +237,7 @@ body.only-home.fills .ticket{backface-visibility:hidden}
 }
 body.only-home.fills.tearing .tear{
   opacity:1;
-  animation:tearPunch .19s steps(11,end) forwards;
+  animation:tearPunch .22s steps(12,end) forwards;
 }
 @keyframes tearPunch{ to{ clip-path:inset(0 0 0 0); } }
 
@@ -239,23 +246,69 @@ body.only-home.fills.tearing .tear{
    first. translateZ does that against the section's perspective. The Z
    rotation is small and deliberate, because nothing anyone has ever torn
    came away perfectly square. Eased in: it holds, then it gives. */
-/* The opacity is on its own, shorter, LATER transition so the card is
-   already gone at the cut. Measured with them sharing one curve: at 468ms
-   the card was still at -11 degrees and 80% opaque, and the navigation at
-   560ms landed in the middle of the motion, which reads as a jump rather
-   than a tear. Opacity now finishes at 560ms and the travel at 590ms, and
-   the page changes at 600ms under something already invisible. */
+/* ---- OUT OF THE BOOK, THEN OVER ----
+
+   It hinges on the perforated edge it was bound by and turns, the way a
+   ticket actually leaves a pad: held on one side, pulled on the other, and
+   once the perforation lets go it carries on turning.
+
+   `transform-origin` stays at the centre and the pivot is moved by a pair of
+   translates instead: `translateX(-50%) rotate translateX(50%)` rotates
+   about the left edge. Setting the origin itself would have been simpler and
+   wrong, because `scale(var(--artS))` shares that origin, so moving it to
+   the edge makes the resting card jump sideways the instant the class lands.
+   At 0 degrees the pair cancels, so the resting transform is untouched.
+
+   It passes 90 degrees, and `backface-visibility:hidden` above means the
+   card is gone from there on. That is the flip: you do not watch a mirrored
+   ticket, you watch it turn away and find the next page under it. */
+/* It is BOUND, then it is FREE, and that is the difference between a ticket
+   leaving a book and a page turning inside one.
+
+   The pivot itself is animated. `translateX(P) rotateY rotateZ translateX(-P)`
+   rotates about a point P away from the centre, so P = -50% hinges on the
+   perforated edge and P = 0 spins about the card's own middle. It starts
+   hinged, gives a short pull while it is still held, and then P runs to zero
+   as the perforation lets go: from that moment it is a loose card turning in
+   the air, not a page attached to a spine.
+
+   The function LIST is identical at every keyframe, so each number
+   interpolates against its own opposite number. Change the list between
+   stops and the browser falls back to decomposing whole matrices, which
+   takes the shortest path through a rotation and does not look like this. */
+@keyframes ticketTearOut{
+  0%{
+    transform:translate(-50%,-50%) scale(var(--artS,1))
+      translateX(-50%) rotateY(0deg) rotateZ(0deg) translateX(50%)
+      translateX(0%) translateY(0%);
+    opacity:1;
+  }
+  26%{                                        /* held, and pulled */
+    transform:translate(-50%,-50%) scale(var(--artS,1))
+      translateX(-50%) rotateY(-13deg) rotateZ(-1deg) translateX(50%)
+      translateX(0%) translateY(0%);
+    opacity:1;
+  }
+  70%{                                        /* it gives */
+    transform:translate(-50%,-50%) scale(var(--artS,1))
+      translateX(-19%) rotateY(-62deg) rotateZ(-5deg) translateX(19%)
+      translateX(-5%) translateY(-2%);
+    opacity:1;
+  }
+  100%{                                       /* free, and over */
+    transform:translate(-50%,-50%) scale(var(--artS,1))
+      translateX(0%) rotateY(-116deg) rotateZ(-8deg) translateX(0%)
+      translateX(-15%) translateY(-7%);
+    opacity:0;
+  }
+}
 body.only-home.fills.tearing .ticket{
-  transition:transform .40s cubic-bezier(.42,0,.7,.35) .19s,
-             opacity .25s cubic-bezier(.6,0,.9,.4) .31s;
-  transform:translate(-50%,-50%) scale(var(--artS,1))
-            translateZ(340px) translateX(-13%) rotateY(-46deg) rotateZ(-5.5deg);
-  opacity:0;
+  animation:ticketTearOut .54s cubic-bezier(.36,0,.58,.46) .22s both;
 }
 /* Asking for less motion is not a preference a click gets to override. */
 @media (prefers-reduced-motion:reduce){
   body.only-home.fills.tearing .ticket{
-    transition:none;transform:translate(-50%,-50%) scale(var(--artS,1));opacity:1}
+    animation:none;transform:translate(-50%,-50%) scale(var(--artS,1));opacity:1}
   body.only-home.fills.tearing .tear{animation:none;opacity:0}
   .med canvas{transition:none}
 }
@@ -967,7 +1020,7 @@ body.scratched .chip.valor::after{
          than in the middle of the motion. A transition can be delayed AND
          throttled, and in a hidden tab it never fires at all, so the timeout
          is the thing that actually navigates. */
-      setTimeout(go, 600);
+      setTimeout(go, 775);
     });
   })();
 
