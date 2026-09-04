@@ -157,11 +157,38 @@ body.only-home{padding:0}
 body.only-home section.screen{padding:0}
 body.only-home .wrap{width:calc(100% - 48px)}
 
+/* ---- AN ARTBOARD WHOSE SHAPE IS THE SCREEN'S SHAPE ----
+
+   Two things were tried before this and each fixed one half.
+
+   A fixed 1400x800 board scaled by one number kept every proportion but
+   LETTERBOXED, because 1.75:1 is not the shape of anybody's screen.
+
+   Then 96vw by 96vh took the screen's shape and had no dead space, but
+   everything inside it is set in fixed pixels: 11px labels, 24px legend
+   rows, a 9px line of small print. On a wide monitor the box grew and the
+   contents did not, so the card came out as a huge empty field with specks
+   of type in it. That is the screenshot he sent.
+
+   The board is 1400 wide and its HEIGHT is 1400 divided by the window's own
+   aspect, then the whole thing is scaled by one multiplier. The board's
+   ratio is therefore the window's ratio, so nothing is left over, and every
+   pixel inside is artboard pixels, so the type grows with the card instead
+   of drowning in it. */
 body.only-home.fills{overflow:hidden}
 body.only-home.fills section.screen{position:fixed;inset:0}
 body.only-home.fills .wrap{width:auto;margin:0}
 body.only-home.fills .ticket{position:absolute;left:50%;top:50%;
-  transform:translate(-50%,-50%);width:96vw;height:96vh}
+  width:var(--artW);height:var(--artH);
+  transform:translate(-50%,-50%) scale(var(--artS,1));
+  transform-origin:center center}
+
+/* The left column was two chips and a square photo, and everything below
+   them was dead paper. The photo takes it now: aspect-ratio:1 is what was
+   holding it to a square, so it comes off here and the picture grows into
+   whatever the column has left. The dot screen already reads its box rather
+   than assuming one, so a tall crop or a wide one both work. */
+body.only-home.fills .tk-rail .med{flex:1 1 auto;aspect-ratio:auto;min-height:90px}
 
 /* A PHONE IS NOT A LAPTOP AND MUST NOT BE HELD TO 96vh.
    Stacked, the card is a column: rail, then the headline, then the legend,
@@ -202,6 +229,37 @@ body.only-home.fills .ticket{position:absolute;left:50%;top:50%;
    coloured label invents a hierarchy between projects. A price chip is
    furniture and there is only one of it. */
 .chip.valor{background:var(--neon)}
+
+/* ---- the yellow as a SCRATCHED panel (body.scratched) ----
+   His question. The argument for it: on a real ticket the yellow is the one
+   surface a coin has been across, and a flat swatch is the only part of this
+   card that looks printed by a computer rather than by a machine in a shop.
+
+   The argument against, and why this is NOT interactive: the covered punch
+   in the corner is the one thing you actually scratch, and its whole force
+   comes from being the only one. So this is a printed FINISH, a panel that
+   has already been scratched, not a second thing to rub.
+
+   Three layers, and all three are needed to stop it reading as a hatch:
+   long coin drags at one angle, a shorter cross pass, and worn patches where
+   the yellow has gone thin. */
+body.scratched .chip.valor{position:relative;overflow:hidden}
+body.scratched .chip.valor > *{position:relative;z-index:2}
+body.scratched .chip.valor::after{
+  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background-image:
+    /* worn patches: the yellow thinning towards the silver under it */
+    radial-gradient(ellipse 60% 40% at 22% 30%, rgba(239,233,220,.42), transparent 70%),
+    radial-gradient(ellipse 45% 55% at 82% 72%, rgba(239,233,220,.30), transparent 70%),
+    /* the cross pass, shorter and fainter */
+    repeating-linear-gradient(74deg,
+      rgba(26,26,24,.13) 0 1px, transparent 1px 7px),
+    /* the coin drags */
+    repeating-linear-gradient(-16deg,
+      rgba(255,255,255,.60) 0 1px, transparent 1px 4px,
+      rgba(255,255,255,.30) 4px 5px, transparent 5px 11px,
+      rgba(26,26,24,.10) 11px 12px, transparent 12px 19px);
+}
 
 /* ---- 1d. the halftone headshot ---- */
 .med{position:relative;width:100%;aspect-ratio:1;border:var(--hair) solid var(--ink);
@@ -295,18 +353,18 @@ body.only-home.fills .ticket{position:absolute;left:50%;top:50%;
    happen in the first place. The barcode is flex:none and keeps its width. */
 .legal{background:var(--ink);color:var(--paper);
        border-top:var(--rule) solid var(--ink);
-       display:flex;justify-content:space-between;align-items:center;gap:26px;
-       padding:9px 26px 8px}
+       display:flex;justify-content:space-between;align-items:center;gap:22px;
+       padding:8px 24px 7px}
 .legal p{margin:0;flex:1 1 auto;min-width:0;text-align:left;
          white-space:nowrap;overflow:hidden;
-         font-family:var(--mono);font-size:9px;line-height:1.5;
-         letter-spacing:.14em;text-transform:uppercase}
+         font-family:var(--mono);font-size:8.4px;line-height:1.5;
+         letter-spacing:.13em;text-transform:uppercase}
 /* the barcode: one repeating gradient whose repeat unit carries bars of six
    different widths, so it scans as printed rather than as a hatch */
 /* both of these are real links now: the barcode to the playlist and the
    badge to the cabinet. Blank the url in content.js and each goes back to
    being the ornament it was, which is how index.html already treats them. */
-.legal-code{display:block;flex:none;width:128px;height:20px;
+.legal-code{display:block;flex:none;width:110px;height:16px;
   transition:opacity .18s linear;
   background-color:transparent;
   background-image:repeating-linear-gradient(90deg,
@@ -425,7 +483,10 @@ body.only-home.fills .ticket{position:absolute;left:50%;top:50%;
 }
 </style>
 </head>
-<body class="tex-grain">
+<!-- `scratched` is the default now: it is the version in the screenshot he
+     approved. One word to remove if he changes his mind, and the control bar
+     on the five-screen page still flips between the two. -->
+<body class="tex-grain scratched">
 
 <!-- 5c. the roughness filter. feTurbulence makes noise, feDisplacementMap
      pushes each pixel of the glyph by that noise, so the vector edge stops
@@ -1166,10 +1227,37 @@ body.only-home.fills .ticket{position:absolute;left:50%;top:50%;
        position:fixed document measures nothing, which is how the whole
        editor went black. */
     document.body.classList.add('fills');
-    /* the card's height changes with the window, so the headline and the
-       small print are re-measured. That is the trade he chose over a fixed
-       board that held its ratio but letterboxed. */
-    addEventListener('resize', realign);
+
+    /* The board is 1400 wide; its height is whatever makes it the shape of
+       this window. One multiplier then scales the whole drawing to fit, so
+       the type inside is never re-measured against a moving column and a
+       resize costs one division. */
+    var BOARDW = 1400;
+    var boardH = 0;
+    function board() {
+      var vw = innerWidth, vh = Math.max(1, innerHeight);
+      /* clamped: a window dragged to a sliver would otherwise ask for a
+         board 8000px tall and the type would be microscopic inside it */
+      var aspect = Math.max(0.55, Math.min(3.2, vw / vh));
+      var h = Math.round(BOARDW / aspect);
+      var changed = h !== boardH;
+      boardH = h;
+      var root = document.documentElement.style;
+      root.setProperty('--artW', BOARDW + 'px');
+      root.setProperty('--artH', h + 'px');
+      root.setProperty('--artS',
+        Math.min(vw * 0.96 / BOARDW, vh * 0.96 / h).toFixed(5));
+      return changed;
+    }
+    /* the board's height changes with the window's shape, so the headline
+       and the small print are refitted only when it actually moved */
+    function onSize() { if (board()) realign(); }
+    board();
+    realign();
+    addEventListener('resize', onSize);
+    addEventListener('orientationchange', onSize);
+    if (window.ResizeObserver) new ResizeObserver(onSize).observe(document.documentElement);
+    if (window.visualViewport) visualViewport.addEventListener('resize', onSize);
   }
 
   /* ---- preview controls ---- */
@@ -1177,6 +1265,9 @@ body.only-home.fills .ticket{position:absolute;left:50%;top:50%;
     ['Ground', 'tex', [['Grain', 'tex-grain'], ['Board', 'tex-board'],
                        ['Guilloche', 'tex-guil'], ['None', 'tex-none']]],
     ['Inks', 'ink', [['2', 'ink2'], ['1', 'ink1']]],
+    /* his open question: is the yellow a flat swatch or a panel that has
+       already been scratched. Both are here so he can flip between them. */
+    ['Yellow', 'scratch', [['Flat', ''], ['Scratched', 'scratched']]],
     ['Machine', 'mono', [['Share Tech', '"Share Tech Mono",monospace'],
                          ['Doto', '"Doto",monospace'], ['Nova', '"Nova Mono",monospace']]],
     ['Display', 'disp', [['Archivo Black', '"Archivo Black",sans-serif'],
@@ -1202,6 +1293,8 @@ body.only-home.fills .ticket{position:absolute;left:50%;top:50%;
             document.body.className.replace(/tex-\S+/g, '').trim() + ' ' + opt[1];
         } else if (g[1] === 'ink') {
           document.body.classList.toggle('ink1', opt[1] === 'ink1');
+        } else if (g[1] === 'scratch') {
+          document.body.classList.toggle('scratched', opt[1] === 'scratched');
         } else {
           document.documentElement.style
             .setProperty('--' + (g[1] === 'mono' ? 'mono' : 'disp'), opt[1]);
