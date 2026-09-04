@@ -1687,26 +1687,3 @@ body.page-awards #page{
   .cab{opacity:1;transform:none}
   .cab .shelf{transform:scaleX(1);opacity:1}
 }
-
-/* ============================================================
-   WHAT WAS UNDER THE TICKET
-
-   Set by site.js only when the home ticket sent us here by tearing off.
-   The card lifted towards you and was taken away, so this page must read as
-   the thing that was UNDERNEATH it, not as a second card arriving: it comes
-   up from slightly behind and settles, rather than turning in from an edge.
-
-   Eased out, against the tear's ease in. The rip accelerates, what is left
-   behind decelerates.
-   ============================================================ */
-html.flip-in{perspective:2000px;perspective-origin:50% 40vh;overflow-x:hidden}
-html.flip-in body{transform-origin:center 40vh;
-                  animation:ticketUnder .44s cubic-bezier(.2,.75,.3,1) both}
-@keyframes ticketUnder{
-  from{transform:translateZ(-190px) rotateY(7deg);opacity:0}
-  60% {opacity:1}
-  to  {transform:translateZ(0) rotateY(0);opacity:1}
-}
-@media (prefers-reduced-motion:reduce){
-  html.flip-in body{animation:none}
-}

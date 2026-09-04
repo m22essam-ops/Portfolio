@@ -190,118 +190,6 @@ body.only-home.fills .ticket{position:absolute;left:50%;top:50%;
    than assuming one, so a tall crop or a wide one both work. */
 body.only-home.fills .tk-rail .med{flex:1 1 auto;aspect-ratio:auto;min-height:90px}
 
-/* ---- THE FLIP: clicking the photograph turns the ticket over ----
-
-   Horizontal, around the vertical axis. On a 1.76:1 landscape card that
-   reads as a card being turned; the same motion on the horizontal axis
-   reads as a venetian blind closing, because the shape is wide and the
-   travel is short.
-
-   Eased IN, not out, for the same reason the intro tear is: the card holds,
-   then goes. An ease-out reads as a panel politely sliding.
-
-   The perspective lives on the section, not the card, or the vanishing
-   point travels with the element and the turn goes flat. */
-body.only-home.fills section.screen{perspective:2400px;perspective-origin:50% 50%}
-body.only-home.fills .ticket{backface-visibility:hidden}
-/* ---- THE TEAR ----
-
-   It rips along its own perforation, which is the only gesture on this site
-   made out of something the card already has. The same reasoning as the
-   intro on the old home page: a device the ticket owns beats a device
-   borrowed from a slideshow.
-
-   Two beats. The holes are PUNCHED down the middle first, top to bottom in
-   steps so they arrive one at a time and you can see the line being made.
-   Then the card gives, all at once, and is taken away.
-
-   The perforation is a window that grows over a strip that does not move,
-   so the holes are revealed rather than stretched. Same trick as the intro.
-   `--tearW` is the hole spacing; it matches the edge perforation's own
-   pitch so the tear reads as part of the same ticket. */
-/* The rip runs down the BOUND edge, not through the middle.
-
-   Down the middle was tearing the ticket in half, which is not what anybody
-   does with a ticket. In a book the ticket is held along one perforated edge
-   and you pull the free side; the rip travels down the binding and the
-   ticket comes away in one piece. That edge is the left one, and the card
-   already has its perforation there, so the line has nothing to invent. */
-/* IT HAS TO BE DRAWN ON PAPER, and it was not.
-
-   The card's own mask already bites red circles out of its left edge, from
-   x=0 to x=9. The rip was a strip at x=3 painting red circles of radius 5.5,
-   so it sat almost entirely inside a hole that was already red: measured,
-   8.4px of it landed on paper, on a card 1452px wide. Red on red. He said he
-   could not see the animation and he was right, because the first third of
-   it was not visible at all.
-
-   Centred at x=21 now, which is the stub's right edge, so the line the
-   ticket tears along is the line it separates from. Radius 8 in a 24px
-   pitch, well clear of the card's own perforation. */
-.tear{
-  position:absolute;left:8px;top:0;bottom:0;width:26px;
-  z-index:4;pointer-events:none;opacity:0;
-  background-image:radial-gradient(circle 8px at center,
-                   var(--red) 95%,transparent 96%);
-  background-size:100% var(--perfP,24px);
-  background-repeat:repeat-y;
-  clip-path:inset(0 0 100% 0);
-}
-body.only-home.fills.tearing .tear{
-  opacity:1;
-  animation:tearPunch .30s steps(13,end) forwards;
-}
-@keyframes tearPunch{ to{ clip-path:inset(0 0 0 0); } }
-
-/* The card comes TOWARDS you before it goes, which is the whole difference
-   between a tear and a page turn: paper you rip lifts off the surface
-   first. translateZ does that against the section's perspective. The Z
-   rotation is small and deliberate, because nothing anyone has ever torn
-   came away perfectly square. Eased in: it holds, then it gives. */
-/* ---- OUT OF THE BOOK, THEN OVER ----
-
-   It hinges on the perforated edge it was bound by and turns, the way a
-   ticket actually leaves a pad: held on one side, pulled on the other, and
-   once the perforation lets go it carries on turning.
-
-   `transform-origin` stays at the centre and the pivot is moved by a pair of
-   translates instead: `translateX(-50%) rotate translateX(50%)` rotates
-   about the left edge. Setting the origin itself would have been simpler and
-   wrong, because `scale(var(--artS))` shares that origin, so moving it to
-   the edge makes the resting card jump sideways the instant the class lands.
-   At 0 degrees the pair cancels, so the resting transform is untouched.
-
-   It passes 90 degrees, and `backface-visibility:hidden` above means the
-   card is gone from there on. That is the flip: you do not watch a mirrored
-   ticket, you watch it turn away and find the next page under it. */
-/* It is BOUND, then it is FREE, and that is the difference between a ticket
-   leaving a book and a page turning inside one.
-
-   The pivot itself is animated. `translateX(P) rotateY rotateZ translateX(-P)`
-   rotates about a point P away from the centre, so P = -50% hinges on the
-   perforated edge and P = 0 spins about the card's own middle. It starts
-   hinged, gives a short pull while it is still held, and then P runs to zero
-   as the perforation lets go: from that moment it is a loose card turning in
-   the air, not a page attached to a spine.
-
-   The function LIST is identical at every keyframe, so each number
-   interpolates against its own opposite number. Change the list between
-   stops and the browser falls back to decomposing whole matrices, which
-   takes the shortest path through a rotation and does not look like this. */
-/* THE STUB. It is the width of the perforation and it does not move.
-   Hidden at rest, because the card's own mask cuts holes in its left edge
-   and anything sitting behind them would show through instead of the red.
-   It appears as the paper gives and outlives the ticket by a beat, which is
-   the whole reason it exists: something has to be left in the book. */
-.tkstub{
-  position:absolute;left:2vw;top:2vh;width:21px;height:96vh;
-  opacity:0;pointer-events:none;background:var(--paper);
-  border-left:var(--rule) solid var(--ink);
-  -webkit-mask-image:radial-gradient(circle 6px at right center,transparent 96%,#000 97%);
-          mask-image:radial-gradient(circle 6px at right center,transparent 96%,#000 97%);
-  -webkit-mask-size:100% var(--perfP,24px);  mask-size:100% var(--perfP,24px);
-  -webkit-mask-repeat:repeat-y;              mask-repeat:repeat-y;
-}
 /* ---- THE STACK ----
    Two blank tickets under the live one. Same size, same perforated edges,
    offset down and right so a sliver of each shows, and stepped a shade
@@ -323,77 +211,9 @@ body.only-home.fills .tkstack.s1{z-index:1;background:#E5DFD2;
   transform:translate(8px,6px) rotate(.15deg)}
 body.only-home.fills .tkstack.s2{z-index:0;background:#D9D3C6;
   transform:translate(16px,11px) rotate(.28deg)}
-body.only-home.fills .tkstub{z-index:2}
 body.only-home.fills .ticket{z-index:3}
 
-/* as the top one leaves, what is left settles up into its place */
-body.only-home.fills.tearing .tkstack.s1{
-  animation:stackSettle .70s cubic-bezier(.3,0,.4,1) .30s both}
-body.only-home.fills.tearing .tkstack.s2{
-  animation:stackSettle2 .70s cubic-bezier(.3,0,.4,1) .30s both}
-@keyframes stackSettle{
-  0%,46%{transform:translate(8px,6px) rotate(.15deg)}
-  100%{transform:translate(3px,2px) rotate(.05deg)}
-}
-@keyframes stackSettle2{
-  0%,46%{transform:translate(16px,11px) rotate(.28deg)}
-  100%{transform:translate(10px,7px) rotate(.16deg)}
-}
-body.only-home.fills.tearing .tkstub{animation:stubStays .74s ease-out .30s both}
-@keyframes stubStays{
-  0%{opacity:0} 14%{opacity:1} 74%{opacity:1} 100%{opacity:0}
-}
-
-/* THREE things he asked for, and each is a separate line in here.
-
-   1. It LIFTS. `translateZ` was lost when this became keyframes, so the card
-      turned without ever coming off the surface. Paper you tear out comes
-      towards you first.
-   2. Something stays: the stub above.
-   3. It RESISTS, then gives. The keyframes between 22% and 42% barely move,
-      so a fifth of the animation is the paper holding, and everything after
-      it is the release. Rhythm is in the keyframe spacing, not the easing
-      curve, which is why the curve here is nearly symmetric. */
-@keyframes ticketTearOut{
-  0%{
-    transform:translate(-50%,-50%) scale(var(--artS,1))
-      translateX(-50%) rotateY(0deg) rotateZ(0deg) translateZ(0px) translateX(50%)
-      translateX(0%) translateY(0%);
-    opacity:1;
-  }
-  22%{                                   /* the pull, still bound */
-    transform:translate(-50%,-50%) scale(var(--artS,1))
-      translateX(-50%) rotateY(-10deg) rotateZ(-.5deg) translateZ(26px) translateX(50%)
-      translateX(0%) translateY(0%);
-    opacity:1;
-  }
-  42%{                                   /* it holds. barely moves. */
-    transform:translate(-50%,-50%) scale(var(--artS,1))
-      translateX(-50%) rotateY(-14deg) rotateZ(-1deg) translateZ(40px) translateX(50%)
-      translateX(0%) translateY(0%);
-    opacity:1;
-  }
-  74%{                                   /* it gives, and comes off the pad */
-    transform:translate(-50%,-50%) scale(var(--artS,1))
-      translateX(-17%) rotateY(-68deg) rotateZ(-5deg) translateZ(210px) translateX(17%)
-      translateX(-6%) translateY(-3%);
-    opacity:1;
-  }
-  100%{                                  /* free, and over */
-    transform:translate(-50%,-50%) scale(var(--artS,1))
-      translateX(0%) rotateY(-104deg) rotateZ(-8deg) translateZ(150px) translateX(0%)
-      translateX(-16%) translateY(-8%);
-    opacity:0;
-  }
-}
-body.only-home.fills.tearing .ticket{
-  animation:ticketTearOut .70s cubic-bezier(.4,0,.5,1) .30s both;
-}
-/* Asking for less motion is not a preference a click gets to override. */
 @media (prefers-reduced-motion:reduce){
-  body.only-home.fills.tearing .ticket{
-    animation:none;transform:translate(-50%,-50%) scale(var(--artS,1));opacity:1}
-  body.only-home.fills.tearing .tear{animation:none;opacity:0}
   .med canvas{transition:none}
 }
 
@@ -760,16 +580,9 @@ body.scratched .chip.valor .chip-front::after{
          the card is the top of something rather than a card on its own. -->
     <i class="tkstack perf s2" aria-hidden="true"></i>
     <i class="tkstack perf s1" aria-hidden="true"></i>
-    <!-- What stays behind when the top one goes. A sibling of the card and
-         BEFORE it, so it paints underneath and is revealed as the ticket
-         leaves. Inside the card it would travel with it, which is the
-         opposite of a stub. -->
-    <i class="tkstub" aria-hidden="true"></i>
     <div class="ticket perf paper">
       <svg class="guil" aria-hidden="true"></svg>
       <svg class="scuff" aria-hidden="true"></svg>
-      <!-- the line the card tears along. Empty and invisible until then. -->
-      <i class="tear" aria-hidden="true"></i>
 
       <div class="tk-band">
         <span class="lbl" id="hMotto"></span>
@@ -1129,38 +942,9 @@ body.scratched .chip.valor .chip-front::after{
   window.__ticketSetPhoto = setPhoto;
   window.__ticketPhotoDefault = DEFPHOTO;
 
-  /* ---- clicking the photograph turns the ticket over ----
-     Every escape hatch the intro has, kept:
-       it is a real <a href>, so a middle click, a right click and copy, and
-         the page with JavaScript off all still work
-       reduced motion goes straight there with no turn
-       a hard timeout navigates even if the transition never fires, which is
-         what a backgrounded tab does to a transitionend
-     The card is edge-on at 91 degrees, so the navigation is hidden inside
-     the moment you cannot see it. */
-  (function () {
-    var link = med;
-    if (!link || !link.getAttribute) return;
-    var reducedNow = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    link.addEventListener('click', function (e) {
-      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
-      var href = link.getAttribute('href');
-      if (!href) return;
-      if (reducedNow) return;                    /* let the browser just go */
-      e.preventDefault();
-      var gone = false;
-      var go = function () { if (gone) return; gone = true; location.href = href; };
-      /* the other side is told it is what was underneath */
-      try { sessionStorage.setItem('ticketFlip', '1'); } catch (err) {}
-      document.body.classList.add('tearing');
-      /* 190ms to punch the holes, 420ms for the card to give. It leaves at
-         5% opacity, so the cut is made under something already gone rather
-         than in the middle of the motion. A transition can be delayed AND
-         throttled, and in a hidden tab it never fires at all, so the timeout
-         is the thing that actually navigates. */
-      setTimeout(go, 1040);
-    });
-  })();
+  /* The photograph is a plain link to the About page. It carried a tear
+     animation and he asked for it out, so there is no handler here at all:
+     the <a href> does the whole job, which is why it was built as one. */
 
   /* ---------------- 2b. the scratch panel ----------------
      Every escape hatch the home page's own scratch has, kept:
