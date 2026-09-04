@@ -288,7 +288,7 @@ body.only-home.fills.tearing .tear{
    It appears as the paper gives and outlives the ticket by a beat, which is
    the whole reason it exists: something has to be left in the book. */
 .tkstub{
-  position:absolute;left:2vw;top:2vh;width:21px;height:96vh;z-index:0;
+  position:absolute;left:2vw;top:2vh;width:21px;height:96vh;
   opacity:0;pointer-events:none;background:var(--paper);
   border-left:var(--rule) solid var(--ink);
   -webkit-mask-image:radial-gradient(circle 6px at right center,transparent 96%,#000 97%);
@@ -296,7 +296,43 @@ body.only-home.fills.tearing .tear{
   -webkit-mask-size:100% var(--perfP,24px);  mask-size:100% var(--perfP,24px);
   -webkit-mask-repeat:repeat-y;              mask-repeat:repeat-y;
 }
-body.only-home.fills .ticket{z-index:1}
+/* ---- THE STACK ----
+   Two blank tickets under the live one. Same size, same perforated edges,
+   offset down and right so a sliver of each shows, and stepped a shade
+   darker so they separate. Tonal steps, not shadows: this site has never
+   had a drop shadow and is not getting one for this.
+
+   Only in the full-screen home, because only there does the card have the
+   fixed geometry these can be lined up against. In the five-screen preview
+   the ticket is in normal flow and they would sit on nothing.
+
+   A hair of rotation on each. Perfectly square reads as one thick card; a
+   quarter of a degree reads as paper somebody put down. */
+.tkstack{display:none}
+body.only-home.fills .tkstack{
+  display:block;position:absolute;left:2vw;top:2vh;width:96vw;height:96vh;
+  pointer-events:none;border:var(--rule) solid var(--ink);
+}
+body.only-home.fills .tkstack.s1{z-index:1;background:#E5DFD2;
+  transform:translate(8px,6px) rotate(.15deg)}
+body.only-home.fills .tkstack.s2{z-index:0;background:#D9D3C6;
+  transform:translate(16px,11px) rotate(.28deg)}
+body.only-home.fills .tkstub{z-index:2}
+body.only-home.fills .ticket{z-index:3}
+
+/* as the top one leaves, what is left settles up into its place */
+body.only-home.fills.tearing .tkstack.s1{
+  animation:stackSettle .70s cubic-bezier(.3,0,.4,1) .30s both}
+body.only-home.fills.tearing .tkstack.s2{
+  animation:stackSettle2 .70s cubic-bezier(.3,0,.4,1) .30s both}
+@keyframes stackSettle{
+  0%,46%{transform:translate(8px,6px) rotate(.15deg)}
+  100%{transform:translate(3px,2px) rotate(.05deg)}
+}
+@keyframes stackSettle2{
+  0%,46%{transform:translate(16px,11px) rotate(.28deg)}
+  100%{transform:translate(10px,7px) rotate(.16deg)}
+}
 body.only-home.fills.tearing .tkstub{animation:stubStays .74s ease-out .30s both}
 @keyframes stubStays{
   0%{opacity:0} 14%{opacity:1} 74%{opacity:1} 100%{opacity:0}
@@ -674,6 +710,11 @@ body.scratched .chip.valor .chip-front::after{
      one line here, fitLegal() shrank it to 2.88px to fit 340px, solving a
      collision that does not exist on a phone. */
   .legal p{white-space:normal;overflow:visible;font-size:9.5px}
+  /* No stack on a phone. Down here the card is sized by its content and the
+     page scrolls, while the layers are a flat 96vh, so they stopped 144px
+     short of the card's own bottom and read as two loose rectangles behind
+     it. A stack is a statement about a card that fits the screen. */
+  body.only-home.fills .tkstack{display:none}
 }
 @media (max-width:560px){ .terms{columns:1} }
 @media (prefers-reduced-motion:reduce){
@@ -705,9 +746,16 @@ body.scratched .chip.valor .chip-front::after{
 <section class="screen">
   <div class="wrap">
     <p class="screenlab">01 / Home</p>
-    <!-- What stays in the book. A sibling of the card and BEFORE it, so it
-         paints underneath and is revealed as the ticket leaves. Inside the
-         card it would travel with it, which is the opposite of a stub. -->
+    <!-- THE REST OF THE STACK. Two more tickets under the top one, deepest
+         first, offset down and right so their edges show. You cannot tear
+         one off a stack that is not there, and at rest this is what says
+         the card is the top of something rather than a card on its own. -->
+    <i class="tkstack perf s2" aria-hidden="true"></i>
+    <i class="tkstack perf s1" aria-hidden="true"></i>
+    <!-- What stays behind when the top one goes. A sibling of the card and
+         BEFORE it, so it paints underneath and is revealed as the ticket
+         leaves. Inside the card it would travel with it, which is the
+         opposite of a stub. -->
     <i class="tkstub" aria-hidden="true"></i>
     <div class="ticket perf paper">
       <svg class="guil" aria-hidden="true"></svg>
