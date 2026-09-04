@@ -1689,23 +1689,23 @@ body.page-awards #page{
 }
 
 /* ============================================================
-   THE FLIP, ARRIVING
+   WHAT WAS UNDER THE TICKET
 
-   Set by site.js only when the home ticket sent us here by turning over.
-   The card left at -91 degrees, so this one comes in from +91: the same
-   edge, continuing the same rotation, which is what makes the two pages
-   read as two sides of one ticket.
+   Set by site.js only when the home ticket sent us here by tearing off.
+   The card lifted towards you and was taken away, so this page must read as
+   the thing that was UNDERNEATH it, not as a second card arriving: it comes
+   up from slightly behind and settles, rather than turning in from an edge.
 
-   Eased OUT here, against the home page's ease IN. The card is thrown and
-   then settles, so the acceleration belongs to the half that leaves and the
-   deceleration to the half that lands.
+   Eased out, against the tear's ease in. The rip accelerates, what is left
+   behind decelerates.
    ============================================================ */
-html.flip-in{perspective:2400px;perspective-origin:50% 42vh;overflow-x:hidden}
-html.flip-in body{transform-origin:center 42vh;backface-visibility:hidden;
-                  animation:ticketFlipIn .42s cubic-bezier(.2,.7,.3,1) both}
-@keyframes ticketFlipIn{
-  from{transform:rotateY(91deg)}
-  to  {transform:rotateY(0)}
+html.flip-in{perspective:2000px;perspective-origin:50% 40vh;overflow-x:hidden}
+html.flip-in body{transform-origin:center 40vh;
+                  animation:ticketUnder .44s cubic-bezier(.2,.75,.3,1) both}
+@keyframes ticketUnder{
+  from{transform:translateZ(-190px) rotateY(7deg);opacity:0}
+  60% {opacity:1}
+  to  {transform:translateZ(0) rotateY(0);opacity:1}
 }
 @media (prefers-reduced-motion:reduce){
   html.flip-in body{animation:none}

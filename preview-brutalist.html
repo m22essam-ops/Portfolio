@@ -88,7 +88,7 @@ body.tex-guil svg.guil{opacity:.07}
 /* :not() is load-bearing. At equal specificity this rule beat the absolute
    positioning above and turned the overlays into in-flow blocks that pushed
    every ticket off the bottom of the screen. */
-.paper > *:not(.guil):not(.scuff){position:relative;z-index:1}
+.paper > *:not(.guil):not(.scuff):not(.tear){position:relative;z-index:1}
 
 /* ---- 2. FULL-FRAME PERFORATION ----
    Was two overlay strips painting red circles on top of the card, which
@@ -204,18 +204,59 @@ body.only-home.fills .tk-rail .med{flex:1 1 auto;aspect-ratio:auto;min-height:90
    point travels with the element and the turn goes flat. */
 body.only-home.fills section.screen{perspective:2400px;perspective-origin:50% 50%}
 body.only-home.fills .ticket{backface-visibility:hidden}
-/* The selector carries only-home AND fills because the rule it has to beat
-   is `body.only-home.fills .ticket`, which sets the resting transform. Two
-   classes there against one here loses on specificity and the card simply
-   never turned: the class went on, the transform stayed put. */
-body.only-home.fills.flipping .ticket{
-  transition:transform .40s cubic-bezier(.55,0,.85,.25);
-  transform:translate(-50%,-50%) scale(var(--artS,1)) rotateY(-91deg);
+/* ---- THE TEAR ----
+
+   It rips along its own perforation, which is the only gesture on this site
+   made out of something the card already has. The same reasoning as the
+   intro on the old home page: a device the ticket owns beats a device
+   borrowed from a slideshow.
+
+   Two beats. The holes are PUNCHED down the middle first, top to bottom in
+   steps so they arrive one at a time and you can see the line being made.
+   Then the card gives, all at once, and is taken away.
+
+   The perforation is a window that grows over a strip that does not move,
+   so the holes are revealed rather than stretched. Same trick as the intro.
+   `--tearW` is the hole spacing; it matches the edge perforation's own
+   pitch so the tear reads as part of the same ticket. */
+.tear{
+  position:absolute;left:50%;top:0;bottom:0;width:20px;margin-left:-10px;
+  z-index:4;pointer-events:none;opacity:0;
+  background-image:radial-gradient(circle 5.5px at center,
+                   var(--red) 96%,transparent 97%);
+  background-size:100% var(--perfP,24px);
+  background-repeat:repeat-y;
+  clip-path:inset(0 0 100% 0);
+}
+body.only-home.fills.tearing .tear{
+  opacity:1;
+  animation:tearPunch .19s steps(11,end) forwards;
+}
+@keyframes tearPunch{ to{ clip-path:inset(0 0 0 0); } }
+
+/* The card comes TOWARDS you before it goes, which is the whole difference
+   between a tear and a page turn: paper you rip lifts off the surface
+   first. translateZ does that against the section's perspective. The Z
+   rotation is small and deliberate, because nothing anyone has ever torn
+   came away perfectly square. Eased in: it holds, then it gives. */
+/* The opacity is on its own, shorter, LATER transition so the card is
+   already gone at the cut. Measured with them sharing one curve: at 468ms
+   the card was still at -11 degrees and 80% opaque, and the navigation at
+   560ms landed in the middle of the motion, which reads as a jump rather
+   than a tear. Opacity now finishes at 560ms and the travel at 590ms, and
+   the page changes at 600ms under something already invisible. */
+body.only-home.fills.tearing .ticket{
+  transition:transform .40s cubic-bezier(.42,0,.7,.35) .19s,
+             opacity .25s cubic-bezier(.6,0,.9,.4) .31s;
+  transform:translate(-50%,-50%) scale(var(--artS,1))
+            translateZ(340px) translateX(-13%) rotateY(-46deg) rotateZ(-5.5deg);
+  opacity:0;
 }
 /* Asking for less motion is not a preference a click gets to override. */
 @media (prefers-reduced-motion:reduce){
-  body.only-home.fills.flipping .ticket{
-    transition:none;transform:translate(-50%,-50%) scale(var(--artS,1))}
+  body.only-home.fills.tearing .ticket{
+    transition:none;transform:translate(-50%,-50%) scale(var(--artS,1));opacity:1}
+  body.only-home.fills.tearing .tear{animation:none;opacity:0}
   .med canvas{transition:none}
 }
 
@@ -549,6 +590,8 @@ body.scratched .chip.valor::after{
     <div class="ticket perf paper">
       <svg class="guil" aria-hidden="true"></svg>
       <svg class="scuff" aria-hidden="true"></svg>
+      <!-- the line the card tears along. Empty and invisible until then. -->
+      <i class="tear" aria-hidden="true"></i>
 
       <div class="tk-band">
         <span class="lbl" id="hMotto"></span>
@@ -916,12 +959,15 @@ body.scratched .chip.valor::after{
       e.preventDefault();
       var gone = false;
       var go = function () { if (gone) return; gone = true; location.href = href; };
-      /* the other side is told to turn in rather than fade in */
+      /* the other side is told it is what was underneath */
       try { sessionStorage.setItem('ticketFlip', '1'); } catch (err) {}
-      document.body.classList.add('flipping');
-      var card = document.querySelector('.ticket');
-      if (card) card.addEventListener('transitionend', go, { once: true });
-      setTimeout(go, 460);                       /* the net under all of it */
+      document.body.classList.add('tearing');
+      /* 190ms to punch the holes, 420ms for the card to give. It leaves at
+         5% opacity, so the cut is made under something already gone rather
+         than in the middle of the motion. A transition can be delayed AND
+         throttled, and in a hidden tab it never fires at all, so the timeout
+         is the thing that actually navigates. */
+      setTimeout(go, 600);
     });
   })();
 
