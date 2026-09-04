@@ -237,7 +237,7 @@ body.only-home.fills .ticket{backface-visibility:hidden}
 }
 body.only-home.fills.tearing .tear{
   opacity:1;
-  animation:tearPunch .22s steps(12,end) forwards;
+  animation:tearPunch .20s steps(12,end) forwards;
 }
 @keyframes tearPunch{ to{ clip-path:inset(0 0 0 0); } }
 
@@ -276,34 +276,70 @@ body.only-home.fills.tearing .tear{
    interpolates against its own opposite number. Change the list between
    stops and the browser falls back to decomposing whole matrices, which
    takes the shortest path through a rotation and does not look like this. */
+/* THE STUB. It is the width of the perforation and it does not move.
+   Hidden at rest, because the card's own mask cuts holes in its left edge
+   and anything sitting behind them would show through instead of the red.
+   It appears as the paper gives and outlives the ticket by a beat, which is
+   the whole reason it exists: something has to be left in the book. */
+.tkstub{
+  position:absolute;left:2vw;top:2vh;width:21px;height:96vh;z-index:0;
+  opacity:0;pointer-events:none;background:var(--paper);
+  border-left:var(--rule) solid var(--ink);
+  -webkit-mask-image:radial-gradient(circle 6px at right center,transparent 96%,#000 97%);
+          mask-image:radial-gradient(circle 6px at right center,transparent 96%,#000 97%);
+  -webkit-mask-size:100% var(--perfP,24px);  mask-size:100% var(--perfP,24px);
+  -webkit-mask-repeat:repeat-y;              mask-repeat:repeat-y;
+}
+body.only-home.fills .ticket{z-index:1}
+body.only-home.fills.tearing .tkstub{animation:stubStays .62s ease-out .20s both}
+@keyframes stubStays{
+  0%{opacity:0} 14%{opacity:1} 74%{opacity:1} 100%{opacity:0}
+}
+
+/* THREE things he asked for, and each is a separate line in here.
+
+   1. It LIFTS. `translateZ` was lost when this became keyframes, so the card
+      turned without ever coming off the surface. Paper you tear out comes
+      towards you first.
+   2. Something stays: the stub above.
+   3. It RESISTS, then gives. The keyframes between 22% and 42% barely move,
+      so a fifth of the animation is the paper holding, and everything after
+      it is the release. Rhythm is in the keyframe spacing, not the easing
+      curve, which is why the curve here is nearly symmetric. */
 @keyframes ticketTearOut{
   0%{
     transform:translate(-50%,-50%) scale(var(--artS,1))
-      translateX(-50%) rotateY(0deg) rotateZ(0deg) translateX(50%)
+      translateX(-50%) rotateY(0deg) rotateZ(0deg) translateZ(0px) translateX(50%)
       translateX(0%) translateY(0%);
     opacity:1;
   }
-  26%{                                        /* held, and pulled */
+  22%{                                   /* the pull, still bound */
     transform:translate(-50%,-50%) scale(var(--artS,1))
-      translateX(-50%) rotateY(-13deg) rotateZ(-1deg) translateX(50%)
+      translateX(-50%) rotateY(-10deg) rotateZ(-.5deg) translateZ(26px) translateX(50%)
       translateX(0%) translateY(0%);
     opacity:1;
   }
-  70%{                                        /* it gives */
+  42%{                                   /* it holds. barely moves. */
     transform:translate(-50%,-50%) scale(var(--artS,1))
-      translateX(-19%) rotateY(-62deg) rotateZ(-5deg) translateX(19%)
-      translateX(-5%) translateY(-2%);
+      translateX(-50%) rotateY(-14deg) rotateZ(-1deg) translateZ(40px) translateX(50%)
+      translateX(0%) translateY(0%);
     opacity:1;
   }
-  100%{                                       /* free, and over */
+  74%{                                   /* it gives, and comes off the pad */
     transform:translate(-50%,-50%) scale(var(--artS,1))
-      translateX(0%) rotateY(-116deg) rotateZ(-8deg) translateX(0%)
-      translateX(-15%) translateY(-7%);
+      translateX(-17%) rotateY(-68deg) rotateZ(-5deg) translateZ(210px) translateX(17%)
+      translateX(-6%) translateY(-3%);
+    opacity:1;
+  }
+  100%{                                  /* free, and over */
+    transform:translate(-50%,-50%) scale(var(--artS,1))
+      translateX(0%) rotateY(-122deg) rotateZ(-9deg) translateZ(120px) translateX(0%)
+      translateX(-16%) translateY(-8%);
     opacity:0;
   }
 }
 body.only-home.fills.tearing .ticket{
-  animation:ticketTearOut .54s cubic-bezier(.36,0,.58,.46) .22s both;
+  animation:ticketTearOut .62s cubic-bezier(.4,0,.5,1) .20s both;
 }
 /* Asking for less motion is not a preference a click gets to override. */
 @media (prefers-reduced-motion:reduce){
@@ -346,7 +382,45 @@ body.only-home.fills.tearing .ticket{
 .chip{border:var(--hair) solid var(--ink);padding:9px 8px;text-align:center}
 .chip .lbl{opacity:.75;display:block;margin-bottom:5px}
 .chip b{font-size:26px;letter-spacing:.02em;display:block}
-.chip:hover{background:var(--neon)}
+.chip:not(.flip):hover{background:var(--neon)}
+
+/* ---- the two-sided chips ----
+   They turn on the HORIZONTAL axis, not the vertical one. A box this wide
+   and this short turning on its vertical axis reads as a door; on the
+   horizontal it reads as a flip-clock or a departure board, which is the
+   machine register the rest of this furniture is set in. It is also a
+   different axis from the card's own turn, so the two never look like the
+   same gesture at two sizes.
+
+   The container carries the perspective and NOTHING else: no border, no
+   padding, no ground. All of that moved to the faces, or the frame would
+   sit still while its contents turned inside it. */
+.chip.flip{border:0;padding:0;background:none;perspective:620px}
+.chip-in{position:relative;display:block;transform-style:preserve-3d;
+         transition:transform .52s cubic-bezier(.2,.85,.25,1)}
+.chip.flip:hover .chip-in,.chip.flip:focus-within .chip-in{transform:rotateX(180deg)}
+.chip-face{display:block;border:var(--hair) solid var(--ink);
+           padding:9px 8px;text-align:center;background:var(--paper);
+           backface-visibility:hidden}
+.chip-back{position:absolute;inset:0;transform:rotateX(180deg);
+           background:var(--ink);color:var(--paper)}
+.chip-back .lbl{opacity:.7}
+.chip.valor .chip-front{background:var(--neon)}
+/* the scratched finish belongs to the yellow face, not to the whole box */
+body.scratched .chip.valor .chip-front{position:relative;overflow:hidden}
+body.scratched .chip.valor .chip-front > *{position:relative;z-index:2}
+body.scratched .chip.valor .chip-front::after{
+  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background-image:
+    radial-gradient(ellipse 60% 40% at 22% 30%, rgba(239,233,220,.42), transparent 70%),
+    radial-gradient(ellipse 45% 55% at 82% 72%, rgba(239,233,220,.30), transparent 70%),
+    repeating-linear-gradient(74deg, rgba(26,26,24,.13) 0 1px, transparent 1px 7px),
+    repeating-linear-gradient(-16deg,
+      rgba(255,255,255,.60) 0 1px, transparent 1px 4px,
+      rgba(255,255,255,.30) 4px 5px, transparent 5px 11px,
+      rgba(26,26,24,.10) 11px 12px, transparent 12px 19px);
+}
+@media (prefers-reduced-motion:reduce){ .chip-in{transition:none} }
 /* 3a. VALOR is neon at rest, by his call. This is not a reversal of the
    hover-only rule: that one was about the work grid's stickers, where a
    coloured label invents a hierarchy between projects. A price chip is
@@ -366,23 +440,10 @@ body.only-home.fills.tearing .ticket{
    Three layers, and all three are needed to stop it reading as a hatch:
    long coin drags at one angle, a shorter cross pass, and worn patches where
    the yellow has gone thin. */
-body.scratched .chip.valor{position:relative;overflow:hidden}
-body.scratched .chip.valor > *{position:relative;z-index:2}
-body.scratched .chip.valor::after{
-  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
-  background-image:
-    /* worn patches: the yellow thinning towards the silver under it */
-    radial-gradient(ellipse 60% 40% at 22% 30%, rgba(239,233,220,.42), transparent 70%),
-    radial-gradient(ellipse 45% 55% at 82% 72%, rgba(239,233,220,.30), transparent 70%),
-    /* the cross pass, shorter and fainter */
-    repeating-linear-gradient(74deg,
-      rgba(26,26,24,.13) 0 1px, transparent 1px 7px),
-    /* the coin drags */
-    repeating-linear-gradient(-16deg,
-      rgba(255,255,255,.60) 0 1px, transparent 1px 4px,
-      rgba(255,255,255,.30) 4px 5px, transparent 5px 11px,
-      rgba(26,26,24,.10) 11px 12px, transparent 12px 19px);
-}
+/* The scratched finish is applied to the yellow FACE, further down with the
+   flip rules. Putting it on `.chip.valor` was right when the chip was one
+   box; on a two-sided chip that box is the perspective container, and
+   `overflow:hidden` on it flattens the turn to nothing. */
 
 /* ---- 1d. the halftone headshot ---- */
 /* it is an <a> now, so it needs to be told to be a block */
@@ -640,6 +701,10 @@ body.scratched .chip.valor::after{
 <section class="screen">
   <div class="wrap">
     <p class="screenlab">01 / Home</p>
+    <!-- What stays in the book. A sibling of the card and BEFORE it, so it
+         paints underneath and is revealed as the ticket leaves. Inside the
+         card it would travel with it, which is the opposite of a stub. -->
+    <i class="tkstub" aria-hidden="true"></i>
     <div class="ticket perf paper">
       <svg class="guil" aria-hidden="true"></svg>
       <svg class="scuff" aria-hidden="true"></svg>
@@ -653,8 +718,21 @@ body.scratched .chip.valor::after{
 
       <div class="tk-grid">
         <div class="tk-rail">
-          <div class="chip valor"><span class="lbl" id="hValorLbl">Valor</span><b id="hValorVal">FREE</b></div>
-          <div class="chip"><span class="lbl" id="hSerieLbl">Serie</span><b id="hSerieVal">13</b></div>
+          <!-- Two-sided. The front is what a ticket prints; the back is what
+               it means. The ids on the FRONT are unchanged, so his design
+               file and the designer keep addressing the same things. -->
+          <div class="chip valor flip">
+            <span class="chip-in">
+              <span class="chip-face chip-front"><span class="lbl" id="hValorLbl">Value</span><b id="hValorVal">FREE</b></span>
+              <span class="chip-face chip-back"><span class="lbl" id="hValorLbl2">Worth</span><b id="hValorVal2">Less</b></span>
+            </span>
+          </div>
+          <div class="chip flip">
+            <span class="chip-in">
+              <span class="chip-face chip-front"><span class="lbl" id="hSerieLbl">Series</span><b id="hSerieVal">13</b></span>
+              <span class="chip-face chip-back"><span class="lbl" id="hSerieLbl2">Luck</span><b id="hSerieVal2">None</b></span>
+            </span>
+          </div>
           <a class="med" id="hMed" href="about.html" aria-label="Who I am"></a>
         </div>
 
@@ -665,7 +743,7 @@ body.scratched .chip.valor::after{
         </div>
 
         <div class="tk-side">
-          <span class="lbl" id="hPremios">Premios</span>
+          <span class="lbl" id="hPremios">Prizes</span>
           <div id="hLegend"></div>
           <div class="scratch">
             <div class="scratch-in" id="scratch">
@@ -1020,7 +1098,7 @@ body.scratched .chip.valor::after{
          than in the middle of the motion. A transition can be delayed AND
          throttled, and in a hidden tab it never fires at all, so the timeout
          is the thing that actually navigates. */
-      setTimeout(go, 775);
+      setTimeout(go, 850);
     });
   })();
 

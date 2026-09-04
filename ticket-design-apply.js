@@ -33,6 +33,10 @@
     { k: 'hValorVal', sel: '#hValorVal', name: 'Price',             text: null,                 group: 'Left rail' },
     { k: 'hSerieLbl', sel: '#hSerieLbl', name: 'Series label',      text: null,                 group: 'Left rail' },
     { k: 'hSerieVal', sel: '#hSerieVal', name: 'Series',            text: null,                 group: 'Left rail' },
+    { k: 'hValorLbl2',sel: '#hValorLbl2',name: 'Price back label',  text: null,                 group: 'Left rail' },
+    { k: 'hValorVal2',sel: '#hValorVal2',name: 'Price back',         text: null,                 group: 'Left rail' },
+    { k: 'hSerieLbl2',sel: '#hSerieLbl2',name: 'Series back label',  text: null,                 group: 'Left rail' },
+    { k: 'hSerieVal2',sel: '#hSerieVal2',name: 'Series back',        text: null,                 group: 'Left rail' },
     { k: 'hMed',      sel: '#hMed',      name: 'Portrait',          text: null,                 group: 'Left rail' },
 
     { k: 'hKick',     sel: '#hKick',     name: 'Kicker',            text: 'ticket.game',        group: 'Centre' },
