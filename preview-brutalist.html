@@ -226,18 +226,30 @@ body.only-home.fills .ticket{backface-visibility:hidden}
    and you pull the free side; the rip travels down the binding and the
    ticket comes away in one piece. That edge is the left one, and the card
    already has its perforation there, so the line has nothing to invent. */
+/* IT HAS TO BE DRAWN ON PAPER, and it was not.
+
+   The card's own mask already bites red circles out of its left edge, from
+   x=0 to x=9. The rip was a strip at x=3 painting red circles of radius 5.5,
+   so it sat almost entirely inside a hole that was already red: measured,
+   8.4px of it landed on paper, on a card 1452px wide. Red on red. He said he
+   could not see the animation and he was right, because the first third of
+   it was not visible at all.
+
+   Centred at x=21 now, which is the stub's right edge, so the line the
+   ticket tears along is the line it separates from. Radius 8 in a 24px
+   pitch, well clear of the card's own perforation. */
 .tear{
-  position:absolute;left:0;top:0;bottom:0;width:17px;
+  position:absolute;left:8px;top:0;bottom:0;width:26px;
   z-index:4;pointer-events:none;opacity:0;
-  background-image:radial-gradient(circle 5.5px at center,
-                   var(--red) 96%,transparent 97%);
+  background-image:radial-gradient(circle 8px at center,
+                   var(--red) 95%,transparent 96%);
   background-size:100% var(--perfP,24px);
   background-repeat:repeat-y;
   clip-path:inset(0 0 100% 0);
 }
 body.only-home.fills.tearing .tear{
   opacity:1;
-  animation:tearPunch .20s steps(12,end) forwards;
+  animation:tearPunch .30s steps(13,end) forwards;
 }
 @keyframes tearPunch{ to{ clip-path:inset(0 0 0 0); } }
 
@@ -291,7 +303,7 @@ body.only-home.fills.tearing .tear{
   -webkit-mask-repeat:repeat-y;              mask-repeat:repeat-y;
 }
 body.only-home.fills .ticket{z-index:1}
-body.only-home.fills.tearing .tkstub{animation:stubStays .62s ease-out .20s both}
+body.only-home.fills.tearing .tkstub{animation:stubStays .74s ease-out .30s both}
 @keyframes stubStays{
   0%{opacity:0} 14%{opacity:1} 74%{opacity:1} 100%{opacity:0}
 }
@@ -333,13 +345,13 @@ body.only-home.fills.tearing .tkstub{animation:stubStays .62s ease-out .20s both
   }
   100%{                                  /* free, and over */
     transform:translate(-50%,-50%) scale(var(--artS,1))
-      translateX(0%) rotateY(-122deg) rotateZ(-9deg) translateZ(120px) translateX(0%)
+      translateX(0%) rotateY(-104deg) rotateZ(-8deg) translateZ(150px) translateX(0%)
       translateX(-16%) translateY(-8%);
     opacity:0;
   }
 }
 body.only-home.fills.tearing .ticket{
-  animation:ticketTearOut .62s cubic-bezier(.4,0,.5,1) .20s both;
+  animation:ticketTearOut .70s cubic-bezier(.4,0,.5,1) .30s both;
 }
 /* Asking for less motion is not a preference a click gets to override. */
 @media (prefers-reduced-motion:reduce){
@@ -724,7 +736,7 @@ body.scratched .chip.valor .chip-front::after{
           <div class="chip valor flip">
             <span class="chip-in">
               <span class="chip-face chip-front"><span class="lbl" id="hValorLbl">Value</span><b id="hValorVal">FREE</b></span>
-              <span class="chip-face chip-back"><span class="lbl" id="hValorLbl2">Worth</span><b id="hValorVal2">Less</b></span>
+              <span class="chip-face chip-back"><span class="lbl" id="hValorLbl2">Worth</span><b id="hValorVal2">More</b></span>
             </span>
           </div>
           <div class="chip flip">
@@ -1098,7 +1110,7 @@ body.scratched .chip.valor .chip-front::after{
          than in the middle of the motion. A transition can be delayed AND
          throttled, and in a hidden tab it never fires at all, so the timeout
          is the thing that actually navigates. */
-      setTimeout(go, 850);
+      setTimeout(go, 1040);
     });
   })();
 
