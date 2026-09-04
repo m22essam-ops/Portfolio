@@ -190,6 +190,35 @@ body.only-home.fills .ticket{position:absolute;left:50%;top:50%;
    than assuming one, so a tall crop or a wide one both work. */
 body.only-home.fills .tk-rail .med{flex:1 1 auto;aspect-ratio:auto;min-height:90px}
 
+/* ---- THE FLIP: clicking the photograph turns the ticket over ----
+
+   Horizontal, around the vertical axis. On a 1.76:1 landscape card that
+   reads as a card being turned; the same motion on the horizontal axis
+   reads as a venetian blind closing, because the shape is wide and the
+   travel is short.
+
+   Eased IN, not out, for the same reason the intro tear is: the card holds,
+   then goes. An ease-out reads as a panel politely sliding.
+
+   The perspective lives on the section, not the card, or the vanishing
+   point travels with the element and the turn goes flat. */
+body.only-home.fills section.screen{perspective:2400px;perspective-origin:50% 50%}
+body.only-home.fills .ticket{backface-visibility:hidden}
+/* The selector carries only-home AND fills because the rule it has to beat
+   is `body.only-home.fills .ticket`, which sets the resting transform. Two
+   classes there against one here loses on specificity and the card simply
+   never turned: the class went on, the transform stayed put. */
+body.only-home.fills.flipping .ticket{
+  transition:transform .40s cubic-bezier(.55,0,.85,.25);
+  transform:translate(-50%,-50%) scale(var(--artS,1)) rotateY(-91deg);
+}
+/* Asking for less motion is not a preference a click gets to override. */
+@media (prefers-reduced-motion:reduce){
+  body.only-home.fills.flipping .ticket{
+    transition:none;transform:translate(-50%,-50%) scale(var(--artS,1))}
+  .med canvas{transition:none}
+}
+
 /* A PHONE IS NOT A LAPTOP AND MUST NOT BE HELD TO 96vh.
    Stacked, the card is a column: rail, then the headline, then the legend,
    then the scratch panel. Forced to the height of the screen it was cut off
@@ -262,8 +291,17 @@ body.scratched .chip.valor::after{
 }
 
 /* ---- 1d. the halftone headshot ---- */
-.med{position:relative;width:100%;aspect-ratio:1;border:var(--hair) solid var(--ink);
-     overflow:hidden;background:var(--paper)}
+/* it is an <a> now, so it needs to be told to be a block */
+.med{display:block;position:relative;width:100%;aspect-ratio:1;
+     border:var(--hair) solid var(--ink);overflow:hidden;background:var(--paper)}
+/* Hovering lifts half the dot screen off, so the photograph underneath comes
+   through. It is the affordance for the click: nothing else on this card
+   reacts to a pointer this way, so the picture reads as the one thing that
+   is a door. Half, not all: a portrait that resolves completely stops being
+   part of the printed ticket. */
+.med canvas{transition:opacity .5s ease}
+.med:hover canvas,.med:focus-visible canvas{opacity:.5}
+.med:focus-visible{outline:var(--rule) solid var(--ink);outline-offset:2px}
 .med img,.med canvas{position:absolute;inset:0;width:100%;height:100%;
                      object-fit:cover;display:block}
 /* hover lifts half the dot screen off in half a second, so the photograph
@@ -521,7 +559,7 @@ body.scratched .chip.valor::after{
         <div class="tk-rail">
           <div class="chip valor"><span class="lbl" id="hValorLbl">Valor</span><b id="hValorVal">FREE</b></div>
           <div class="chip"><span class="lbl" id="hSerieLbl">Serie</span><b id="hSerieVal">13</b></div>
-          <div class="med" id="hMed"></div>
+          <a class="med" id="hMed" href="about.html" aria-label="Who I am"></a>
         </div>
 
         <div class="tk-main">
@@ -856,6 +894,36 @@ body.scratched .chip.valor::after{
   setPhoto();
   window.__ticketSetPhoto = setPhoto;
   window.__ticketPhotoDefault = DEFPHOTO;
+
+  /* ---- clicking the photograph turns the ticket over ----
+     Every escape hatch the intro has, kept:
+       it is a real <a href>, so a middle click, a right click and copy, and
+         the page with JavaScript off all still work
+       reduced motion goes straight there with no turn
+       a hard timeout navigates even if the transition never fires, which is
+         what a backgrounded tab does to a transitionend
+     The card is edge-on at 91 degrees, so the navigation is hidden inside
+     the moment you cannot see it. */
+  (function () {
+    var link = med;
+    if (!link || !link.getAttribute) return;
+    var reducedNow = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    link.addEventListener('click', function (e) {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+      var href = link.getAttribute('href');
+      if (!href) return;
+      if (reducedNow) return;                    /* let the browser just go */
+      e.preventDefault();
+      var gone = false;
+      var go = function () { if (gone) return; gone = true; location.href = href; };
+      /* the other side is told to turn in rather than fade in */
+      try { sessionStorage.setItem('ticketFlip', '1'); } catch (err) {}
+      document.body.classList.add('flipping');
+      var card = document.querySelector('.ticket');
+      if (card) card.addEventListener('transitionend', go, { once: true });
+      setTimeout(go, 460);                       /* the net under all of it */
+    });
+  })();
 
   /* ---------------- 2b. the scratch panel ----------------
      Every escape hatch the home page's own scratch has, kept:

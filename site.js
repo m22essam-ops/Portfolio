@@ -519,3 +519,46 @@
     });
   }
 })();
+
+/* ============================================================
+   THE OTHER HALF OF THE FLIP
+
+   The home ticket turns away around its vertical axis when the portrait is
+   clicked, and stores a flag on the way out. Whatever page catches that flag
+   turns IN from the same edge, so the two halves read as one card being
+   turned over rather than as a page that left and a page that arrived.
+
+   Read once and thrown away: a flag that survives would flip the next
+   ordinary navigation too.
+   ============================================================ */
+(function () {
+  var flag = null;
+  try {
+    flag = sessionStorage.getItem('ticketFlip');
+    if (flag) sessionStorage.removeItem('ticketFlip');
+  } catch (e) { return; }
+  if (flag !== '1') return;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  /* A CSS animation does not START in a hidden tab, and this one begins at
+     rotateY(91deg) with fill:both. So in a background tab the page would sit
+     edge-on, which is to say invisible, until the net below fired. Measured:
+     animationstart never fires, the body stays frozen at 91 degrees.
+     Nobody is looking at a hidden tab, so there is nothing to animate. */
+  if (document.hidden) return;
+
+  var html = document.documentElement;
+  html.classList.add('flip-in');
+  var done = function () { html.classList.remove('flip-in'); };
+  /* and if it is hidden mid-turn, stop pretending and just show the page */
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) done();
+  }, { once: true });
+  /* A transform on <body> makes it the containing block for anything
+     position:fixed inside it, which on these pages is the nav. So the class
+     comes off the moment the turn finishes, and comes off anyway after a
+     beat in case the animation never fires. */
+  document.addEventListener('animationend', function (e) {
+    if (e.target === document.body) done();
+  }, { once: true });
+  setTimeout(done, 700);
+})();

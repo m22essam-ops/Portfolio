@@ -1687,3 +1687,26 @@ body.page-awards #page{
   .cab{opacity:1;transform:none}
   .cab .shelf{transform:scaleX(1);opacity:1}
 }
+
+/* ============================================================
+   THE FLIP, ARRIVING
+
+   Set by site.js only when the home ticket sent us here by turning over.
+   The card left at -91 degrees, so this one comes in from +91: the same
+   edge, continuing the same rotation, which is what makes the two pages
+   read as two sides of one ticket.
+
+   Eased OUT here, against the home page's ease IN. The card is thrown and
+   then settles, so the acceleration belongs to the half that leaves and the
+   deceleration to the half that lands.
+   ============================================================ */
+html.flip-in{perspective:2400px;perspective-origin:50% 42vh;overflow-x:hidden}
+html.flip-in body{transform-origin:center 42vh;backface-visibility:hidden;
+                  animation:ticketFlipIn .42s cubic-bezier(.2,.7,.3,1) both}
+@keyframes ticketFlipIn{
+  from{transform:rotateY(91deg)}
+  to  {transform:rotateY(0)}
+}
+@media (prefers-reduced-motion:reduce){
+  html.flip-in body{animation:none}
+}
