@@ -1223,7 +1223,7 @@ window.SITE_CONTENT = {
   },
   about: {
     label: "Don't take it personally (it seems so)",
-    heading: "A little about me.",
+    heading: "Read me.",
     portrait: "portrait-studio.jpg",
     portraits: [
       "portrait-studio.jpg",
@@ -1235,11 +1235,12 @@ window.SITE_CONTENT = {
     ],
     portraitAlt: "Mohammed Essam",
     paragraphs: [
-      "More than 5 years of writing for people who skip the ads, and a few more years writing just because I like to.",
-      "An entire life having fun being serious about making ordinary things look superficially good (my room included).",
-      "Award-losing copywriter so far. Designed in Egypt, put to work in the UAE, and licensed in Madrid, which makes my buffet of ideas accidentally intercontinental.",
-      "I fought the AI and the AI won, so I moved to easier fights now: managing my MacBook's storage to open one more Adobe file.",
-      "Give me a mic connected to the whole world, and my take would be: \"No one who uses noise-canceling headphones can say human connection is the most powerful.\""
+      "I wanted to be a mechanical engineer, right up until I became one. So I shifted to sociology.",
+      "Mechanical engineering taught me how machines work. Sociology taught me how societies work. Neither prepared me for people who pay to skip me.",
+      "Designed in Egypt, put to work in the UAE, and licensed in Madrid, which makes my buffet of ideas accidentally intercontinental.",
+      "I have never used Nokia or Kodak as a cautionary tale in a presentation. Not once.",
+      "I got my first bike at seven. I finally learned to balance on it at eighteen. Every photograph of me in between has my arm in a cast.",
+      "I can be misunderstood in four languages."
     ],
     skillLinks: [
       {
@@ -1255,6 +1256,15 @@ window.SITE_CONTENT = {
       "Social & content",
       "Scripting & VO",
       "Concept Development"
+    ],
+    languages: [
+      { name: "Arabic",  say: "\u0647\u0627\u064a\u0644 \u0645\u0645\u062a\u0627\u0632" },
+      { name: "English", say: "i fully gotcha" },
+      { name: "Spanish", say: "si leche normal" },
+      { name: "Italian", say: "english per favore" }
+    ],
+    education: [
+      { org: "Miami Ad School, Madrid", role: "Master\u2019s in Copywriting", time: "Oct 2025 \u2013 Sep 2026" }
     ],
     experience: [
       {

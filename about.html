@@ -61,6 +61,11 @@
     </div>
     <div id="aboutText"></div>
   </div>
+  <p class="blk-head" id="langHead" hidden>Languages</p>
+  <div class="lang-list" id="langList"></div>
+  <p class="blk-head" id="eduHead" hidden>Education</p>
+  <div class="exp-list" id="eduList"></div>
+  <p class="blk-head" id="expHead" hidden>Experience</p>
   <div class="exp-list" id="expList"></div>
   <!-- the résumé, under the experience list. Filled by the script below from
        contact.resume, and left out entirely when there is no link in it. -->
@@ -231,15 +236,47 @@
      The lead wraps, so the title drops under the agency by itself when
      there is no room for both. Under 900px the row stacks properly and the
      dates move above, which is the rule that was already there. */
-  document.getElementById('expList').innerHTML = jobs.map(function (e) {
-    return '<div class="exp-row">' +
-      '<span class="exp-lead">' +
-        '<span class="exp-org">' + orgHtml(e.org) + '</span>' +
-        '<span class="exp-role">' + esc(e.role) + '</span>' +
-      '</span>' +
-      '<span class="exp-time">' + esc(e.time) + '</span>' +
+  function rows(list) {
+    return list.map(function (e) {
+      return '<div class="exp-row">' +
+        '<span class="exp-lead">' +
+          '<span class="exp-org">' + orgHtml(e.org) + '</span>' +
+          '<span class="exp-role">' + esc(e.role) + '</span>' +
+        '</span>' +
+        '<span class="exp-time">' + esc(e.time) + '</span>' +
+        '</div>';
+    }).join('');
+  }
+  document.getElementById('expList').innerHTML = rows(jobs);
+
+  /* ---- languages, and education ----
+     Both are lists in content.js and both print nothing at all when the list
+     is missing or empty, headings included: the same contract as the layout
+     and the résumé button. Nothing on this page is ever a heading over air.
+
+     The heading only appears once its list has rows, which is why the three
+     of them start hidden. `Experience` is a heading the page never had, and
+     it is needed now: with two dated lists stacked, an unlabelled one reads
+     as a continuation of the one above it. */
+  function fillBlock(headId, listId, html) {
+    var head = document.getElementById(headId);
+    var list = document.getElementById(listId);
+    if (!list) return;
+    list.innerHTML = html || '';
+    if (head) head.hidden = !html;
+  }
+  var langs = (A.languages || []).filter(function (l) { return l && l.name && l.say; });
+  fillBlock('langHead', 'langList', langs.map(function (l) {
+    /* dir="auto" on the value: Arabic set inside a left-to-right row resolves
+       its spaces and punctuation against the paragraph, not the words, and
+       they end up on the wrong side of the line. */
+    return '<div class="lang-row">' +
+      '<span class="lang-name">' + esc(l.name) + '</span>' +
+      '<span class="lang-say" dir="auto">' + esc(l.say) + '</span>' +
       '</div>';
-  }).join('');
+  }).join(''));
+  fillBlock('eduHead', 'eduList', rows(A.education || []));
+  if (jobs.length) document.getElementById('expHead').hidden = false;
 
   /* ---- the résumé ----
      Straight out of contact.resume, which is admin section 6, so the link and

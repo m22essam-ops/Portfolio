@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     THE ABOUT PAGE  ·  proposal, not live
+
+     The rewritten bio, a languages block and an education block, drawn with
+     the REAL stylesheet, the real content.js and the real site.js, so what
+     is on screen is what the page would be rather than an impression of it.
+
+     Every open decision is a switch in the bar at the top. Nothing here is
+     published and about.html is untouched.
+
+     THE DATES ON ASSIUT ARE PLACEHOLDERS. He has not given them yet. They
+     are the only invented facts on this page and they are marked in the bar.
+     ============================================================ -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>About, proposed</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,800&family=Barlow+Condensed:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+/* ---- the switch bar. Preview furniture, never part of the page. ---- */
+.pbar{position:sticky;top:0;z-index:200;display:flex;flex-wrap:wrap;
+      align-items:center;gap:0;background:#141414;
+      border-bottom:3px solid #E8FF00;font-family:ui-monospace,monospace}
+.pbar .g{display:flex;align-items:center;border-right:1px solid #ffffff2e}
+.pbar b{color:#E8FF00;font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+        padding:0 10px;font-weight:400}
+.pbar button{font:inherit;font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  background:none;border:0;border-left:1px solid #ffffff24;color:#fff;
+  padding:10px 12px;cursor:pointer}
+.pbar button[aria-pressed="true"]{background:#E8FF00;color:#111}
+.pnote{background:#332F00;color:#FFF3A8;font-family:ui-monospace,monospace;
+       font-size:11px;line-height:1.6;padding:10px 16px}
+.pnote b{color:#fff}
+
+/* ---- LANGUAGES ----
+   Label in the system voice, the line itself in the page's ink. The joke is
+   in the values, so the heading stays the plain word: a heading that also
+   jokes is a second joke stealing from the first, which is the same crime as
+   the caption that used to sit under the scratch panel. */
+/* ALIGNMENT. styles.css caps the About page's blocks at 1200 and centres
+   them inside a .wrap that is wider than that, and it says so: "Add a block
+   to the page, add it here." I added three blocks and did not. So the
+   languages sat on the wrap's left edge while education and experience sat
+   on the 1200 edge, about 60px apart, which is what he is looking at. */
+body.page-about .lang-list,
+body.page-about .blk-head{max-width:1200px;margin-inline:auto}
+.lang-list{margin:0 0 40px}
+.lang-row{max-width:760px}
+.lang-row{display:flex;align-items:baseline;gap:24px;
+          padding:11px 0;border-top:1px solid var(--line)}
+/* --mono is the system voice on this site, not --system: that name does not
+   exist and the label was silently falling back to the body face.
+   --fg-dim, not --fg-faint: composited over this page's ground, faint is
+   2.48:1 against a 4.5 requirement at 12px. Dim is 5.99. Measured. */
+.lang-name{font-family:var(--mono);font-weight:600;font-size:12px;
+           letter-spacing:.14em;text-transform:uppercase;color:var(--fg-dim);
+           flex:0 0 116px}
+.lang-say{font-family:var(--body);color:var(--fg);line-height:1.25;
+          font-size:20px}
+/* the descending variant: competence measured by the eye before it is read.
+   Size, never opacity. Faded small text has failed the contrast floor on
+   this site twice and this is not the place to try it a third time. */
+body.steps .lang-row:nth-child(1) .lang-say{font-size:27px}
+body.steps .lang-row:nth-child(2) .lang-say{font-size:23px}
+body.steps .lang-row:nth-child(3) .lang-say{font-size:19px}
+body.steps .lang-row:nth-child(4) .lang-say{font-size:15px}
+/* Arabic inside an English row: without dir the trailing punctuation and the
+   spaces resolve against the paragraph direction and jump to the wrong end. */
+.lang-say[dir]{unicode-bidi:isolate}
+
+.blk-head{font-family:var(--mono);font-weight:700;font-size:12px;
+          letter-spacing:.16em;text-transform:uppercase;color:var(--fg-dim);
+          margin:0 0 4px}
+@media (max-width:900px){
+  .lang-row{flex-direction:column;align-items:flex-start;gap:4px}
+  .lang-name{flex:none}
+}
+</style>
+</head>
+<body class="page page-about">
+
+<div class="pbar" id="pbar"></div>
+<div class="pnote">
+  Proposal only. <b>about.html and content.js are untouched.</b>
+  The Assiut dates are placeholders: they are the only invented facts here.
+</div>
+
+<nav class="page-nav">
+  <div class="wrap">
+    <a class="logo" href="index.html">mohammed essam</a>
+    <div class="links">
+      <a href="work.html">The work</a>
+      <a href="about.html" class="on">Who I am</a>
+      <a href="mailto:m22essam@gmail.com">Say hi</a>
+    </div>
+  </div>
+</nav>
+
+<header class="page-head">
+  <div class="wrap"><h1 id="aboutHeading"></h1></div>
+</header>
+
+<div class="wrap">
+  <div class="about-grid">
+    <div class="about-shot" id="aboutShot">
+      <img class="about-portrait" id="aboutPortrait" src="" alt="">
+    </div>
+    <div id="aboutText"></div>
+  </div>
+
+  <p class="blk-head">Languages</p>
+  <div class="lang-list" id="langList"></div>
+
+  <p class="blk-head">Education</p>
+  <div class="exp-list" id="eduList"></div>
+
+  <p class="blk-head">Experience</p>
+  <div class="exp-list" id="expList"></div>
+</div>
+
+<footer class="stub" id="siteFoot"></footer>
+
+<script src="content.js"></script>
+<script src="site.js"></script>
+<script>
+(function () {
+  var C = window.SITE_CONTENT || {}, A = C.about || {};
+  var $ = function (id) { return document.getElementById(id); };
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  
+
+  /* the portrait roll, same as the real page */
+  var roll = (A.portraits && A.portraits.length ? A.portraits : [A.portrait])
+    .filter(function (s) { return s && String(s).trim(); });
+  if (roll.length) {
+    var p = $('aboutPortrait');
+    p.src = window.imgSrc(roll[0]);
+    p.alt = A.portraitAlt || 'Mohammed Essam';
+    var seen = 0;
+    roll.slice(1).forEach(function (s) { new Image().src = window.imgSrc(s); });
+    $('aboutShot').addEventListener('click', function () {
+      seen = (seen + 1) % roll.length; p.src = window.imgSrc(roll[seen]);
+    });
+  }
+
+  /* ============================================================
+     THE COPY. His words, with the four open decisions as switches.
+     ============================================================ */
+  var S = { assiut: 0, award: 0, langs: 1, steps: 1, edu: 0, geo: 0, brand: 0, head: 0 };
+  /* Everything here is either the site's own vocabulary or plain. The ticket
+     already says "A red-tier ticket to the mind of MOHAMMED ESSAM" and "The
+     ticket has no cash value", so this page can finish a sentence the home
+     page started rather than open a new joke. */
+  var HEADS = ['Read me?', 'Read me.', 'Since you’re here?',
+               'Since you’re here.', 'The back of the ticket.',
+               'No cash value.', 'The mind in question.',
+               'The long version.', 'A little about me.'];
+
+  /* His latest pass, with the mistakes he asked me to catch fixed and every
+     fix listed back to him. No em dashes anywhere. */
+  var PARA1 = [
+    'I wanted to be a mechanical engineer, right up until I became one. ' +
+    'So I shifted to sociology.',
+
+    'I wanted to be a mechanical engineer, right up until Assiut University ' +
+    'made me one. So I shifted to sociology.'
+  ];
+  /* his "but I enjoy the challenge" came off: it is a job-application phrase
+     and it explained the joke instead of being one. "Pay to skip me" is his
+     and it is the best thing in the paragraph, so it ends on it. */
+  var PARA_WORK = 'Mechanical engineering taught me how machines work. ' +
+                  'Sociology taught me how societies work. Neither prepared ' +
+                  'me for people who pay to skip me.';
+  var PARA_AD = [
+    'Designed in Egypt, put to work in the UAE, and licensed in Madrid, ' +
+    'which makes my buffet of ideas accidentally intercontinental.',
+
+    'Designed in Egypt, put to work in the UAE, and licensed in Madrid, ' +
+    'giving me a creative perspective that crosses borders by default.'
+  ];
+  var PARA_NOKIA = [
+    'I have never used Nokia or Kodak as a cautionary tale in a presentation. ' +
+    'Not once.',
+
+    'I have never used Nokia or Fujifilm as a cautionary tale in a ' +
+    'presentation. Not once.'
+  ];
+  /* the em dash is gone, and so is the clause after it: "which should tell
+     you everything about my stubbornness" is a sentence explaining the
+     sentence above it, which is the one crime this site keeps catching. */
+  var PARA4 = 'I got my first bike at seven. I finally learned to balance on ' +
+              'it at eighteen. Every photograph of me in between has my arm ' +
+              'in a cast.';
+  var PARA2 = [
+    'I can be misunderstood in four languages.',
+    ''
+  ];
+
+  var LANGS = [
+    [['العربية', 'Arabic'],  'هايل ممتاز'],
+    [['English', 'English'],                                     'i fully gotcha'],
+    [['Español', 'Spanish'],                                'si leche normal'],
+    [['Italiano', 'Italian'],                                    'english per favore']
+  ];
+
+  /* Assiut's years are NOT known. Marked so nobody mistakes them for facts. */
+  var EDU = [
+    { org: 'Miami Ad School, Madrid', role: 'Master’s in Copywriting', time: 'Oct 2025 – Sep 2026' },
+    { org: 'Assiut University, Egypt', role: 'BA in Sociology', time: '20?? – 20??' },
+    { org: 'Assiut University, Egypt', role: 'BSc in Mechanical Engineering', time: '20?? – 20??' }
+  ];
+
+  function orgHtml(org) {
+    var s = String(org == null ? '' : org);
+    var m = /[,，、(（]/.exec(s);
+    return (m && m.index > 0)
+      ? '<b>' + esc(s.slice(0, m.index)) + '</b>' +
+        '<span class="exp-place">' + esc(s.slice(m.index)) + '</span>'
+      : '<b>' + esc(s) + '</b>';
+  }
+  function rows(list) {
+    return list.map(function (e) {
+      return '<div class="exp-row"><span class="exp-lead">' +
+        '<span class="exp-org">' + orgHtml(e.org) + '</span>' +
+        '<span class="exp-role">' + esc(e.role) + '</span></span>' +
+        '<span class="exp-time">' + esc(e.time) + '</span></div>';
+    }).join('');
+  }
+
+  function paint() {
+    var order = [PARA1[S.assiut], PARA_WORK, PARA_AD[S.geo],
+                 PARA_NOKIA[S.brand], PARA4, PARA2[S.award]]
+                 .filter(function (t) { return t; });
+    var html = order
+      .map(function (t) { return '<p class="about-text">' + esc(t) + '</p>'; }).join('');
+
+    var skills = A.skills || [];
+    if (skills.length) {
+      var links = {};
+      (A.skillLinks || []).forEach(function (l) {
+        if (l && l.skill && l.url) links[String(l.skill).trim().toLowerCase()] = l.url;
+      });
+      html += '<div class="skills-list">' + skills.map(function (s) {
+        var to = links[String(s).trim().toLowerCase()];
+        return to ? '<a class="skill-tag is-link" href="' + esc(to) + '">' + esc(s) + '</a>'
+                  : '<span class="skill-tag">' + esc(s) + '</span>';
+      }).join('') + '</div>';
+    }
+    $('aboutText').innerHTML = html;
+
+    $('langList').innerHTML = LANGS.map(function (l) {
+      return '<div class="lang-row">' +
+        '<span class="lang-name">' + esc(l[0][S.langs]) + '</span>' +
+        '<span class="lang-say" dir="auto">' + esc(l[1]) + '</span></div>';
+    }).join('');
+
+    /* Option B leaves Assiut out of the block, because a row with no dates
+       inside a list that has them reads as something withheld. The story in
+       the first paragraph is then the only place it appears, which is where
+       a reader expects no dates at all. */
+    $('eduList').innerHTML = rows(S.edu ? EDU.slice(0, 1) : EDU);
+    $('expList').innerHTML = rows(A.experience || []);
+    document.body.classList.toggle('steps', !!S.steps);
+    $('aboutHeading').textContent = HEADS[S.head];
+  }
+
+  var GROUPS = [
+    ['Opening',   'assiut', [['Plain', 0], ['Names Assiut', 1]]],
+    ['Lang labels',  'langs', [['Own language', 0], ['English', 1]]],
+    ['Lang sizes',   'steps', [['Descending', 1], ['Flat', 0]]],
+    ['Education',    'edu',   [['A: both listed', 0], ['B: Miami only', 1]]],
+    ['Geography',    'geo',   [['Intercontinental', 0], ['Crosses borders', 1]]],
+    ['Cautionary',   'brand', [['Kodak', 0], ['Fujifilm', 1]]],
+    ['Languages line','award',[['Keep', 0], ['Cut', 1]]],
+    ['Heading', 'head', [['Read me?', 0], ['Read me.', 1],
+                         ['Since you’re here?', 2], ['Since you’re here.', 3],
+                         ['Back of ticket', 4], ['No cash value', 5],
+                         ['Mind in question', 6], ['Long version', 7],
+                         ['A little about me', 8]]]
+  ];
+  var bar = $('pbar');
+  GROUPS.forEach(function (g) {
+    var w = document.createElement('div');
+    w.className = 'g';
+    w.innerHTML = '<b>' + g[0] + '</b>';
+    g[2].forEach(function (o) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.textContent = o[0];
+      b.setAttribute('aria-pressed', String(S[g[1]] === o[1]));
+      b.addEventListener('click', function () {
+        S[g[1]] = o[1];
+        [].forEach.call(w.querySelectorAll('button'), function (x) {
+          x.setAttribute('aria-pressed', String(x === b));
+        });
+        paint();
+      });
+      w.appendChild(b);
+    });
+    bar.appendChild(w);
+  });
+
+  paint();
+})();
+</script>
+</body>
+</html>
