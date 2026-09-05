@@ -274,14 +274,14 @@
     /* dir="auto" on the value: Arabic set inside a left-to-right row resolves
        its spaces and punctuation against the paragraph, not the words, and
        they end up on the wrong side of the line. */
-    /* The line comes FIRST and the language name second, so this block has
-       the same shape as the two under it: the thing worth reading on the
-       left, its small label pushed to the right rail. It also happens to be
-       the better joke, because you work out which language it is from the
-       line and the label only confirms it. */
+    /* NAME first, level second: the language on the left and how well he
+       speaks it on the right, which is his call and the way a language list
+       is read. This was the other way round for one release because the
+       order was fixed in the preview and the old markup was the version
+       ported across. */
     return '<div class="lang-row">' +
-      '<span class="lang-say" dir="auto">' + esc(l.say) + '</span>' +
       '<span class="lang-name">' + esc(l.name) + '</span>' +
+      '<span class="lang-say" dir="auto">' + esc(l.say) + '</span>' +
       '</div>';
   }).join(''));
   /* ONE list. Education and jobs in a single chronological run called
