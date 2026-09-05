@@ -277,16 +277,23 @@ body.only-home.fills .ticket{z-index:3}
 /* the scratched finish belongs to the yellow face, not to the whole box */
 body.scratched .chip.valor .chip-front{position:relative;overflow:hidden}
 body.scratched .chip.valor .chip-front > *{position:relative;z-index:2}
+/* QUIETER. It was four layers, and two of them were 1px hatching: a cross
+   pass every 7px and a drag pattern carrying three separate marks inside a
+   19px cycle. On a chip 251px wide that is roughly one mark every 6px, which
+   is not wear, it is noise, and at this size it turns the yellow grey.
+
+   The cross pass is gone. The drags are one bright pass and one faint one in
+   a 34px cycle, so about one mark every 17px: measured, a third of the marks
+   it had. The two soft worn patches stay, because they are what actually
+   reads as a panel somebody has been at, and they carry no edges at all. */
 body.scratched .chip.valor .chip-front::after{
   content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
   background-image:
-    radial-gradient(ellipse 60% 40% at 22% 30%, rgba(239,233,220,.42), transparent 70%),
-    radial-gradient(ellipse 45% 55% at 82% 72%, rgba(239,233,220,.30), transparent 70%),
-    repeating-linear-gradient(74deg, rgba(26,26,24,.13) 0 1px, transparent 1px 7px),
+    radial-gradient(ellipse 60% 40% at 22% 30%, rgba(239,233,220,.34), transparent 72%),
+    radial-gradient(ellipse 45% 55% at 82% 72%, rgba(239,233,220,.24), transparent 72%),
     repeating-linear-gradient(-16deg,
-      rgba(255,255,255,.60) 0 1px, transparent 1px 4px,
-      rgba(255,255,255,.30) 4px 5px, transparent 5px 11px,
-      rgba(26,26,24,.10) 11px 12px, transparent 12px 19px);
+      rgba(255,255,255,.40) 0 1px, transparent 1px 15px,
+      rgba(26,26,24,.06) 15px 16px, transparent 16px 34px);
 }
 @media (prefers-reduced-motion:reduce){ .chip-in{transition:none} }
 /* 3a. VALOR is neon at rest, by his call. This is not a reversal of the
