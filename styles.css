@@ -1691,38 +1691,59 @@ body.page-awards #page{
 }
 
 
-/* ============ LANGUAGES, and the block headings (5 Sep 2026) ============
-   The label is the system voice; the line beside it is the page's ink. The
-   joke is entirely in the values, so the heading stays the plain word:
-   a heading that also jokes is a second joke stealing from the first.
+/* ====== LANGUAGES, MILESTONES, AND THE PROPORTIONS (5 Sep 2026) ======
 
-   --fg-dim, never --fg-faint. Composited over this page's ground, faint
-   measures 2.48:1 against a 4.5 requirement at this size; dim is 5.99.
-   Measured, not assumed, and the same trap the ticket's small print fell
-   into in August. */
-.blk-head{font-family:var(--mono);font-weight:700;font-size:12px;
+   The photograph was 501 by 566, a ratio of 0.89, because align-items was
+   stretching it to the height of the text column: the picture was being
+   deformed by the LENGTH OF THE BIO, so every time the words got shorter the
+   portrait got squarer. A fixed column and an explicit 3:4 holds it whatever
+   the copy does.
+
+   The two lists then break OUT of the right column and run the full content
+   width, pulled left by exactly the left column plus the gap, so they start
+   on the photograph's edge and finish on the bio's. Three elements, two
+   rails, no third edge.
+
+   No rule through the gap between a title and its date. One was tried and it
+   was a second line doing the job the row's own border already does. */
+body.page-about .about-grid{grid-template-columns:360px minmax(0,62ch);
+  gap:64px;align-items:start;margin-bottom:0}
+body.page-about .about-shot{aspect-ratio:3/4}
+.lists{margin-left:-424px;width:calc(100% + 424px)}
+.lists .blk-head{margin-top:38px}
+body.page-about .exp-list{max-width:none;margin:0}
+body.page-about .exp-row{max-width:none}
+
+.blk-head{font-family:var(--mono);font-weight:700;font-size:11.5px;
           letter-spacing:.16em;text-transform:uppercase;color:var(--fg-dim);
-          margin:0 0 4px}
-.lang-list{margin:0 0 40px}
-/* Identical to .exp-row on purpose: same padding, same gap, same rule, same
-   space-between. Three blocks stacked under three headings that behave
-   differently read as three accidents. */
+          margin:0 0 2px}
+
+/* Languages is the same component as Milestones: same padding, same gap,
+   same rule, same space-between. The language is bold and the level is not,
+   at his call, which puts the display face on the left of both lists and the
+   quiet type on the right of both. */
+.lang-list{margin:0 0 8px}
 .lang-row{display:flex;justify-content:space-between;align-items:baseline;
-          gap:28px;max-width:760px;padding:13px 0;
-          border-top:1px solid var(--line)}
-/* and the label matches .exp-time, which is the slot it now sits in */
-.lang-name{font-family:var(--mono);font-weight:600;font-size:11.5px;
-           letter-spacing:.14em;text-transform:uppercase;color:var(--fg-dim);
-           white-space:nowrap;flex:none}
-/* Competence measured by the eye before it is read. SIZE, never opacity:
-   faded small text has failed the contrast floor on this site twice. */
-.lang-say{font-family:var(--body);color:var(--fg);line-height:1.25;font-size:20px}
-.lang-row:nth-child(1) .lang-say{font-size:27px}
-.lang-row:nth-child(2) .lang-say{font-size:23px}
-.lang-row:nth-child(3) .lang-say{font-size:19px}
-.lang-row:nth-child(4) .lang-say{font-size:15px}
+          gap:28px;padding:13px 0;border-top:1px solid var(--line)}
+.lang-name{font-family:var(--display);font-weight:800;font-size:16px;
+           letter-spacing:-.02em;color:var(--fg);flex:none}
+/* Still descending, so competence is measured by the eye before it is read.
+   SIZE and never opacity: faded small text has failed the contrast floor on
+   this site three times. */
+.lang-say{font-family:var(--body);font-weight:400;color:var(--fg-dim);
+          line-height:1.2;text-align:right;font-size:15px}
+.lang-row:nth-child(1) .lang-say{font-size:17px}
+.lang-row:nth-child(2) .lang-say{font-size:15.5px}
+.lang-row:nth-child(3) .lang-say{font-size:14px}
+.lang-row:nth-child(4) .lang-say{font-size:13px}
+/* Arabic inside a left-to-right row resolves its spaces and punctuation
+   against the paragraph rather than the words without this. */
 .lang-say[dir]{unicode-bidi:isolate}
+
 @media (max-width:900px){
+  body.page-about .about-grid{grid-template-columns:1fr;gap:30px}
+  body.page-about .about-shot{aspect-ratio:4/5}
+  .lists{margin-left:0;width:auto}
   .lang-row{flex-direction:column;align-items:flex-start;gap:4px}
-  .lang-name{flex:none}
+  .lang-say{text-align:left}
 }

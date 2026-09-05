@@ -38,48 +38,89 @@
        font-size:11px;line-height:1.6;padding:10px 16px}
 .pnote b{color:#fff}
 
-/* ---- LANGUAGES ----
-   Label in the system voice, the line itself in the page's ink. The joke is
-   in the values, so the heading stays the plain word: a heading that also
-   jokes is a second joke stealing from the first, which is the same crime as
-   the caption that used to sit under the scratch panel. */
-/* ALIGNMENT. styles.css caps the About page's blocks at 1200 and centres
-   them inside a .wrap that is wider than that, and it says so: "Add a block
-   to the page, add it here." I added three blocks and did not. So the
-   languages sat on the wrap's left edge while education and experience sat
-   on the 1200 edge, about 60px apart, which is what he is looking at. */
-body.page-about .lang-list,
-body.page-about .blk-head{max-width:1200px;margin-inline:auto}
-.lang-list{margin:0 0 40px}
-.lang-row{max-width:760px}
-.lang-row{display:flex;align-items:baseline;gap:24px;
-          padding:11px 0;border-top:1px solid var(--line)}
-/* --mono is the system voice on this site, not --system: that name does not
-   exist and the label was silently falling back to the body face.
-   --fg-dim, not --fg-faint: composited over this page's ground, faint is
-   2.48:1 against a 4.5 requirement at 12px. Dim is 5.99. Measured. */
-.lang-name{font-family:var(--mono);font-weight:600;font-size:12px;
-           letter-spacing:.14em;text-transform:uppercase;color:var(--fg-dim);
-           flex:0 0 116px}
-.lang-say{font-family:var(--body);color:var(--fg);line-height:1.25;
-          font-size:20px}
-/* the descending variant: competence measured by the eye before it is read.
-   Size, never opacity. Faded small text has failed the contrast floor on
-   this site twice and this is not the place to try it a third time. */
-body.steps .lang-row:nth-child(1) .lang-say{font-size:27px}
-body.steps .lang-row:nth-child(2) .lang-say{font-size:23px}
-body.steps .lang-row:nth-child(3) .lang-say{font-size:19px}
-body.steps .lang-row:nth-child(4) .lang-say{font-size:15px}
-/* Arabic inside an English row: without dir the trailing punctuation and the
-   spaces resolve against the paragraph direction and jump to the wrong end. */
+/* ---- PROPORTIONS AND ALIGNMENT ----
+
+   Measured, three edges that did not line up:
+     photo left 113, everything else 120        (the frame sits outside)
+     language row right 480, photo right 487    (row narrower than the photo)
+     milestones right 880, bio right 1134       (two rails on one page)
+
+   The last one is the real fault. The page was two columns down to the bio
+   and then a full-width band that stopped 254px short of it, so nothing
+   agreed with anything. Milestones now sits in the right column under the
+   bio, so the page is two columns all the way down and each column keeps its
+   own edge. The row lands at about 590, which is nearer brianlovin's 640
+   than the 760 was, and that width is the whole reason the gap between a
+   title and its dates reads as a rail instead of a hole. */
+body.page-about .about-grid{grid-template-columns:360px minmax(0,62ch);
+  gap:64px;align-items:start;margin-bottom:0}
+.about-shot{aspect-ratio:3/4}
+body.page-about .exp-list{max-width:none;margin:34px 0 0}
+body.page-about .exp-row{max-width:none}
+
+/* ---- WIDE LISTS ----
+   The two lists break out of the right column and run the full content
+   width, so they share their right edge with the bio and start on the same
+   left edge as the photograph. 1014 instead of 590.
+
+   A wider row is a longer gap between a title and its date, and 1200 was
+   once rejected here for exactly that: the space stopped reading as a rail
+   and started reading as a hole. So at this width the row grows a ledger
+   rule between the two, which is a device the ticket already owns. */
+body.wide .lists{margin-left:-424px;width:1014px}
+/* styles.css caps .lang-row at 760 and the override has to say so, or the
+   two lists come out 254px apart while looking like one component */
+body.wide .lang-row,body.wide .exp-row{max-width:none}
+body.wide .exp-lead,body.wide .lang-name{position:relative}
+body.wide .exp-row,body.wide .lang-row{position:relative}
+body.wide .exp-row::after,body.wide .lang-row::after{
+  content:"";position:absolute;left:0;right:0;bottom:15px;height:1px;
+  background:var(--line);z-index:0}
+body.wide .exp-lead,body.wide .exp-time,
+body.wide .lang-name,body.wide .lang-say{
+  position:relative;z-index:1;background:var(--bg);}
+body.wide .exp-lead,body.wide .lang-name{padding-right:14px}
+body.wide .exp-time,body.wide .lang-say{padding-left:14px}
+@media (max-width:900px){
+  body.wide .lists{margin-left:0;width:auto}
+  body.wide .exp-row::after,body.wide .lang-row::after{display:none}
+}
+
+.blk-head{font-family:var(--mono);font-weight:700;font-size:11.5px;
+          letter-spacing:.16em;text-transform:uppercase;color:var(--fg-dim);
+          margin:0 0 2px}
+.side-langs{margin-top:26px}
+.under-ms{margin-top:38px}
+.under-ms .lang-say{text-align:right}
+.lang-list{margin:0}
+
+/* The language is BOLD and the level is not, at his call, and it puts this
+   block in the same shape as the milestones under it: display face and 800
+   on the left, quiet type on the right. Two lists that behave the same. */
+/* identical geometry to .exp-row: same padding, same gap, same rule, same
+   space-between. Two lists that are the same component. */
+.lang-row{display:flex;justify-content:space-between;align-items:baseline;
+          gap:28px;padding:13px 0;border-top:1px solid var(--line)}
+.lang-name{font-family:var(--display);font-weight:800;font-size:16px;
+           letter-spacing:-.02em;color:var(--fg);flex:none}
+.lang-say{font-family:var(--body);font-weight:400;color:var(--fg-dim);
+          line-height:1.2;text-align:right;font-size:15px}
+.lang-row:nth-child(1) .lang-say{font-size:17px}
+.lang-row:nth-child(2) .lang-say{font-size:15.5px}
+.lang-row:nth-child(3) .lang-say{font-size:14px}
+.lang-row:nth-child(4) .lang-say{font-size:13px}
 .lang-say[dir]{unicode-bidi:isolate}
 
-.blk-head{font-family:var(--mono);font-weight:700;font-size:12px;
-          letter-spacing:.16em;text-transform:uppercase;color:var(--fg-dim);
-          margin:0 0 4px}
+body.shot-dots .about-portrait{filter:none;mix-blend-mode:normal}
+body.shot-dots .about-shot canvas{position:absolute;inset:0;width:100%;
+  height:100%;z-index:3}
+body.shot-flat .about-portrait{filter:grayscale(1) contrast(1.15)}
+body.shot-flat .about-shot{background:var(--bg)}
+
 @media (max-width:900px){
-  .lang-row{flex-direction:column;align-items:flex-start;gap:4px}
-  .lang-name{flex:none}
+  body.page-about .about-grid{grid-template-columns:1fr;gap:30px}
+  .about-shot{aspect-ratio:4/5;margin-left:0}
+  .side-langs{margin-top:20px}
 }
 </style>
 </head>
@@ -108,20 +149,24 @@ body.steps .lang-row:nth-child(4) .lang-say{font-size:15px}
 
 <div class="wrap">
   <div class="about-grid">
-    <div class="about-shot" id="aboutShot">
-      <img class="about-portrait" id="aboutPortrait" src="" alt="">
+    <div>
+      <div class="about-shot" id="aboutShot">
+        <img class="about-portrait" id="aboutPortrait" src="" alt="">
+      </div>
+      <div class="side-langs" id="langSide">
+        <p class="blk-head">Languages</p>
+        <div class="lang-list" id="langList"></div>
+      </div>
     </div>
-    <div id="aboutText"></div>
+    <div>
+      <div id="aboutText"></div>
+      <div class="lists">
+        <p class="blk-head" style="margin-top:38px">Milestones</p>
+        <div class="exp-list" id="expList"></div>
+        <div class="under-ms" id="langUnder"></div>
+      </div>
+    </div>
   </div>
-
-  <p class="blk-head">Languages</p>
-  <div class="lang-list" id="langList"></div>
-
-  <p class="blk-head">Education</p>
-  <div class="exp-list" id="eduList"></div>
-
-  <p class="blk-head">Experience</p>
-  <div class="exp-list" id="expList"></div>
 </div>
 
 <footer class="stub" id="siteFoot"></footer>
@@ -156,7 +201,7 @@ body.steps .lang-row:nth-child(4) .lang-say{font-size:15px}
   /* ============================================================
      THE COPY. His words, with the four open decisions as switches.
      ============================================================ */
-  var S = { assiut: 0, award: 0, langs: 1, steps: 1, edu: 0, geo: 0, brand: 0, head: 0 };
+  var S = { assiut: 0, award: 0, langs: 1, steps: 1, edu: 0, geo: 0, brand: 0, head: 0, shot: 0, lpos: 1, wide: 1 };
   /* Everything here is either the site's own vocabulary or plain. The ticket
      already says "A red-tier ticket to the mind of MOHAMMED ESSAM" and "The
      ticket has no cash value", so this page can finish a sentence the home
@@ -268,9 +313,25 @@ body.steps .lang-row:nth-child(4) .lang-say{font-size:15px}
        inside a list that has them reads as something withheld. The story in
        the first paragraph is then the only place it appears, which is where
        a reader expects no dates at all. */
-    $('eduList').innerHTML = rows(S.edu ? EDU.slice(0, 1) : EDU);
-    $('expList').innerHTML = rows(A.experience || []);
-    document.body.classList.toggle('steps', !!S.steps);
+
+    /* Socialize, Feb 2022 to Jun 2023, one month before We Are Social. His
+       dates. It overlaps Social Nuts, which is flagged to him and not fixed
+       here, because shortening a real job is his call and not mine. */
+    /* his correction: Social Nuts Feb 2022 to Jul 2023, and no Socialize */
+    var jobs = [EDU[0]].concat((A.experience || []).map(function (j) {
+      return /social nuts/i.test(j.org || '')
+        ? { org: j.org, role: j.role, time: 'Feb 2022 \u2013 Jul 2023' } : j;
+    }));
+    $('expList').innerHTML = rows(jobs);
+    /* the whole languages block moves between the two columns, so the two
+       positions can be compared rather than described */
+    var side = $('langSide'), under = $('langUnder');
+    if (S.lpos === 1) { under.appendChild(side); side.className = 'under-ms-in'; }
+    else { $('aboutShot').parentNode.appendChild(side); side.className = 'side-langs'; }
+    document.body.className = 'page page-about' +
+      (S.shot === 1 ? ' shot-dots' : S.shot === 2 ? ' shot-flat' : '') +
+      (S.wide ? ' wide' : '');
+    if (S.shot === 1) dotScreen(); else clearDots();
     $('aboutHeading').textContent = HEADS[S.head];
   }
 
@@ -282,6 +343,10 @@ body.steps .lang-row:nth-child(4) .lang-say{font-size:15px}
     ['Geography',    'geo',   [['Intercontinental', 0], ['Crosses borders', 1]]],
     ['Cautionary',   'brand', [['Kodak', 0], ['Fujifilm', 1]]],
     ['Languages line','award',[['Keep', 0], ['Cut', 1]]],
+    ['Row width', 'wide', [['Wide, full page', 1], ['Narrow, in column', 0]]],
+    ['Languages', 'lpos', [['Under the photo', 0], ['Under milestones', 1]]],
+    ['Portrait', 'shot', [['Red screen, as now', 0], ['Halftone dots', 1],
+                          ['Plain grey', 2]]],
     ['Heading', 'head', [['Read me?', 0], ['Read me.', 1],
                          ['Since you’re here?', 2], ['Since you’re here.', 3],
                          ['Back of ticket', 4], ['No cash value', 5],
@@ -307,6 +372,55 @@ body.steps .lang-row:nth-child(4) .lang-say{font-size:15px}
       w.appendChild(b);
     });
     bar.appendChild(w);
+  });
+
+  /* the ticket's dot screen, run over the About portrait so he can see the
+     two treatments side by side rather than imagine them */
+  function clearDots() {
+    var c = $('aboutShot').querySelector('canvas');
+    if (c) c.remove();
+  }
+  function dotScreen() {
+    var box = $('aboutShot'), img = $('aboutPortrait');
+    if (!box || !img || !img.complete || !img.naturalWidth) return;
+    clearDots();
+    try {
+      var w = box.clientWidth, h = box.clientHeight, pitch = 3;
+      var cols = Math.max(8, Math.round(w / pitch)), rowsN = Math.max(8, Math.round(h / pitch));
+      var read = document.createElement('canvas');
+      read.width = cols; read.height = rowsN;
+      var rx = read.getContext('2d');
+      var sc = Math.max(cols / img.naturalWidth, rowsN / img.naturalHeight);
+      var dw = img.naturalWidth * sc, dh = img.naturalHeight * sc;
+      rx.drawImage(img, (cols - dw) / 2, (rowsN - dh) / 2, dw, dh);
+      var d = rx.getImageData(0, 0, cols, rowsN).data;
+      var out = document.createElement('canvas');
+      var dpr = Math.min(2, window.devicePixelRatio || 1);
+      out.width = w * dpr; out.height = h * dpr;
+      out.style.width = '100%'; out.style.height = '100%';
+      var g = out.getContext('2d'); g.scale(dpr, dpr);
+      var cs = getComputedStyle(document.documentElement);
+      g.fillStyle = cs.getPropertyValue('--bg').trim() || '#F2EEE5';
+      g.fillRect(0, 0, w, h);
+      g.fillStyle = cs.getPropertyValue('--fg').trim() || '#0B0A09';
+      var lums = new Float32Array(cols * rowsN), lo = 1, hi = 0;
+      for (var n = 0; n < cols * rowsN; n++) {
+        var q = n * 4;
+        var L = (0.2126 * d[q] + 0.7152 * d[q + 1] + 0.0722 * d[q + 2]) / 255;
+        lums[n] = L; if (L < lo) lo = L; if (L > hi) hi = L;
+      }
+      var span = Math.max(0.12, hi - lo);
+      var cw = w / cols, ch = h / rowsN, maxR = Math.max(cw, ch) * 0.39;
+      for (var y = 0; y < rowsN; y++) for (var x = 0; x < cols; x++) {
+        var r = Math.pow(1 - (lums[y * cols + x] - lo) / span, 1.12) * maxR;
+        if (r < 0.18) continue;
+        g.beginPath(); g.arc((x + .5) * cw, (y + .5) * ch, r, 0, 6.2832); g.fill();
+      }
+      box.appendChild(out);
+    } catch (e) {}
+  }
+  $('aboutPortrait').addEventListener('load', function () {
+    if (S.shot === 1) setTimeout(dotScreen, 0);
   });
 
   paint();

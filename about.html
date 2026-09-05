@@ -59,14 +59,19 @@
     <div class="about-shot" id="aboutShot">
       <img class="about-portrait" id="aboutPortrait" src="" alt="">
     </div>
-    <div id="aboutText"></div>
+    <div>
+      <div id="aboutText"></div>
+      <!-- The two lists break out of this column and run the full page
+           width. They are inside it so they follow the bio, and pulled left
+           by exactly the left column plus the gap. -->
+      <div class="lists">
+        <p class="blk-head" id="expHead" hidden>Milestones</p>
+        <div class="exp-list" id="expList"></div>
+        <p class="blk-head" id="langHead" hidden>Languages</p>
+        <div class="lang-list" id="langList"></div>
+      </div>
+    </div>
   </div>
-  <p class="blk-head" id="langHead" hidden>Languages</p>
-  <div class="lang-list" id="langList"></div>
-  <p class="blk-head" id="eduHead" hidden>Education</p>
-  <div class="exp-list" id="eduList"></div>
-  <p class="blk-head" id="expHead" hidden>Experience</p>
-  <div class="exp-list" id="expList"></div>
   <!-- the résumé, under the experience list. Filled by the script below from
        contact.resume, and left out entirely when there is no link in it. -->
   <div id="aboutResume"></div>
@@ -247,7 +252,6 @@
         '</div>';
     }).join('');
   }
-  document.getElementById('expList').innerHTML = rows(jobs);
 
   /* ---- languages, and education ----
      Both are lists in content.js and both print nothing at all when the list
@@ -280,8 +284,13 @@
       '<span class="lang-name">' + esc(l.name) + '</span>' +
       '</div>';
   }).join(''));
-  fillBlock('eduHead', 'eduList', rows(A.education || []));
-  if (jobs.length) document.getElementById('expHead').hidden = false;
+  /* ONE list. Education and jobs in a single chronological run called
+     Milestones, so the newest and most relevant thing he has done sits at
+     the top where a hirer looks first, instead of in a separate block
+     underneath the jobs. His call, and the reason a one-row Education
+     heading is gone. */
+  var milestones = (A.education || []).concat(jobs);
+  fillBlock('expHead', 'expList', rows(milestones));
 
   /* ---- the résumé ----
      Straight out of contact.resume, which is admin section 6, so the link and
