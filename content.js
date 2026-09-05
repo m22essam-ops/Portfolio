@@ -1264,7 +1264,9 @@ window.SITE_CONTENT = {
       { name: "Italian", say: "english per favore" }
     ],
     education: [
-      { org: "Miami Ad School, Madrid", role: "Master\u2019s in Copywriting", time: "Oct 2025 \u2013 Sep 2026" }
+      { org: "Miami Ad School, Madrid", role: "Master\u2019s in Copywriting", time: "Oct 2025 \u2013 Sep 2026" },
+      { org: "Assiut University, Egypt", role: "BA in Sociology", time: "2020 \u2013 2023" },
+      { org: "Assiut University, Egypt", role: "BSc in Mechanical Engineering", time: "2016 \u2013 2020" }
     ],
     experience: [
       {

@@ -270,9 +270,14 @@
     /* dir="auto" on the value: Arabic set inside a left-to-right row resolves
        its spaces and punctuation against the paragraph, not the words, and
        they end up on the wrong side of the line. */
+    /* The line comes FIRST and the language name second, so this block has
+       the same shape as the two under it: the thing worth reading on the
+       left, its small label pushed to the right rail. It also happens to be
+       the better joke, because you work out which language it is from the
+       line and the label only confirms it. */
     return '<div class="lang-row">' +
-      '<span class="lang-name">' + esc(l.name) + '</span>' +
       '<span class="lang-say" dir="auto">' + esc(l.say) + '</span>' +
+      '<span class="lang-name">' + esc(l.name) + '</span>' +
       '</div>';
   }).join(''));
   fillBlock('eduHead', 'eduList', rows(A.education || []));

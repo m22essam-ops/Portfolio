@@ -1264,7 +1264,7 @@ a.skill-tag:focus-visible{color:var(--red);border-color:var(--red)}
    family rather than naming one, so it can never drift off the row's face. */
 .exp-place{font-family:inherit;font-weight:400;font-size:16px;letter-spacing:0;color:var(--fg-dim)}
 .exp-role{font-size:15px;line-height:1.2;color:var(--fg-dim)}
-.exp-time{font-size:11.5px;color:var(--fg-faint);white-space:nowrap}
+.exp-time{font-size:11.5px;color:var(--fg-dim);white-space:nowrap}
 
 /* ============================ RESPONSIVE ============================ */
 
@@ -1704,11 +1704,16 @@ body.page-awards #page{
           letter-spacing:.16em;text-transform:uppercase;color:var(--fg-dim);
           margin:0 0 4px}
 .lang-list{margin:0 0 40px}
-.lang-row{display:flex;align-items:baseline;gap:24px;max-width:760px;
-          padding:11px 0;border-top:1px solid var(--line)}
-.lang-name{font-family:var(--mono);font-weight:600;font-size:12px;
+/* Identical to .exp-row on purpose: same padding, same gap, same rule, same
+   space-between. Three blocks stacked under three headings that behave
+   differently read as three accidents. */
+.lang-row{display:flex;justify-content:space-between;align-items:baseline;
+          gap:28px;max-width:760px;padding:13px 0;
+          border-top:1px solid var(--line)}
+/* and the label matches .exp-time, which is the slot it now sits in */
+.lang-name{font-family:var(--mono);font-weight:600;font-size:11.5px;
            letter-spacing:.14em;text-transform:uppercase;color:var(--fg-dim);
-           flex:0 0 116px}
+           white-space:nowrap;flex:none}
 /* Competence measured by the eye before it is read. SIZE, never opacity:
    faded small text has failed the contrast floor on this site twice. */
 .lang-say{font-family:var(--body);color:var(--fg);line-height:1.25;font-size:20px}
