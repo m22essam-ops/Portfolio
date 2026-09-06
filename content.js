@@ -1258,8 +1258,8 @@ window.SITE_CONTENT = {
       "Concept Development"
     ],
     languages: [
-      { name: "Arabic",  say: "\u0647\u0627\u064a\u0644 \u0645\u0645\u062a\u0627\u0632" },
       { name: "English", say: "i fully gotcha" },
+      { name: "Arabic",  say: "\u0647\u0627\u064a\u0644 \u0645\u0645\u062a\u0627\u0632" },
       { name: "Spanish", say: "si leche normal" },
       { name: "Italian", say: "english per favore" }
     ],
