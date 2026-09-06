@@ -392,9 +392,6 @@ body.scratched .chip.valor .chip-front::after{
    card it cannot leave one word stranded. */
 .tk-sub{font-family:var(--mono);font-size:clamp(12px,1.28vw,18px);
         letter-spacing:.02em;line-height:1.45;margin:22px 0 0;text-wrap:pretty}
-/* the two languages are the whole point of the line. Everything else on this
-   card is a joke about losing; this is the one hard capability on it. */
-.tk-sub b{font-weight:400;box-shadow:inset 0 -.34em 0 var(--neon)}
 
 /* ---- 1. the 00 data field is gone ----
    The column keeps a floor so removing it leaves negative space under the
@@ -725,23 +722,14 @@ body.scratched .chip.valor .chip-front::after{
      box holding 22px of margin, so clearing the field in admin or the designer
      genuinely takes it off the card.
 
-     The two languages are marked by MATCHING HIS WORDS, never by an index or a
-     marker he has to remember typing. Same contract as about.skillLinks: if he
-     rewrites the line and the phrase is no longer in it, the highlight simply
-     does not appear and the sentence still reads. A marker character would end
-     up inside the field he is editing, which is the trap the footnote asterisk
-     was moved out of. */
+     Plain text and nothing else. "English and Arabic" carried a neon underline
+     for one pass and he took it off, so there is no markup in here at all now:
+     the line is his words, set once, and the designer edits it as words. */
   (function () {
     var sub = $('hSub'), s = String(T.sub || '').trim();
     if (!sub) return;
     if (!s) { sub.remove(); return; }
-    var esc = function (t) {
-      return t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    };
-    var m = s.match(/english and arabic/i);
-    sub.innerHTML = m
-      ? esc(s.slice(0, m.index)) + '<b>' + esc(m[0]) + '</b>' + esc(s.slice(m.index + m[0].length))
-      : esc(s);
+    sub.textContent = s;
   })();
 
   var awards = (T.awards || []).length;
@@ -1170,9 +1158,9 @@ body.scratched .chip.valor .chip-front::after{
          "AWARD-LOSINGCOPYWRITER" and measure the bearing of a string that is
          never drawn. The left edge is set by the FIRST line. */
       /* Only a BLOCK child starts its own line, and that is the whole test.
-         The sub-line's highlight is an inline <b> sitting in the MIDDLE of the
-         sentence, so taking firstElementChild there would measure the bearing
-         of "English" and shift a line that begins with "who". */
+         An INLINE child sits in the middle of a sentence, so measuring it would
+         hand back the bearing of a word the line does not begin with and shift
+         the whole row. Nothing here has one today; the sub-line briefly did. */
       var kid = e.firstElementChild;
       var t = (kid && getComputedStyle(kid).display === 'block'
                  ? kid.textContent : e.textContent).trim();
