@@ -44,6 +44,7 @@
     { k: 'hHead',     sel: '#hHead',     name: 'Headline, block',   text: null,                 group: 'Centre' },
     { k: 'hHeadTop',  sel: '#hHeadTop',  name: 'Headline line 1',   text: 'ticket.titleTop',    group: 'Centre' },
     { k: 'hHeadBot',  sel: '#hHeadBot',  name: 'Headline line 2',   text: 'ticket.titleBottom', group: 'Centre' },
+    { k: 'hSub',      sel: '#hSub',      name: 'Sub-line',          text: 'ticket.sub',         group: 'Centre' },
 
     { k: 'hPremios',  sel: '#hPremios',  name: 'Side heading',      text: null,                 group: 'Right rail' },
     { k: 'hLeg0q',    sel: '#hLeg0q',    name: 'Row 1 number',      text: null,                 group: 'Right rail' },

@@ -18,7 +18,7 @@ window.SITE_CONTENT = {
     serial: "No. 131313 . Exp. never",
     titleTop: "Award-losing",
     titleBottom: "copywriter",
-    sub: "I write headlines in English and Arabic to sell just about anything...",
+    sub: "who writes headlines in English and Arabic to sell just about anything.",
     scratchNote: "",
     badge: "I WON NOTHING",
     terms: "Odds of winning awards: Historically low. The ticket has no cash value, but the headlines do.",
@@ -1258,7 +1258,7 @@ window.SITE_CONTENT = {
       "Concept Development"
     ],
     languages: [
-      { name: "English", say: "i fully gotcha" },
+      { name: "English", say: "i swear in it comfortably" },
       { name: "Arabic",  say: "\u0647\u0627\u064a\u0644 \u0645\u0645\u062a\u0627\u0632" },
       { name: "Spanish", say: "si leche normal" },
       { name: "Italian", say: "english per favore" }

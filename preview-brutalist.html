@@ -380,6 +380,31 @@ body.scratched .chip.valor .chip-front::after{
 .tk-head .fn{font-style:normal;font-size:.40em;letter-spacing:0;
              vertical-align:.95em;margin-left:.05em}
 
+/* the sub-line. His line, and the only place on the card that says what he
+   actually does: everything else says what he has not won. It is set in the
+   MONO, not the display face, so the centre column is one voice (kicker,
+   name, this) with a single hero cut through it. In the display face at any
+   readable size it argues with the headline directly above it.
+   Measured at 1440: the sentence sets 680px at 18px against 758px of column,
+   so it holds one line here and is ALLOWED TO WRAP below that. A sentence may
+   wrap; only the headline may not, which is why there is no nowrap here and
+   no fitter chasing it. */
+/* It opens lower case ON PURPOSE. The whole centre column is one sentence:
+   "A red-tier ticket to the mind of / MOHAMMED ESSAM / AWARD-LOSING
+   COPYWRITER / who writes headlines in English and Arabic to sell just about
+   anything." Capitalising the w breaks the join and leaves a fragment.
+
+   No max-width: measured at 1440 the sentence sets 716px against a 731px
+   headline directly above it, so the two lock into one block. A measure here
+   would break it to two lines while 42px of column sat unused beside them.
+   `pretty` only ever moves the LAST line, so where it does wrap on a narrower
+   card it cannot leave one word stranded. */
+.tk-sub{font-family:var(--mono);font-size:clamp(12px,1.28vw,18px);
+        letter-spacing:.02em;line-height:1.45;margin:22px 0 0;text-wrap:pretty}
+/* the two words that are the whole point of the line. Everything else on this
+   card is a joke about losing; this is the one hard capability on it. */
+.tk-sub b{font-weight:400;box-shadow:inset 0 -.34em 0 var(--neon)}
+
 /* ---- 1. the 00 data field is gone ----
    The column keeps a floor so removing it leaves negative space under the
    headline rather than letting the card collapse to the height of three
@@ -620,6 +645,7 @@ body.scratched .chip.valor .chip-front::after{
           <p class="lbl tk-kick" id="hKick"></p>
           <h1 class="tk-name" id="hName">MOHAMMED ESSAM</h1>
           <h2 class="tk-head" id="hHead"></h2>
+          <p class="tk-sub" id="hSub"></p>
         </div>
 
         <div class="tk-side">
@@ -783,6 +809,29 @@ body.scratched .chip.valor .chip-front::after{
   $('hHead').innerHTML =
     '<span id="hHeadTop">' + (T.titleTop || '').toUpperCase() + '<i class="fn">*</i></span>' +
     '<span id="hHeadBot">' + (T.titleBottom || '').toUpperCase() + '</span>';
+
+  /* the sub-line. Empty and the element is removed rather than left as a blank
+     box holding 22px of margin, so clearing the field in admin or the designer
+     genuinely takes it off the card.
+
+     The two languages are marked by MATCHING HIS WORDS, never by an index or a
+     marker he has to remember typing. Same contract as about.skillLinks: if he
+     rewrites the line and the phrase is no longer in it, the highlight simply
+     does not appear and the sentence still reads. A marker character would end
+     up inside the field he is editing, which is the trap the footnote asterisk
+     was moved out of. */
+  (function () {
+    var sub = $('hSub'), s = String(T.sub || '').trim();
+    if (!sub) return;
+    if (!s) { sub.remove(); return; }
+    var esc = function (t) {
+      return t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    };
+    var m = s.match(/english and arabic/i);
+    sub.innerHTML = m
+      ? esc(s.slice(0, m.index)) + '<b>' + esc(m[0]) + '</b>' + esc(s.slice(m.index + m[0].length))
+      : esc(s);
+  })();
 
   var awards = (T.awards || []).length;
   var pad = (awards < 10 ? '0' : '') + awards;
@@ -1208,9 +1257,15 @@ body.scratched .chip.valor .chip-front::after{
       var s = getComputedStyle(e);
       /* the headline is two block spans, so textContent would hand the canvas
          "AWARD-LOSINGCOPYWRITER" and measure the bearing of a string that is
-         never drawn. The left edge is set by the FIRST line. */
-      var t = (e.firstElementChild ? e.firstElementChild.textContent
-                                   : e.textContent).trim();
+         never drawn. The left edge is set by the FIRST line.
+
+         Only a BLOCK child starts its own line, and that is the whole test.
+         The sub-line's highlight is an inline <b> sitting in the MIDDLE of the
+         sentence, so taking firstElementChild there would measure the bearing
+         of "English" and shift a line that begins with "who". */
+      var kid = e.firstElementChild;
+      var t = (kid && getComputedStyle(kid).display === 'block'
+                 ? kid.textContent : e.textContent).trim();
       /* the canvas measures the string it is given, so uppercase it here or
          the bearing measured is the lowercase one and the correction is wrong */
       if (s.textTransform === 'uppercase') t = t.toUpperCase();
@@ -1287,7 +1342,7 @@ body.scratched .chip.valor .chip-front::after{
     p.style.letterSpacing = track.toFixed(3) + 'px';
   }
 
-  var FLUSH = ['#hKick', '#hName', '#hHead'];
+  var FLUSH = ['#hKick', '#hName', '#hHead', '#hSub'];
   function realign() { fitHead(); alignInk(FLUSH); fitLegal(); }
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(realign);
   realign();
