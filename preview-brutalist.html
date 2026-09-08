@@ -70,21 +70,20 @@ body.ink1{--neon:var(--paper);--silver:var(--paper);--silver-hi:var(--paper)}
 *{box-sizing:border-box;border-radius:0 !important}
 body{margin:0;background:var(--red);color:var(--ink);font-family:var(--mono);
      -webkit-font-smoothing:antialiased}
-/* ---- THE HOME GROUND, 6 Sep 2026 ----
-   The red field is gone from the page that ships. His call, asked for twice
-   and confirmed: the ground is to be EXACTLY the About page's, not a relative
-   of it. So it is the same token as the card, and the card no longer sits ON
-   something, it IS the sheet.
+/* ---- THE HOME GROUND: RED, AND IT STAYS RED ----
+   The field around the card was turned to paper for one build on 6 Sep 2026
+   and put straight back on 7 Sep. Recording it so nobody removes it again on
+   the same reasoning:
 
-   The ticket still reads, because its edge was never carried by the colour
-   behind it: `.perf` is a MASK, so it cuts the card's own 3px ink border into
-   scallops, and that black edge is what draws the ticket now.
+   What he asked for was that the home and the About page use the SAME
+   background, meaning the surface you READ on. On About that is the body; on
+   the home it is the card. So the thing to unify was the CARD, which is now
+   exactly #F1E4DC, About's own ground, and the two pages share one paper.
 
-   Scoped to `.only-home`, which is the state index.html ships in. Screens 02
-   to 05 of this file keep the red behind them: they are the system reference,
-   and a paper ticket on paper with nothing around it stops showing where the
-   card ends. `--red` is now used by nothing else in this file. */
-body.only-home{background:var(--paper)}
+   The red field is not a background in that sense. It is the only loud colour
+   on the site, it is the one thing the home page has that no other page does,
+   and taking it away did not unify anything: it left six cream pages and
+   deleted the accent. `--red` on the body is the whole of it. */
 a{color:inherit;text-decoration:none}
 img{display:block;max-width:100%}
 
