@@ -434,8 +434,22 @@ body.scratched .chip.valor .chip-front::after{
    #hLegend rather than beside it: as a sibling it would take half the space
    and leave the two rows a quarter each. */
 #hLegend{flex:1;display:flex;flex-direction:column}
-.legrow{display:flex;flex:1;align-items:center;gap:12px;padding:13px 16px;
-        border-bottom:var(--hair) solid var(--ink)}
+/* NO RULE BETWEEN THE ROWS, and this is the fix for "it should be one ticket
+   not a stack of them" (7 Sep 2026). The stack elements were already gone; the
+   card was making a new one out of itself.
+
+   Three 207px boxes, each closed by a full-bleed hairline top and bottom, and
+   the card's perforated edge scalloping down the right through all of them:
+   every box had a rule above it, a rule below it and two torn edges, which is
+   a ticket. Three of those in a column is a stack, however many layers you
+   delete from the markup.
+
+   Taking the rules out lets the perforation run unbroken from the band to the
+   foil, so the column reads as one panel with three entries in it. The height
+   he asked for is untouched: the boxes are still big, they are just no longer
+   separately fenced. The rule comes BACK on a phone, in the media query at the
+   foot of this file, where the rows are 51px and would otherwise run together. */
+.legrow{display:flex;flex:1;align-items:center;gap:12px;padding:13px 16px}
 .legrow:hover,.legrow:focus-visible{background:var(--neon)}
 /* sized against the VIEWPORT height, because the card is 96vh and so is the
    column it has to fill. A fixed size leaves the hole back on a short screen.
@@ -599,6 +613,11 @@ body.scratched .chip.valor .chip-front::after{
   /* the label wraps to two lines down here, so the row needs its full height
      back rather than the baseline of a single line. */
   .legrow .w{line-height:1.35}
+  /* the rule comes back on a phone. Stacked, the rows are 51px and sit right
+     on top of each other, so with nothing between them they read as one block
+     of text. They cannot look like separate tickets at that height, which is
+     the whole reason the rule is wrong on the wide card and right here. */
+  .legrow{border-bottom:var(--hair) solid var(--ink)}
   .grid{grid-template-columns:1fr;gap:22px;padding:20px}
   .terms{columns:2}
   /* the barcode is a fixed 168px and will not shrink, so in a row it ate
