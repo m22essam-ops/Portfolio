@@ -671,7 +671,15 @@ body.has-won .tk-badge{background:var(--ink)}
   font-size:13px;color:var(--fg-faint);
   white-space:nowrap;
 }
-.page-nav .links{display:flex;gap:24px;flex:none}
+/* The links are set BIGGER than the rest of the header (his ask, 7 Sep 2026).
+   14.5px condensed caps read as fine print next to a 23px name, so the one
+   part of the header you are meant to use was the quietest thing in it.
+
+   A clamp, not a number, because this row is the tightest piece of layout on
+   the site: below 520px it drops to its own line under the name, and at 375px
+   it has 331px to fit three items in. The floor is what keeps that true. */
+.page-nav .links{display:flex;gap:24px;flex:none;
+                 font-size:clamp(15px,1.3vw,18px)}
 .page-nav .links a{text-decoration:none;opacity:.55;transition:opacity .16s;white-space:nowrap}
 .page-nav .links a:hover,.page-nav .links a.on{opacity:1;color:var(--red)}
 
@@ -1514,6 +1522,15 @@ body.page-awards{ --bg:#E6E7E2; --well:#D6D8D1; --nav-bg:#E6E7E2f2; }
    sit on it and the red has to stay the loudest thing on the page. #A3BAD1 was
    tried first and it was too heavy, closer to a painted wall than to paper. */
 body.page-work-ran { --bg:#CFDCE6; --well:#B9CBDA; --nav-bg:#CFDCE6f2; }
+/* Work I want to do, the other half of the same door (6 Sep 2026). A warm sand
+   against the dusty blue, so the two filtered views are opposite temperatures
+   and cannot be confused with each other or with the paper of All work.
+
+   Same discipline as the blue: light, low-chroma and grey-leaning, because the
+   stills sit on it and the red stays the loudest thing on the page. It is NOT
+   given a mark of its own; the ground is the difference, exactly as the tick
+   was rejected on Work that worked for being a second signal saying one thing. */
+body.page-work-want{ --bg:#E8DFCD; --well:#D8CDB6; --nav-bg:#E8DFCDf2; }
 /* The manipulating piece keeps the About paper, because it is a room off the
    About page rather than a section of its own, and it gets NO mark at all.
    Every other page has one small drawn thing; this is the one that does not,
@@ -1552,13 +1569,72 @@ body.page-about::before{
 body.page-awards::before{
   left:0;right:0;top:63%;height:2px;background:var(--well);opacity:.5;
 }
-/* Everything on the page sits above the mark. NOT the nav: this selector is
+/* ================= THE PAPER: PRINTED, NOT SCRATCHED =================
+   7 Sep 2026. The ticket's 22 diagonal drags were ported here for one pass and
+   he killed them on sight, and he was right about why: a scratch is DAMAGE.
+   It says somebody dragged a key across the page. What this paper wants to say
+   is that it came out of a machine, so the texture has to be REGULAR, and its
+   irregularity has to be the machine's, not a scribble.
+
+   So every option below is built from repeats, and the only randomness is the
+   fibre in the stock itself. All are `fixed` so they keep their size on a page
+   that scrolls, and all sit at z-index 0 under the content rule further down.
+
+   Set one class on <body> to pick. `tex-fibre` is the paper on its own and
+   every other option lays its press over the same fibre. */
+
+/* the stock: fractal noise, the same tile the ticket uses for its grain */
+body[class*="tex-"]::after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-repeat:repeat;opacity:.30;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+}
+
+/* the press: a second fixed layer over the stock, one repeat each.
+   ::before is taken on this page by the perforation run, so the press rides on
+   its own element rather than a pseudo, added by the page that wants it. */
+.tex-press{position:fixed;inset:0;pointer-events:none;z-index:0}
+
+/* 1. BANDS. A thermal head printing one line at a time. The most literal
+      "came out of a machine" there is, and the one a real ticket looks like. */
+body.tex-bands .tex-press{
+  background-image:repeating-linear-gradient(180deg,
+    rgba(11,10,9,.045) 0 1px, transparent 1px 3px);
+}
+/* 2. DOTS. An offset screen. It rhymes with the portrait, which is already a
+      halftone, so the page and the picture are printed the same way. */
+body.tex-dots .tex-press{
+  background-image:radial-gradient(circle at 1px 1px,rgba(11,10,9,.075) .6px,transparent .75px);
+  background-size:3px 3px;
+}
+/* 3. INK. Banding with an uneven period, so the head reads as a real one that
+      does not lay ink down perfectly evenly rather than as a CSS repeat. */
+body.tex-ink .tex-press{
+  background-image:repeating-linear-gradient(180deg,
+    rgba(11,10,9,.038) 0 1px, transparent 1px 4px,
+    rgba(11,10,9,.020) 4px 5px, transparent 5px 9px,
+    rgba(11,10,9,.028) 9px 10px, transparent 10px 16px);
+}
+/* 4. WEAVE. Bands both ways: the paper's own grid, closer to laid stock. */
+body.tex-weave .tex-press{
+  background-image:
+    repeating-linear-gradient(180deg,rgba(11,10,9,.035) 0 1px,transparent 1px 4px),
+    repeating-linear-gradient(90deg, rgba(11,10,9,.022) 0 1px,transparent 1px 5px);
+}
+/* 5. FIBRE. The stock and nothing else. */
+
+/* Everything on the page sits above the texture. NOT the nav: this selector is
    (0,1,1) and .page-nav is (0,1,0), so it was winning and quietly turning the
    sticky header into a relative one with z-index 1 on all three of these
    pages. The header stopped sticking, and page content painted over the work
-   menu, which is why the menu vanished the moment the pointer reached it. */
+   menu, which is why the menu vanished the moment the pointer reached it.
+
+   NOT the press either, and that exclusion is load-bearing for the same
+   reason: this rule is (0,2,1) against the (0,1,0) of `.tex-press`, so it
+   would win, turn the overlay into an in-flow block and drop an empty
+   viewport-tall div into the top of the page. */
 body.page-work   > *:not(.page-nav),
-body.page-about  > *:not(.page-nav),
+body.page-about  > *:not(.page-nav):not(.tex-press),
 body.page-awards > *:not(.page-nav){position:relative;z-index:1}
 
 /* ============================ THE CABINET ============================

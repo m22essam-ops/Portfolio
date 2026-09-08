@@ -1219,7 +1219,9 @@ window.SITE_CONTENT = {
       }
     ],
     ranHeading: "Work that worked.",
-    ranNote: "Work that fought its way to production. I concepted, wrote, and occasionally hijacked the director's chair."
+    ranNote: "Work that fought its way to production. I concepted, wrote, and occasionally hijacked the director's chair.",
+    wantHeading: "Spec work.",
+    wantNote: "Concepted, written, and never made. Every one of them is still available."
   },
   about: {
     label: "Don't take it personally (it seems so)",
@@ -1235,12 +1237,11 @@ window.SITE_CONTENT = {
     ],
     portraitAlt: "Mohammed Essam",
     paragraphs: [
-      "I wanted to be a mechanical engineer, right up until I became one. So I shifted to sociology.",
-      "Mechanical engineering taught me how machines work. Sociology taught me how societies work. Neither prepared me for people who pay to skip me.",
+      "I got my first bike at seven. I learned to balance on it at eighteen. Every photograph of me in between has my arm in a cast.",
+      "Then I wanted to be a mechanical engineer, right up until I became one. So I shifted to sociology.",
+      "Mechanical engineering taught me how machines work. Sociology taught me how societies work. Advertising came to shape my inner social engineer.",
       "Designed in Egypt, put to work in the UAE, and licensed in Madrid, which makes my buffet of ideas accidentally intercontinental.",
-      "I have never used Nokia or Kodak as a cautionary tale in a presentation. Not once.",
-      "I got my first bike at seven. I finally learned to balance on it at eighteen. Every photograph of me in between has my arm in a cast.",
-      "I can be misunderstood in four languages."
+      "Then I fought AI and AI won. But I have still never used Nokia or Kodak as a don't-be-that slide. Not once."
     ],
     skillLinks: [
       {

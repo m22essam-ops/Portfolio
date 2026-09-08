@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The right column · five options</title>
+<!--
+  A switcher for ONE decision: what the three links in the right column say and
+  how they are set. Same construction as preview-ground.html: it drives the
+  REAL preview-brutalist.html in an iframe and rewrites #hLegend inside it,
+  rather than holding a copy of the ticket that would go stale.
+
+  Nothing here can reach the live site. Closing the tab puts it all back.
+  Not linked from the site. Self-contained: no stylesheet, no content.js.
+-->
+<style>
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;font:13px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace;
+       background:#1A1A18;color:#EFE9DC;display:flex;flex-direction:column}
+  .bar{flex:none;display:flex;flex-wrap:wrap;align-items:center;gap:8px;
+       padding:10px 14px;border-bottom:1px solid #EFE9DC33;background:#111}
+  .bar h1{font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+          margin:0 10px 0 0;font-weight:600;opacity:.7}
+  #opts{display:flex;flex-wrap:wrap;gap:8px}
+  button{font:inherit;cursor:pointer;padding:7px 11px;border:1px solid #EFE9DC55;
+         background:transparent;color:#EFE9DC}
+  button:hover{border-color:#EFE9DC}
+  button[aria-pressed="true"]{background:#EFE9DC;color:#1A1A18;border-color:#EFE9DC}
+  .note{flex:none;padding:9px 14px;border-bottom:1px solid #EFE9DC22;
+        background:#151515;font-size:12px;color:#EFE9DCcc;min-height:38px}
+  .note b{color:#EFE9DC}
+  .stage{flex:1;min-height:0;position:relative;background:#000}
+  iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+  .warn{padding:14px;background:#E3261A;color:#fff;display:none}
+  .warn.on{display:block}
+</style>
+</head>
+<body>
+
+<div class="bar"><h1>Right column</h1><div id="opts"></div></div>
+<div class="note" id="note"></div>
+<div class="warn" id="warn">
+  The ticket did not load. Open this over the local server
+  (<b>http://127.0.0.1:8888/preview-tabs.html</b>), not by double-clicking it.
+</div>
+<div class="stage">
+  <iframe id="frame" src="preview-brutalist.html?only=home" title="The home ticket"></iframe>
+</div>
+
+<script>
+(function () {
+  /* Every option keeps the same three destinations. Only the words, the
+     numbers and which side they sit on change, because the argument is about
+     language, not about where the links go.
+
+     `lead` is the left slot, `tail` the right. `mono` marks the small
+     tracked-out voice so an option can put the NAME big and the number small,
+     which is the swap the odds layout depends on. */
+  var LINKS = ['work.html?ran=1', 'work.html?ran=0', 'about.html'];
+
+  var OPTIONS = [
+    { k:'now', name:'Current', head:'Prizes',
+      rows:[['09','Work I have done'],['07','Work I want to do'],['01','Who am I']],
+      why:'What the preview holds. Two labels that both open "Work I", 15 and 17 characters, so they do not scan as two different things. His words: the names are the worst.' },
+
+    { k:'his', name:'1 · Your names', head:'Prizes',
+      rows:[['09','Work that worked'],['07','Spec work'],['01','Who am I']],
+      why:'Your two names dropped straight in, nothing else touched. Fixes the reading problem immediately: the labels are now different lengths and different shapes.' },
+
+    { k:'odds', name:'2 · Odds', head:'Prize &nbsp;&nbsp; Odds', big:'lead',
+      rows:[['Work that worked','1 in 9'],['Spec work','1 in 7'],['Who am I','1 in 1']],
+      why:'The one thing a real prize table always prints, and the word this whole site is built on. "1 in 1" makes the only guaranteed prize on the ticket a person. Names lead, numbers follow.' },
+
+    { k:'tier', name:'3 · Tiers', head:'Prize table',
+      rows:[['1st','Work that worked'],['2nd','Spec work'],['3rd','Who am I']],
+      why:'Closest to the printed article, and it is the one that lies: it ranks his own work first, second, third, which is not what any of these are.' },
+
+    { k:'plain', name:'4 · No heading', head:'',
+      rows:[['09','Work that worked'],['07','Spec work'],['01','Who am I']],
+      why:'Your names with the word "Prizes" removed. The real prize is the scratch panel directly underneath saying YOU GOTTA WIN SOMETHING, so the heading was naming the wrong thing.' }
+  ];
+
+  var frame = document.getElementById('frame'),
+      note  = document.getElementById('note'),
+      warn  = document.getElementById('warn'),
+      wrap  = document.getElementById('opts'),
+      current = 'now';
+
+  OPTIONS.forEach(function (o) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.textContent = o.name; b.dataset.k = o.k;
+    b.setAttribute('aria-pressed', o.k === current ? 'true' : 'false');
+    b.addEventListener('click', function () { apply(o.k); });
+    wrap.appendChild(b);
+  });
+
+  function apply(k) {
+    var o = OPTIONS.filter(function (x) { return x.k === k; })[0];
+    if (!o) return;
+    current = k;
+    [].forEach.call(wrap.querySelectorAll('button'), function (b) {
+      b.setAttribute('aria-pressed', b.dataset.k === k ? 'true' : 'false');
+    });
+    note.innerHTML = '<b>' + o.name + '</b> &middot; ' + o.why;
+
+    var doc;
+    try { doc = frame.contentDocument; } catch (e) { doc = null; }
+    if (!doc || !doc.getElementById('hLegend')) { warn.classList.add('on'); return; }
+    warn.classList.remove('on');
+
+    var legend = doc.getElementById('hLegend');
+    var lbl    = doc.getElementById('hPremios');
+
+    /* the heading is an element the ticket already owns, so blank it rather
+       than remove it: removing it changes the column's flex children and the
+       rows would silently redistribute. */
+    if (lbl) { lbl.innerHTML = o.head || ''; lbl.style.display = o.head ? '' : 'none'; }
+
+    legend.innerHTML = '';
+    o.rows.forEach(function (r, i) {
+      var a = doc.createElement('a');
+      a.className = 'legrow';
+      a.href = LINKS[i] || '#';
+      a.id = 'hLeg' + i;
+      /* `qty` is the big mono numeral, `w` the small tracked label. Swapping
+         which one holds the name is the whole difference in option 2. */
+      var leadCls = o.big === 'lead' ? 'w' : 'qty';
+      var tailCls = o.big === 'lead' ? 'qty' : 'w';
+      a.innerHTML =
+        '<span class="' + leadCls + '" id="hLeg' + i + 'q">' + r[0] + '</span>' +
+        '<span class="' + tailCls + '" id="hLeg' + i + 'w">' + r[1] + '</span>' +
+        '<span>&rarr;</span>';
+      legend.appendChild(a);
+    });
+
+    /* option 2 puts the long string on the left, so the label has to be the
+       one that grows and the number the one that does not */
+    var tag = doc.getElementById('__tabTrial');
+    if (!tag) { tag = doc.createElement('style'); tag.id = '__tabTrial'; doc.head.appendChild(tag); }
+    tag.textContent = o.big === 'lead'
+      ? '.legrow .w{flex:1;font-size:15px;letter-spacing:.08em}' +
+        '.legrow .qty{font-size:clamp(13px,1.4vh,17px);letter-spacing:.14em;' +
+        'text-transform:uppercase;font-family:var(--mono);flex:none;opacity:.75}'
+      : '';
+  }
+
+  frame.addEventListener('load', function () { apply(current); });
+  note.textContent = 'Loading the ticket…';
+})();
+</script>
+</body>
+</html>

@@ -218,9 +218,13 @@
       workLink.setAttribute('aria-haspopup', 'true');
       workLink.setAttribute('aria-expanded', 'false');
 
-      /* ONE item. The parent link is already the all-work page, so listing
-         "All work" underneath it only said the same thing twice. The menu
-         exists to offer the thing that is NOT the default.
+      /* TWO items now (6 Sep 2026, his ask): the work he has done and the work
+         he wants to do. Still no "All work" row, because the parent link IS the
+         all-work page and listing it underneath itself said the same thing
+         twice. The menu offers the two things that are NOT the default.
+
+         Both labels are strip()ped from his own headings in content.js, so a
+         menu row can never disagree with the page it opens.
 
          Two elements, not one: the outer .nav-menu is the hit area and holds
          the bridging padding, the inner .nav-menu-in is the panel you can see.
@@ -232,11 +236,16 @@
       panel.className = 'nav-menu-in';
       menu.appendChild(panel);
 
-      var sub = document.createElement('a');
-      sub.href = 'work.html?ran=1';
-      sub.textContent = strip(W.ranHeading, 'Work that worked');  /* his copy */
-      if (onWork && ran) { sub.className = 'on'; sub.setAttribute('aria-current', 'page'); }
-      panel.appendChild(sub);
+      var want = /[?&]ran=0\b/.test(location.search);
+      [['work.html?ran=1', strip(W.ranHeading,  'Work that worked'),  onWork && ran],
+       ['work.html?ran=0', strip(W.wantHeading, 'Work I want to do'), onWork && want]
+      ].forEach(function (row) {
+        var sub = document.createElement('a');
+        sub.href = row[0];
+        sub.textContent = row[1];                                   /* his copy */
+        if (row[2]) { sub.className = 'on'; sub.setAttribute('aria-current', 'page'); }
+        panel.appendChild(sub);
+      });
       item.appendChild(menu);
 
       /* the parent stays lit while you are anywhere in the section */

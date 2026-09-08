@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Home ground · five options</title>
+<!--
+  A switcher for ONE decision: what colour the home page sits on.
+
+  It loads the real preview-brutalist.html in an iframe and writes a style tag
+  into it, rather than holding a copy of the ticket. Same reason the ticket
+  designer does it: a second copy of the card is a second card to keep in step,
+  and it would be wrong the first time the real one changed.
+
+  Nothing here can reach the live site. It only ever injects CSS into the frame
+  in this tab, so closing it puts everything back.
+
+  Not linked from the site, same as preview-intro.html and preview-footer.html.
+  It is self-contained on purpose: no stylesheet, no webfont, no content.js, so
+  it still works when the thing it is testing does not.
+-->
+<style>
+  :root{ --ink:#1A1A18; --paper:#EFE9DC; }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;font:13px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;
+       background:#1A1A18;color:#EFE9DC;display:flex;flex-direction:column}
+
+  .bar{flex:none;display:flex;flex-wrap:wrap;align-items:center;gap:8px;
+       padding:10px 14px;border-bottom:1px solid #EFE9DC33;background:#111}
+  .bar h1{font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+          margin:0 10px 0 0;font-weight:600;opacity:.7}
+  /* the buttons live in their own div, which is a BLOCK inside the flex bar,
+     so without this they stack into a column instead of sitting in a row */
+  #opts{display:flex;flex-wrap:wrap;gap:8px}
+
+  button{font:inherit;cursor:pointer;padding:7px 11px;border-radius:0;
+         border:1px solid #EFE9DC55;background:transparent;color:#EFE9DC;
+         display:flex;align-items:center;gap:7px}
+  button:hover{border-color:#EFE9DC}
+  button[aria-pressed="true"]{background:#EFE9DC;color:#1A1A18;border-color:#EFE9DC}
+  /* the two chips ARE the option: the ground it sits on and the card on top */
+  .sw{display:inline-flex;border:1px solid #0006}
+  .sw i{width:13px;height:13px;display:block}
+
+  .note{flex:none;padding:8px 14px;border-bottom:1px solid #EFE9DC22;
+        background:#151515;font-size:12px;color:#EFE9DCcc;min-height:34px}
+  .note b{color:#EFE9DC;font-weight:600}
+  .note .de{opacity:.65}
+
+  .stage{flex:1;min-height:0;position:relative;background:#000}
+  iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+
+  .warn{padding:14px;background:#E3261A;color:#fff;font-size:13px;display:none}
+  .warn.on{display:block}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <h1>Home ground</h1>
+  <div id="opts"></div>
+</div>
+<div class="note" id="note"></div>
+<div class="warn" id="warn">
+  The ticket did not load. Open this over the local server
+  (<b>http://127.0.0.1:8888/preview-ground.html</b>), not by double-clicking the file:
+  an iframe opened from <b>file://</b> cannot be written into.
+</div>
+
+<div class="stage">
+  <iframe id="frame" src="preview-brutalist.html?only=home" title="The home ticket"></iframe>
+</div>
+
+<script>
+(function () {
+  /* ground = what the card sits on, card = the ticket's paper.
+     `null` means leave the stylesheet alone, which is what "Current" is:
+     it must inject NOTHING, or it stops being a picture of what ships. */
+  var OPTIONS = [
+    { k:'now', name:'Current',  ground:null,      card:null,
+      why:'What the preview holds now: ground and card both #F1E4DC, exactly the About page’s. The red field is gone and the ticket is drawn by its ink border alone.' },
+
+    { k:'red', name:'Red field (old)', ground:'#E3261A', card:'#EFE9DC',
+      why:'How it shipped until 6 Sep 2026. Here so the change can be undone by eye rather than from memory.' },
+
+    { k:'d',   name:'D · paper only', ground:'#E3261A', card:'#F1E4DC',
+      why:'Red field kept, ticket paper set to About’s exact ground.' },
+
+    { k:'a',   name:'A · literal', ground:'#F1E4DC', card:'#EFE9DC',
+      why:'About’s ground behind, the OLD card paper on it. ΔE 3.8 apart, which is why the two had to become one colour rather than two near-misses.' },
+
+    { k:'b',   name:'B', ground:'#F1E4DC', card:'#F6F3EE',
+      why:'About’s ground behind, card lifted to About’s lighter paper. ΔE 6.1. Works, but the red is gone from the site entirely.' },
+
+    { k:'c',   name:'C', ground:'#E4D2C6', card:'#F1E4DC',
+      why:'About’s well behind, About’s ground as the card. ΔE 6.7, the best separation of the three, every colour from the About palette. Red gone.' }
+  ];
+
+  /* what the page shows when nothing is injected, used for the chips and the
+     "(unchanged)" labels on the Current row. Both are #F1E4DC since 6 Sep. */
+  var RED = '#F1E4DC', PAPER = '#F1E4DC';
+  var frame = document.getElementById('frame');
+  var note  = document.getElementById('note');
+  var warn  = document.getElementById('warn');
+  var wrap  = document.getElementById('opts');
+  var current = 'now';
+
+  OPTIONS.forEach(function (o) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.setAttribute('aria-pressed', o.k === current ? 'true' : 'false');
+    b.dataset.k = o.k;
+    var sw = document.createElement('span');
+    sw.className = 'sw';
+    var g = document.createElement('i'), c = document.createElement('i');
+    g.style.background = o.ground || RED;
+    c.style.background = o.card   || PAPER;
+    sw.appendChild(g); sw.appendChild(c);
+    b.appendChild(sw);
+    b.appendChild(document.createTextNode(o.name));
+    b.addEventListener('click', function () { apply(o.k); });
+    wrap.appendChild(b);
+  });
+
+  function apply(k) {
+    var o = OPTIONS.filter(function (x) { return x.k === k; })[0];
+    if (!o) return;
+    current = k;
+    [].forEach.call(wrap.querySelectorAll('button'), function (b) {
+      b.setAttribute('aria-pressed', b.dataset.k === k ? 'true' : 'false');
+    });
+
+    note.innerHTML = '<b>' + o.name + '</b> &middot; ground ' +
+      '<span class="de">' + (o.ground || RED + ' (unchanged)') + '</span>' +
+      ' &middot; card <span class="de">' + (o.card || PAPER + ' (unchanged)') + '</span>' +
+      '<br>' + o.why;
+
+    var doc;
+    try { doc = frame.contentDocument; } catch (e) { doc = null; }
+    if (!doc || !doc.head) { warn.classList.add('on'); return; }
+    warn.classList.remove('on');
+
+    /* one style tag, rewritten. Appending a new one each time would stack
+       rules and the LAST click would win over the one before it forever. */
+    var tag = doc.getElementById('__groundTrial');
+    if (!tag) {
+      tag = doc.createElement('style');
+      tag.id = '__groundTrial';
+      doc.head.appendChild(tag);
+    }
+    tag.textContent =
+      (o.ground ? 'body{background:' + o.ground + ' !important}' : '') +
+      (o.card   ? '.ticket.paper{background:' + o.card + ' !important}' : '');
+  }
+
+  /* the frame reloads whenever auto-refresh.js sees content.js change, and a
+     reload throws the injected tag away, so re-apply on every load. */
+  frame.addEventListener('load', function () { apply(current); });
+  if (frame.contentDocument && frame.contentDocument.readyState === 'complete') apply(current);
+  else note.textContent = 'Loading the ticket…';
+})();
+</script>
+</body>
+</html>

@@ -112,17 +112,36 @@
      as tabs over one grid. It was killed as tabs in Aug 2026 for good
      reasons; he asked for it back in this form on 21 Aug and that stands.
      The plain work page is still everything, best first, one grid. */
-  var ranOnly = qs.get('ran') === '1';
+  var ranOnly  = qs.get('ran') === '1';
+  /* ?ran=0 is the other half of the same door, added 6 Sep 2026 at his request:
+     work he has done against work he WANTS to do. It is the same `ran` flag
+     read the other way round, so no project gained a field and ticking "It got
+     produced" in admin still moves a piece from one view to the other.
+
+     The reframe is his and it is the point. These are the spec, school and
+     unsold pieces, and calling them "work I want to do" makes them an ambition
+     rather than a list of things nobody bought. That is also why this is still
+     a DOOR and not tabs over one grid: tabs were killed in Aug 2026 because
+     they made visitors sort by a criterion they do not care about. A visitor
+     who never opens either door still sees all 18, best first, in one grid. */
+  var wantOnly = qs.get('ran') === '0';
+  var filtered = ranOnly || wantOnly;
 
   /* ============ WORK INDEX ============ */
   function renderIndex() {
     var items = allWork();
-    if (ranOnly) items = items.filter(function (e) { return e.ran; });
+    if (ranOnly)  items = items.filter(function (e) { return e.ran; });
+    if (wantOnly) items = items.filter(function (e) { return !e.ran; });
 
-    var heading = ranOnly ? (W.ranHeading || 'Work that worked.') : (W.heading || 'The work.');
-    var note    = ranOnly ? (W.ranNote || '') : (W.note || '');
+    var heading = ranOnly  ? (W.ranHeading  || 'Work that worked.')
+                : wantOnly ? (W.wantHeading || 'Work I want to do.')
+                :            (W.heading     || 'The work.');
+    var note    = ranOnly  ? (W.ranNote  || '')
+                : wantOnly ? (W.wantNote || '')
+                :            (W.note     || '');
     document.getElementById('pageTitle').textContent =
-      (ranOnly ? 'Work that worked' : 'The work') + ' · Mohammed Essam';
+      (ranOnly ? 'Work that worked' : wantOnly ? 'Work I want to do' : 'The work') +
+      ' · Mohammed Essam';
 
     /* The way back to all the work goes AFTER the grid, not under the heading.
        It sat at the top for one pass and it was the wrong thing in the wrong
@@ -137,7 +156,7 @@
         (note ? '<p class="note">' + esc(note) + '</p>' : '') +
       '</div></header>' +
       '<div class="wrap"><div class="work-list" id="workList"></div>' +
-        (ranOnly
+        (filtered
           ? '<p class="all-work-end"><a class="all-work" href="work.html">See all work →</a></p>'
           : '') +
       '</div>';
@@ -146,7 +165,11 @@
        are told apart at a glance instead of by reading the heading. All work
        keeps the ordinary paper and the registration cross: the difference
        belongs on the page that earned it, not on the default one. */
-    if (ranOnly) document.body.classList.add('page-work-ran');
+    if (ranOnly)  document.body.classList.add('page-work-ran');
+    /* its own ground too, so the three views are told apart at a glance rather
+       than by reading the heading. `page-work-want` is defined in styles.css
+       beside `page-work-ran`. */
+    if (wantOnly) document.body.classList.add('page-work-want');
 
     var list = document.getElementById('workList');
 

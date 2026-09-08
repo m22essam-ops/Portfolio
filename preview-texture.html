@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The paper · five presses</title>
+<!--
+  A switcher for ONE decision: what the paper looks like.
+
+  It drives the REAL about.html in an iframe and sets a class on its <body>,
+  so what you are judging is the actual page. Every option is defined in
+  styles.css (search "PRINTED, NOT SCRATCHED"); nothing is faked here.
+
+  The scratches are gone before you start: they were damage, not printing.
+  Zoom the browser to 150% or more to judge these honestly. A press texture
+  that is obvious at 100% is too strong.
+
+  Nothing here can reach the live site. Not linked from the site.
+-->
+<style>
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;font:13px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace;
+       background:#1A1A18;color:#EFE9DC;display:flex;flex-direction:column}
+  .bar{flex:none;display:flex;flex-wrap:wrap;align-items:center;gap:8px;
+       padding:10px 14px;border-bottom:1px solid #EFE9DC33;background:#111}
+  .bar h1{font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+          margin:0 10px 0 0;font-weight:600;opacity:.7}
+  #opts{display:flex;flex-wrap:wrap;gap:8px}
+  button{font:inherit;cursor:pointer;padding:7px 11px;border:1px solid #EFE9DC55;
+         background:transparent;color:#EFE9DC}
+  button:hover{border-color:#EFE9DC}
+  button[aria-pressed="true"]{background:#EFE9DC;color:#1A1A18;border-color:#EFE9DC}
+  .note{flex:none;padding:9px 14px;border-bottom:1px solid #EFE9DC22;
+        background:#151515;font-size:12px;color:#EFE9DCcc;min-height:38px}
+  .note b{color:#EFE9DC}
+  .stage{flex:1;min-height:0;position:relative;background:#000}
+  iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+  .warn{padding:14px;background:#E3261A;color:#fff;display:none}
+  .warn.on{display:block}
+</style>
+</head>
+<body>
+
+<div class="bar"><h1>The paper</h1><div id="opts"></div></div>
+<div class="note" id="note">Loading the page…</div>
+<div class="warn" id="warn">
+  about.html did not load. Open this over the local server
+  (<b>http://127.0.0.1:8888/preview-texture.html</b>), not by double-clicking it.
+</div>
+<div class="stage">
+  <iframe id="frame" src="about.html" title="The About page"></iframe>
+</div>
+
+<script>
+(function () {
+  var OPTIONS = [
+    { k:'', name:'None',
+      why:'No texture at all. The flat colour, which is what every page other than the home is today. Here as the baseline: if none of the presses beats this, none of them is earning its place.' },
+    { k:'tex-fibre', name:'1 · Fibre',
+      why:'The stock on its own. Fractal noise, the same tile the ticket already uses for its grain. Paper, no press.' },
+    { k:'tex-bands', name:'2 · Bands',
+      why:'A thermal head laying down one line at a time, 1px on and 2px off. The most literal "came out of a machine", and the one a real printed ticket actually looks like. My pick.' },
+    { k:'tex-dots',  name:'3 · Dots',
+      why:'An offset screen on a 3px grid. It rhymes with the portrait, which is already a halftone, so the page and the picture would be printed the same way.' },
+    { k:'tex-ink',   name:'4 · Uneven ink',
+      why:'Banding on an uneven period, 4px then 5px then 7px, so it reads as a head that does not lay ink perfectly evenly rather than as a CSS repeat.' },
+    { k:'tex-weave', name:'5 · Weave',
+      why:'Bands both ways: the paper’s own grid, closer to a laid stock than to a printer. The furthest from a machine of the four.' }
+  ];
+
+  var frame = document.getElementById('frame'),
+      note  = document.getElementById('note'),
+      warn  = document.getElementById('warn'),
+      wrap  = document.getElementById('opts'),
+      current = 'tex-bands';
+
+  OPTIONS.forEach(function (o) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.textContent = o.name; b.dataset.k = o.k;
+    b.addEventListener('click', function () { apply(o.k); });
+    wrap.appendChild(b);
+  });
+
+  function apply(k) {
+    var o = OPTIONS.filter(function (x) { return x.k === k; })[0];
+    if (!o) return;
+    current = k;
+    [].forEach.call(wrap.querySelectorAll('button'), function (b) {
+      b.setAttribute('aria-pressed', b.dataset.k === k ? 'true' : 'false');
+    });
+    note.innerHTML = '<b>' + o.name + '</b> &middot; ' + o.why +
+      (k ? ' <span style="opacity:.55">body class: ' + k + '</span>' : '');
+
+    var doc;
+    try { doc = frame.contentDocument; } catch (e) { doc = null; }
+    if (!doc || !doc.body) { warn.classList.add('on'); return; }
+    warn.classList.remove('on');
+
+    /* clear whatever press was on, then set this one */
+    OPTIONS.forEach(function (x) { if (x.k) doc.body.classList.remove(x.k); });
+    if (k) doc.body.classList.add(k);
+
+    /* the press rides on its own element because ::before on this page is the
+       perforation run and ::after is the stock. One div, reused. */
+    var press = doc.querySelector('.tex-press');
+    if (!press) {
+      press = doc.createElement('div');
+      press.className = 'tex-press';
+      press.setAttribute('aria-hidden', 'true');
+      doc.body.insertBefore(press, doc.body.firstChild);
+    }
+  }
+
+  frame.addEventListener('load', function () { apply(current); });
+})();
+</script>
+</body>
+</html>

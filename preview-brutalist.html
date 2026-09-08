@@ -39,7 +39,15 @@
   /* 5b. never pure black. Ink absorbed by cheap paper never reaches #000,
      and #0B0A09 was close enough to read as digital. */
   --ink:#1A1A18;
-  --paper:#EFE9DC;
+  /* EXACTLY the About page's ground (styles.css, body.page-about --bg), so the
+     surface you read on is one colour across the whole site. It was #EFE9DC,
+     which sat ΔE 3.8 from About: too close to be a decision and too far to be
+     a match, which is the worst place for two colours to be.
+
+     These two values live in different files and nothing enforces the match,
+     because this page is self-contained and does not load styles.css. If the
+     About ground ever moves, move this with it. */
+  --paper:#F1E4DC;
   --neon:#E8FF00;
   --silver:#BFBCB4;
   --silver-hi:#E4E2DC;
@@ -62,6 +70,21 @@ body.ink1{--neon:var(--paper);--silver:var(--paper);--silver-hi:var(--paper)}
 *{box-sizing:border-box;border-radius:0 !important}
 body{margin:0;background:var(--red);color:var(--ink);font-family:var(--mono);
      -webkit-font-smoothing:antialiased}
+/* ---- THE HOME GROUND, 6 Sep 2026 ----
+   The red field is gone from the page that ships. His call, asked for twice
+   and confirmed: the ground is to be EXACTLY the About page's, not a relative
+   of it. So it is the same token as the card, and the card no longer sits ON
+   something, it IS the sheet.
+
+   The ticket still reads, because its edge was never carried by the colour
+   behind it: `.perf` is a MASK, so it cuts the card's own 3px ink border into
+   scallops, and that black edge is what draws the ticket now.
+
+   Scoped to `.only-home`, which is the state index.html ships in. Screens 02
+   to 05 of this file keep the red behind them: they are the system reference,
+   and a paper ticket on paper with nothing around it stops showing where the
+   card ends. `--red` is now used by nothing else in this file. */
+body.only-home{background:var(--paper)}
 a{color:inherit;text-decoration:none}
 img{display:block;max-width:100%}
 
@@ -190,28 +213,14 @@ body.only-home.fills .ticket{position:absolute;left:50%;top:50%;
    than assuming one, so a tall crop or a wide one both work. */
 body.only-home.fills .tk-rail .med{flex:1 1 auto;aspect-ratio:auto;min-height:90px}
 
-/* ---- THE STACK ----
-   Two blank tickets under the live one. Same size, same perforated edges,
-   offset down and right so a sliver of each shows, and stepped a shade
-   darker so they separate. Tonal steps, not shadows: this site has never
-   had a drop shadow and is not getting one for this.
+/* ---- THE STACK IS GONE ----
+   Two blank tickets used to sit under the live one, offset down and right and
+   stepped a shade darker, so the home page read as a pad of tickets. He asked
+   for ONE ticket on 6 Sep 2026 and it is one ticket: the markup, both tonal
+   layers and the z-index they needed are all removed, not hidden.
 
-   Only in the full-screen home, because only there does the card have the
-   fixed geometry these can be lined up against. In the five-screen preview
-   the ticket is in normal flow and they would sit on nothing.
-
-   A hair of rotation on each. Perfectly square reads as one thick card; a
-   quarter of a degree reads as paper somebody put down. */
-.tkstack{display:none}
-body.only-home.fills .tkstack{
-  display:block;position:absolute;left:2vw;top:2vh;width:96vw;height:96vh;
-  pointer-events:none;border:var(--rule) solid var(--ink);
-}
-body.only-home.fills .tkstack.s1{z-index:1;background:#E5DFD2;
-  transform:translate(8px,6px) rotate(.15deg)}
-body.only-home.fills .tkstack.s2{z-index:0;background:#D9D3C6;
-  transform:translate(16px,11px) rotate(.28deg)}
-body.only-home.fills .ticket{z-index:3}
+   `.ticket` keeps no z-index of its own now. It had one only to sit above the
+   two layers, and there is nothing left to sit above. */
 
 @media (prefers-reduced-motion:reduce){
   .med canvas{transition:none}
@@ -410,15 +419,43 @@ body.scratched .chip.valor .chip-front::after{
 
 .tk-side{border-left:var(--hair) solid var(--ink);display:flex;flex-direction:column}
 .tk-side > .lbl{padding:14px 16px 10px;border-bottom:var(--hair) solid var(--ink);display:block}
-.legrow{display:flex;align-items:baseline;gap:12px;padding:13px 16px;
+/* ---- the ledger takes the column ----
+   Measured at 1440x900: the column is 796px tall and carried 327px of ink, so
+   469px of it, 58.9%, was a HOLE. The cause was not the amount of space, it
+   was where the space fell: `margin-top:auto` pinned the foil to the floor and
+   opened the whole gap in ONE place, in the middle.
+
+   The ledger takes it instead, which costs no new words on a card whose words
+   are all his, and it promotes the one hard number in that column: 18 pieces
+   of work, counted from work.projects.length so it stays true by itself.
+
+   Two links and the stamp share the height EQUALLY, because all three are
+   `flex:1` children of the same column. That is why the stamp lives inside
+   #hLegend rather than beside it: as a sibling it would take half the space
+   and leave the two rows a quarter each. */
+#hLegend{flex:1;display:flex;flex-direction:column}
+.legrow{display:flex;flex:1;align-items:center;gap:12px;padding:13px 16px;
         border-bottom:var(--hair) solid var(--ink)}
 .legrow:hover,.legrow:focus-visible{background:var(--neon)}
-.legrow .qty{font-size:24px;line-height:1}
+/* sized against the VIEWPORT height, because the card is 96vh and so is the
+   column it has to fill. A fixed size leaves the hole back on a short screen.
+   `center`, not the old `baseline`: at 54px against a 12px label a shared
+   baseline hangs the label off the bottom of the numeral. */
+.legrow .qty{font-size:clamp(24px,6vh,60px);line-height:1}
 .legrow .w{font-family:var(--mono);font-size:12px;letter-spacing:.16em;
            text-transform:uppercase;flex:1}
 
 /* ---- 2b. the scratch panel ---- */
-.scratch{margin-top:auto;padding:16px;border-top:var(--hair) solid var(--ink)}
+/* ---- THE STAMP IS GONE ----
+   It was tried twice on 6 Sep 2026 and killed both times: first as a rotated
+   rubber stamp hanging in the corner, which read as a sticker slapped on the
+   card, then squared off into a slot in the ledger, which was tidier and still
+   not wanted. The ledger is three links now and nothing else.
+   `ticket.stampArc` keeps its words and still prints in fine-print clause 3. */
+
+/* no `margin-top:auto` any more: the auto margins on the label and the rows
+   centre that pair, and the foil simply ends the column. */
+.scratch{padding:16px;border-top:var(--hair) solid var(--ink)}
 .scratch-in{position:relative;border:2px dashed var(--ink);overflow:hidden;
             min-height:104px;display:flex}
 .scratch-prize{flex:1;display:flex;flex-direction:column;align-items:center;
@@ -553,6 +590,15 @@ body.scratched .chip.valor .chip-front::after{
   .tk-rail .med{width:92px;height:92px;flex:none;aspect-ratio:auto}
   .tk-rail .chip{flex:1}
   .tk-side{border-left:0;border-top:var(--hair) solid var(--ink)}
+  /* stacked, the column has no fixed height for the ledger to share out, so
+     the growth is meaningless and the big numerals would only make a phone
+     scroll further. Back to the rows they always were. */
+  #hLegend{flex:none;display:block}
+  .legrow{flex:none;align-items:baseline}
+  .legrow .qty{font-size:24px}
+  /* the label wraps to two lines down here, so the row needs its full height
+     back rather than the baseline of a single line. */
+  .legrow .w{line-height:1.35}
   .grid{grid-template-columns:1fr;gap:22px;padding:20px}
   .terms{columns:2}
   /* the barcode is a fixed 168px and will not shrink, so in a row it ate
@@ -565,11 +611,6 @@ body.scratched .chip.valor .chip-front::after{
      one line here, fitLegal() shrank it to 2.88px to fit 340px, solving a
      collision that does not exist on a phone. */
   .legal p{white-space:normal;overflow:visible;font-size:9.5px}
-  /* No stack on a phone. Down here the card is sized by its content and the
-     page scrolls, while the layers are a flat 96vh, so they stopped 144px
-     short of the card's own bottom and read as two loose rectangles behind
-     it. A stack is a statement about a card that fits the screen. */
-  body.only-home.fills .tkstack{display:none}
 }
 @media (max-width:560px){ .terms{columns:1} }
 @media (prefers-reduced-motion:reduce){
@@ -603,12 +644,6 @@ body.scratched .chip.valor .chip-front::after{
 <section class="screen">
   <div class="wrap">
     <p class="screenlab">01 / Home</p>
-    <!-- THE REST OF THE STACK. Two more tickets under the top one, deepest
-         first, offset down and right so their edges show. You cannot tear
-         one off a stack that is not there, and at rest this is what says
-         the card is the top of something rather than a card on its own. -->
-    <i class="tkstack perf s2" aria-hidden="true"></i>
-    <i class="tkstack perf s1" aria-hidden="true"></i>
     <div class="ticket perf paper">
       <svg class="guil" aria-hidden="true"></svg>
       <svg class="scuff" aria-hidden="true"></svg>
@@ -826,9 +861,48 @@ body.scratched .chip.valor .chip-front::after{
   /* the 00 block is removed; `pad` still feeds the legend and the work count */
 
   var projects = (W.projects || []);
-  [[projects.length, 'Work', 'work.html'],
-   [1, 'Who am I', 'about.html'],
-   [awards, 'Awards', T.badgeUrl || 'awards.html']
+  /* NO AWARDS ROW, and this is a decision rather than an oversight. The award
+     joke is already told by "I WON NOTHING" in the black band, and that badge
+     is itself the link to the cabinet, so nothing is orphaned by dropping the
+     row. His reasoning, and it is right: the joke works BECAUSE it is thrown
+     away in a corner. Given a dedicated tab of its own, with a 00 set as large
+     as the count of his real work, it stops being an aside and becomes a
+     section about having won nothing. `awards` still feeds the fine print and
+     the work count on the later screens.
+
+     What took the slot is his split: work he has done against work he wants to
+     do. Both counts are COUNTED, never typed, so ticking "It got produced" on
+     a project in admin moves it from one row to the other and both numbers
+     stay true on their own.
+
+     They count what work.html will actually RENDER, which is not the length of
+     the array. work.html drops any project that is a draft or has no title,
+     and two of the eighteen are drafts today (modon-actors-too-seriously and
+     nothing-in-my-dreams). The old row said 18 WORK straight off
+     projects.length while the page it opened showed 16, so the front door has
+     been overstating the portfolio by two on the live site. Same filter here
+     as there, or the number promises work that is not on the other side. */
+  var shown     = projects.filter(function (p) {
+    return !p.draft && p.title && String(p.title).trim();
+  });
+  var didCount  = shown.filter(function (p) { return p.ran !== false; }).length;
+  var wantCount = shown.length - didCount;
+
+  /* HIS NAMES: "Work that worked" and "Spec work" (7 Sep 2026). They are read
+     off the headings of the pages they open, not typed here, and the trailing
+     full stop is stripped the same way site.js strips it for the nav menu.
+
+     That is the point of doing it this way: the tab, the dropdown row and the
+     page's own heading are now three prints of ONE string in content.js, so
+     renaming the page in admin renames the tab, and none of the three can end
+     up saying something the other two do not. */
+  var strip = function (s, fallback) {
+    var t = String(s == null ? '' : s).trim().replace(/\.\s*$/, '');
+    return t || fallback;
+  };
+  [[didCount,  strip(W.ranHeading,  'Work that worked'), 'work.html?ran=1'],
+   [wantCount, strip(W.wantHeading, 'Spec work'),        'work.html?ran=0'],
+   [1,         'Who am I',                               'about.html']
   ].forEach(function (r, i) {
     var a = document.createElement('a');
     a.className = 'legrow'; a.href = r[2]; a.id = 'hLeg' + i;
