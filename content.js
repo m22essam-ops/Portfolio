@@ -663,7 +663,7 @@ window.SITE_CONTENT = {
         image: "Circle_Sticker_Mockup_4.png",
         alt: "Let's Call It What It Is, Canesten",
         sticker: "Never left the deck",
-        tagline: "Taboo, rebuilt so nicknames lose.",
+        tagline: "You can't treat what you won't say",
         story: [
           "Women do not struggle with the symptoms, they struggle with the words. We whisper, we nickname, down there, the itch, and that avoidance is what keeps people from getting help.",
           "So we hijacked the one game where nicknames are actually illegal. Taboo, rebuilt: say down there, you lose. Say thrush, you score.",
