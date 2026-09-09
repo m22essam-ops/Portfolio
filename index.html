@@ -667,32 +667,49 @@ body.scratched .chip.valor .chip-front::after{
    centre column moves to the top and the rail moves under the prize rows. */
 @media (max-width:1000px){
 
-  /* ---- B, C, D: the headline opens the card ---- */
-  body.ph-head .tk-grid{display:grid}
-  body.ph-head .tk-main{order:1}
-  body.ph-head .tk-side{order:2}
-  body.ph-head .tk-rail{order:3;border-bottom:0;border-top:var(--hair) solid var(--ink)}
-  /* the photo stops sharing a row with the chips, so it can have a real ratio */
-  body.ph-head .tk-rail{flex-direction:column;align-items:stretch}
-  body.ph-head .tk-rail .chip{flex:none}
-  body.ph-head .tk-rail .med{width:100%;height:auto;aspect-ratio:4/3;order:-1;
-                             margin-bottom:14px}
-  /* the two chips sit side by side under it rather than stacking into a tower */
-  body.ph-head .tk-rail{display:flex;gap:12px;flex-wrap:wrap}
-  body.ph-head .tk-rail .chip{flex:1 1 calc(50% - 6px)}
+  /* ---- HIS PHONE LAYOUT (9 Sep 2026), and it is the layout, not an option.
+     Dictated exactly: black header, MOHAMMED ESSAM bold, the headline, the
+     sub-line, the picture, the tabs, the prize, the footer. The kicker, the
+     VALUE chip and the SERIES chip come out.
 
-  /* ---- C: portrait, matching the About page ---- */
-  body.ph-tall .tk-rail .med{aspect-ratio:3/4}
+     Why they come out rather than moving: a phone met the two chips and a
+     92x92 photo BEFORE it was told whose site it is, and "$50" and "13" are
+     ticket furniture. They are a joke about the format on a screen with no
+     room for one, and they were pushing his name below the fold.
 
-  /* ---- D: the photo as a wide band under the headline ---- */
-  body.ph-strip .tk-rail .med{aspect-ratio:21/9}
+     Nothing is deleted from the markup, so the wide card keeps all of it. */
+  #hKick{display:none}
+  .tk-rail .chip{display:none}
+
+  .tk-grid{display:grid}
+  .tk-main{order:1}
+  /* the rail is now the photograph and nothing else, so it can have a real
+     ratio instead of one dictated by a row of chips it had to share */
+  .tk-rail{order:2;border-right:0;border-bottom:0;
+           border-top:var(--hair) solid var(--ink);
+           display:block;padding:0}
+  /* the full selector, not `.tk-rail .med`. The full-screen rule up the file
+     sets `aspect-ratio:auto` at (0,3,1) so the photo can stretch to whatever
+     height the rail has left, and a (0,2,0) selector here loses to it however
+     far down the file it sits. Matched, so this one wins on order. It came out
+     3.98:1 on a phone before this line: a letterbox, not a portrait. */
+  body.only-home.fills .tk-rail .med,
+  .tk-rail .med{width:100%;height:auto;aspect-ratio:4/3;display:block;
+                flex:none;min-height:0}
+  .tk-side{order:3}
+
+  /* his name, set BOLD. Share Tech Mono ships one weight, so font-weight does
+     nothing to it and a stroke is the only lever that does: measured at 27%
+     more ink against 1.2% for font-weight:700. Same trick as the designer's
+     Thicken slider, and the reason that slider exists. */
+  .tk-name{-webkit-text-stroke:.6px currentColor;font-size:15px;letter-spacing:.24em}
 
   .wrap{width:calc(100% - 40px)}
   .tk-grid{grid-template-columns:1fr}
-  .tk-rail{border-right:0;border-bottom:var(--hair) solid var(--ink);
-           flex-direction:row;align-items:center}
-  .tk-rail .med{width:92px;height:92px;flex:none;aspect-ratio:auto}
-  .tk-rail .chip{flex:1}
+  /* the old rail rules are gone. They set the photo to 92x92 in a row beside
+     the two chips, which is the arrangement he replaced; leaving them here
+     meant two rules fighting over the same element at the same specificity,
+     and the later one won. */
   .tk-side{border-left:0;border-top:var(--hair) solid var(--ink)}
   /* stacked, the column has no fixed height for the ledger to share out, so
      the growth is meaningless and the big numerals would only make a phone
