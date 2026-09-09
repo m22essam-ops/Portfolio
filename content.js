@@ -165,8 +165,7 @@ window.SITE_CONTENT = {
         sticker: "Never left the deck",
         tagline: "Billboards that hear you walking home.",
         story: [
-          "Walking home at night in heels should not be frightening. To help women feel safer on the streets of London, Domino's showed the city its true colors with slicing-edge OOH billboards using audio-recognition technology. The billboards pick up the sound of accelerating high heels and flash intense red and blue, mimicking a police siren to scare off anyone thinking of causing trouble.",
-          "With every headline about players moving to the Saudi League, we staged a press conference where David Villa announced he was heading to Saudi Arabia to bring fun back to football."
+          "Walking home at night in heels should not be frightening. To help women feel safer on the streets of London, Domino's showed the city its true colors with slicing-edge OOH billboards using audio-recognition technology. The billboards pick up the sound of accelerating high heels and flash intense red and blue, mimicking a police siren to scare off anyone thinking of causing trouble."
         ],
         media: [
           {
@@ -1255,13 +1254,29 @@ window.SITE_CONTENT = {
       "Concept Development"
     ],
     languages: [
-      { name: "English", say: "i swear in it comfortably" },
-      { name: "Arabic",  say: "\u0647\u0627\u064a\u0644 \u0645\u0645\u062a\u0627\u0632" },
-      { name: "Spanish", say: "si leche normal" },
-      { name: "Italian", say: "english per favore" }
+      {
+        name: "English",
+        say: "i swear in it comfortably"
+      },
+      {
+        name: "Arabic",
+        say: "هايل ممتاز"
+      },
+      {
+        name: "Spanish",
+        say: "si leche normal"
+      },
+      {
+        name: "Italian",
+        say: "english per favore"
+      }
     ],
     education: [
-      { org: "Miami Ad School, Madrid", role: "Master\u2019s in Copywriting", time: "Oct 2025 \u2013 Sep 2026" }
+      {
+        org: "Miami Ad School, Madrid",
+        role: "Master’s in Copywriting",
+        time: "Oct 2025 – Sep 2026"
+      }
     ],
     experience: [
       {
