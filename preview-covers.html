@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New covers · pick one</title>
+<!-- ============================================================
+     THE COVER CHOOSER
+
+     Not a mockup of a layout: the actual candidate images, cropped to the
+     4:3 the grid uses, so a cover can be chosen by looking rather than by
+     reading a filename.
+
+     Every candidate here is ALREADY IN HIS FOLDER. Nothing is generated and
+     nothing is invented: for each project this lists the cover it uses today
+     beside every still that project's own media block already contains. Three
+     of the four broken covers turn out to have real work sitting unused a few
+     lines below them in content.js.
+
+     Where a project has NO candidates it says so and why, because a chooser
+     that quietly skips the hard ones is the same as not doing the work.
+     Not linked from the site.
+     ============================================================ -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Share+Tech+Mono&family=Barlow+Condensed:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="favicon.png">
+<style>
+  :root{--ink:#1A1A18;--paper:#F1E4DC;--red:#E3261A;--neon:#E8FF00;
+        --mono:"Share Tech Mono",ui-monospace,monospace;
+        --disp:"Archivo Black","Arial Black",Impact,sans-serif;
+        --cond:"Barlow Condensed","Arial Narrow",sans-serif;
+        --body:"Hanken Grotesk",system-ui,sans-serif}
+  *{box-sizing:border-box}
+  body{margin:0;background:#141412;color:var(--paper);font-family:var(--body)}
+  header{padding:24px 30px;border-bottom:1px solid #EFE9DC22;position:sticky;top:0;
+         background:#0f0f0e;z-index:9}
+  h1{font-family:var(--cond);font-size:16px;letter-spacing:.2em;text-transform:uppercase;
+     margin:0 0 8px;font-weight:700}
+  header p{margin:0;font-size:13px;line-height:1.6;color:#EFE9DCaa;max-width:100ch}
+  header b{color:var(--neon);font-weight:400}
+
+  .proj{padding:28px 30px;border-bottom:1px solid #EFE9DC1a}
+  .projhead{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+  .projhead .brand{font-family:var(--disp);font-size:22px;text-transform:uppercase;
+                   letter-spacing:-.01em}
+  .projhead .camp{font-family:var(--cond);font-size:16px;font-weight:600;color:#EFE9DCbb}
+  .projhead .tag{font-family:var(--mono);font-size:10px;letter-spacing:.14em;
+                 text-transform:uppercase;padding:3px 7px;border:1px solid var(--red);
+                 color:var(--red)}
+
+  .row{display:flex;gap:18px;overflow-x:auto;padding-bottom:6px;align-items:flex-start}
+  .opt{flex:none;width:260px}
+  .shot{position:relative;aspect-ratio:4/3;overflow:hidden;background:#2a2a27;
+        border:1px solid #EFE9DC22}
+  .shot img{width:100%;height:100%;object-fit:cover;display:block}
+  .shot::after{content:"";position:absolute;inset:auto 0 0 0;height:44%;
+               background:linear-gradient(transparent,rgba(0,0,0,.55));pointer-events:none}
+  .proof{position:absolute;right:8px;bottom:8px;z-index:2;background:var(--paper);
+         color:var(--ink);font-family:var(--mono);font-size:9px;letter-spacing:.12em;
+         text-transform:uppercase;padding:5px 7px;max-width:78%;text-align:right;
+         line-height:1.3}
+  .proof.spec{background:transparent;color:var(--paper);border:1px solid var(--paper)}
+  .lab{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+       margin-top:8px;line-height:1.5;color:#EFE9DC88;word-break:break-word}
+  .opt.is-now .shot{outline:2px solid var(--red);outline-offset:2px}
+  .opt.is-now .lab{color:var(--red)}
+  .opt.is-pick .shot{outline:2px solid var(--neon);outline-offset:2px}
+  .opt.is-pick .lab{color:var(--neon)}
+  .none{font-family:var(--mono);font-size:11px;letter-spacing:.08em;line-height:1.7;
+        color:#EFE9DC77;border-left:2px solid var(--red);padding-left:12px;max-width:80ch}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>New covers &middot; every candidate already in his folder</h1>
+  <p>For each project: the cover it uses today, outlined in <b style="color:var(--red)">red</b>, beside every still that project's own media block already contains, all cropped to the 4:3 the grid uses. My suggestion is outlined in <b>yellow</b>. Nothing here is generated. Three of the four broken covers have real work sitting unused a few lines below them in content.js.</p>
+</header>
+
+<div id="out"></div>
+
+<script>
+(function () {
+  var v = /^https?:$/.test(location.protocol) ? '?v=' + Math.floor(Date.now() / 60000) : '';
+  document.write('<scr' + 'ipt src="content.js' + v + '"><\/scr' + 'ipt>');
+})();
+</script>
+<script src="site.js"></script>
+<script>
+(function () {
+  var C = window.SITE_CONTENT || {}, W = C.work || {};
+  function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+  var BROKEN = {
+    'Minimalist Elegant Modern Bold  Advertising Poster Design _ Coffee Shop Branding.jpg': 1,
+    '71OjfNNqSVL.jpg': 1, 'Circle_Sticker_Mockup_4.png': 1, '_ 68.jpeg': 1
+  };
+  /* my suggestion per project, chosen from that project's OWN stills. Only
+     where there is a real choice to make; everything else keeps its cover. */
+  var PICK = {
+    'true-colors-of-dominos': 'Dominos art board.jpg',
+    'canesten-lets-call-it':  'Down there.jpg',
+    'pop-the-pressure':       'Tuborg caseboard.jpg'
+  };
+  /* why a project has nothing to choose from. Written out rather than left
+     blank, because "no candidates" and "this is a radio ad" are different
+     problems with different fixes. */
+  var WHY = {
+    'murder-whats-next':
+      'Radio. There is no film and no still anywhere in this project, which is why the cover is a scraped can. A radio piece needs a TYPOGRAPHIC cover carrying the line, or it does not belong in a visual grid.',
+    'nothing-in-my-dreams':
+      'Draft, so it does not render on the site at all. No stills in the project.',
+    'default':
+      'Every image in this project is the cover itself; the rest of the media is film. A frame grab from the video is the cover, and that needs ffmpeg, which is not on this machine.'
+  };
+
+  var live = (W.projects || []).filter(function (p) { return p.title && String(p.title).trim(); });
+  var html = '';
+
+  live.forEach(function (p) {
+    var cover = p.image || '';
+    var stills = (p.media || []).filter(function (m) {
+      return m && m.type === 'image' && m.src && String(m.src).trim();
+    }).map(function (m) { return m.src; });
+
+    /* the cover is often repeated inside media; show it once */
+    var cands = stills.filter(function (s) { return s !== cover; });
+    var campaign = String(p.title || '');
+    if (p.client) {
+      campaign = campaign.replace(new RegExp('^\\s*' + p.client.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + '\\s*[-\u2013\u2014:\u00b7]\\s*','i'), '');
+    }
+
+    function card(src, cls, label) {
+      return '<div class="opt ' + cls + '">' +
+        '<div class="shot">' +
+          (src ? '<img src="' + esc(window.imgSrc(src)) + '" alt="" loading="lazy">' : '') +
+          (p.sticker ? '<span class="proof' + (p.ran === false ? ' spec' : '') + '">' +
+             esc(p.sticker) + '</span>' : '') +
+        '</div>' +
+        '<span class="lab">' + label + '</span>' +
+      '</div>';
+    }
+
+    html += '<section class="proj">' +
+      '<div class="projhead">' +
+        '<span class="brand">' + esc(p.client || p.title) + '</span>' +
+        '<span class="camp">' + esc(campaign) + '</span>' +
+        (BROKEN[cover] ? '<span class="tag">cover is not his work</span>' : '') +
+        (p.draft ? '<span class="tag">draft, not live</span>' : '') +
+      '</div>';
+
+    if (!cands.length) {
+      html += '<div class="row">' + card(cover, 'is-now', 'Now &middot; ' + esc(cover)) + '</div>' +
+              '<p class="none">' + (WHY[p.slug] || WHY['default']) + '</p>';
+    } else {
+      html += '<div class="row">' + card(cover, 'is-now', 'Now &middot; ' + esc(cover));
+      cands.forEach(function (s) {
+        var isPick = PICK[p.slug] === s;
+        html += card(s, isPick ? 'is-pick' : '',
+          (isPick ? 'Suggested &middot; ' : '') + esc(s));
+      });
+      html += '</div>';
+    }
+    html += '</section>';
+  });
+
+  document.getElementById('out').innerHTML = html;
+})();
+</script>
+</body>
+</html>

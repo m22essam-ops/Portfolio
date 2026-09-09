@@ -28,7 +28,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Syne:wght@400..800&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Share+Tech+Mono&family=Barlow+Condensed:wght@500;600;700&family=Syne:wght@400..800&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="favicon.png">
 <link rel="stylesheet" href="styles.css">
@@ -219,7 +219,57 @@
       ? (W.producedLabel || 'Produced')
       : (W.presentedLabel || 'Spec');
 
-    var html = '<section class="project"><div class="wrap">' +
+    /* ---- the ticket header, screen 03 of the brutalist system ----
+       Behind ?hdr=1 while he decides. It was drawn at the same time as the
+       home ticket and never ported, which is why a visitor goes full-screen
+       lottery ticket on the home page and then lands on a project that looks
+       like an ordinary website.
+
+       HEADER ONLY, deliberately. The case study below stays on the gallery
+       paper: the stated art direction is that the work carries the colour, and
+       wrapping someone else's campaign stills in a red ticket fights them. */
+    var ticketHdr = /[?&]hdr=1\b/.test(location.search);
+    var html;
+
+    if (ticketHdr) {
+      /* the chips. `client · category · year · sticker`, EXCEPT that a sticker
+         which only repeats the category is dropped: on Tuborg both fields say
+         "D&AD brief" and the row printed it twice. One project of eighteen
+         today, but it is luck, not design, that keeps it to one. */
+      var chips = [p.client, p.category, p.year].filter(Boolean);
+      if (p.sticker && String(p.sticker).trim().toLowerCase() !==
+                       String(p.category || '').trim().toLowerCase()) {
+        chips.push(p.sticker);
+      }
+      /* "Play the film" only where there IS one, or it is a dead promise on
+         the projects that are stills. The preview had it as a <button> that
+         did nothing at all. */
+      var firstVid = (p.media || []).filter(function (m) {
+        return m && m.type === 'video' && m.src && String(m.src).trim();
+      })[0];
+
+      html = '<section class="project"><div class="wrap">' +
+        '<div class="pj-ticket pj-perf">' +
+          '<div class="pj-band">' +
+            '<a class="pj-back" href="work.html"><b>&lt;</b>All work</a>' +
+            '<span class="pj-serial">' + esc((C.ticket || {}).serial || '') + '</span>' +
+          '</div>' +
+          '<div class="pj-body">' +
+            '<div class="pj-chips">' +
+              chips.map(function (c) { return '<span>' + esc(c) + '</span>'; }).join('') +
+              '<span class="pj-status ' + (entry.ran ? 'is-ran' : 'is-spec') + '">' +
+                esc(status) + '</span>' +
+            '</div>' +
+            '<h1 class="pj-title">' + esc(p.title) + '</h1>' +
+            (p.tagline ? '<p class="pj-tag">' + esc(p.tagline) + '</p>' : '') +
+            '<div class="pj-acts">' +
+              (firstVid ? '<a class="pj-btn is-solid" href="#film">Play the film &rarr;</a>' : '') +
+              '<a class="pj-btn" href="#next">Next project</a>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+    } else {
+      html = '<section class="project"><div class="wrap">' +
       '<div class="project-top">' +
         '<a class="back-link" href="work.html">← All work</a>' +
       '</div>' +
@@ -232,6 +282,7 @@
       ' · <span class="' + (entry.ran ? 'status-produced' : 'status-pitched') + '">' + esc(status) + '</span>' +
       (p.sticker ? ' · ' + esc(p.sticker) : '') + '</p>' +
       '<h1 class="project-title">' + esc(p.title) + '</h1>';
+    }
 
     var story = (p.story || []).filter(function (t) { return t && String(t).trim(); });
     if (story.length) {
@@ -274,9 +325,14 @@
             '" title="' + esc(m.caption || p.title) + '" frameborder="0" loading="lazy"' +
             ' allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>' + cap + '</figure>';
         }
-        return '<figure class="project-media" data-layout="' + esc(m.layout || '') + '"><img src="' +
-          esc(window.imgSrc(m.src)) + '" alt="' + esc(m.caption || p.alt || p.title) +
-          '" loading="lazy">' + cap + '</figure>';
+        /* A BUTTON around the image, not a div with a click handler. It has to
+           be reachable by keyboard and announce itself, and a button is the
+           only element that does both without being told to. `zoomable` is
+           what the lightbox delegates on. */
+        return '<figure class="project-media" data-layout="' + esc(m.layout || '') + '">' +
+          '<button type="button" class="zoomable" aria-label="Open image">' +
+          '<img src="' + esc(window.imgSrc(m.src)) + '" alt="' +
+          esc(m.caption || p.alt || p.title) + '" loading="lazy"></button>' + cap + '</figure>';
       }).join('') + '</div>';
     }
 
@@ -313,6 +369,108 @@
 
     html += '</div></section>';
     page.innerHTML = html;
+    buildLightbox();
+  }
+
+  /* ============ THE LIGHTBOX ============
+     Click any still on a project page and it opens full size (his ask,
+     9 Sep 2026). Project images are shown at column width, and several of
+     them are posters and caseboards with type on them that is simply not
+     readable at that size.
+
+     Built once, on demand, and delegated: the media grid is written by
+     innerHTML, so a listener bound to each image would have to be rebound on
+     every render. One listener on the grid survives that.
+
+     Things that are deliberate here:
+
+       - VIDEOS ARE NOT INCLUDED. An iframe cannot be reopened larger without
+         reloading it, which would restart a film someone is halfway through.
+         Only `.zoomable` (the stills) is caught.
+       - Arrow keys and the on-screen arrows step through the stills of THAT
+         project, because a project is a set and looking at one usually means
+         looking at the next.
+       - Focus is remembered and given back on close. Without it the keyboard
+         lands at the top of the document and the reader loses their place.
+       - `overflow:hidden` on <html> while open, or the page behind scrolls
+         under the overlay on a trackpad.
+       - The close button is a real button and Escape works. An overlay you
+         can only leave by clicking exactly the right pixel is a trap. */
+  var LB = null;
+  function buildLightbox() {
+    var grid = document.querySelector('.media-grid');
+    if (!grid) return;
+
+    var shots = [].slice.call(grid.querySelectorAll('.zoomable img'));
+    if (!shots.length) return;
+
+    grid.addEventListener('click', function (ev) {
+      var btn = ev.target.closest ? ev.target.closest('.zoomable') : null;
+      if (!btn) return;
+      var img = btn.querySelector('img');
+      openLightbox(shots.indexOf(img));
+    });
+  }
+
+  function openLightbox(start) {
+    var grid = document.querySelector('.media-grid');
+    var shots = [].slice.call(grid.querySelectorAll('.zoomable img'));
+    if (!shots.length) return;
+    var at = Math.max(0, start), opener = document.activeElement;
+
+    if (!LB) {
+      LB = document.createElement('div');
+      LB.className = 'lb';
+      LB.setAttribute('role', 'dialog');
+      LB.setAttribute('aria-modal', 'true');
+      LB.setAttribute('aria-label', 'Image viewer');
+      LB.innerHTML =
+        '<button type="button" class="lb-x" aria-label="Close">&times;</button>' +
+        '<button type="button" class="lb-nav lb-prev" aria-label="Previous image">&larr;</button>' +
+        '<figure class="lb-stage"><img alt=""><figcaption class="lb-cap"></figcaption></figure>' +
+        '<button type="button" class="lb-nav lb-next" aria-label="Next image">&rarr;</button>';
+      document.body.appendChild(LB);
+    }
+    var big = LB.querySelector('img'), cap = LB.querySelector('.lb-cap');
+
+    function show(i) {
+      at = (i + shots.length) % shots.length;
+      var s = shots[at];
+      big.src = s.currentSrc || s.src;
+      big.alt = s.alt || '';
+      /* the caption under the image on the page, if it has one */
+      var fig = s.closest('figure');
+      var fc = fig && fig.querySelector('figcaption');
+      cap.textContent = fc ? fc.textContent : (s.alt || '');
+      cap.hidden = !cap.textContent;
+      /* one image and the arrows are noise */
+      LB.querySelectorAll('.lb-nav').forEach(function (n) { n.hidden = shots.length < 2; });
+    }
+
+    function close() {
+      LB.classList.remove('is-open');
+      document.documentElement.style.overflow = '';
+      document.removeEventListener('keydown', onKey);
+      if (opener && opener.focus) opener.focus();
+    }
+    function onKey(e) {
+      if (e.key === 'Escape') close();
+      else if (e.key === 'ArrowRight') show(at + 1);
+      else if (e.key === 'ArrowLeft') show(at - 1);
+    }
+
+    LB.onclick = function (e) {
+      if (e.target === LB) close();                       /* the backdrop */
+      else if (e.target.closest('.lb-x')) close();
+      else if (e.target.closest('.lb-next')) show(at + 1);
+      else if (e.target.closest('.lb-prev')) show(at - 1);
+    };
+
+    show(at);
+    LB.classList.add('is-open');
+    document.documentElement.style.overflow = 'hidden';
+    document.addEventListener('keydown', onKey);
+    LB.querySelector('.lb-x').focus();
   }
 
   if (slug) {

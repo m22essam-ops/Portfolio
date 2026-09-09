@@ -73,7 +73,7 @@
            width. They are inside it so they follow the bio, and pulled left
            by exactly the left column plus the gap. -->
       <div class="lists">
-        <p class="blk-head" id="expHead" hidden>Milestones</p>
+        <p class="blk-head" id="expHead" hidden>Experience</p>
         <div class="exp-list" id="expList"></div>
         <p class="blk-head" id="langHead" hidden>Languages</p>
         <div class="lang-list" id="langList"></div>
@@ -302,11 +302,14 @@
       '<span class="lang-say" dir="auto">' + esc(l.say) + '</span>' +
       '</div>';
   }).join(''));
-  /* ONE list. Education and jobs in a single chronological run called
-     Milestones, so the newest and most relevant thing he has done sits at
-     the top where a hirer looks first, instead of in a separate block
-     underneath the jobs. His call, and the reason a one-row Education
-     heading is gone. */
+  /* ONE list: education and jobs in a single reverse-chronological run, so
+     the newest and most relevant thing he has done sits at the top where a
+     hirer looks first instead of in a separate block under the jobs.
+
+     It is called EXPERIENCE, not Milestones (9 Sep 2026, his call). A
+     milestone is a landmark you passed; a job is work you did. Every real
+     portfolio and every CV convention calls this column experience, and a
+     recruiter scanning for the word was not finding it. */
   var milestones = (A.education || []).concat(jobs);
   fillBlock('expHead', 'expList', rows(milestones));
 
