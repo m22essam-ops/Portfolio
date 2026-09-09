@@ -1013,9 +1013,7 @@ window.SITE_CONTENT = {
         sticker: "Never left the deck",
         tagline: "Sunscreen, from the villain's point of view.",
         story: [
-          "For years brands sold sunscreen as sun protection. The truth is it was mainly used to hide crimes and to start them. Name one other product that leaves a white mask big enough to make a face unrecognisable, takes forever to rub into a child, causes chaos and starts tears. There is none.",
-          "So it was time to end that shady business, and make clear that people who belong to the dark should not benefit from a product designed to expose you to light.",
-          "Nivea's new formula: no tears, no white cast, absorbed in seconds. Which were, ironically, the exact reasons it was bad news for some."
+          "For years, sunscreen was the best mask in the business. Nivea's new formula absorbs in seconds, leaves no white cast, and puts a lot of people out of work."
         ],
         media: [
           {
