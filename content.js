@@ -75,86 +75,6 @@ window.SITE_CONTENT = {
     limit: 0,
     projects: [
       {
-        slug: "pop-the-pressure",
-        title: "Tuborg - Pop the Pressure",
-        client: "Tuborg",
-        category: "D&AD brief",
-        year: "2026",
-        image: "Tuborg poster on poster 4x3.jpg",
-        alt: "Tuborg Pop the Pressure",
-        sticker: "D&AD brief",
-        tagline: "Thousands of balloons, one Glastonbury set.",
-        story: [
-          "Rising depression and anxiety are holding London's youth back.",
-          "To release the pressure, Tuborg ran a symbolic activation at Glastonbury. During a set by Dave, fans popped thousands of balloons standing in for real struggles, to feel lighter, see clearer and party responsibly."
-        ],
-        media: [
-          {
-            type: "image",
-            src: "Tuborg caseboard.jpg",
-            caption: ""
-          },
-          {
-            type: "video",
-            src: "<div style=\"padding:55.21% 0 0 0;position:relative;\"><iframe src=\"https://player.vimeo.com/video/1218494179?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;\" title=\"Tuborg - Pop The Pressure\"></iframe></div>",
-            caption: ""
-          },
-          {
-            type: "image",
-            src: "Tuborg Poster Mockup 44.jpg",
-            caption: "",
-            layout: "half"
-          },
-          {
-            type: "image",
-            src: "Tuborg poster on poster.jpg",
-            caption: "",
-            layout: "half"
-          },
-          {
-            type: "image",
-            src: "Tuborg wall  mockup.png",
-            caption: "",
-            layout: "half"
-          },
-          {
-            type: "image",
-            src: "tuborg tote.jpg",
-            caption: "",
-            layout: "half"
-          }
-        ],
-        credits: [
-          {
-            role: "Team",
-            name: "Mohammed Essam, Baltazar Lee, Ana Molinero"
-          },
-          {
-            role: "Tutor",
-            name: "Pranay Suri"
-          },
-          {
-            role: "Client",
-            name: "Tuborg for D&AD, Miami Ad School Madrid"
-          },
-          {
-            role: "Producer",
-            name: "Evgeniia Sabirzianova"
-          },
-          {
-            role: "Production lead",
-            name: "Olesia Starodubtseva"
-          },
-          {
-            role: "Brand director",
-            name: "Viktoria Nikulnikova"
-          }
-        ],
-        next: {},
-        "draft": false,
-        "ran": false
-      },
-      {
         slug: "true-colors-of-dominos",
         title: "Domino's - The True Colors",
         client: "Domino's",
@@ -282,6 +202,64 @@ window.SITE_CONTENT = {
         },
         "draft": false,
         "ran": true
+      },
+      {
+        slug: "the-mumbled-code",
+        title: "Babyshop - Make Their First Words Discount",
+        client: "Babyshop",
+        category: "Digital activation",
+        year: "2025",
+        image: "live/uqwyeuoa-random-8-words-cover.jpg",
+        alt: "Babyshop, Make Their First Words Discount",
+        sticker: "Concept only",
+        tagline: "Every toddler keysmash is a promo code.",
+        story: [
+          "Give a toddler your phone and they will type stringsjksdhsad, or 2m$sdajhad, or kasd@34jksad.",
+          "So why not make the chaos count.",
+          "Babyshop, through their app, turns any 8-letter toddler smash into a promo code. jklmnopa unlocks an extra 15% off. Making their first words discount."
+        ],
+        media: [
+          {
+            type: "video",
+            src: "babyshop.mp4",
+            caption: ""
+          }
+        ],
+        credits: [
+          {
+            role: "Copywriter",
+            name: "Mohammed Essam"
+          }
+        ],
+        next: {},
+        "draft": false,
+        "ran": false
+      },
+      {
+        slug: "murder-whats-next",
+        title: "Liquid Death - Murder What's Next",
+        client: "Liquid Death",
+        category: "Radio",
+        year: "2026",
+        image: "71OjfNNqSVL.jpg",
+        alt: "",
+        sticker: "Thirsty for fame",
+        tagline: "",
+        story: [
+          "When you murder your thirst with Liquid Death, you might like it so much that you start thinking of your next murder.",
+          "In this radio campaign, Liquid Death shows how the taste of its water makes people feel like killing. But, as the suits probably say, it’s better to just “murder” your thirst. Way more legal, safe, and super refreshing!"
+        ],
+        media: [
+          {
+            type: "video",
+            src: "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/q2Wa7VXfJeY?si=mNmOs_qwjPKpUsbc\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+            caption: ""
+          }
+        ],
+        credits: [],
+        next: {},
+        "draft": false,
+        "ran": false
       },
       {
         slug: "pringles-champions-of-fun",
@@ -525,6 +503,86 @@ window.SITE_CONTENT = {
         "ran": true
       },
       {
+        slug: "pop-the-pressure",
+        title: "Tuborg - Pop the Pressure",
+        client: "Tuborg",
+        category: "D&AD brief",
+        year: "2026",
+        image: "Tuborg poster on poster 4x3.jpg",
+        alt: "Tuborg Pop the Pressure",
+        sticker: "D&AD brief",
+        tagline: "Thousands of balloons, one Glastonbury set.",
+        story: [
+          "Rising depression and anxiety are holding London's youth back.",
+          "To release the pressure, Tuborg ran a symbolic activation at Glastonbury. During a set by Dave, fans popped thousands of balloons standing in for real struggles, to feel lighter, see clearer and party responsibly."
+        ],
+        media: [
+          {
+            type: "image",
+            src: "Tuborg caseboard.jpg",
+            caption: ""
+          },
+          {
+            type: "video",
+            src: "<div style=\"padding:55.21% 0 0 0;position:relative;\"><iframe src=\"https://player.vimeo.com/video/1218494179?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;\" title=\"Tuborg - Pop The Pressure\"></iframe></div>",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "Tuborg Poster Mockup 44.jpg",
+            caption: "",
+            layout: "half"
+          },
+          {
+            type: "image",
+            src: "Tuborg poster on poster.jpg",
+            caption: "",
+            layout: "half"
+          },
+          {
+            type: "image",
+            src: "Tuborg wall  mockup.png",
+            caption: "",
+            layout: "half"
+          },
+          {
+            type: "image",
+            src: "tuborg tote.jpg",
+            caption: "",
+            layout: "half"
+          }
+        ],
+        credits: [
+          {
+            role: "Team",
+            name: "Mohammed Essam, Baltazar Lee, Ana Molinero"
+          },
+          {
+            role: "Tutor",
+            name: "Pranay Suri"
+          },
+          {
+            role: "Client",
+            name: "Tuborg for D&AD, Miami Ad School Madrid"
+          },
+          {
+            role: "Producer",
+            name: "Evgeniia Sabirzianova"
+          },
+          {
+            role: "Production lead",
+            name: "Olesia Starodubtseva"
+          },
+          {
+            role: "Brand director",
+            name: "Viktoria Nikulnikova"
+          }
+        ],
+        next: {},
+        "draft": false,
+        "ran": false
+      },
+      {
         slug: "song-for-the-cashless",
         title: "Social Nuts - A Song for the Cashless",
         client: "Social Nuts",
@@ -595,6 +653,69 @@ window.SITE_CONTENT = {
         next: {},
         "draft": false,
         "ran": true
+      },
+      {
+        slug: "canesten-lets-call-it",
+        title: "Canesten - Let's Call It What It Is",
+        client: "Canesten",
+        category: "Miami Ad School",
+        year: "2026",
+        image: "Circle_Sticker_Mockup_4.png",
+        alt: "Let's Call It What It Is, Canesten",
+        sticker: "Never left the deck",
+        tagline: "Taboo, rebuilt so nicknames lose.",
+        story: [
+          "Women do not struggle with the symptoms, they struggle with the words. We whisper, we nickname, down there, the itch, and that avoidance is what keeps people from getting help.",
+          "So we hijacked the one game where nicknames are actually illegal. Taboo, rebuilt: say down there, you lose. Say thrush, you score.",
+          "Same rule in every market: you cannot treat what you cannot name."
+        ],
+        media: [
+          {
+            type: "image",
+            src: "Down there.jpg",
+            caption: "",
+            layout: "half"
+          },
+          {
+            type: "image",
+            src: "pinky toe.jpg",
+            caption: "",
+            layout: "half"
+          },
+          {
+            type: "image",
+            src: "stickers .jpg",
+            caption: "",
+            layout: "full"
+          },
+          {
+            type: "image",
+            src: "Window Sign Mockup.jpg",
+            caption: "",
+            layout: "full"
+          }
+        ],
+        credits: [
+          {
+            role: "Copywriters",
+            name: "Mohammed Essam, Tiago Lima"
+          },
+          {
+            role: "Art directors",
+            name: "Anna Zurabishvili, Maddalena Manchetta"
+          },
+          {
+            role: "Teacher",
+            name: "Victor Gonzalez"
+          },
+          {
+            role: "Client",
+            name: "Canesten, Miami Ad School Madrid"
+          }
+        ],
+        next: {},
+        "draft": false,
+        "ran": false
       },
       {
         slug: "quarantine-games",
@@ -940,69 +1061,6 @@ window.SITE_CONTENT = {
         "ran": true
       },
       {
-        slug: "canesten-lets-call-it",
-        title: "Canesten - Let's Call It What It Is",
-        client: "Canesten",
-        category: "Miami Ad School",
-        year: "2026",
-        image: "Circle_Sticker_Mockup_4.png",
-        alt: "Let's Call It What It Is, Canesten",
-        sticker: "Never left the deck",
-        tagline: "Taboo, rebuilt so nicknames lose.",
-        story: [
-          "Women do not struggle with the symptoms, they struggle with the words. We whisper, we nickname, down there, the itch, and that avoidance is what keeps people from getting help.",
-          "So we hijacked the one game where nicknames are actually illegal. Taboo, rebuilt: say down there, you lose. Say thrush, you score.",
-          "Same rule in every market: you cannot treat what you cannot name."
-        ],
-        media: [
-          {
-            type: "image",
-            src: "Down there.jpg",
-            caption: "",
-            layout: "half"
-          },
-          {
-            type: "image",
-            src: "pinky toe.jpg",
-            caption: "",
-            layout: "half"
-          },
-          {
-            type: "image",
-            src: "stickers .jpg",
-            caption: "",
-            layout: "full"
-          },
-          {
-            type: "image",
-            src: "Window Sign Mockup.jpg",
-            caption: "",
-            layout: "full"
-          }
-        ],
-        credits: [
-          {
-            role: "Copywriters",
-            name: "Mohammed Essam, Tiago Lima"
-          },
-          {
-            role: "Art directors",
-            name: "Anna Zurabishvili, Maddalena Manchetta"
-          },
-          {
-            role: "Teacher",
-            name: "Victor Gonzalez"
-          },
-          {
-            role: "Client",
-            name: "Canesten, Miami Ad School Madrid"
-          }
-        ],
-        next: {},
-        "draft": false,
-        "ran": false
-      },
-      {
         slug: "nivea-never-see-the-sun",
         title: "Nivea - I Might Never See the Sun Again",
         client: "Nivea",
@@ -1058,38 +1116,6 @@ window.SITE_CONTENT = {
           {
             role: "Client",
             name: "Nivea, Miami Ad School Madrid"
-          }
-        ],
-        next: {},
-        "draft": false,
-        "ran": false
-      },
-      {
-        slug: "the-mumbled-code",
-        title: "Babyshop - Make Their First Words Discount",
-        client: "Babyshop",
-        category: "Digital activation",
-        year: "2025",
-        image: "live/uqwyeuoa-random-8-words-cover.jpg",
-        alt: "Babyshop, Make Their First Words Discount",
-        sticker: "Concept only",
-        tagline: "Every toddler keysmash is a promo code.",
-        story: [
-          "Give a toddler your phone and they will type stringsjksdhsad, or 2m$sdajhad, or kasd@34jksad.",
-          "So why not make the chaos count.",
-          "Babyshop, through their app, turns any 8-letter toddler smash into a promo code. jklmnopa unlocks an extra 15% off. Making their first words discount."
-        ],
-        media: [
-          {
-            type: "video",
-            src: "babyshop.mp4",
-            caption: ""
-          }
-        ],
-        credits: [
-          {
-            role: "Copywriter",
-            name: "Mohammed Essam"
           }
         ],
         next: {},
@@ -1182,32 +1208,6 @@ window.SITE_CONTENT = {
         ],
         next: {},
         "draft": true,
-        "ran": false
-      },
-      {
-        slug: "murder-whats-next",
-        title: "Liquid Death - Murder What's Next",
-        client: "Liquid Death",
-        category: "Radio",
-        year: "2026",
-        image: "71OjfNNqSVL.jpg",
-        alt: "",
-        sticker: "Thirsty for fame",
-        tagline: "",
-        story: [
-          "When you murder your thirst with Liquid Death, you might like it so much that you start thinking of your next murder.",
-          "In this radio campaign, Liquid Death shows how the taste of its water makes people feel like killing. But, as the suits probably say, it’s better to just “murder” your thirst. Way more legal, safe, and super refreshing!"
-        ],
-        media: [
-          {
-            type: "video",
-            src: "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/q2Wa7VXfJeY?si=mNmOs_qwjPKpUsbc\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
-            caption: ""
-          }
-        ],
-        credits: [],
-        next: {},
-        "draft": false,
         "ran": false
       }
     ],
