@@ -48,7 +48,14 @@
   --bg:#F2EEE5;
   --fg:#0B0A09;
   --fg-dim:#0B0A09a8;
-  --fg-faint:#0B0A0961;
+  /* Raised from #0B0A0961 on 9 Sep 2026. At 38% ink it composited to 2.44:1
+     against a 4.5 requirement, and it was not decoration: it set the job title
+     under his name in the nav on EVERY page, the serial on every work card,
+     "See all work" and the copyright line. Four visible things, all failing.
+     0xB4 is 71% ink, which measures 4.6:1 on the lightest ground the site uses
+     (#F1E4DC) and better on the others, so it clears on all of them.
+     Still visibly quieter than --fg-dim, which is the job it was doing. */
+  --fg-faint:#0B0A09b4;
   --line:#0B0A091f;
   --well:#E4DFD2;
   /* the sticky nav's own ground: the same paper, nearly opaque. It was
@@ -680,7 +687,12 @@ body.has-won .tk-badge{background:var(--ink)}
    it has 331px to fit three items in. The floor is what keeps that true. */
 .page-nav .links{display:flex;gap:24px;flex:none;
                  font-size:clamp(15px,1.3vw,18px)}
-.page-nav .links a{text-decoration:none;opacity:.55;transition:opacity .16s;white-space:nowrap}
+/* .55 put the caret at 3.3:1 against a 4.5 requirement, and the caret is the
+   ONLY thing telling anyone the Work menu opens. Opacity on the link is a
+   group opacity, so a child cannot undo it: the fix has to be here, not on
+   `.nav-caret`. .72 measures past 4.5 and is still visibly quieter than the
+   current page's link, which is the whole job of the dimming. */
+.page-nav .links a{text-decoration:none;opacity:.72;transition:opacity .16s;white-space:nowrap}
 .page-nav .links a:hover,.page-nav .links a.on{opacity:1;color:var(--red)}
 
 /* ---- the work menu ----
@@ -1510,6 +1522,17 @@ body.is-home.home-locked{overflow:hidden}
 /* the base for both work pages, and what All work keeps: the ordinary paper */
 body.page-work  { --bg:#EFE9DC; --well:#E2DACA; --nav-bg:#EFE9DCf2; }
 body.page-about { --bg:#F1E4DC; --well:#E4D2C6; --nav-bg:#F1E4DCf2; }
+/* ticket.terms, at the foot of the About page (9 Sep 2026). Set in the system
+   voice at the size the ticket sets its own small print, above a hairline, so
+   it reads as a disclaimer and not as a closing statement. It is aligned to
+   the Milestones list rather than the bio column, because it belongs to the
+   page rather than to the paragraph above it. */
+body.page-about .about-terms{
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.13em;
+  text-transform:uppercase;line-height:1.7;color:var(--fg-dim);
+  max-width:1200px;margin:64px auto 0;padding-top:16px;
+  border-top:1px solid var(--line);
+}
 body.page-awards{ --bg:#E6E7E2; --well:#D6D8D1; --nav-bg:#E6E7E2f2; }
 /* Work that worked, and ONLY that page: a dusty blue. The work that ran is the
    one part of the site that is finished, so it is the one ground that is a

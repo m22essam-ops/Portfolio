@@ -11,7 +11,6 @@ window.TICKET_DESIGN = {
   "vars": {},
   "body": {},
   "text": {
-    "hLegal": "1. ANY AWARD FROM MY MOM IS NOT COUNTED.   2. THIS TICKET HAS NO CASH VALUE.   3. BOB MARLEY NEVER WON THE GRAMMY, AMY ADAMS THE OSCARS, AND NOW IT’S ME.   4. SUBJECT TO CHANGE WITHOUT PRIOR NOTICE.",
     "hValorVal": "$50"
   },
   "style": {},

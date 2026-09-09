@@ -9,11 +9,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mohammed Essam &mdash; Award-losing copywriter</title>
+<title>Mohammed Essam, award-losing copywriter</title>
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Mohammed Essam">
 <meta property="og:locale" content="en_GB">
-<meta property="og:title" content="Mohammed Essam &mdash; Award-losing copywriter">
+<meta property="og:title" content="Mohammed Essam, award-losing copywriter">
 <meta property="og:description" content="Mohammed Essam, copywriter. Cairo, Dubai, Madrid. Work that ran, and work that didn&#x27;t.">
 <meta property="og:url" content="https://www.mohammedessam.com/">
 <meta property="og:image" content="https://www.mohammedessam.com/images/og.jpg">
@@ -244,6 +244,36 @@ body.only-home.fills .tk-rail .med{flex:1 1 auto;aspect-ratio:auto;min-height:90
 .tk-band{background:var(--ink);color:var(--paper);display:flex;
          justify-content:space-between;align-items:center;gap:20px;padding:9px 18px}
 .tk-band .lbl{color:var(--paper)}
+
+/* ---- "I WON NOTHING" has to look clickable (his ask, 9 Sep 2026) ----
+   It is the door to the cabinet and it was styled exactly like the motto on
+   the other end of the band, which is not a link. Nothing said it could be
+   pressed until the cursor happened to cross it.
+
+   A rule that DRAWS ITSELF IN from the left rather than a colour change or an
+   underline that is always there: at rest the badge is untouched, so the joke
+   is still thrown away in a corner, and the moment you are near it the card
+   admits it does something. `scaleX` on a pseudo, so nothing reflows and the
+   band cannot change height on hover.
+
+   `:focus-visible` gets the same treatment, or the affordance exists only for
+   people using a mouse. */
+a#hBadge{position:relative;display:inline-block}
+a#hBadge::after{content:"";position:absolute;left:0;right:0;bottom:-3px;
+  height:1px;background:var(--paper);
+  transform:scaleX(0);transform-origin:left center;
+  transition:transform .22s cubic-bezier(.2,.7,.3,1)}
+a#hBadge:hover::after,a#hBadge:focus-visible::after{transform:scaleX(1)}
+/* the smallest possible nudge of the type itself, so the whole label reacts
+   and not just the rule under it */
+a#hBadge{transition:letter-spacing .22s ease}
+a#hBadge:hover,a#hBadge:focus-visible{letter-spacing:.26em}
+@media (prefers-reduced-motion:reduce){
+  a#hBadge,a#hBadge::after{transition:none}
+  /* asked for less motion, so the rule is simply THERE rather than drawn */
+  a#hBadge:hover::after,a#hBadge:focus-visible::after{transform:scaleX(1)}
+  a#hBadge:hover,a#hBadge:focus-visible{letter-spacing:inherit}
+}
 /* 1. bookends. He wrote "1fr 2.5fr 1fr (or roughly 20/60/20)" and those are
    two different grids: 2.5fr is 22/56/22, which is a NARROWER centre than the
    190px/1fr/260px it had. 3fr is the 20/60/20 he named and the one that
@@ -403,8 +433,15 @@ body.scratched .chip.valor .chip-front::after{
    would break it to two lines while 42px of column sat unused beside them.
    `pretty` only ever moves the LAST line, so where it does wrap on a narrower
    card it cannot leave one word stranded. */
-.tk-sub{font-family:var(--mono);font-size:clamp(12px,1.28vw,18px);
-        letter-spacing:.02em;line-height:1.45;margin:22px 0 0;text-wrap:pretty}
+/* Upper case, his call (9 Sep 2026). It also settles the one thing left over
+   from the lower-case pass: this was the only sentence on the site still
+   opening in lower case, and in caps the question does not arise. His copy
+   stays sentence case in content.js, so admin shows him a readable line and
+   the shouting is the stylesheet's decision, not something typed into a field.
+   Tracking is opened up because caps set at mono default read as a block. */
+.tk-sub{font-family:var(--mono);font-size:clamp(11px,1.16vw,16px);
+        text-transform:uppercase;letter-spacing:.11em;
+        line-height:1.5;margin:22px 0 0;text-wrap:pretty}
 
 /* ---- 1. the 00 data field is gone ----
    The column keeps a floor so removing it leaves negative space under the
@@ -716,7 +753,23 @@ body.scratched .chip.valor .chip-front::after{
   </div>
 </section>
 
-<script src="content.js"></script>
+<script>
+(function () {
+  /* ---- THE CACHE STAMP, restored to the home page 9 Sep 2026 ----
+     GitHub Pages serves content.js with `cache-control: max-age=600`, so for
+     ten minutes after a save the live site keeps handing out the previous
+     words. Every other page writes this stamp; the home page lost it when the
+     brutalist ticket replaced the old index.html, so for weeks a save landed
+     everywhere EXCEPT the loudest page on the site. That is exactly the
+     "I press save and nothing happens" bug this was built to kill.
+
+     Only on a real web server. Anything else (file://, and the data: URLs some
+     preview panes use) gets exactly the tag this always had, so the
+     double-click workflow cannot regress. */
+  var v = /^https?:$/.test(location.protocol) ? '?v=' + Math.floor(Date.now() / 60000) : '';
+  document.write('<scr' + 'ipt src="content.js' + v + '"><\/scr' + 'ipt>');
+})();
+</script>
 <script>
 (function () {
   var C = window.SITE_CONTENT || {};
@@ -726,8 +779,30 @@ body.scratched .chip.valor .chip-front::after{
   var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ---------------- home ---------------- */
-  txt('hMotto', T.band || '');
-  txt('hBadge', T.badge || '');
+  /* ---- THE AWARDS SWITCH, rebuilt 9 Sep 2026 ----
+     `ticket.awards` is an array. Empty, the card runs the award-losing
+     version. Put one award in it and the whole card corrects itself: the band,
+     the badge, both halves of the headline and the stamp all swap to their
+     `won*` twins, and the card prints what was won.
+
+     This existed on the OLD index.html and was lost when the brutalist ticket
+     replaced it. For five days the six won* fields were read by nothing, so
+     the day he finally won something the site would still have said
+     AWARD-LOSING and I WON NOTHING, silently. That is the one failure this
+     mechanism exists to prevent, so it is back and it is tested both ways.
+
+     Everything reads through pick(), so a missing won* field falls back to the
+     losing copy rather than printing an empty band. */
+  var awards = (T.awards || []).length;
+  var won    = awards > 0;
+  function pick(wonKey, key) {
+    var w = String(T[wonKey] == null ? '' : T[wonKey]).trim();
+    return (won && w) ? w : (T[key] || '');
+  }
+  txt('hMotto', pick('wonBand',  'band'));
+  txt('hBadge', pick('wonBadge', 'badge'));
+  /* the card announces itself as a correction notice */
+  if (won) document.body.classList.add('has-won');
 
   /* ---- the two quiet links, same contract as index.html ----
      "I won nothing" is a claim, so it opens the cabinet and shows you. The
@@ -765,8 +840,8 @@ body.scratched .chip.valor .chip-front::after{
      and not a character in his copy, so it survives an edit in the designer
      and never turns up inside the field he is typing into. */
   $('hHead').innerHTML =
-    '<span id="hHeadTop">' + (T.titleTop || '').toUpperCase() + '<i class="fn">*</i></span>' +
-    '<span id="hHeadBot">' + (T.titleBottom || '').toUpperCase() + '</span>';
+    '<span id="hHeadTop">' + pick('wonTitleTop', 'titleTop').toUpperCase() + '<i class="fn">*</i></span>' +
+    '<span id="hHeadBot">' + pick('wonTitleBottom', 'titleBottom').toUpperCase() + '</span>';
 
   /* the sub-line. Empty and the element is removed rather than left as a blank
      box holding 22px of margin, so clearing the field in admin or the designer
@@ -776,15 +851,22 @@ body.scratched .chip.valor .chip-front::after{
      for one pass and he took it off, so there is no markup in here at all now:
      the line is his words, set once, and the designer edits it as words. */
   (function () {
-    var sub = $('hSub'), s = String(T.sub || '').trim();
+    var sub = $('hSub');
+    /* when an award lands, wonLine TAKES OVER the sub-line. It is the sentence
+       that explains the correction ("We regret to inform you the joke is
+       over."), and this is the only slot on the card it can occupy without
+       displacing something. Same rule as the old index.html. */
+    var s = String(pick('wonLine', 'sub') || '').trim();
     if (!sub) return;
     if (!s) { sub.remove(); return; }
     sub.textContent = s;
   })();
 
-  var awards = (T.awards || []).length;
+  /* `awards` is declared once, up with the awards switch. Re-declaring it here
+     with `var` was harmless while both said the same thing, but two sources
+     for one number is how they stop agreeing. */
   var pad = (awards < 10 ? '0' : '') + awards;
-  /* the 00 block is removed; `pad` still feeds the legend and the work count */
+  /* the 00 block is removed; `pad` still feeds the work count on screen 04 */
 
   var projects = (W.projects || []);
   /* NO AWARDS ROW, and this is a decision rather than an oversight. The award
@@ -1127,7 +1209,7 @@ body.scratched .chip.valor .chip-front::after{
   if ($('fTerms')) $('fTerms').innerHTML = [
     '<b>1.</b> ' + (T.terms || ''),
     '<b>2.</b> This ticket entitles the bearer to one (1) copywriter, subject to availability, mood, and the bearer having read this far.',
-    '<b>3.</b> ' + (T.stampArc || 'Valid until hired') + '. No cash alternative is offered and none has ever been requested.',
+    '<b>3.</b> ' + (pick('wonStampArc', 'stampArc') || 'Valid until hired') + '. No cash alternative is offered and none has ever been requested.',
     '<b>4.</b> Prizes are drawn from ' + projects.length + ' entries. Odds of any single piece having won an award are, at the time of printing, exactly zero.',
     '<b>5.</b> The holder accepts that headlines are written in English and Arabic and that neither is a guarantee of anything.',
     '<b>6.</b> Claims must be submitted by electronic mail. The draft arrives already written. The bearer may change it.',

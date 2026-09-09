@@ -57,11 +57,11 @@ HEAD = """<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mohammed Essam &mdash; Award-losing copywriter</title>
+<title>Mohammed Essam, award-losing copywriter</title>
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Mohammed Essam">
 <meta property="og:locale" content="en_GB">
-<meta property="og:title" content="Mohammed Essam &mdash; Award-losing copywriter">
+<meta property="og:title" content="Mohammed Essam, award-losing copywriter">
 <meta property="og:description" content="Mohammed Essam, copywriter. Cairo, Dubai, Madrid. Work that ran, and work that didn&#x27;t.">
 <meta property="og:url" content="https://www.mohammedessam.com/">
 <meta property="og:image" content="https://www.mohammedessam.com/images/og.jpg">

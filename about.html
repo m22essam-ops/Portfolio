@@ -83,6 +83,16 @@
   <!-- the résumé, under the experience list. Filled by the script below from
        contact.resume, and left out entirely when there is no link in it. -->
   <div id="aboutResume"></div>
+
+  <!-- `ticket.terms` prints here now (9 Sep 2026, his ask). It is the best
+       line on the home page and it had stopped printing anywhere at all: the
+       brutalist ticket replaced the old fine print with its own four clauses
+       and left this field orphaned.
+
+       Small print at the foot of the page he wrote it for, in the system
+       voice, at the size the ticket sets its own terms. NOT a heading and not
+       a pull quote: it is a disclaimer, and it only works read as one. -->
+  <p class="about-terms" id="aboutTerms"></p>
 </div>
 
 <!-- the tear-off stub. site.js fills it. -->
@@ -313,6 +323,16 @@
         '<span class="resume-arrow" aria-hidden="true">&#8595;</span>' +
       '</a>';
   }
+
+  /* his terms line, at the foot of this page. Empty and the paragraph removes
+     itself rather than leaving a gap, the same contract every optional line on
+     the site keeps. */
+  (function () {
+    var el = document.getElementById('aboutTerms');
+    var s = String((C.ticket && C.ticket.terms) || '').trim();
+    if (!el) return;
+    if (s) el.textContent = s; else el.remove();
+  })();
 
   /* the footer stub, including its small print, is built by site.js */
 

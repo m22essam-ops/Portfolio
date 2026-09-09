@@ -15,7 +15,7 @@ window.SITE_CONTENT = {
     name: "MOHAMMED ESSAM",
     band: "If I play, I play to win",
     game: "A red-tier ticket to the mind of",
-    serial: "No. 131313 . Exp. never",
+    serial: "No. 131313 · Exp. never",
     titleTop: "Award-losing",
     titleBottom: "copywriter",
     sub: "who writes headlines in English and Arabic to sell just about anything.",
@@ -23,11 +23,7 @@ window.SITE_CONTENT = {
     badge: "I WON NOTHING",
     terms: "Odds of winning awards: Historically low. The ticket has no cash value, but the headlines do.",
     stampArc: "VALID UNTIL HIRED",
-    stampName: "Who am I ",
-    stampValue: "",
-    stampFoot: "",
     stampPhoto: "portrait-rooftop.jpg",
-    stampUrl: "about.html",
     awards: [],
     wonBand: "The National Award Lottery",
     wonTitleTop: "Award-winning",
@@ -1286,7 +1282,7 @@ window.SITE_CONTENT = {
       {
         role: "Creative Copywriter",
         org: "Social Nuts, Cairo",
-        time: "Feb 2022 – Jul 2023"
+        time: "Jul 2021 – Jul 2023"
       }
     ]
   },
@@ -1315,8 +1311,6 @@ window.SITE_CONTENT = {
   },
   contact: {
     label: "03 — Get in touch",
-    headline: "Have a project? A vacancy?",
-    ctaText: "Now we talk.",
     ctaUrl: "mailto:m22essam@gmail.com",
     mailTemplates: [
       {

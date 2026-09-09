@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     404  ·  the page that was not there
+
+     GitHub Pages serves this automatically for any address that does not
+     exist. Before it, a mistyped URL or an old link from the previous site
+     got GitHub's bare default: no nav, no name, no way back.
+
+     `jokes.notFound` has been written in content.js since the rebuild and
+     printed NOWHERE. This is the page it was written for.
+
+     It carries the ordinary nav, so the one thing a lost visitor needs is
+     the first thing on the page. It uses the About paper because that is the
+     site's default ground, and it takes no mark of its own: this is not a
+     place, it is a wrong turn.
+     ============================================================ -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Not here, Mohammed Essam</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Syne:wght@400..800&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* the number is set like the headline of a work page, because on a lottery
+     ticket a number IS the content. Nothing new is invented for this page. */
+  .fourofour{font-family:var(--display);font-weight:800;line-height:.86;
+             letter-spacing:-.03em;font-size:clamp(88px,22vw,260px);margin:0}
+  .fourofour-line{font-size:clamp(19px,2.2vw,26px);max-width:34ch;
+                  margin:26px 0 34px;line-height:1.35}
+  .fourofour-back{font-family:var(--mono);font-size:13px;letter-spacing:.16em;
+                  text-transform:uppercase;color:var(--red);text-decoration:none;
+                  border-bottom:1px solid currentColor;padding-bottom:3px}
+  .fourofour-wrap{padding:9vh 0 14vh}
+</style>
+</head>
+<body class="page page-about tex-dots">
+<div class="tex-press" aria-hidden="true"></div>
+
+<nav class="page-nav">
+  <div class="wrap">
+    <a class="logo" href="index.html">mohammed essam</a>
+    <div class="links">
+      <a href="work.html">The work</a>
+      <a href="about.html">Who I am</a>
+      <a href="mailto:m22essam@gmail.com">Say hi</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap fourofour-wrap">
+  <p class="fourofour">404</p>
+  <p class="fourofour-line" id="notFoundLine"></p>
+  <a class="fourofour-back" href="index.html">Back to the ticket &rarr;</a>
+</div>
+
+<footer class="stub" id="siteFoot"></footer>
+
+<script>
+(function () {
+  /* the same cache stamp every other page uses. Only on a real web server, so
+     the double-click workflow gets exactly the tag it always had. */
+  var v = /^https?:$/.test(location.protocol) ? '?v=' + Math.floor(Date.now() / 60000) : '';
+  document.write('<scr' + 'ipt src="content.js' + v + '"><\/scr' + 'ipt>');
+})();
+</script>
+<script src="site.js"></script>
+<script>
+(function () {
+  var C = window.SITE_CONTENT || {};
+  var J = C.jokes || {};
+  var el = document.getElementById('notFoundLine');
+  /* his line, trimmed: it is stored with a trailing space. If he ever empties
+     the field the paragraph removes itself rather than leaving a gap, same
+     contract as every other optional line on the site. */
+  var s = String(J.notFound == null ? '' : J.notFound).trim();
+  if (s) el.textContent = s; else el.remove();
+})();
+</script>
+</body>
+</html>
