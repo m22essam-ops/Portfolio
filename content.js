@@ -174,7 +174,7 @@ window.SITE_CONTENT = {
         client: "Domino's",
         category: "Miami Ad School",
         year: "2026",
-        image: "Minimalist Elegant Modern Bold  Advertising Poster Design _ Coffee Shop Branding.jpg",
+        image: "Dominos cover.jpg",
         alt: "Domino's making the streets safer",
         sticker: "Never left the deck",
         tagline: "Billboards that hear you walking home.",
