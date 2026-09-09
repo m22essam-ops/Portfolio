@@ -235,7 +235,7 @@ window.SITE_CONTENT = {
         client: "Babyshop",
         category: "Digital activation",
         year: "2025",
-        image: "babyshop-ezgif.com-video-to-gif-converter.gif",
+        image: "babyshop-ezgif.com-video-to-gif-converter (1).gif",
         alt: "Babyshop, Make Their First Words Discount",
         sticker: "Concept only",
         tagline: "Every toddler keysmash is a promo code.",
