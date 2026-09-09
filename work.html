@@ -427,6 +427,7 @@
       LB.innerHTML =
         '<button type="button" class="lb-x" aria-label="Close">&times;</button>' +
         '<button type="button" class="lb-nav lb-prev" aria-label="Previous image">&larr;</button>' +
+        '<span class="lb-count" aria-hidden="true"></span>' +
         '<figure class="lb-stage"><img alt=""><figcaption class="lb-cap"></figcaption></figure>' +
         '<button type="button" class="lb-nav lb-next" aria-label="Next image">&rarr;</button>';
       document.body.appendChild(LB);
@@ -434,7 +435,11 @@
     var big = LB.querySelector('img'), cap = LB.querySelector('.lb-cap');
 
     function show(i) {
-      at = (i + shots.length) % shots.length;
+      /* CLAMPED, not wrapped. It used to be `(i + n) % n`, so the last image
+         rolled round to the first and the set never ended: his note was that
+         it shuffles endlessly. A portfolio set has a first and a last and the
+         reader should be able to feel both. */
+      at = Math.max(0, Math.min(shots.length - 1, i));
       var s = shots[at];
       big.src = s.currentSrc || s.src;
       big.alt = s.alt || '';
@@ -443,8 +448,16 @@
       var fc = fig && fig.querySelector('figcaption');
       cap.textContent = fc ? fc.textContent : (s.alt || '');
       cap.hidden = !cap.textContent;
-      /* one image and the arrows are noise */
-      LB.querySelectorAll('.lb-nav').forEach(function (n) { n.hidden = shots.length < 2; });
+      /* one image and the arrows are noise. With more than one they STAY PUT
+         and go dim at the ends: a control that disappears shifts the ones
+         beside it, and then the reader is chasing buttons. */
+      var only = shots.length < 2;
+      LB.querySelectorAll('.lb-nav').forEach(function (n) { n.hidden = only; });
+      LB.querySelector('.lb-prev').disabled = only || at === 0;
+      LB.querySelector('.lb-next').disabled = only || at === shots.length - 1;
+      /* how far in, so the end of the set is a fact and not a surprise */
+      LB.querySelector('.lb-count').textContent = only ? '' :
+        (at + 1) + ' / ' + shots.length;
     }
 
     function close() {

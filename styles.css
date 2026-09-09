@@ -1998,25 +1998,43 @@ body.page-about .exp-row{max-width:none}
 }
 /* 44px, because these are the only controls in the overlay and a miss puts
    the reader back on a page they cannot see. */
-.lb-nav{width:46px;height:46px;font-size:19px;border-radius:50%}
+/* ---- THE ARROWS DO NOT MOVE (his ask, 9 Sep 2026) ----
+   They were flex siblings of the picture, so their position was set by the
+   picture's width: a tall image made a narrow stage and the arrows walked
+   inwards, a wide one pushed them out. Clicking through a set meant chasing
+   two buttons around the screen.
+
+   `fixed` to the VIEWPORT instead. Same two places on every image, whatever
+   its shape, so the pointer can stay still while the pictures change. */
+.lb-nav{
+  position:fixed;top:50%;transform:translateY(-50%);
+  width:46px;height:46px;font-size:19px;border-radius:50%;
+}
+.lb-prev{left:clamp(10px,2.2vw,28px)}
+.lb-next{right:clamp(10px,2.2vw,28px)}
+/* the ends of the set. Not hidden: a control that vanishes moves the ones
+   beside it and makes the reader wonder what they did. It stays, and stops. */
+.lb-nav[disabled]{opacity:.28;cursor:default;pointer-events:none}
 .lb-x{position:absolute;top:clamp(12px,2.4vw,26px);right:clamp(12px,2.4vw,26px);
       width:44px;height:44px;font-size:26px;border-radius:50%}
 .lb-x:hover,.lb-nav:hover{background:var(--red);border-color:var(--red);color:#fff}
 .lb-x:focus-visible,.lb-nav:focus-visible{outline:2px solid var(--red);outline-offset:3px}
 
 @media (max-width:700px){
-  /* the arrows move off the sides and under the picture: at 375px a 46px
-     control on each flank takes a quarter of the width away from the image. */
-  .lb{flex-direction:column;justify-content:center;padding:64px 12px 20px}
-  .lb-stage{order:1}
-  .lb-prev{order:2}
-  .lb-next{order:3}
-  .lb{display:none}
-  .lb.is-open{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr auto;
-              align-content:center;gap:12px}
-  .lb-stage{grid-column:1 / -1;grid-row:1}
-  .lb-stage img{max-height:calc(100vh - 190px)}
+  /* On a phone they come off the flanks: at 375px a 46px control on each side
+     takes a quarter of the width away from the picture. They are still FIXED,
+     just to the bottom of the viewport rather than its sides, so they still do
+     not move when the image does. */
+  .lb{padding:60px 12px 86px}
+  .lb-nav{top:auto;bottom:20px;transform:none}
+  .lb-prev{left:50%;margin-left:-56px}
+  .lb-next{right:50%;margin-right:-56px}
+  .lb-stage img{max-height:calc(100vh - 210px)}
 }
 @media (prefers-reduced-motion:reduce){
   .project-media .zoomable{transition:none}
 }
+/* how far into the set. Fixed to the viewport like the arrows, so it does not
+   move with the picture either. */
+.lb-count{position:fixed;top:clamp(14px,2.6vw,28px);left:50%;transform:translateX(-50%);
+          font-family:var(--display);font-size:12px;letter-spacing:.18em;opacity:.6}
