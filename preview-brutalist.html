@@ -692,13 +692,16 @@ body.scratched .chip.valor .chip-front::after{
   .tk-rail{order:2;border-right:0;border-bottom:0;
            border-top:var(--hair) solid var(--ink);
            display:block;padding:0}
-  /* the full selector, not `.tk-rail .med`. The full-screen rule up the file
+  /* 16:9, his call (9 Sep 2026): option 2's order with a wider picture than
+     the 4:3 it shipped with, and explicitly not the 3:4 upright.
+
+     The full selector, not `.tk-rail .med`. The full-screen rule up the file
      sets `aspect-ratio:auto` at (0,3,1) so the photo can stretch to whatever
      height the rail has left, and a (0,2,0) selector here loses to it however
      far down the file it sits. Matched, so this one wins on order. It came out
-     3.98:1 on a phone before this line: a letterbox, not a portrait. */
+     3.98:1 before any of this: a letterbox by accident, not by choice. */
   body.only-home.fills .tk-rail .med,
-  .tk-rail .med{width:100%;height:auto;aspect-ratio:4/3;display:block;
+  .tk-rail .med{width:100%;height:auto;aspect-ratio:16/9;display:block;
                 flex:none;min-height:0}
   .tk-side{order:3}
 

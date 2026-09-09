@@ -7,6 +7,7 @@ window.TICKET_DESIGN = {
   "version": 1,
   "photo": "portrait-studio.jpg",
   "photoZoom": "1",
+  "photoY": "0.36",
   "photoDots": "2.5",
   "vars": {},
   "body": {},
