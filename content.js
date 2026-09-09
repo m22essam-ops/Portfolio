@@ -75,67 +75,6 @@ window.SITE_CONTENT = {
     limit: 0,
     projects: [
       {
-        slug: "true-colors-of-dominos",
-        title: "Domino's - The True Colors",
-        client: "Domino's",
-        category: "Miami Ad School",
-        year: "2026",
-        image: "Minimalist Elegant Modern Bold  Advertising Poster Design _ Coffee Shop Branding.jpg",
-        alt: "Domino's making the streets safer",
-        sticker: "Never left the deck",
-        tagline: "Billboards that hear you walking home.",
-        story: [
-          "Walking home at night in heels should not be frightening. To help women feel safer on the streets of London, Domino's showed the city its true colors with slicing-edge OOH billboards using audio-recognition technology. The billboards pick up the sound of accelerating high heels and flash intense red and blue, mimicking a police siren to scare off anyone thinking of causing trouble."
-        ],
-        media: [
-          {
-            type: "image",
-            src: "Dominos art board.jpg",
-            caption: ""
-          },
-          {
-            type: "image",
-            src: "Dominos art style .jpg",
-            caption: "",
-            layout: "full"
-          },
-          {
-            type: "video",
-            src: "<div style=\"padding:56.25% 0 0 0;position:relative;\"><iframe src=\"https://player.vimeo.com/video/1205222256?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;\" title=\"Dominos - The True Color\"></iframe></div>",
-            caption: ""
-          },
-          {
-            type: "image",
-            src: "dominos bus stop poster mockup.jpg",
-            caption: "",
-            layout: "half"
-          },
-          {
-            type: "image",
-            src: "Dominos news.jpg",
-            caption: "",
-            layout: "half"
-          }
-        ],
-        credits: [
-          {
-            role: "Team",
-            name: "Mohammed Essam, Baltazar Lee"
-          },
-          {
-            role: "Tutor",
-            name: "Pranay Suri"
-          },
-          {
-            role: "Client",
-            name: "Domino's, Miami Ad School Madrid"
-          }
-        ],
-        next: {},
-        "draft": false,
-        "ran": false
-      },
-      {
         slug: "yango-unstoppable-rides",
         title: "Yango - Unstoppable Rides",
         client: "Yango",
@@ -204,38 +143,6 @@ window.SITE_CONTENT = {
         "ran": true
       },
       {
-        slug: "the-mumbled-code",
-        title: "Babyshop - Make Their First Words Discount",
-        client: "Babyshop",
-        category: "Digital activation",
-        year: "2025",
-        image: "live/uqwyeuoa-random-8-words-cover.jpg",
-        alt: "Babyshop, Make Their First Words Discount",
-        sticker: "Concept only",
-        tagline: "Every toddler keysmash is a promo code.",
-        story: [
-          "Give a toddler your phone and they will type stringsjksdhsad, or 2m$sdajhad, or kasd@34jksad.",
-          "So why not make the chaos count.",
-          "Babyshop, through their app, turns any 8-letter toddler smash into a promo code. jklmnopa unlocks an extra 15% off. Making their first words discount."
-        ],
-        media: [
-          {
-            type: "video",
-            src: "babyshop.mp4",
-            caption: ""
-          }
-        ],
-        credits: [
-          {
-            role: "Copywriter",
-            name: "Mohammed Essam"
-          }
-        ],
-        next: {},
-        "draft": false,
-        "ran": false
-      },
-      {
         slug: "murder-whats-next",
         title: "Liquid Death - Murder What's Next",
         client: "Liquid Death",
@@ -257,6 +164,107 @@ window.SITE_CONTENT = {
           }
         ],
         credits: [],
+        next: {},
+        "draft": false,
+        "ran": false
+      },
+      {
+        slug: "Knights-of-glowing-box",
+        title: "Domino's - Knights of the Glowing Box",
+        client: "Domino's",
+        category: "Miami Ad School",
+        year: "2026",
+        image: "Minimalist Elegant Modern Bold  Advertising Poster Design _ Coffee Shop Branding.jpg",
+        alt: "Domino's making the streets safer",
+        sticker: "Never left the deck",
+        tagline: "Billboards that hear you walking home.",
+        story: [
+          "Walking home at night in heels should not be frightening. To help women feel safer on the streets of London, Domino's showed the city its true colors with slicing-edge OOH billboards using audio-recognition technology. The billboards pick up the sound of accelerating high heels and flash intense red and blue, mimicking a police siren to scare off anyone thinking of causing trouble."
+        ],
+        media: [
+          {
+            type: "image",
+            src: "art board - 2.jpg",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "Dominos art style .jpg",
+            caption: "",
+            layout: "full"
+          },
+          {
+            type: "video",
+            src: "<div style=\"padding:56.25% 0 0 0;position:relative;\"><iframe src=\"https://player.vimeo.com/video/1205222256?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;\" title=\"Dominos - The True Color\"></iframe></div>",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "dominos bus stop poster mockup.jpg",
+            caption: "",
+            layout: "half"
+          },
+          {
+            type: "image",
+            src: "Screen 35ML Mockup.jpg",
+            caption: "",
+            layout: "half"
+          }
+        ],
+        credits: [
+          {
+            role: "Team",
+            name: "Mohammed Essam, Baltazar Lee"
+          },
+          {
+            role: "Tutor",
+            name: "Pranay Suri"
+          },
+          {
+            role: "Client",
+            name: "Domino's, Miami Ad School Madrid"
+          }
+        ],
+        next: {},
+        "draft": false,
+        "ran": false
+      },
+      {
+        slug: "the-mumbled-code",
+        title: "Babyshop - Make Their First Words Discount",
+        client: "Babyshop",
+        category: "Digital activation",
+        year: "2025",
+        image: "babyshop-ezgif.com-video-to-gif-converter.gif",
+        alt: "Babyshop, Make Their First Words Discount",
+        sticker: "Concept only",
+        tagline: "Every toddler keysmash is a promo code.",
+        story: [
+          "Give a toddler your phone and they will type stringsjksdhsad, or 2m$sdajhad, or kasd@34jksad.",
+          "So why not make the chaos count.",
+          "Babyshop, through their app, turns any 8-letter toddler smash into a promo code. jklmnopa unlocks an extra 15% off. Making their first words discount."
+        ],
+        media: [
+          {
+            type: "video",
+            src: "babyshop.mp4",
+            caption: ""
+          }
+        ],
+        credits: [
+          {
+            role: "Copywriter",
+            name: "Mohammed Essam"
+          },
+          {
+            role: "Art Director",
+            name: "Mohammed Essam"
+          },
+          {
+            role: "Client",
+            name: "Miami Ad School \\ BabyShop"
+          }
+        ],
         next: {},
         "draft": false,
         "ran": false
@@ -1119,7 +1127,7 @@ window.SITE_CONTENT = {
           }
         ],
         next: {},
-        "draft": false,
+        "draft": true,
         "ran": false
       },
       {
@@ -1214,7 +1222,7 @@ window.SITE_CONTENT = {
     ranHeading: "Work that worked.",
     ranNote: "Work that fought its way to production. I concepted, wrote, and occasionally hijacked the director's chair.",
     wantHeading: "Spec work.",
-    wantNote: "Concepted, written, and never made. Every one of them is still available."
+    wantNote: "Had fun exploring those ideas in my time at Miami Ad School Madrid."
   },
   about: {
     label: "Don't take it personally (it seems so)",
