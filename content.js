@@ -148,7 +148,7 @@ window.SITE_CONTENT = {
         client: "Liquid Death",
         category: "Radio",
         year: "2026",
-        image: "71OjfNNqSVL.jpg",
+        image: "liquid death cover.jpg",
         alt: "",
         sticker: "Thirsty for fame",
         tagline: "",
@@ -160,6 +160,26 @@ window.SITE_CONTENT = {
           {
             type: "video",
             src: "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/q2Wa7VXfJeY?si=mNmOs_qwjPKpUsbc\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "Put_in_OOH_mockup_2K_20260911150112.jpeg",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "Gemini_Generated_Image_celimzcelimzceli.jpg",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "Put_in_suitable_mockup_2K_20260911150405.jpeg",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "Lawyers_scribbling_on_paper_2K_20260911112601.jpg",
             caption: ""
           }
         ],
@@ -572,18 +592,6 @@ window.SITE_CONTENT = {
           {
             role: "Client",
             name: "Tuborg for D&AD, Miami Ad School Madrid"
-          },
-          {
-            role: "Producer",
-            name: "Evgeniia Sabirzianova"
-          },
-          {
-            role: "Production lead",
-            name: "Olesia Starodubtseva"
-          },
-          {
-            role: "Brand director",
-            name: "Viktoria Nikulnikova"
           }
         ],
         next: {},
