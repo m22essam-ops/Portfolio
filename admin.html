@@ -442,6 +442,17 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
       <label class="field"><span>Line under it</span><input data-path="work.ranNote" placeholder="Optional."><small>Currently a placeholder. Write over it, or empty the box and the line disappears.</small></label>
     </div>
 
+    <!-- Spec work (added 11 Sep 2026). The other half of the same door:
+         work.html?ran=0 shows everything whose "It got produced" box is
+         unticked. These two fields existed in content.js from 6 Sep with no
+         box in here, so they could only be changed by editing the file. -->
+    <div class="subhead">Spec work</div>
+    <p class="hint">The page that shows only the work that did <strong>not</strong> run: every project with <strong>It got produced</strong> unticked. The heading also becomes that page's name in the Work menu, so keep it short.</p>
+    <div class="grid2">
+      <label class="field"><span>Heading on that page</span><input data-path="work.wantHeading" placeholder="Spec work."></label>
+      <label class="field"><span>Line under it</span><input data-path="work.wantNote" placeholder="Optional."><small>Empty the box and the line disappears.</small></label>
+    </div>
+
     <div class="subhead">The three buttons</div>
     <div class="grid2">
       <label class="field"><span>Button 1 label</span><input data-path="ticket.nav.0.label"></label>
