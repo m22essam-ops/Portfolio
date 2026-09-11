@@ -1231,7 +1231,7 @@ window.SITE_CONTENT = {
     ranHeading: "Work that worked.",
     ranNote: "Work that fought its way to production. I concepted, wrote, and occasionally hijacked the director's chair.",
     wantHeading: "Spec work.",
-    wantNote: "Had fun exploring those ideas in my time at Miami Ad School Madrid."
+    wantNote: "Had fun crafting those ideas in my time at Miami Ad School Madrid."
   },
   about: {
     label: "Don't take it personally (it seems so)",
