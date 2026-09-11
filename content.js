@@ -148,13 +148,14 @@ window.SITE_CONTENT = {
         client: "Liquid Death",
         category: "Radio",
         year: "2026",
-        image: "liquid death cover.jpg",
+        image: "coverr.jpg",
         alt: "",
         sticker: "Thirsty for fame",
         tagline: "",
         story: [
-          "When you murder your thirst with Liquid Death, you might like it so much that you start thinking of your next murder.",
-          "In this radio campaign, Liquid Death shows how the taste of its water makes people feel like killing. But, as the suits probably say, it’s better to just “murder” your thirst. Way more legal, safe, and super refreshing!"
+          "Liquid Death tastes good enough that murdering your thirst stops feeling like a metaphor.",
+          "Two radio spots about what happens in the ninety seconds after. A first date. A middle seat. Same escalation both times.",
+          "Legal has asked us to point out that thirst is the only item on the list you're allowed to do."
         ],
         media: [
           {
