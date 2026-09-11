@@ -151,7 +151,7 @@ window.SITE_CONTENT = {
         image: "coverr.jpg",
         alt: "",
         sticker: "Thirsty for fame",
-        tagline: "",
+        tagline: "The thirst was the easy one.",
         story: [
           "Liquid Death tastes good enough that murdering your thirst stops feeling like a metaphor.",
           "Two radio spots about what happens in the ninety seconds after. A first date. A middle seat. Same escalation both times.",
