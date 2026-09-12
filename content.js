@@ -191,7 +191,7 @@ window.SITE_CONTENT = {
       },
       {
         slug: "pick-your-side",
-        title: "Pick a Side",
+        title: "Get Out The Vote - Pick a Side",
         client: "Get Out The Vote",
         category: "Miami Ad School",
         year: "2026",
