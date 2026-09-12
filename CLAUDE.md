@@ -1749,9 +1749,65 @@ same box is not a bigger header, it is a tighter one.
   the taller bar with no change. Re-checked open: panel 17px under the link,
   both rows there.
 
+### A way back, and no image taller than the screen (12 Sep 2026)
+
+Both came out of him sending **thelifeofpita.com**, an art director on the
+same Miami Ad School Madrid programme and year, and asking for a red team.
+
+**PREVIOUS on project pages.** His site has `← PREVIOUS [X] NEXT →` and you
+can go through his whole book without ever landing on a grid. Ours had "Keep
+going →" and nothing else, so re-reading the piece you just left meant All
+work and a hunt. That was the one thing his site plainly did better.
+
+**This is not the grid of ten coming back.** The rule against that is about
+"you may also like" dumps; a Previous is the other direction of the same
+rail. Forward stays loud (`clamp(28px,5vw,58px)` under a red rule) and back
+is small and in the system voice above it: two titles at display size would
+read as a fork, and a portfolio should push forward. First project has no
+Previous, last still says "Back to All work". Verified at both ends.
+
+**The 80vh ceiling on media.** His words: "our rations are too big .. i need
+to make sure that each image in the media is in one scroll".
+
+Measured on Tuborg at 1440x900 first, because the number is the argument: the
+two portrait stills rendered **908px in a 900px viewport, 101%**, so neither
+could ever be seen whole, and a portrait in a full-width slot would have come
+to 1860px, over twice the screen. After: nothing above 80%, the portraits at
+720px and 481/510 wide, centred.
+
+- **It shrinks, it never crops.** `object-fit:cover` would hold the full width
+  and cut the picture, and the picture is somebody's poster with the headline
+  at the top of it. The cost is that a wide image is slightly narrower than
+  its slot on a short screen. That is the right trade on a portfolio and it
+  was a deliberate choice, not an oversight.
+- **The film takes the ceiling through its WIDTH** (`max-width:calc(80vh*16/9)`),
+  so the 16:9 stays 16:9 instead of being clipped inside a box that is not.
+  `padding-top` is a percentage of the width, so clamping width is enough. At
+  900px tall this computes to 1280px and the 1240px column is already inside
+  it, so nothing moves on an ordinary screen.
+- **`.project-media .zoomable img` had to be given the ceiling too.** It is the
+  more specific rule, and the stills are the only media that is ever tall, so
+  missing it would have exempted exactly the thing the cap is for.
+- 80vh and not 100: the fifth of the screen left over is what tells you there
+  is something after this one.
+
+**On his per-project colours, asked and answered:** each of his project screens
+is the brand's own colour (McDonald's `#FFC72C`, Platanomelón `#FFE500` with a
+`#FF30AC` accent), and his site chrome is a named palette randomised per visit
+(`window.__PALETTE__`, e.g. "Bicycle": `#161616` ground, `#8f9bf6` accent).
+**Not copied, and the reasoning should not be re-run:** borrowed brand colour
+means every screen belongs to the client, and a randomised chrome means the
+site has no fixed identity. `#E3261A` on every page is the thing people leave
+with. He is an art director selling range; this is a copywriter selling a
+voice, and a voice needs one colour.
+
 ## Don't
 
 - Don't add a build step or framework.
+- Don't give project pages the client's brand colour, and don't randomise the
+  site palette. Both were looked at on 12 Sep against a real example and
+  rejected: they sell the client and dissolve the identity.
+- Don't crop project media to make it fit. The cap shrinks on purpose.
 - Don't scale part of the nav. Every size in `.page-nav`, at every width, is
   one set; a 15% name over 0% links is the crowding the scaling undid.
 - Don't put the intro's markup or CSS in `styles.css` expecting the home page

@@ -349,12 +349,32 @@
         }).join('') + '</ul></div>';
     }
 
-    /* ONE next-project link. Never a grid of ten. */
+    /* ONE next-project link. Never a grid of ten.
+
+       A PREVIOUS was added 12 Sep 2026, and it is not the grid of ten coming
+       back in disguise: it is the other direction of the same rail. Until now
+       the only way to re-read the piece you just left was All work and a hunt
+       through the grid for it, which is the move a CD makes constantly and the
+       one thing the page could not do. thelifeofpita.com, an art director on
+       the same Miami Ad School programme, has PREVIOUS / [X] / NEXT on every
+       project and you can go through his whole book without ever landing on a
+       grid. That was the single thing his site did better than this one.
+
+       Forward stays the big move and back stays small on purpose. Two titles
+       at clamp(28px,5vw,58px) would be a fork in the road; one loud and one
+       quiet is a direction with a way back. */
     var all = allWork();
     var idx = -1;
     for (var k = 0; k < all.length; k++) if (all[k].p.slug === p.slug) { idx = k; break; }
     var next = (idx > -1 && idx < all.length - 1) ? all[idx + 1] : null;
+    var prev = (idx > 0) ? all[idx - 1] : null;
     var label = J.nextLabel || 'Next';
+    if (prev) {
+      html += '<a class="prev-project" href="work.html?slug=' + encodeURIComponent(prev.p.slug) + '">' +
+        '<span class="prev-arrow">&larr;</span>' +
+        '<span class="prev-label">Previous</span>' +
+        '<span class="prev-title">' + esc(prev.p.title) + '</span></a>';
+    }
     if (next) {
       html += '<a class="next-project" href="work.html?slug=' + encodeURIComponent(next.p.slug) + '">' +
         '<span class="next-label">' + esc(label) + '</span>' +

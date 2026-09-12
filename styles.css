@@ -1013,7 +1013,33 @@ body.has-won .tk-badge{background:var(--ink)}
 .media-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:28px;margin-bottom:70px}
 .project-media{margin:0;grid-column:1/-1}
 .project-media[data-layout="half"]{grid-column:auto}
-.project-media img{width:100%;border-radius:3px;border:1px solid var(--line)}
+/* NO PIECE OF MEDIA IS TALLER THAN THE SCREEN (his ask, 12 Sep 2026:
+   "i need to make sure that each image in the media is in one scroll").
+
+   Measured on Tuborg at 1440x900 before this: the two portrait stills came out
+   908px tall in a 900px viewport, 101%, so neither could ever be seen whole,
+   and a portrait in a full-width slot would have been 1860px, over twice the
+   screen. 80vh leaves a fifth of the screen showing what comes next, which is
+   what tells you there is more without you having to find out.
+
+   It SHRINKS, it does not crop. `object-fit:cover` would hold the full width
+   but cut the image, and the thing being cut is somebody's poster: the
+   headline lives at the top of most of them. A wide image therefore comes out
+   slightly narrower than its slot on a short screen and is centred, which is
+   the price of never mangling the work. */
+.project-media img{
+  display:block;
+  width:auto;max-width:100%;
+  height:auto;max-height:80vh;
+  margin-inline:auto;
+  border-radius:3px;border:1px solid var(--line);
+}
+/* The film gets the same ceiling, but through its WIDTH, so the 16:9 stays
+   exactly 16:9 instead of being clipped inside a box that is no longer 16:9.
+   padding-top is a percentage of the width, so clamping the width is all it
+   takes. At 900px tall this computes to 1280px and the 1240px column is
+   already inside it: nothing moves on an ordinary screen. */
+.video-wrap{max-width:calc(80vh * 16 / 9);margin-inline:auto}
 .project-media figcaption{
   margin-top:11px;font-size:12px;color:var(--fg-faint);
   font-family:var(--mono);letter-spacing:.1em;text-transform:uppercase;
@@ -1033,6 +1059,20 @@ body.has-won .tk-badge{background:var(--ink)}
   flex:0 0 40%;color:var(--fg-faint);
   font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;
 }
+
+/* The way back, added 12 Sep 2026. It sits ABOVE the red rule and in the
+   system voice, so the page still has one loud move at the bottom and the
+   return is simply available. Given the same weight as the next link it would
+   read as a fork, and a portfolio should always be pushing forward. */
+.prev-project{
+  display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
+  text-decoration:none;margin-bottom:20px;
+  font-family:var(--mono);font-size:12px;font-weight:500;
+  text-transform:uppercase;letter-spacing:.12em;color:var(--fg-faint);
+}
+.prev-project .prev-title{color:var(--fg);letter-spacing:.06em}
+.prev-project:hover,
+.prev-project:hover .prev-title{color:var(--red)}
 
 .next-project{
   display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;
@@ -1970,7 +2010,15 @@ body.page-about .exp-row{max-width:none}
   display:block;width:100%;padding:0;border:0;background:none;
   cursor:zoom-in;line-height:0;
 }
-.project-media .zoomable img{display:block;width:100%;height:auto}
+/* This rule is more specific than the one that sets the 80vh ceiling, so it
+   has to carry the ceiling too or the stills, which are the only things that
+   are ever tall, would be the one kind of media that ignores it. */
+.project-media .zoomable img{
+  display:block;
+  width:auto;max-width:100%;
+  height:auto;max-height:80vh;
+  margin-inline:auto;
+}
 /* the affordance. Nothing else on a project page reacts to a pointer, so a
    small lift is enough to say this one does. */
 .project-media .zoomable{transition:filter .18s ease}
