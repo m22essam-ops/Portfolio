@@ -746,12 +746,183 @@ body.scratched .chip.valor .chip-front::after{
   *{transition:none !important}
   .caret{animation:none}
 }
+
+/* ====================== THE WAY IN (the intro) ======================
+   Brought back 12 Sep 2026 at his request. It shipped on the old home on
+   22 Aug and was lost on 4 Sep when the home page became this card: the
+   rules survived in styles.css, but this page is self-contained and does
+   not load styles.css, so they had to come here. They are the same rules,
+   the same four numbers, and the same reasoning.
+
+   The ticket's own perforation is punched across the red field, left to
+   right, and when the row is complete the field tears along it and the two
+   halves travel off, each carrying its scalloped edge away. About two
+   seconds. It replaced two tumbling dice, which were his idea and then his
+   complaint: "the intro is soooooooooo bad, need to look elegant and
+   decent, like the cabinet". Do not put the dice back.
+
+   It is the only one of the four candidates made out of something the site
+   already owns, and the only one that is honestly a LOADING screen: the
+   perforation crossing the screen is a progress bar that does not look
+   like one.
+   =================================================================== */
+.boot{display:none}
+html.is-booting .boot{
+  display:block;position:fixed;inset:0;z-index:9999;
+  /* NO background of its own. The two halves ARE the red field. Give this
+     a red as well and it parts to reveal more red, which is exactly the
+     trap a card wipe on this site fell into once already. */
+  background:transparent;
+}
+
+/* THE CARD IS NOT HIDDEN. It is behind the halves from the first frame and
+   the tear uncovers it, so there is no class anywhere whose removal the
+   page's visibility depends on: fitHead() and fitLegal() can measure, and
+   the halftone can draw, the whole time this is on top of them. */
+.boot-half{
+  position:absolute;left:0;right:0;
+  /* a pixel of overlap each. Two halves of an odd number of pixels leave a
+     sub-pixel seam down the middle, and one hairline of paper showing
+     through before the perforation is punched gives the whole thing away. */
+  height:calc(50% + 1px);
+  background:var(--red);
+  will-change:transform;
+}
+.boot-half.top{top:0}
+.boot-half.bot{bottom:0}
+
+/* The punched holes. A window that grows in steps() over a strip that does
+   not move, rather than an animated mask: the strip keeps its own width so
+   the holes are revealed one after another instead of being stretched, and
+   a growing width is understood by everything that has ever rendered CSS. */
+.boot-punch{position:absolute;left:0;width:0;height:14px;overflow:hidden}
+.boot-half.top .boot-punch{bottom:-7px}
+.boot-half.bot .boot-punch{top:-7px}
+.boot-punch i{
+  position:absolute;left:0;top:0;height:14px;width:100vw;
+  background-image:radial-gradient(circle at 11px 7px,var(--paper) 5px,transparent 5.5px);
+  background-size:22px 14px;
+}
+
+/* steps(), so they are punched one at a time rather than wiped across.
+   Every duration here and the 1270ms trigger in the script are the original
+   divided by 1.15 at his request: the sequence ends at 1.98s, not 2.28s.
+   They are ONE piece of choreography and must be scaled TOGETHER, or the
+   punch stops landing before the tear starts. The 3.4s cap and the 6s panic
+   exit are NOT scaled: they are safety nets, not beats. */
+html.is-booting .boot.is-punching .boot-punch{animation:bootPunch .826s steps(28,end) .13s both}
+@keyframes bootPunch{from{width:0}to{width:100%}}
+/* someone who clicks before it has finished gets the row completed at once,
+   not a half-punched ticket torn in half */
+html.is-booting .boot.is-skipped .boot-punch{animation:none;width:100%}
+
+/* The tear. Eased IN rather than out: paper holds, gives all at once, and
+   then it is gone. An ease-out reads as two panels sliding, which is a
+   slideshow transition and not a ticket being torn. */
+html.is-booting .boot.is-tearing .boot-half.top{animation:bootTearUp   .713s cubic-bezier(.55,0,.28,1) both}
+html.is-booting .boot.is-tearing .boot-half.bot{animation:bootTearDown .713s cubic-bezier(.55,0,.28,1) both}
+@keyframes bootTearUp  {from{transform:translateY(0)}to{transform:translateY(-101%)}}
+@keyframes bootTearDown{from{transform:translateY(0)}to{transform:translateY(101%)}}
 </style>
 </head>
 <!-- `scratched` is the default now: it is the version in the screenshot he
      approved. One word to remove if he changes his mind, and the control bar
      on the five-screen page still flips between the two. -->
 <body class="tex-grain scratched">
+
+<!-- THE WAY IN. This div is an empty shell on purpose: everything is built
+     by the script under it, so with JavaScript off nothing is drawn and the
+     page is exactly the page.
+
+     Note the card is never hidden. It sits behind the two halves from the
+     first frame and the tear uncovers it, so nothing here can leave a
+     visitor facing a page whose content waits on a class being removed. -->
+<div class="boot" id="boot" aria-hidden="true"></div>
+<script>
+(function () {
+  /* The preview shows five reference screens; the live page is the single
+     card. build-index.py flips this to true, and asserts that it did. The
+     intro belongs on the page people arrive at, not on a reference sheet
+     that is opened to check a measurement.
+
+     Deliberately NOT written as the `only=home` test the rest of the page
+     uses: build-index.py requires exactly one of those and dies on two. */
+  var BOOT_LIVE = true;    /* build-index.py: this IS the live home */
+  if (!BOOT_LIVE && !/[?&]intro=1\b/.test(location.search)) return;
+
+  var el = document.getElementById('boot');
+  if (!el) return;
+
+  /* Once per tab. He reloads this page all day from admin and the designer,
+     and auto-refresh.js reloads it every time content.js changes: a
+     two-second screen on every one of those is a tax on his own work.
+     Someone arriving fresh gets it. ?intro=1 forces it, which is how to
+     look at it again without opening a new window. */
+  var force = /[?&]intro=1\b/.test(location.search);
+  var still = false, seen = false;
+  try { still = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+  try { seen  = sessionStorage.getItem('bootSeen') === '1'; } catch (e) {}
+
+  /* Asking for less motion is not a preference a query string gets to
+     override. It wins over ?intro=1 too, which the once-per-tab rule does
+     not: the whole point of that flag is to see this again on demand. */
+  if (still)          { el.parentNode.removeChild(el); return; }
+  if (seen && !force) { el.parentNode.removeChild(el); return; }
+  try { sessionStorage.setItem('bootSeen', '1'); } catch (e) {}
+
+  var punch = '<div class="boot-punch"><i></i></div>';
+  el.innerHTML =
+    '<div class="boot-half top">' + punch + '</div>' +
+    '<div class="boot-half bot">' + punch + '</div>';
+  document.documentElement.classList.add('is-booting');
+  /* THE PANIC EXIT, on the very next line and before anything else can run.
+     From here the page is under an overlay, and a throw anywhere below
+     would leave it there. This line makes that impossible, so it goes first
+     and it never moves. */
+  setTimeout(off, 6000);
+
+  el.classList.add('is-punching');
+
+  var torn = false, gone = false;
+
+  function tear() {
+    if (torn) return;
+    torn = true;
+    el.classList.add('is-tearing');
+    /* the halves are clear of the screen at .713s; a breath after that the
+       overlay has no reason to exist */
+    setTimeout(off, 783);
+  }
+
+  function off() {
+    if (gone) return;
+    gone = true;
+    document.documentElement.classList.remove('is-booting');
+    if (el.parentNode) el.parentNode.removeChild(el);
+  }
+
+  /* It tears once the perforation is complete AND the page has finished
+     loading, whichever is later: a loading screen that lets go while the
+     fonts are still arriving is worse than none. The hard cap is the safety
+     net, so one slow embed can never hold the card behind it. */
+  var timeUp = false, ready = document.readyState === 'complete';
+  var maybe = function () { if (timeUp && ready) tear(); };
+  setTimeout(function () { timeUp = true; maybe(); }, 1270);
+  window.addEventListener('load', function () { ready = true; maybe(); });
+  setTimeout(function () { ready = timeUp = true; maybe(); }, 3400);
+
+  /* and anyone who does not want to watch tears it themselves. The row of
+     holes is completed first, so what they get is the same gesture early
+     rather than a different one. */
+  ['click', 'touchstart', 'keydown', 'wheel'].forEach(function (ev) {
+    window.addEventListener(ev, function () {
+      if (torn) return;
+      el.classList.add('is-skipped');
+      tear();
+    }, { once: true, passive: true });
+  });
+})();
+</script>
 
 <!-- 5c. the roughness filter. feTurbulence makes noise, feDisplacementMap
      pushes each pixel of the glyph by that noise, so the vector edge stops

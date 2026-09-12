@@ -30,6 +30,12 @@ What it does, and why each step:
 
   4. The control bar and its 44px spacer go, for the same reason.
 
+  5. `var BOOT_LIVE = false` becomes `true`, switching the intro on. The
+     preview is five reference screens and is opened to check a measurement;
+     a two-second loading screen belongs on the page people arrive at. It is
+     a flag rather than a second `only=home` test because step 2 requires
+     exactly one of those and dies on two.
+
 Every step asserts. A silent partial build is how you end up with a home page
 missing its headline, so this stops rather than writing a file it is unsure of.
 """
@@ -122,9 +128,16 @@ def main():
             die("could not find %r to remove" % dead)
         out = out.replace(dead, "")
 
+    # --- 5. switch the intro on -------------------------------------------
+    boot = "var BOOT_LIVE = false;   /* build-index.py rewrites this line */"
+    if out.count(boot) != 1:
+        die("expected exactly 1 BOOT_LIVE flag, found %d" % out.count(boot))
+    out = out.replace(boot, "var BOOT_LIVE = true;    /* build-index.py: this IS the live home */")
+
     # --- checks that the page still IS the page ---------------------------
     for must in ['id="hHead"', 'id="hSub"', 'id="hLegend"', 'id="hLegal"',
-                 'class="ticket perf paper"', "content.js"]:
+                 'class="ticket perf paper"', "content.js",
+                 'var BOOT_LIVE = true', 'class="boot" id="boot"']:
         if must not in out:
             die("the built page is missing %s" % must)
     if out.count('<section class="screen"') != 1:

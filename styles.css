@@ -650,6 +650,14 @@ body.has-won .tk-badge{background:var(--ink)}
 
 /* ============================ SHARED PAGE CHROME ============================ */
 
+/* EVERYTHING IN THIS HEADER WAS SCALED BY 15% ON 12 SEP 2026, at his request:
+   "make the header with my name and the tabs bigger by 15%". Every number in
+   the nav is the old one times 1.15, at every width, including the two phone
+   blocks near the foot of this file. The bar's height went with the type, or
+   bigger words in the same box is not a bigger header, it is a tighter one.
+
+   They are one set. Scaling some and not others is how a header ends up with
+   a 15% name over 0% links, which is the crowding this was meant to undo. */
 .page-nav{
   position:sticky;top:0;z-index:50;
   background:var(--nav-bg);backdrop-filter:blur(9px);
@@ -657,9 +665,9 @@ body.has-won .tk-badge{background:var(--ink)}
   /* 12px condensed caps read as fine print rather than as navigation on any
      screen bigger than a laptop. Up enough to be read at a glance, not so far
      that the header starts competing with the first row of work. */
-  font-size:14.5px;
+  font-size:16.7px;   /* 14.5 x 1.15 */
 }
-.page-nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;height:70px}
+.page-nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;height:80px}
 /* the lockup: name in capitals, the job under it and deliberately not bold.
    site.js builds the two lines, so editing the HTML alone will not change it. */
 .page-nav .logo{
@@ -668,14 +676,14 @@ body.has-won .tk-badge{background:var(--ink)}
 }
 .page-nav .logo b{
   display:block;font-weight:800;letter-spacing:.01em;
-  font-size:23px;text-transform:uppercase;
+  font-size:26.5px;text-transform:uppercase;   /* 23 x 1.15 */
   white-space:nowrap;      /* the name is one line or it is not a lockup */
 }
 .page-nav .logo span{
-  display:block;margin-top:3px;
+  display:block;margin-top:3.5px;
   font-family:var(--mono);font-weight:500;
   text-transform:lowercase;letter-spacing:.16em;
-  font-size:13px;color:var(--fg-faint);
+  font-size:15px;color:var(--fg-faint);        /* 13 x 1.15 */
   white-space:nowrap;
 }
 /* The links are set BIGGER than the rest of the header (his ask, 7 Sep 2026).
@@ -685,8 +693,8 @@ body.has-won .tk-badge{background:var(--ink)}
    A clamp, not a number, because this row is the tightest piece of layout on
    the site: below 520px it drops to its own line under the name, and at 375px
    it has 331px to fit three items in. The floor is what keeps that true. */
-.page-nav .links{display:flex;gap:24px;flex:none;
-                 font-size:clamp(15px,1.3vw,18px)}
+.page-nav .links{display:flex;gap:27.5px;flex:none;
+                 font-size:clamp(17.25px,1.5vw,20.7px)}   /* all x 1.15 */
 /* .55 put the caret at 3.3:1 against a 4.5 requirement, and the caret is the
    ONLY thing telling anyone the Work menu opens. Opacity on the link is a
    group opacity, so a child cannot undo it: the fix has to be here, not on
@@ -1338,8 +1346,8 @@ a.skill-tag:focus-visible{color:var(--red);border-color:var(--red)}
      edge like the rest of the site. */
   .foot-in{flex-direction:column;align-items:flex-start;gap:22px}
   .foot-side{flex-direction:column;align-items:flex-start;gap:16px}
-  .page-nav .links{gap:17px}
-  .page-nav{font-size:12.5px;letter-spacing:.11em}
+  .page-nav .links{gap:19.5px}                        /* 17 x 1.15 */
+  .page-nav{font-size:14.4px;letter-spacing:.11em}    /* 12.5 x 1.15 */
   body.is-home{padding:16px 10px}
 
 
@@ -1364,17 +1372,17 @@ a.skill-tag:focus-visible{color:var(--red);border-color:var(--red)}
    alternative was dropping "Say hi" on phones, and the point of a portfolio
    is that the way to reach him is never the thing that gets cut. */
 @media (max-width:520px){
-  .page-nav .wrap{flex-wrap:wrap;height:auto;padding-top:14px;padding-bottom:12px;gap:8px 20px}
-  .page-nav .links{width:100%;gap:18px}
+  .page-nav .wrap{flex-wrap:wrap;height:auto;padding-top:16px;padding-bottom:14px;gap:9px 20px}
+  .page-nav .links{width:100%;gap:20.7px}             /* 18 x 1.15 */
 }
 
 @media (max-width:520px){
   .credits-list li{flex-direction:column;gap:3px}
   .credits-list li span{flex:none}
-  .page-nav .logo b{font-size:18.5px}
-  .page-nav .logo span{font-size:11.5px}
-  .page-nav .links{gap:14px}
-  .page-nav{font-size:11.5px;letter-spacing:.1em}
+  .page-nav .logo b{font-size:21.3px}                 /* 18.5 x 1.15 */
+  .page-nav .logo span{font-size:13.2px}              /* 11.5 x 1.15 */
+  .page-nav .links{gap:16px}                          /* 14 x 1.15 */
+  .page-nav{font-size:13.2px;letter-spacing:.1em}     /* 11.5 x 1.15 */
   .tk-band{padding:9px 18px;font-size:10.5px}
 }
 

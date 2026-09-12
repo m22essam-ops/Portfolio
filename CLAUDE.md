@@ -1702,9 +1702,61 @@ Verified: admin loads with no console error, a full local save round trip is
 byte-identical (`719205a0…`, 52,770 bytes both sides), and a simulated pick
 reports its size back immediately.
 
+### The intro is back, and it lives in the ticket now
+
+He asked for it back on 12 Sep. It had not been removed on purpose: it shipped
+on the old home on 22 Aug, and on 4 Sep the home page became the brutalist
+card. **The `.boot` rules survived in `styles.css` and did nothing, because
+`preview-brutalist.html` is self-contained and does not load `styles.css`.**
+The markup and the script had gone with `index-flow.html`, which still holds
+the original if it is ever needed again.
+
+Same gesture, same four numbers, same reasoning as the note of 22 Aug: the
+perforation is punched left to right across the red field, the field tears
+along it, the two halves travel off. Punch 0.13s delay + 0.826s, tear at
+1270ms running 0.713s, overlay gone 783ms later. **Those four are one piece of
+choreography and must be scaled TOGETHER.** The 3.4s cap and the 6s panic exit
+are not beats and are not scaled.
+
+- It is in `preview-brutalist.html`, so **it reaches the live page through
+  `build-index.py`.** Never hand-edit `index.html`.
+- **`var BOOT_LIVE = false` is flipped to `true` by build step 5**, which is
+  how the intro plays on the live card and not on the five-screen reference
+  sheet. It is a flag and not a second `only=home` test because step 2 requires
+  exactly one of those and dies on two. The build asserts the flip.
+- `?intro=1` still forces it, `prefers-reduced-motion` still wins over that,
+  and it still plays once per tab.
+- Verified by screenshot mid-punch on the built page, and clean after: the
+  overlay removes itself, `is-booting` comes off, the card is there.
+
+### The header is 15% bigger
+
+His ask, 12 Sep, in those words: "make the header with my name and the tabs
+bigger by 15%". Every number in `.page-nav` is the old one times 1.15 at every
+width, the two phone blocks at the foot of `styles.css` included.
+
+**The bar's height went with the type** (70px to 80px). Bigger words in the
+same box is not a bigger header, it is a tighter one.
+
+- The home page has no nav bar, so nothing there changed. This is work.html,
+  about.html, the project pages and the rest.
+- Measured at 1440: name 26.5, job line 15, links 20.7, gap 27.5, base 16.7,
+  bar 80. At 768: base 14.4, links at the clamp floor 17.25. At 375 the links
+  sit on their own row and end at 254px inside 331px, so **the phone fit the
+  nav was rebuilt for on 24 Aug still holds**, with 77px to spare and no
+  sideways scroll at any width tested.
+- The dropdown is `top:100%` on the link, not a fixed offset, so it followed
+  the taller bar with no change. Re-checked open: panel 17px under the link,
+  both rows there.
+
 ## Don't
 
 - Don't add a build step or framework.
+- Don't scale part of the nav. Every size in `.page-nav`, at every width, is
+  one set; a 15% name over 0% links is the crowding the scaling undid.
+- Don't put the intro's markup or CSS in `styles.css` expecting the home page
+  to see it. The home is built from `preview-brutalist.html`, which does not
+  load that file.
 - Don't let anything upload to GitHub before content.js is written. The words
   are the save; the pictures are not allowed to put them at risk.
 - Don't reject out of `ghUploadImages()`, and don't let any save path reject
