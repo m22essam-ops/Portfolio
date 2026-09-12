@@ -377,6 +377,7 @@
     var next = (idx > -1 && idx < all.length - 1) ? all[idx + 1] : null;
     var prev = (idx > 0) ? all[idx - 1] : null;
     var label = J.nextLabel || 'Next';
+    html += '<nav class="proj-nav">';
     if (prev) {
       html += '<a class="prev-project" href="work.html?slug=' + encodeURIComponent(prev.p.slug) + '">' +
         '<span class="prev-arrow">&larr;</span>' +
@@ -394,6 +395,7 @@
         '<span class="next-title">All work</span>' +
         '<span class="next-arrow">→</span></a>';
     }
+    html += '</nav>';
 
     html += '</div></section>';
     page.innerHTML = html;

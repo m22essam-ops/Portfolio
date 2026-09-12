@@ -1092,28 +1092,43 @@ body.has-won .tk-badge{background:var(--ink)}
   font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;
 }
 
-/* The way back, added 12 Sep 2026. It sits ABOVE the red rule and in the
-   system voice, so the page still has one loud move at the bottom and the
-   return is simply available. Given the same weight as the next link it would
-   read as a fork, and a portfolio should always be pushing forward. */
-.prev-project{
-  display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
-  text-decoration:none;margin-bottom:20px;
-  font-family:var(--mono);font-size:12px;font-weight:500;
-  text-transform:uppercase;letter-spacing:.12em;color:var(--fg-faint);
+/* BACK AND FORWARD ARE THE SAME SIZE (13 Sep 2026, his call), and colour
+   carries the hierarchy instead of type size.
+
+   The next link used to be clamp(28px,5vw,58px) display type under a red
+   rule. At the foot of a project page that is the call-to-action band every
+   marketing site has, which is the thing he has objected to twice, and it
+   made the second-loudest thing on a project page the name of a DIFFERENT
+   project. Both are now the system voice on one rail: back is quiet ink,
+   forward is red. You can still tell instantly which way the page wants you
+   to go, and neither one shouts over the work above it. */
+.proj-nav{
+  display:flex;align-items:baseline;justify-content:space-between;
+  gap:18px 28px;flex-wrap:wrap;
+  border-top:2px solid var(--red);padding:24px 0 0;
 }
+.prev-project,
+.next-project{
+  display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
+  text-decoration:none;
+  font-family:var(--mono);font-size:12px;font-weight:500;
+  text-transform:uppercase;letter-spacing:.12em;
+}
+/* back: quiet */
+.prev-project{color:var(--fg-faint)}
 .prev-project .prev-title{color:var(--fg);letter-spacing:.06em}
 .prev-project:hover,
 .prev-project:hover .prev-title{color:var(--red)}
 
-.next-project{
-  display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;
-  text-decoration:none;border-top:2px solid var(--red);padding:34px 0 0;
-}
-.next-label{font-size:11.5px;color:var(--fg-faint)}
-.next-title{font-family:var(--display);font-weight:800;letter-spacing:-.03em;font-size:clamp(28px,5vw,58px)}
-.next-project:hover .next-title{color:var(--red)}
-.next-arrow{margin-left:auto;font-size:30px;color:var(--red)}
+/* forward: red. margin-left:auto so it still sits right on the first
+   project, where there is no back link to push it there. */
+.next-project{color:var(--red);margin-left:auto}
+.next-project .next-title{color:var(--red);letter-spacing:.06em}
+.next-project:hover,
+.next-project:hover .next-title,
+.next-project:hover .next-arrow{color:var(--red-hot)}
+.next-label{color:var(--fg-faint)}
+.next-arrow{color:var(--red)}
 
 /* ============================ ABOUT ============================ */
 
