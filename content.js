@@ -191,7 +191,7 @@ window.SITE_CONTENT = {
       },
       {
         slug: "pick-your-side",
-        title: "McDonald's - Pick Your Side",
+        title: "Pick Your Side",
         client: "McDonald's",
         category: "Miami Ad School",
         year: "2026",
@@ -201,37 +201,46 @@ window.SITE_CONTENT = {
         tagline: "The only ballot with a drive-thru.",
         story: [
           "America cannot agree on anything. It can agree on lunch.",
-          "For the midterm elections, McDonald's turned its side menu into a ballot. No registration, no queue, no argument with an uncle. You just had to pick a side."
+          "For the midterm elections, McDonald's turned its side menu into a ballot."
         ],
         media: [
           {
             type: "image",
-            src: "",
-            caption: ""
+            src: "order.webp",
+            caption: "",
+            layout: "half"
           },
           {
             type: "image",
-            src: "",
-            caption: ""
+            src: "checkout.webp",
+            caption: "",
+            layout: "half"
           },
           {
             type: "image",
-            src: "",
-            caption: ""
+            src: "app.webp",
+            caption: "",
+            layout: "half"
+          },
+          {
+            type: "image",
+            src: "Sticker.webp",
+            caption: "",
+            layout: "half"
           }
         ],
         credits: [
           {
             role: "Copywriter",
-            name: "Mohammed Essam"
+            name: "Mohammed Essam, Salvatore Scala"
           },
           {
             role: "Art Director",
-            name: ""
+            name: "Jose Pita"
           }
         ],
         next: {},
-        "draft": true,
+        "draft": false,
         "ran": false
       },
       {
