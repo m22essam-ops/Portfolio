@@ -191,13 +191,13 @@ window.SITE_CONTENT = {
       },
       {
         slug: "pick-your-side",
-        title: "Pick Your Side",
-        client: "McDonald's",
+        title: "Pick a Side",
+        client: "Get Out The Vote",
         category: "Miami Ad School",
         year: "2026",
         image: "",
         alt: "",
-        sticker: "Never left the deck",
+        sticker: "sides are the main",
         tagline: "The only ballot with a drive-thru.",
         story: [
           "America cannot agree on anything. It can agree on lunch.",
@@ -208,25 +208,30 @@ window.SITE_CONTENT = {
             type: "image",
             src: "order.webp",
             caption: "",
-            layout: "third"
+            layout: "half"
           },
           {
             type: "image",
             src: "checkout.webp",
             caption: "",
-            layout: "third"
+            layout: "half"
           },
           {
             type: "image",
             src: "app.webp",
             caption: "",
-            layout: "third"
+            layout: "half"
+          },
+          {
+            type: "video",
+            src: "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/IQvnk5GbEuc?si=f6Yjrx5A70InUNVN\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+            caption: ""
           },
           {
             type: "image",
             src: "Sticker.webp",
             caption: "",
-            layout: "third"
+            layout: "half"
           }
         ],
         credits: [
@@ -1285,7 +1290,7 @@ window.SITE_CONTENT = {
     ranHeading: "Work that worked.",
     ranNote: "Work that fought its way to production. I concepted, wrote, and occasionally hijacked the director's chair.",
     wantHeading: "Spec work.",
-    wantNote: "Had fun crafting those ideas in my time at Miami Ad School Madrid."
+    wantNote: "Briefs nobody paid me for, answered like somebody had."
   },
   about: {
     label: "Don't take it personally (it seems so)",
