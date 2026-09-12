@@ -190,6 +190,51 @@ window.SITE_CONTENT = {
         "ran": false
       },
       {
+        slug: "pick-your-side",
+        title: "McDonald's - Pick Your Side",
+        client: "McDonald's",
+        category: "Miami Ad School",
+        year: "2026",
+        image: "",
+        alt: "",
+        sticker: "Never left the deck",
+        tagline: "The only ballot with a drive-thru.",
+        story: [
+          "America cannot agree on anything. It can agree on lunch.",
+          "For the midterm elections, McDonald's turned its side menu into a ballot. No registration, no queue, no argument with an uncle. You just had to pick a side."
+        ],
+        media: [
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "",
+            caption: ""
+          }
+        ],
+        credits: [
+          {
+            role: "Copywriter",
+            name: "Mohammed Essam"
+          },
+          {
+            role: "Art Director",
+            name: ""
+          }
+        ],
+        next: {},
+        "draft": true,
+        "ran": false
+      },
+      {
         slug: "Knights-of-glowing-box",
         title: "Domino's - Knights of the Glowing Box",
         client: "Domino's",

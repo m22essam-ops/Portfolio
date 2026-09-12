@@ -927,10 +927,16 @@ body.has-won .tk-badge{background:var(--ink)}
 }
 
 /* THE STICKER — what actually happened to this piece */
+/* Up from 11px/7px-12px on 12 Sep 2026, his call: "never left the deck sticker
+   is very little". Measured before: that sticker came to 141x38 on a 600px
+   card, under a quarter of its width, for the one element carrying the only
+   piece of information the grid gives you about what happened to a piece.
+   The widest, "Three films, three markets", goes 182px to roughly 240px, and
+   the max-width below still holds it inside a 572px card. */
 .sticker{
   position:absolute;top:14px;right:14px;z-index:2;
   background:var(--red);color:var(--paper);
-  font-size:11px;padding:7px 12px;border-radius:100px;
+  font-size:14px;padding:9px 16px;border-radius:100px;
   transform:rotate(-3deg);
   max-width:calc(100% - 28px);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
