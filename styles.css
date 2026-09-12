@@ -1016,7 +1016,11 @@ body.has-won .tk-badge{background:var(--ink)}
 .project-body{max-width:62ch;margin-bottom:60px}
 .project-body p{font-size:19px;line-height:1.62;margin:0 0 22px;color:var(--fg-dim)}
 
-.media-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:28px;margin-bottom:70px}
+/* Row gap opened up from 28px on 13 Sep 2026, his call. Side by side, 28px
+   reads as one pair; stacked, it read as one tall picture cut in half. The
+   columns keep 28 because that gap is doing the opposite job: holding two
+   images together as a pair. */
+.media-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:52px 28px;margin-bottom:70px}
 .project-media{margin:0;grid-column:1/-1}
 .project-media[data-layout="half"]{grid-column:auto}
 /* NO PIECE OF MEDIA IS TALLER THAN THE SCREEN (his ask, 12 Sep 2026:
@@ -1038,7 +1042,6 @@ body.has-won .tk-badge{background:var(--ink)}
   width:auto;max-width:100%;
   height:auto;max-height:80vh;
   margin-inline:auto;
-  border-radius:3px;border:1px solid var(--line);
 }
 /* The film gets the same ceiling, but through its WIDTH, so the 16:9 stays
    exactly 16:9 instead of being clipped inside a box that is no longer 16:9.
