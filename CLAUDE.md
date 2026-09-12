@@ -1801,9 +1801,56 @@ site has no fixed identity. `#E3261A` on every page is the thing people leave
 with. He is an art director selling range; this is a copywriter selling a
 voice, and a voice needs one colour.
 
+### Six columns, a spacer, and About's rail (13 Sep 2026)
+
+**The media grid is six columns, not two.** His ask was a 1/3 option. Six is
+the smallest number divisible by 2 and 3, so full (span 6), two-thirds (4),
+half (3) and third (2) are all whole tracks and every mix still lines up on
+the same vertical rails. Two columns could not express a third at all.
+
+**The spacer is his idea and it is a media item.** `{type:"spacer", layout:""}`
+in a project's media list. Full width it makes 48px of vertical air; half or
+third it takes a cell and pushes what follows across, which is the only way
+to leave a deliberate hole in a grid. **One fixed small size on purpose**: two
+or three of them is how you ask for more, which he can see and count instead
+of guessing a number. Hidden below 900px when it is half or third, because
+nothing sits beside it in one column.
+
+Three things had to learn about it, and missing any one loses every spacer:
+
+- **`cleanAll()` drops media with no `src`.** A spacer is deliberately empty,
+  so without an exemption the serializer deleted them all on the next save.
+- **work.html filtered the same way** before rendering.
+- **The slot padder counted spacers as image slots**, so three spacers left a
+  project with nowhere to put a picture.
+
+Verified end to end through the real path: added from admin's button, saved,
+survived `serialize()`, rendered at 48px spanning 6.
+
+**Pick Your Side was upscaling.** His four assets are 460–560px native and
+half width is 606px, so `app.webp` was being blown up 1.32x. At third they
+render 0.70x, under native, which is what "not good size" actually was.
+
+**About was the only page not on its own rail.** `margin-inline:auto` centred
+its 1200px column inside a `.wrap` that grows with the screen. Measured
+against the nav before the fix: 16px out at 1280, 20px at 1440, 121px at 1680,
+224px at 1920, **480px at 2560**. On his monitor his name in the header and
+the headline under it were half a screen apart. Kept the 1200px measure, which
+is a reading decision, and dropped the centring. Now 0 at every width.
+
+Swept every page at 1920 afterwards: all 0 except `manipulating.html` at +394,
+which is its deliberate 860px centred reading column and is documented above.
+`.about-shot` measures 7px left of the text and that is not a bug either: it
+is the bounding box of its `rotate(-1.6deg)`.
+
 ## Don't
 
 - Don't add a build step or framework.
+- Don't let `cleanAll()`, the media filter in work.html, or the slot padder
+  forget spacers. A spacer has no `src` by design and each of those three
+  would silently delete or miscount it.
+- Don't centre a capped column inside a `.wrap` that grows. Cap the measure,
+  keep the left edge.
 - Don't give project pages the client's brand colour, and don't randomise the
   site palette. Both were looked at on 12 Sep against a real example and
   rejected: they sell the client and dissolve the identity.

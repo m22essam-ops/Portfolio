@@ -290,9 +290,17 @@
         story.map(function (t) { return '<p>' + esc(t) + '</p>'; }).join('') + '</div>';
     }
 
-    var media = (p.media || []).filter(function (m) { return m.src && String(m.src).trim(); });
+    /* A spacer has no src on purpose, so it has to be let through a filter
+       written to drop the empty slots admin pads every project with. */
+    var media = (p.media || []).filter(function (m) {
+      return m.type === 'spacer' || (m.src && String(m.src).trim());
+    });
     if (media.length) {
       html += '<div class="media-grid">' + media.map(function (m) {
+        if (m.type === 'spacer') {
+          return '<div class="media-spacer" data-layout="' + esc(m.layout || '') +
+                 '" aria-hidden="true"></div>';
+        }
         var cap = m.caption ? '<figcaption>' + esc(m.caption) + '</figcaption>' : '';
         if (m.type === 'video') {
           var src = String(m.src).trim();

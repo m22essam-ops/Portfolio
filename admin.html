@@ -260,6 +260,16 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
   border-radius: 8px;
   padding: 10px;
 }
+/* a spacer slot is empty by design, so it is drawn as a gap rather than as a
+   card with nothing in it: dashed, no fill, obviously not a missing image */
+.media-slot-spacer {
+  background: none;
+  border-style: dashed;
+}
+.media-slot-spacer .spacer-label {
+  font-weight: 600; font-size: 13px; margin-bottom: 8px; opacity: .75;
+}
+.media-slot-spacer .hint { font-size: 11px; opacity: .6; margin: 6px 0 0; }
 .media-slot input, .media-video-slot input, .media-video-slot textarea, .media-slot select {
   width: 100%;
   background: var(--panel2);
@@ -748,6 +758,23 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
           '</div></div>';
         return;
       }
+      if (m.type === 'spacer') {
+        imgSlots += '<div class="media-slot media-slot-spacer">' +
+          '<div class="spacer-label">Empty space</div>' +
+          '<select data-path="' + base + '.media.' + i + '.layout" title="How much room it takes">' +
+            '<option value=""' + (!m.layout ? ' selected' : '') + '>Full width (adds height)</option>' +
+            '<option value="two-thirds"' + (m.layout === 'two-thirds' ? ' selected' : '') + '>Two thirds (holds a gap)</option>' +
+            '<option value="half"' + (m.layout === 'half' ? ' selected' : '') + '>Half width (holds a gap)</option>' +
+            '<option value="third"' + (m.layout === 'third' ? ' selected' : '') + '>One third (holds a gap)</option>' +
+          '</select>' +
+          '<p class="hint">One is a small gap. Add two or three in a row for more.</p>' +
+          '<div class="media-actions">' +
+            '<button class="mini" data-act="move-media" data-path="' + base + '" data-idx="' + i + '" data-dir="-1" type="button" title="Move up">&uarr;</button>' +
+            '<button class="mini" data-act="move-media" data-path="' + base + '" data-idx="' + i + '" data-dir="1" type="button" title="Move down">&darr;</button>' +
+            '<button class="del" data-act="remove-row" data-path="' + base + '" data-row="media" data-idx="' + i + '" type="button">Remove</button>' +
+          '</div></div>';
+        return;
+      }
       imgSlots += '<div class="media-slot">' +
         '<div class="media-pick">' +
           '<input data-path="' + base + '.media.' + i + '.src" placeholder="File name in images/, or full http link" value="' + esc(m.src) + '">' +
@@ -759,7 +786,9 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
         '<select data-path="' + base + '.media.' + i + '.layout" title="Grid block size">' +
           '<option value=""' + (!m.layout ? ' selected' : '') + '>Auto (by shape)</option>' +
           '<option value="full"' + (m.layout === 'full' ? ' selected' : '') + '>Full width</option>' +
+          '<option value="two-thirds"' + (m.layout === 'two-thirds' ? ' selected' : '') + '>Two thirds</option>' +
           '<option value="half"' + (m.layout === 'half' ? ' selected' : '') + '>Half width</option>' +
+          '<option value="third"' + (m.layout === 'third' ? ' selected' : '') + '>One third</option>' +
         '</select>' +
         '<input data-path="' + base + '.media.' + i + '.caption" placeholder="Caption (also used as alt text)" value="' + esc(m.caption) + '">' +
         '<div class="media-actions">' +
@@ -822,6 +851,7 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
         '<div class="subhead">Video (full width on the site, outside the image grid)</div>' +
         vidSlots +
         '<button class="add-btn" data-act="add-row" data-path="' + base + '" data-row="media-video" type="button">+ Add video slot</button>' +
+        '<button class="add-btn" data-act="add-row" data-path="' + base + '" data-row="media-spacer" type="button">+ Add empty space</button>' +
         '<div class="subhead">Credits (4 slots) <button class="mini" data-act="add-row" data-path="' + base + '" data-row="credits" type="button">+ Add credit</button></div>' +
         creditRows +
         '<div class="grid2">' +
@@ -842,7 +872,11 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
     (M.work[group] || []).forEach(function (p) {
       if (!Array.isArray(p.media)) p.media = [];
       if (!Array.isArray(p.credits)) p.credits = [];
-      var imgs = p.media.filter(function (m) { return m.type !== 'video'; }).length;
+      /* spacers are not image slots: counting them here meant three spacers
+         left a project with no empty slot to put a picture in */
+      var imgs = p.media.filter(function (m) {
+        return m.type !== 'video' && m.type !== 'spacer';
+      }).length;
       for (var i = imgs; i < 3; i++) p.media.push({ type: 'image', src: '', caption: '' });
       if (!p.media.some(function (m) { return m.type === 'video'; })) {
         p.media.push({ type: 'video', src: '', caption: '' });
@@ -1318,6 +1352,8 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
               (btn.dataset.row && btn.dataset.row.indexOf('media') === 0 ? '.media' : '.credits'));
         if (btn.dataset.row === 'media-image') proj.media.push({ type: 'image', src: '', caption: '' });
         else if (btn.dataset.row === 'media-video') proj.media.push({ type: 'video', src: '', caption: '' });
+        /* no src, and that is the point: the cleaner below must know to keep it */
+        else if (btn.dataset.row === 'media-spacer') proj.media.push({ type: 'spacer', layout: '' });
         else if (btn.dataset.row === 'media') proj.media.push({ type: 'image', src: '', caption: '' });
         else proj.credits.push({ role: '', name: '' });
         renderProjects(pr3.group);
@@ -1471,7 +1507,11 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
   function cleanAll(o) {
     ['projects', 'produced', 'presented'].forEach(function (g) {
       ((o.work && o.work[g]) || []).forEach(function (p) {
-        p.media = (p.media || []).filter(function (m) { return m.src && String(m.src).trim(); });
+        /* A spacer is deliberately empty, so the rule that drops the padded
+           blank slots would delete every one of them on the next save. */
+        p.media = (p.media || []).filter(function (m) {
+          return m.type === 'spacer' || (m.src && String(m.src).trim());
+        });
         p.credits = (p.credits || []).filter(function (c) {
           return (c.role && String(c.role).trim()) || (c.name && String(c.name).trim());
         });

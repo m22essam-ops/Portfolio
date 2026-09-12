@@ -1020,9 +1020,32 @@ body.has-won .tk-badge{background:var(--ink)}
    reads as one pair; stacked, it read as one tall picture cut in half. The
    columns keep 28 because that gap is doing the opposite job: holding two
    images together as a pair. */
-.media-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:52px 28px;margin-bottom:70px}
-.project-media{margin:0;grid-column:1/-1}
-.project-media[data-layout="half"]{grid-column:auto}
+/* SIX columns, not two (13 Sep 2026, his ask for a 1/3 option). Six is the
+   smallest number that divides cleanly by 2 and by 3, so full, two-thirds,
+   half and third are all whole numbers of tracks and every combination still
+   lines up on the same vertical rails. Two columns could not express a third
+   at all. */
+.media-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:52px 28px;margin-bottom:70px}
+.project-media{margin:0;grid-column:span 6}
+.project-media[data-layout="full"]{grid-column:span 6}
+.project-media[data-layout="two-thirds"]{grid-column:span 4}
+.project-media[data-layout="half"]{grid-column:span 3}
+.project-media[data-layout="third"]{grid-column:span 2}
+
+/* THE SPACER, his idea: an empty block he can drop into the media list where
+   a particular project needs air, instead of every project paying for it in
+   the stylesheet. Deliberately ONE small fixed size so two or three of them
+   is the way to ask for more, which is a decision he can see and count rather
+   than a number he has to guess.
+
+   Full width it makes vertical space. Half or third it takes a cell and
+   pushes what follows across, which is the only way to leave a deliberate
+   hole in a grid. Those two have no height of their own: the picture beside
+   them sets the row. */
+.media-spacer{grid-column:span 6;height:48px}
+.media-spacer[data-layout="two-thirds"]{grid-column:span 4;height:0}
+.media-spacer[data-layout="half"]{grid-column:span 3;height:0}
+.media-spacer[data-layout="third"]{grid-column:span 2;height:0}
 /* NO PIECE OF MEDIA IS TALLER THAN THE SCREEN (his ask, 12 Sep 2026:
    "i need to make sure that each image in the media is in one scroll").
 
@@ -1116,12 +1139,20 @@ body.has-won .tk-badge{background:var(--ink)}
    out of it and was the only child of the container still running full width,
    so it started 217px to the left of the heading, the photo and the jobs,
    which all start together. Add a block to the page, add it here. */
+   LEFT ALIGNED, NOT CENTRED (13 Sep 2026, found in an alignment sweep).
+   `margin-inline:auto` centred this 1200px column inside a `.wrap` that grows
+   with the screen, so About was the only page whose content did not start on
+   the same rail as its own nav. Measured against the nav's left edge before
+   the fix: 16px out at 1280, 20px at 1440, 121px at 1680, 224px at 1920 and
+   480px at 2560. On his own monitor his name in the header and the headline
+   under it were half a screen apart. The 1200px measure is kept, because that
+   is a reading decision; only the centring goes. */
 body.page-about .page-head .wrap,
 body.page-about .about-grid,
 body.page-about .exp-list,
 body.page-about .lang-list,
 body.page-about .blk-head,
-body.page-about #aboutResume{max-width:1200px;margin-inline:auto}
+body.page-about #aboutResume{max-width:1200px;margin-inline:0}
 .about-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:56px;align-items:stretch;margin-bottom:96px}
 /* The About portrait is printed the same way the stamp is: a flat red
    ground with a grey photograph screened over it, so it is two inks rather
@@ -1371,8 +1402,20 @@ a.skill-tag:focus-visible{color:var(--red);border-color:var(--red)}
   /* stacked, there is no text beside it to match, so the frame carries its
      own portrait shape instead of stretching to a row it now owns alone */
   .about-shot{min-height:0;aspect-ratio:4/5}
+  /* One column on a phone, so every block spans it whatever it was asked to
+     be. A half or third SPACER is meaningless once nothing sits beside it,
+     so it goes rather than leaving a mystery gap; the full-width one still
+     does its job, which is vertical air. */
   .media-grid{grid-template-columns:1fr}
-  .project-media[data-layout="half"]{grid-column:1/-1}
+  .project-media,
+  .project-media[data-layout="full"],
+  .project-media[data-layout="two-thirds"],
+  .project-media[data-layout="half"],
+  .project-media[data-layout="third"]{grid-column:1/-1}
+  .media-spacer{grid-column:1/-1}
+  .media-spacer[data-layout="two-thirds"],
+  .media-spacer[data-layout="half"],
+  .media-spacer[data-layout="third"]{display:none}
   .tk-body{padding:30px 18px 22px}
   .tk-mid{flex-direction:column;align-items:flex-start;gap:26px}
   /* the tabs only stretch when they are standing next to the stamp; 

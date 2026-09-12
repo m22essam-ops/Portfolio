@@ -208,25 +208,25 @@ window.SITE_CONTENT = {
             type: "image",
             src: "order.webp",
             caption: "",
-            layout: "half"
+            layout: "third"
           },
           {
             type: "image",
             src: "checkout.webp",
             caption: "",
-            layout: "half"
+            layout: "third"
           },
           {
             type: "image",
             src: "app.webp",
             caption: "",
-            layout: "half"
+            layout: "third"
           },
           {
             type: "image",
             src: "Sticker.webp",
             caption: "",
-            layout: "half"
+            layout: "third"
           }
         ],
         credits: [
