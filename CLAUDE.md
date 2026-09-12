@@ -1632,9 +1632,89 @@ reading a frozen `ticket-design-v1.js`. His request, so there is something to
 go back to. **The copy has to point at its own design file** or it changes
 whenever the live one does, which would make it useless as a reference.
 
+## Added 12 Sep 2026
+
+### "Save failed." — one unreadable picked file stopped every save
+
+His report was "why the admin file is not updating???? need a final solution
+(saving failed)", and the words in that bracket were the diagnosis. **A bare
+"Save failed." with nothing after it is printed by exactly one line**, the
+catch at the end of the GitHub button, and only when something rejects with an
+object that is not an `Error`. The only thing that ever did was
+`reader.onerror = reject` in `ghUploadImages()`: a `FileReader` error handler
+is handed a ProgressEvent, which has no `.message`.
+
+Measured before touching anything: his folder held
+`tagline: "The thirst was the easy one."` and a 1,264,281-byte `coverr.jpg`;
+GitHub and the live site held an empty tagline and the older 1,252,039-byte
+file. Every one of the 67 images the site references was live and fine, so
+this was not the usual "the bytes never got uploaded". His folder had moved at
+01:03, 01:11 and 01:32; GitHub's last commit was 01:02. **Nine hours of
+editing a folder that was ahead of his own live site, with nothing anywhere
+saying so.**
+
+Four things were wrong and each one alone was enough:
+
+- **A `File` from a file input is a handle into the disk, not a copy.** It
+  goes stale when the file behind it is moved, renamed or rewritten. The save
+  read its picked files TWICE, once for the folder and once for GitHub, and
+  **between the two reads it wrote the picked image into `images/` itself**.
+  The second read could therefore fail where the first had just worked. Fixed
+  at the root: `rememberPick()` reads the bytes the moment he picks the file
+  and keeps them, so nothing downstream ever touches the disk again. It is
+  also the one moment he is still looking at the file he chose, so it now says
+  "Ready to upload: name (N KB)" or names the failure while he can still act.
+- **The pictures were uploaded BEFORE the words.** content.js is the whole
+  point of the save and it went last, behind the big slow failure-prone half.
+  Reversed: content.js reaches GitHub first, then the files.
+- **`ghUploadImages()` rejected, killing the save.** It cannot reject now. It
+  collects failures, NAMES them, and the status line says the words are saved
+  and which files are not.
+- **`pickedFiles` was only emptied on success, so the whole list was retried
+  from scratch every time** and died at the same file forever. That is what
+  made it "everytime". Each file is deleted as it lands.
+
+Two more in the same family, fixed in the same pass:
+
+- The image `GET` read its sha **off the default branch while the `PUT` wrote
+  to `gh.branch`**. Same bug content.js had already been fixed for, same
+  consequence: replacing an existing file 409s on a non-default Pages branch.
+- **Saving locally emptied the picked list**, so pick an image → Save locally
+  → Save to GitHub put the file NAME into the live content.js with the file
+  itself still on his laptop. A 404 live that looks perfect in his own
+  preview, which is the exact trap this file already warns about. A pick is
+  forgotten when it is PUBLISHED, not when it is written to this machine.
+
+**The last line of defence, and the thing that makes it final:
+`ghCheckDrift()`.** Every fix above addresses a cause; this catches the
+symptom whatever the next cause turns out to be. On load, and after every
+save, it reads content.js from the folder and from GitHub and compares them
+byte for byte. Both are written by the same serializer, so different means
+something did not get published, and a red banner says so.
+
+- **It says nothing at all when it cannot answer** — opened as a file, not
+  connected, GitHub unreachable. Same reasoning as the local server's liveness
+  check in `Edit the site/`: a banner that cries wolf on a check that never
+  ran is worse than no banner.
+- It re-checks 2.5s after a successful save, which is what clears it.
+
+Verified: admin loads with no console error, a full local save round trip is
+byte-identical (`719205a0…`, 52,770 bytes both sides), and a simulated pick
+reports its size back immediately.
+
 ## Don't
 
 - Don't add a build step or framework.
+- Don't let anything upload to GitHub before content.js is written. The words
+  are the save; the pictures are not allowed to put them at risk.
+- Don't reject out of `ghUploadImages()`, and don't let any save path reject
+  with something that is not an `Error`. That is what produced a bare
+  "Save failed." with no file named and nothing to act on.
+- Don't read a picked `File` twice. The bytes are read once at pick time
+  because the handle goes stale the moment the file behind it is rewritten,
+  and the save rewrites picked images itself.
+- Don't clear `pickedFiles` wholesale, and don't clear it on a local save.
+  Per-file, on successful upload, only.
 - Don't use em dashes in user-facing copy.
 - Don't reinstate the slot machine, the word chain, or the scratch panels.
 - Don't reintroduce halftone, sunburst, gold, grain or drop shadows.

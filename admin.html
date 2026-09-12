@@ -239,6 +239,10 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
 /* ---------- GitHub publish ---------- */
 .gh-connect-row { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 10px; }
 .gh-connect-row .field { min-width: 300px; flex: 1; }
+.drift-banner {
+  margin: 12px 0 0; padding: 10px 14px; font-size: 14px; font-weight: 600;
+  color: var(--danger); border: 2px solid var(--danger); border-radius: 4px;
+}
 .gh-status { font-size: 13px; margin: 0 0 12px; }
 .gh-status.ok { color: var(--teal); }
 .gh-status.err { color: var(--danger); }
@@ -329,6 +333,7 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
     </label>
     <span id="statusLine"></span>
   </div>
+  <p id="driftBanner" class="drift-banner" hidden></p>
 </header>
 
 <main>
@@ -1541,6 +1546,28 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
   /* files picked on this machine, keyed by field path — uploaded to images/
      (or videos/) on the next Save to GitHub so the live site can see them */
   var pickedFiles = {};
+  /* Read the bytes the MOMENT he picks the file, and keep those bytes.
+
+     A File from a file input is a handle into the disk, not a copy of it, so
+     it goes stale as soon as the file behind it is moved, renamed or
+     rewritten. This save reads its picked files TWICE: once for the folder
+     and once for GitHub. And between those two reads it writes the picked
+     image into images/ itself, which is exactly the kind of change that
+     invalidates the handle. So the second read could fail where the first
+     had just worked.
+
+     It cost the live site a cover and a line on 12 Sep 2026. The upload
+     rejected with a FileReader event, and an event carries no `.message`, so
+     the catch at the end of the save fell through to the bare words
+     "Save failed." — no file named, nothing to act on. content.js never
+     reached GitHub, because the upload ran BEFORE it. And since pickedFiles
+     was only emptied on success, every later save retried the same
+     unreadable file and died in the same place: his folder kept moving, the
+     live site never did.
+
+     Read once, here, and nothing downstream can go stale. The read is also
+     the one moment he is still looking at the file he chose, so a failure
+     can be reported in terms he can act on. */
   function rememberPick(input, folder) {
     var f = input.files[0];
     if (!f || !input.dataset.target) return;
@@ -1549,8 +1576,32 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
       el.value = f.name;
       el.dispatchEvent(new Event('input', { bubbles: true }));
     }
-    pickedFiles[input.dataset.target] = { file: f, folder: folder };
+    var entry = { file: f, name: f.name, folder: folder, b64: null, error: null };
+    pickedFiles[input.dataset.target] = entry;
     input.value = '';
+    entry.reading = new Promise(function (resolve) {
+      var reader = new FileReader();
+      reader.onload = function () {
+        entry.b64 = String(reader.result).replace(/^data:[^;]*;base64,/, '');
+        status('Ready to upload: ' + entry.name + ' (' +
+          Math.round(f.size / 1024) + ' KB). Press a save button to send it.');
+        resolve();
+      };
+      reader.onerror = function () {
+        entry.error = 'could not be read from disk';
+        status('Could not read ' + entry.name + '. Pick it again, or copy it ' +
+          'into the portfolio folder first. Everything else will still save.', true);
+        resolve();
+      };
+      reader.readAsDataURL(f);
+    });
+  }
+  /* Every picked file has finished being read. Pressing save a fraction of a
+     second after choosing a big file must not send it half-read. */
+  function pickedReady() {
+    return Promise.all(Object.keys(pickedFiles).map(function (k) {
+      return (pickedFiles[k] && pickedFiles[k].reading) || null;
+    }));
   }
   imgPicker.addEventListener('change', function () { rememberPick(this, 'images'); });
   videoPicker.addEventListener('change', function () { rememberPick(this, 'images'); });
@@ -1564,26 +1615,17 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
     }
     return 'http://127.0.0.1:8888/api/save'; /* opened via file:// — the default server port */
   }
+  /* The bytes were read at pick time; this just hands them over. No second
+     trip to the disk, so a file that read once cannot fail to read now. */
   function readPickedFiles() {
-    var keys = Object.keys(pickedFiles);
-    var files = {};
-    var chain = Promise.resolve();
-    keys.forEach(function (key) {
-      var entry = pickedFiles[key];
-      if (!entry || !entry.file) return;
-      chain = chain.then(function () {
-        return new Promise(function (resolve) {
-          var reader = new FileReader();
-          reader.onload = function () {
-            files[entry.file.name] = String(reader.result).replace(/^data:[^;]*;base64,/, '');
-            resolve();
-          };
-          reader.onerror = function () { resolve(); };
-          reader.readAsDataURL(entry.file);
-        });
+    return pickedReady().then(function () {
+      var files = {};
+      Object.keys(pickedFiles).forEach(function (key) {
+        var entry = pickedFiles[key];
+        if (entry && entry.b64) files[entry.name] = entry.b64;
       });
+      return files;
     });
-    return chain.then(function () { return files; });
   }
   /* Writes content.js and any picked files into the folder on this machine.
      Shared by BOTH save buttons: Save to GitHub calls it too, so the copy on
@@ -1644,7 +1686,14 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
       });
     }).then(function (r) { return r.json(); })
       .then(function (d) {
-        if (d && d.ok && clearPicks) pickedFiles = {};
+        /* A picked file is forgotten when it is PUBLISHED, not when it is
+           written to this machine. Saving locally used to empty the list, so
+           picking an image, pressing Save locally, then pressing Save to
+           GitHub put the file name into content.js on the live site with the
+           file itself still sitting on his laptop: a 404 that looks perfect
+           in his own preview. The bytes are held in memory from pick time
+           now, so there is nothing to gain by dropping them early.
+           ghUploadImages() removes each one as it lands. */
         return d;
       })
       .catch(function () { return null; });
@@ -1874,53 +1923,73 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
 
   /* upload each picked image/video into images/ (or videos/) — the name must
      match what the field holds */
+  /* Upload the picked files.
+
+     This must NEVER reject. By the time it runs, content.js is already on
+     GitHub, and a picture that will not upload is not a reason to tell him
+     his words did not save. It used to reject, it ran BEFORE the words, and
+     one unreadable file therefore stopped the whole save — silently enough
+     that the folder and the live site drifted apart for nine hours.
+
+     Failures are collected and NAMED, so the status line can say which file
+     and why. And each file that lands is deleted from the list as it lands:
+     one bad file must not make the next save re-send the good ones, and
+     must not make every future save fail at the same place. */
+  var uploadNote = '';
   function ghUploadImages() {
-    var paths = Object.keys(pickedFiles);
-    if (!paths.length) return Promise.resolve();
-    var chain = Promise.resolve();
-    var done = 0;
-    paths.forEach(function (key) {
-      var entry = pickedFiles[key];
-      if (!entry || !entry.file) return;
-      var f = entry.file;
-      var folder = entry.folder === 'videos' ? 'videos' : 'images';
-      var kind = folder === 'videos' ? 'video' : 'image';
-      chain = chain.then(function () {
-        return new Promise(function (resolve, reject) {
-          var reader = new FileReader();
-          reader.onload = function () {
-            var b64 = String(reader.result).replace(/^data:[^;]*;base64,/, '');
-            var path = folder + '/' + encodeURIComponent(f.name);
-            ghApi('/repos/' + gh.owner + '/' + gh.repo + '/contents/' + path)
-              .then(function (res) {
-                var sha = null;
-                if (res.ok) return res.json().then(function (d) { sha = d.sha; return sha; });
-                if (res.status === 404) return null;
-                return ghErrFrom(res).then(function (m) { throw new Error(m); });
-              })
-              .then(function (sha) {
-                var body = { message: 'Add ' + kind + ' ' + f.name, content: b64 };
-                if (sha) body.sha = sha;
-                if (gh.branch) body.branch = gh.branch;
-                return ghApi('/repos/' + gh.owner + '/' + gh.repo + '/contents/' + path, {
-                  method: 'PUT',
-                  body: JSON.stringify(body)
-                });
-              })
-              .then(function (res) {
-                if (!res.ok) return ghErrFrom(res).then(function (m) { throw new Error(m); });
-                done++;
-                ghStatus('Uploading files to GitHub... (' + done + '/' + paths.length + ')', false);
-                resolve();
-              })
-              .catch(reject);
-          };
-          reader.onerror = reject;
-          reader.readAsDataURL(f);
+    uploadNote = '';
+    var keys = Object.keys(pickedFiles);
+    if (!keys.length) return Promise.resolve();
+    return pickedReady().then(function () {
+      var chain = Promise.resolve();
+      var done = 0, failed = [];
+      keys.forEach(function (key) {
+        var entry = pickedFiles[key];
+        if (!entry) return;
+        chain = chain.then(function () {
+          if (!entry.b64) {
+            failed.push(entry.name + ' (' + (entry.error || 'was not read') + ')');
+            return;
+          }
+          var folder = entry.folder === 'videos' ? 'videos' : 'images';
+          var kind = folder === 'videos' ? 'video' : 'image';
+          var path = folder + '/' + encodeURIComponent(entry.name);
+          /* on the serving branch, not the default one — the same fix
+             content.js needed, for the same reason: a sha read off the
+             wrong branch makes every replacement of an existing file 409 */
+          return ghApi('/repos/' + gh.owner + '/' + gh.repo + '/contents/' + path + ghRef())
+            .then(function (res) {
+              if (res.ok) return res.json().then(function (d) { return d.sha; });
+              if (res.status === 404) return null;
+              return ghErrFrom(res).then(function (m) { throw new Error(m); });
+            })
+            .then(function (sha) {
+              var body = { message: 'Add ' + kind + ' ' + entry.name, content: entry.b64 };
+              if (sha) body.sha = sha;
+              if (gh.branch) body.branch = gh.branch;
+              return ghApi('/repos/' + gh.owner + '/' + gh.repo + '/contents/' + path, {
+                method: 'PUT',
+                body: JSON.stringify(body)
+              });
+            })
+            .then(function (res) {
+              if (!res.ok) return ghErrFrom(res).then(function (m) { throw new Error(m); });
+              done++;
+              delete pickedFiles[key];
+              ghStatus('Uploading files to GitHub... (' + done + '/' + keys.length + ')', false);
+            })
+            .catch(function (e) {
+              failed.push(entry.name + ' (' + ((e && e.message) || 'upload failed') + ')');
+            });
         });
       });
+      return chain.then(function () {
+        if (failed.length) {
+          uploadNote = ' The words are saved, but these files did NOT upload: ' +
+            failed.join('; ') + '. Pick them again and save once more.';
+        }
+      });
     });
-    return chain.then(function () { pickedFiles = {}; });
   }
 
   /* after a save, poll GitHub Pages builds until the live site is rebuilt */
@@ -1993,7 +2062,6 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
           ? ' Your folder is updated too.'
           : ' (Your folder was NOT updated: the local server is not running.)') + ogNote + DISK_NOTE;
       })
-      .then(ghUploadImages)
       .then(function () {
         /* read the current sha on the serving branch — not the default branch,
            or writes to a non-default Pages branch would always 409 */
@@ -2031,17 +2099,33 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
       })
       .then(function (putRes) {
         if (!putRes.ok) return ghErrFrom(putRes).then(function (m) { throw new Error(m); });
+        /* The words are on GitHub. Only now the pictures: they are the big,
+           slow, failure-prone half, and nothing about them is allowed to
+           put the words at risk any more. */
+        ghStatus('Words saved to GitHub. Uploading files...', false);
+        return ghUploadImages();
+      })
+      .then(function () {
+        folderNote += uploadNote;
         /* content saved — now push the admin editor too, then confirm the live build */
         ghStatus('Saved. Syncing the admin editor to GitHub...', false);
         return ghSyncAdmin().then(function () {
           ghPollLive(new Date().toISOString(), 0);
           btnGithub.disabled = false;
+          setTimeout(ghCheckDrift, 2500);   /* clears the banner once it is true */
         });
       })
       .catch(function (err) {
         /* a TypeError here is the browser refusing the request (blocked,
            offline, or a file:// origin), not GitHub saying no. Say which. */
-        var msg = err && err.message ? err.message : 'Save failed.';
+        /* Never a bare "Save failed." again. That exact string, with nothing
+           after it, was all he got on 12 Sep: it is what this line prints
+           when something rejects with an object that is not an Error, and
+           the only thing that ever did was a FileReader event. Say what is
+           known, and say what the folder got, so the words are never
+           silently ahead of the live site with no sign of it. */
+        var msg = err && err.message ? err.message
+          : 'Save failed, and GitHub gave no reason.' + folderNote;
         if (err && err.name === 'TypeError') {
           msg = 'The browser blocked the request to GitHub' +
             (location.protocol === 'file:'
@@ -2051,6 +2135,9 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
         }
         ghStatus(msg, true);
         btnGithub.disabled = false;
+        /* a failed save is exactly when he needs to be told his folder is
+           now ahead of the live site, and it is the moment he will see it */
+        ghCheckDrift();
       });
   });
 
@@ -2098,6 +2185,49 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
       'Everything else on this page still works.';
   }
 
+  /* ---- does this folder still match the live site? ----
+     The last line of defence, and the one that makes the rest final. Every
+     fix above addresses a cause; this one catches the SYMPTOM whatever the
+     cause turns out to be next time. On 12 Sep a save wrote his folder and
+     never reached GitHub, and nothing anywhere said so: he went on editing a
+     folder that was ahead of his own live site for nine hours.
+
+     So: read the folder's content.js and GitHub's, and compare the two files
+     byte for byte. Both are written by the same serializer, so equal means
+     equal and different means something did not get published.
+
+     It says nothing at all when it cannot answer — opened as a file, no
+     connection, GitHub unreachable. A banner that cries wolf on a check that
+     never ran is worse than no banner, the same reasoning as the local
+     server's liveness check in `Edit the site/`. */
+  function ghCheckDrift() {
+    var el = document.getElementById('driftBanner');
+    if (!el) return;
+    el.hidden = true;
+    if (!gh.token || !gh.owner || !gh.repo) return;
+    if (!/^https?:/.test(location.protocol)) return;
+    var onDisk = fetch('content.js?cb=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.text() : null; })
+      .catch(function () { return null; });
+    var onGithub = ghApi('/repos/' + gh.owner + '/' + gh.repo + '/contents/content.js' + ghRef())
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        if (!d || !d.content) return null;
+        var raw = atob(String(d.content).replace(/\s/g, ''));
+        var bytes = new Uint8Array(raw.length);
+        for (var n = 0; n < raw.length; n++) bytes[n] = raw.charCodeAt(n);
+        return new TextDecoder('utf-8').decode(bytes);
+      })
+      .catch(function () { return null; });
+    Promise.all([onDisk, onGithub]).then(function (both) {
+      if (both[0] == null || both[1] == null) return;   /* could not ask: say nothing */
+      if (both[0] === both[1]) return;                  /* in step */
+      el.hidden = false;
+      el.textContent = 'Your folder and the live site do not match. Something saved ' +
+        'here never reached GitHub. Press Save to GitHub to publish it.';
+    });
+  }
+
   /* restore a saved connection on load */
   if (gh.token && gh.owner && gh.repo) {
     var opt = document.createElement('option');
@@ -2108,6 +2238,7 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
     elGhBranch.textContent = 'Saves to the default branch (' + (gh.branch || 'main') + '), the same one your site is served from.';
     elGhStatus.textContent = 'Connected as ' + gh.owner + '.';
     elGhStatus.className = 'gh-status ok';
+    ghCheckDrift();
   }
 
   /* ---------------- go ---------------- */
