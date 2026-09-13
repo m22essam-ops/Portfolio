@@ -1060,10 +1060,28 @@ body.has-won .tk-badge{background:var(--ink)}
    headline lives at the top of most of them. A wide image therefore comes out
    slightly narrower than its slot on a short screen and is centred, which is
    the price of never mangling the work. */
+/* TWO BLOCKS IN A ROW ARE THE SAME SIZE (13 Sep 2026, his ask: the red gif
+   "alligend size-wise with the gif next to it").
+
+   Before: `width:auto` meant an image smaller than its column drew at its own
+   pixel size, so the fries carton sat at 560px beside a phone squeezed to
+   335px by the 80vh ceiling. Two things of unrelated scale in one row.
+
+   Now each block fills its cell and the picture is CONTAINED inside it, so a
+   row is one size and nothing is cropped. On these transparent cutouts the
+   letterbox is invisible: there is no visible box for the artwork to sit in,
+   it simply centres. A row whose pictures are the same shape is unchanged,
+   because the cell was already that shape. */
+/* NOT display:flex. Making the figure and the button flex containers stretches
+   the image to the container's cross size, the container asks its content how
+   tall it is, and every image on every project measured 0px. Block layout,
+   intrinsic height, and matchRowHeights() in work.html evens the row up after
+   the pictures know their own size. */
 .project-media img{
   display:block;
-  width:auto;max-width:100%;
+  width:100%;max-width:100%;
   height:auto;max-height:80vh;
+  object-fit:contain;
   margin-inline:auto;
   /* LIFT, NOT A FRAME (13 Sep 2026, his ask: the work "looks so white on
      white"). This is `filter: drop-shadow`, deliberately NOT `box-shadow`.
@@ -2136,8 +2154,9 @@ body.page-about .exp-row{max-width:none}
    are ever tall, would be the one kind of media that ignores it. */
 .project-media .zoomable img{
   display:block;
-  width:auto;max-width:100%;
+  width:100%;max-width:100%;
   height:auto;max-height:80vh;
+  object-fit:contain;
   margin-inline:auto;
   filter:drop-shadow(0 8px 22px rgba(11,10,9,.20));
 }
