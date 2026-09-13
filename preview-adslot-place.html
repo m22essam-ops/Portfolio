@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     WHERE THE AD UNIT GOES — two placements, on the real About layout
+
+     He picked design 02, the 300x250 medium rectangle. Then the right
+     question: where does it sit?
+
+     Measured on the live About page at 1600px first, because the answer
+     turns on one number: the third column is 1204px tall and the ad is
+     about 262px. Dropping it in and walking away fills 22% of the hole
+     and leaves 878px of the same complaint underneath it.
+
+       photo 490 tall · bio 614 · lists 544 · page 2100
+
+     PLACEMENT A — sticky. The ad is pinned and rides the whole scroll,
+     which is exactly what a real 300x250 sidebar unit does. The column
+     is never empty at any scroll position, and no new content is needed.
+
+     PLACEMENT B — stacked. Ad, then the skills and languages moved up
+     from below it (option C). Fills roughly 712 of the 1204 with things
+     that already exist, and shortens the page.
+
+     NOT LINKED FROM THE SITE. Needs the local server: it reads
+     styles.css and content.js.
+     ============================================================ -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>The ad unit: where it goes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Barlow+Condensed:wght@500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  body{margin:0}
+  .pv-bar{
+    position:sticky;top:0;z-index:200;background:#0B0A09;color:#F2EEE5;
+    font-family:"Barlow Condensed",sans-serif;letter-spacing:.12em;
+    text-transform:uppercase;font-size:13px;padding:12px 22px;
+    display:flex;gap:20px;align-items:center;flex-wrap:wrap;
+  }
+  .pv-bar b{color:#FF3B2B}
+  .pv-head{
+    font-family:"Barlow Condensed",sans-serif;text-transform:uppercase;
+    letter-spacing:.14em;font-size:12px;color:#0B0A09b4;padding:38px 0 0;
+  }
+  .pv-head span{background:#E3261A;color:#F6F3EE;padding:4px 10px;margin-right:10px}
+  .pv-note{font-family:"Hanken Grotesk",sans-serif;font-size:14px;max-width:74ch;
+           color:#0B0A09b4;margin:10px 0 26px;line-height:1.55}
+  .pv-sep{height:2px;background:#0B0A091f;margin:80px 0 0}
+
+  /* the third column. styles.css pins two at (0,2,1), so this has to win. */
+  body.page-about .demo .about-grid{
+    grid-template-columns:360px minmax(0,62ch) minmax(250px,1fr);
+    gap:56px;
+  }
+  .demo .lists{margin-top:46px}
+  /* The sticky goes on a CHILD, not on the grid item. With align-self:start
+     the item shrinks to its content, so there is no room inside it for
+     anything to stick to and it simply scrolls away: measured going 96 -> 52
+     -> -348 before this was split in two. The item stretches to the row, the
+     child pins inside it. */
+  .railA{align-self:stretch}
+  .railA-in{position:sticky;top:96px}
+  .railB{align-self:start}
+
+  /* ---------------- the unit (design 02) ---------------- */
+  .slot{
+    position:relative;display:block;width:100%;padding:0;
+    font:inherit;color:inherit;text-align:left;
+    background:none;border:0;cursor:pointer;-webkit-appearance:none;appearance:none;
+  }
+  .slot:focus-visible{outline:2px solid #E3261A;outline-offset:4px}
+  .slot img{display:block;width:100%;height:auto}
+  .ad-unit{
+    width:100%;aspect-ratio:6/5;background:#E6E1D6;
+    border:1px solid #0B0A0926;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;text-align:center;
+    padding:20px;position:relative;overflow:hidden;
+  }
+  .ad-unit::before{
+    content:"AD";position:absolute;top:0;right:0;z-index:2;
+    background:#0B0A0914;color:#0B0A0999;
+    font-family:"Barlow Condensed",sans-serif;font-size:9.5px;
+    letter-spacing:.16em;padding:3px 7px;
+  }
+  .ad-unit .plus{font-family:"Archivo Black",sans-serif;font-size:34px;color:#0B0A0933;line-height:1;margin-bottom:12px}
+  .ad-unit .h{
+    font-family:"Barlow Condensed",sans-serif;text-transform:uppercase;
+    letter-spacing:.1em;font-size:15px;color:#0B0A09;margin:0 0 8px;font-weight:700;
+  }
+  .ad-unit .b{
+    font-family:"Hanken Grotesk",sans-serif;font-size:12.5px;line-height:1.5;
+    color:#0B0A09b4;margin:0;max-width:34ch;
+  }
+  .is-sold .ad-unit{aspect-ratio:auto;padding:0;background:none;border:0}
+  .is-sold .sell{display:none}
+  .slot-live{
+    font-family:"Barlow Condensed",sans-serif;text-transform:uppercase;
+    letter-spacing:.14em;font-size:10.5px;color:#0B0A0999;
+    display:flex;justify-content:space-between;gap:12px;padding-top:9px;
+  }
+  .slot-live b{color:#E3261A}
+  .slot-down{background:none;border:0;padding:0;cursor:pointer;font:inherit;
+             color:#0B0A0999;text-decoration:underline}
+  .slot-down:hover{color:#E3261A}
+
+  .sidecol .blk-head{margin-top:34px}
+  .sidecol .blk-head:first-child{margin-top:26px}
+  .sidecol .lang-row{display:block;padding:9px 0;border-top:1px solid #0B0A091f}
+  .sidecol .lang-name{font-family:"Barlow Condensed",sans-serif;text-transform:uppercase;
+                      letter-spacing:.1em;font-size:12.5px}
+  .sidecol .lang-say{font-family:"Hanken Grotesk",sans-serif;font-size:14px;color:#0B0A09b4}
+
+  /* ON A PHONE the third column is gone, so the ad becomes an inline unit
+     between the bio and the experience list, which is where a real one
+     would sit on mobile anyway. */
+  @media (max-width:1100px){
+    body.page-about .demo .about-grid{grid-template-columns:1fr}
+    .railA{position:static;max-width:340px}
+    .railB{max-width:340px}
+  }
+</style>
+</head>
+<body class="page page-about tex-dots">
+<div class="tex-press" aria-hidden="true"></div>
+
+<div class="pv-bar">
+  <b>Preview only</b>
+  <span>Where the 300x250 goes. Both are live: click the unit and pick a picture.</span>
+  <span id="pvW"></span>
+</div>
+
+<div class="wrap">
+
+  <p class="pv-head"><span>Placement A</span> Sticky &mdash; it rides the scroll, like a real sidebar unit</p>
+  <p class="pv-note">The column is 1204px tall and the ad is 262px, so a static one fills a fifth
+    of it and leaves the rest of the complaint underneath. Pinned, it is in view for the whole
+    2100px of page, the column is never empty at any scroll position, and it needs no new
+    content. It is also the honest behaviour for the format: real 300x250s follow you.
+    <strong>Scroll this section to see it.</strong></p>
+
+  <div class="demo">
+    <div class="about-grid">
+      <div class="about-shot"><img class="about-portrait" id="shotA" src="" alt=""></div>
+      <div>
+        <div id="textA"></div>
+        <div class="lists">
+          <p class="blk-head">Experience</p>
+          <div class="exp-list" id="expA"></div>
+        </div>
+      </div>
+      <aside class="railA">
+        <div class="railA-in">
+          <button class="slot" data-slot="a" type="button">
+            <div class="ad-unit">
+              <div class="sell">
+                <div class="plus">+</div>
+                <p class="h">Your ad here</p>
+                <p class="b">300 x 250. Available immediately. No competition for the slot.</p>
+              </div>
+              <div class="ran"></div>
+            </div>
+          </button>
+          <p class="slot-live" data-live="a"></p>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <div class="pv-sep"></div>
+
+  <p class="pv-head"><span>Placement B</span> Stacked &mdash; the ad, then the short lists moved up under it</p>
+  <p class="pv-note">The ad sits at the top of the column and the skills and languages come up
+    from below it. About 712 of the 1204 is filled with things that already exist, the page gets
+    shorter, and the right edge straightens. Nothing moves while you scroll.</p>
+
+  <div class="demo">
+    <div class="about-grid">
+      <div class="about-shot"><img class="about-portrait" id="shotB" src="" alt=""></div>
+      <div>
+        <div id="textB"></div>
+        <div class="lists">
+          <p class="blk-head">Experience</p>
+          <div class="exp-list" id="expB"></div>
+        </div>
+      </div>
+      <aside class="railB sidecol">
+        <button class="slot" data-slot="b" type="button">
+          <div class="ad-unit">
+            <div class="sell">
+              <div class="plus">+</div>
+              <p class="h">Your ad here</p>
+              <p class="b">300 x 250. Available immediately. No competition for the slot.</p>
+            </div>
+            <div class="ran"></div>
+          </div>
+        </button>
+        <p class="slot-live" data-live="b"></p>
+        <div id="sideB"></div>
+      </aside>
+    </div>
+  </div>
+
+  <div style="height:110px"></div>
+</div>
+
+<input type="file" id="adPicker" accept="image/*" hidden>
+
+<script src="content.js"></script>
+<script>
+(function () {
+  'use strict';
+  var C = window.SITE_CONTENT || {}, A = C.about || {};
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function imgSrc(n){n=String(n||'').trim();return !n?'':(/^https?:\/\//i.test(n)?n:'images/'+n);}
+
+  var bio = (A.paragraphs||[]).map(function(p){return '<p class="about-text">'+esc(p)+'</p>';}).join('');
+  document.getElementById('textA').innerHTML = bio;
+  document.getElementById('textB').innerHTML = bio;
+  var shot = imgSrc(A.portrait || (A.portraits||[])[0]);
+  document.getElementById('shotA').src = shot;
+  document.getElementById('shotB').src = shot;
+
+  var exp = (A.experience||[]).map(function(e){
+    return '<div class="exp-row"><span class="exp-lead"><b>'+esc(e.org)+'</b> '+
+           '<span class="exp-role">'+esc(e.role)+'</span></span>'+
+           '<span class="exp-time">'+esc(e.time)+'</span></div>';}).join('');
+  document.getElementById('expA').innerHTML = exp;
+  document.getElementById('expB').innerHTML = exp;
+
+  var side = '';
+  if ((A.skills||[]).length) {
+    side += '<p class="blk-head">Skills</p><div class="skills-list">' +
+      A.skills.map(function(s){return '<span class="skill-tag">'+esc(s)+'</span>';}).join('') + '</div>';
+  }
+  if ((A.languages||[]).length) {
+    side += '<p class="blk-head">Languages</p><div class="lang-list">' +
+      A.languages.map(function(l){
+        return '<div class="lang-row"><span class="lang-name">'+esc(l.name)+'</span>'+
+               (l.say?'<span class="lang-say"> '+esc(l.say)+'</span>':'')+'</div>';}).join('') + '</div>';
+  }
+  document.getElementById('sideB').innerHTML = side;
+
+  /* ---- the slot, same engine as preview-adslot.html ---- */
+  var picker = document.getElementById('adPicker'), current = null;
+  var KEY='adplace:', MAXW=700, Q=0.82;
+
+  function live(n,on){
+    var el=document.querySelector('[data-live="'+n+'"]'); if(!el) return;
+    el.innerHTML = on ? '<span><b>Live</b> &middot; audience: 1 &middot; stays in your browser</span>'+
+      '<button class="slot-down" type="button" data-down="'+n+'">Take it down</button>' : '';
+  }
+  function paint(n,url){
+    var b=document.querySelector('[data-slot="'+n+'"]'); if(!b) return;
+    var ran=b.querySelector('.ran');
+    if(url){ran.innerHTML='<img alt="Your advertisement">';ran.querySelector('img').src=url;
+            b.classList.add('is-sold');live(n,true);}
+    else{ran.innerHTML='';b.classList.remove('is-sold');live(n,false);}
+  }
+  function shrink(file,cb){
+    var r=new FileReader();
+    r.onload=function(){
+      var im=new Image();
+      im.onload=function(){
+        var w=im.naturalWidth,h=im.naturalHeight;
+        if(!w||!h){cb(String(r.result));return;}
+        var s=Math.min(1,MAXW/w),c=document.createElement('canvas');
+        c.width=Math.round(w*s);c.height=Math.round(h*s);
+        try{c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',Q));}
+        catch(e){cb(String(r.result));}
+      };
+      im.onerror=function(){cb(String(r.result));};
+      im.src=String(r.result);
+    };
+    r.onerror=function(){cb('');};
+    r.readAsDataURL(file);
+  }
+  document.addEventListener('click',function(ev){
+    var d=ev.target.closest&&ev.target.closest('[data-down]');
+    if(d){var n=d.getAttribute('data-down');try{localStorage.removeItem(KEY+n);}catch(e){}paint(n,'');return;}
+    var b=ev.target.closest&&ev.target.closest('[data-slot]');
+    if(!b) return;
+    current=b.getAttribute('data-slot'); picker.value=''; picker.click();
+  });
+  picker.addEventListener('change',function(){
+    var f=picker.files&&picker.files[0]; if(!f||!current) return;
+    var n=current;
+    shrink(f,function(url){ if(!url) return; paint(n,url);
+      try{localStorage.setItem(KEY+n,url);}catch(e){} });
+  });
+  ['a','b'].forEach(function(n){
+    var s=null; try{s=localStorage.getItem(KEY+n);}catch(e){}
+    if(s) paint(n,s);
+  });
+
+  function w(){document.getElementById('pvW').textContent='viewport '+window.innerWidth+'px';}
+  w(); window.addEventListener('resize',w);
+})();
+</script>
+</body>
+</html>
