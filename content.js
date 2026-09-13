@@ -205,9 +205,17 @@ window.SITE_CONTENT = {
         ],
         media: [
           {
+            type: "spacer",
+            layout: ""
+          },
+          {
             type: "video",
             src: "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/IQvnk5GbEuc?si=f6Yjrx5A70InUNVN\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
             caption: ""
+          },
+          {
+            type: "spacer",
+            layout: ""
           },
           {
             type: "image",
@@ -232,6 +240,10 @@ window.SITE_CONTENT = {
             src: "Sticker.webp",
             caption: "",
             layout: "half"
+          },
+          {
+            type: "spacer",
+            layout: ""
           }
         ],
         credits: [
