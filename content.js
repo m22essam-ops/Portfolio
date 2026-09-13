@@ -200,8 +200,8 @@ window.SITE_CONTENT = {
         sticker: "sides are the main",
         tagline: "The only ballot with a drive-thru.",
         story: [
-          "America cannot agree on anything. It can agree on lunch.",
-          "For the midterm elections, McDonald's turned its side menu into a ballot."
+          "So easy is it to pick thy side, and so impactful is thy side on thy meal. Why then, when Americans do think upon elections, they think: first, 'tis complicated; and second, it maketh no impact?",
+          "So McDonald's did redesign their ordering screens, that people might lay their hands upon a thing deliciously helpful."
         ],
         media: [
           {
