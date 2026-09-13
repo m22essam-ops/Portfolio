@@ -381,17 +381,14 @@
     if (prev) {
       html += '<a class="prev-project" href="work.html?slug=' + encodeURIComponent(prev.p.slug) + '">' +
         '<span class="prev-arrow">&larr;</span>' +
-        '<span class="prev-label">Previous</span>' +
         '<span class="prev-title">' + esc(prev.p.title) + '</span></a>';
     }
     if (next) {
       html += '<a class="next-project" href="work.html?slug=' + encodeURIComponent(next.p.slug) + '">' +
-        '<span class="next-label">' + esc(label) + '</span>' +
         '<span class="next-title">' + esc(next.p.title) + '</span>' +
         '<span class="next-arrow">→</span></a>';
     } else {
       html += '<a class="next-project" href="work.html">' +
-        '<span class="next-label">Back to</span>' +
         '<span class="next-title">All work</span>' +
         '<span class="next-arrow">→</span></a>';
     }

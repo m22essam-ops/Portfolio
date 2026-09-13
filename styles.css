@@ -1065,7 +1065,22 @@ body.has-won .tk-badge{background:var(--ink)}
   width:auto;max-width:100%;
   height:auto;max-height:80vh;
   margin-inline:auto;
+  /* LIFT, NOT A FRAME (13 Sep 2026, his ask: the work "looks so white on
+     white"). This is `filter: drop-shadow`, deliberately NOT `box-shadow`.
+     A box-shadow is drawn around the element's RECTANGLE, so on the
+     transparent cutouts it would put a hard-edged shadow round a box with
+     artwork floating loose inside it, which is precisely the border he had
+     removed a day earlier. drop-shadow follows the alpha channel, so a
+     cutout is shadowed along its own silhouette and a photograph along its
+     edge, with one rule and no per-image flag.
+
+     Soft and low-contrast on purpose. The art direction rules out the hard
+     1970s offset, and the only other elevation on the site, the nav panel,
+     is the same kind of quiet lift. */
+  filter:drop-shadow(0 8px 22px rgba(11,10,9,.20));
 }
+/* opaque and rectangular, so the cheap shadow is the right one here */
+.video-wrap{box-shadow:0 8px 22px rgba(11,10,9,.20)}
 /* The film gets the same ceiling, but through its WIDTH, so the 16:9 stays
    exactly 16:9 instead of being clipped inside a box that is no longer 16:9.
    padding-top is a percentage of the width, so clamping the width is all it
@@ -1107,11 +1122,16 @@ body.has-won .tk-badge{background:var(--ink)}
   gap:18px 28px;flex-wrap:wrap;
   border-top:2px solid var(--red);padding:24px 0 0;
 }
+/* The words "Previous" and "Keep going" are gone (13 Sep 2026, his call), so
+   each side is an arrow and a project name. The arrow already says which
+   direction, and the label was saying it a second time. 13.2px is the old
+   12px plus his 10%: with the labels off there is room for the names to
+   carry a little more weight. */
 .prev-project,
 .next-project{
   display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
   text-decoration:none;
-  font-family:var(--mono);font-size:12px;font-weight:500;
+  font-family:var(--mono);font-size:13.2px;font-weight:500;
   text-transform:uppercase;letter-spacing:.12em;
 }
 /* back: quiet */
@@ -1642,6 +1662,40 @@ body.page-about { --bg:#F1E4DC; --well:#E4D2C6; --nav-bg:#F1E4DCf2; }
    it reads as a disclaimer and not as a closing statement. It is aligned to
    the Milestones list rather than the bio column, because it belongs to the
    page rather than to the paragraph above it. */
+/* WHERE TO FIND HIM, on the About page (13 Sep 2026, his ask).
+   The footer carries the same links at 23px on every page, which is the right
+   size for furniture at the bottom of a screen. About is the page somebody is
+   reading while they decide, so here the icons are 34px and the address is
+   set to be read and copied rather than found. The footer is unchanged. */
+.about-contact{
+  margin-top:70px;padding-top:26px;
+  border-top:2px solid var(--red);
+  max-width:1200px;
+}
+.about-contact .blk-head{margin-bottom:14px}
+.about-mail{
+  display:inline-block;
+  font-family:var(--mono);font-size:clamp(18px,2vw,24px);
+  letter-spacing:.02em;color:var(--fg);text-decoration:none;
+  border-bottom:1px solid var(--line);padding-bottom:2px;
+  transition:color .16s var(--ease),border-color .16s var(--ease);
+}
+.about-mail:hover{color:var(--red);border-color:var(--red)}
+.about-social{display:flex;align-items:center;gap:26px;margin-top:22px;flex-wrap:wrap}
+.about-social a{
+  display:block;color:var(--fg-faint);text-decoration:none;
+  transition:color .16s var(--ease),transform .16s var(--ease);
+}
+.about-social a:hover{color:var(--red);transform:translateY(-2px)}
+.about-social svg{
+  width:34px;height:34px;display:block;
+  fill:none;stroke:currentColor;stroke-width:1.6;
+}
+.about-social svg .fill{fill:currentColor;stroke:none}
+.about-social a.txt{
+  font-family:var(--mono);font-size:14px;text-transform:uppercase;letter-spacing:.1em;
+}
+
 body.page-about .about-terms{
   font-family:var(--mono);font-size:11.5px;letter-spacing:.13em;
   text-transform:uppercase;line-height:1.7;color:var(--fg-dim);
@@ -2085,12 +2139,18 @@ body.page-about .exp-row{max-width:none}
   width:auto;max-width:100%;
   height:auto;max-height:80vh;
   margin-inline:auto;
+  filter:drop-shadow(0 8px 22px rgba(11,10,9,.20));
 }
 /* the affordance. Nothing else on a project page reacts to a pointer, so a
    small lift is enough to say this one does. */
 .project-media .zoomable{transition:filter .18s ease}
+/* `filter` is ONE property: a second declaration replaces the first rather
+   than adding to it, so the hover state has to restate the shadow or the
+   picture drops flat the moment you point at it. */
 .project-media .zoomable:hover img,
-.project-media .zoomable:focus-visible img{filter:brightness(.92)}
+.project-media .zoomable:focus-visible img{
+  filter:drop-shadow(0 8px 22px rgba(11,10,9,.20)) brightness(.92);
+}
 .project-media .zoomable:focus-visible{outline:2px solid var(--red);outline-offset:3px}
 
 .lb{

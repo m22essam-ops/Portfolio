@@ -84,14 +84,20 @@
        contact.resume, and left out entirely when there is no link in it. -->
   <div id="aboutResume"></div>
 
-  <!-- `ticket.terms` prints here now (9 Sep 2026, his ask). It is the best
-       line on the home page and it had stopped printing anywhere at all: the
-       brutalist ticket replaced the old fine print with its own four clauses
-       and left this field orphaned.
+  <!-- WHERE TO FIND HIM, at a size you can actually use (13 Sep 2026, his
+       ask). The icons exist in the footer on every page, at 23px, as the last
+       thing before the bottom of the screen. This is the page somebody reads
+       when they are deciding whether to get in touch, so the same links are
+       repeated here, bigger, with the address written out beside them.
 
-       Small print at the foot of the page he wrote it for, in the system
-       voice, at the size the ticket sets its own terms. NOT a heading and not
-       a pull quote: it is a disclaimer, and it only works read as one. -->
+       Same builder as the footer (window.buildSocialRow), same contact.links,
+       so adding a link in admin fills both or neither. -->
+  <section class="about-contact" id="aboutContact" hidden>
+    <p class="blk-head">Say hi</p>
+    <a class="about-mail" id="aboutMail" href="#"></a>
+    <div class="about-social" id="aboutSocial"></div>
+  </section>
+
   <p class="about-terms" id="aboutTerms"></p>
 </div>
 
@@ -327,14 +333,51 @@
       '</a>';
   }
 
-  /* his terms line, at the foot of this page. Empty and the paragraph removes
-     itself rather than leaving a gap, the same contract every optional line on
-     the site keeps. */
+  /* The terms line is NOT printed here any more (13 Sep 2026, his call).
+     `ticket.terms` still carries "Odds of winning awards: Historically low..."
+     and the home card still prints it, so the field is untouched and the joke
+     survives where it was written for. It was only ever borrowed down here,
+     and on a page that already ends with his experience it read as a fourth
+     telling of a joke the visitor met on the way in. */
   (function () {
     var el = document.getElementById('aboutTerms');
-    var s = String((C.ticket && C.ticket.terms) || '').trim();
-    if (!el) return;
-    if (s) el.textContent = s; else el.remove();
+    if (el) el.remove();
+  })();
+
+  /* The contact block. Built from the same contact.links the footer uses, via
+     the builder site.js exposes, so there is one list of links on the site.
+
+     The address is left BARE here on purpose, exactly as the footer leaves
+     its own: sweepMail() puts the half-written draft on every mailto on the
+     page, and a link that arrives already carrying a query is marked
+     hands-off for the life of the page. Pre-fill it and this would be the one
+     address on the site stuck on whichever draft was dealt first.
+
+     No links and no address, and the whole block stays hidden rather than
+     printing a heading over nothing. */
+  (function () {
+    var box = document.getElementById('aboutContact');
+    if (!box) return;
+    var links = (C.contact && C.contact.links) || [];
+    var mail = '';
+    links.forEach(function (l) {
+      if (!mail && l && l.url && /^mailto:/i.test(l.url)) mail = l.url;
+    });
+    if (!mail && C.contact && C.contact.ctaUrl && /^mailto:/i.test(C.contact.ctaUrl)) {
+      mail = C.contact.ctaUrl;
+    }
+    var a = document.getElementById('aboutMail');
+    if (mail) {
+      a.href = mail;                                   /* bare: sweepMail fills it */
+      a.textContent = mail.replace(/^mailto:/i, '').split('?')[0];
+    } else if (a) {
+      a.remove();
+    }
+    var row = (typeof window.buildSocialRow === 'function')
+      ? window.buildSocialRow(links) : '';
+    var host = document.getElementById('aboutSocial');
+    if (row) host.innerHTML = row; else host.remove();
+    if (mail || row) box.hidden = false;
   })();
 
   /* the footer stub, including its small print, is built by site.js */
