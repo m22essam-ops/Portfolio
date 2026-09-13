@@ -254,6 +254,9 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
 
 /* ---------- media grid in project cards: images 2-up, video full width ---------- */
 .media-grid-admin { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+/* a video now sits in the same ordered list as the images, and it takes the
+   full row so its embed box and the block number are readable */
+.media-grid-admin .media-video-slot { grid-column: 1 / -1; }
 .media-slot, .media-video-slot {
   background: var(--panel);
   border: 1px solid var(--line);
@@ -744,16 +747,27 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
     var title = p.title || 'Untitled project';
     var sub = p.slug || 'no link yet';
 
-    var imgSlots = '', vidSlots = '';
+    /* ONE list, in the order the page actually prints them (13 Sep 2026).
+       Images and videos were built into two separate lists and shown under
+       two separate headings, one of which claimed videos were "outside the
+       image grid". They have not been outside it for a long time: work.html
+       walks `media` in order and a video takes its turn like anything else.
+       So the editor was showing an order that did not exist, and there was
+       no control anywhere that could move a video at all. */
+    var imgSlots = '';
     (p.media || []).forEach(function (m, i) {
+      var arrows =
+        '<button class="mini" data-act="move-media" data-path="' + base + '" data-idx="' + i + '" data-dir="-1" type="button" title="Move up">&uarr;</button>' +
+        '<button class="mini" data-act="move-media" data-path="' + base + '" data-idx="' + i + '" data-dir="1" type="button" title="Move down">&darr;</button>';
       if (m.type === 'video') {
-        vidSlots += '<div class="media-video-slot">' +
+        imgSlots += '<div class="media-video-slot">' +
+          '<div class="spacer-label">Video &middot; block ' + (i + 1) + '</div>' +
           '<textarea data-path="' + base + '.media.' + i + '.src" rows="2" placeholder="Vimeo / YouTube link, or paste the full embed code — or pick a video file below (uploads to images/ on Save to GitHub)">' + esc(m.src) + '</textarea>' +
           '<div class="media-pick">' +
             '<button class="mini" data-act="pick-video" data-field="' + base + '.media.' + i + '.src" type="button" title="Pick a video file from your computer — its name fills in here and it uploads to images/ on save">Pick video file</button>' +
           '</div>' +
           '<input data-path="' + base + '.media.' + i + '.caption" placeholder="Caption" value="' + esc(m.caption) + '">' +
-          '<div class="media-actions">' +
+          '<div class="media-actions">' + arrows +
             '<button class="del" data-act="remove-row" data-path="' + base + '" data-row="media" data-idx="' + i + '" type="button">Remove video</button>' +
           '</div></div>';
         return;
@@ -845,11 +859,9 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
           '<small>Put the file in the images/ folder first. Just the file name, no images/ prefix. This image is the card thumbnail on the home page and in "You may also like" — it does not appear inside the project page.</small></label>' +
         '<label class="field"><span>Image alt text</span><input data-path="' + base + '.alt" value="' + esc(p.alt) + '"></label>' +
         '<label class="field"><span>Story (project page, one paragraph per line)</span><textarea data-path="' + base + '.story" data-type="textlist" rows="4" placeholder="Situation, insight, idea, result. Empty = the page shows the basics only.">' + esc((p.story || []).join('\n')) + '</textarea></label>' +
-        '<div class="subhead">Images (blocks) — <em>Auto</em> lays out by shape (landscape wide, portrait paired), <em>Full width</em> spans the row, <em>Half</em> pairs 50/50. Use the arrows to reorder.</div>' +
+        '<div class="subhead">Media, in the order it appears on the page. Images, videos and empty space all sit in one list: use the arrows to move any block past any other. Width: <em>Full</em> spans the row, <em>Two thirds</em>, <em>Half</em> pairs 50/50, <em>One third</em> puts three across.</div>' +
         '<div class="media-grid-admin">' + imgSlots + '</div>' +
         '<button class="add-btn" data-act="add-row" data-path="' + base + '" data-row="media-image" type="button">+ Add image slot</button>' +
-        '<div class="subhead">Video (full width on the site, outside the image grid)</div>' +
-        vidSlots +
         '<button class="add-btn" data-act="add-row" data-path="' + base + '" data-row="media-video" type="button">+ Add video slot</button>' +
         '<button class="add-btn" data-act="add-row" data-path="' + base + '" data-row="media-spacer" type="button">+ Add empty space</button>' +
         '<div class="subhead">Credits (4 slots) <button class="mini" data-act="add-row" data-path="' + base + '" data-row="credits" type="button">+ Add credit</button></div>' +
@@ -1311,14 +1323,19 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
       arr.splice(to, 0, arr.splice(pr2.idx, 1)[0]);
       renderProjects(pr2.group);
     } else if (act === 'move-media') {
-      /* move one image up/down among the other images (videos stay put) */
+      /* Move a block one place, past whatever is next to it.
+
+         It used to skip over anything of a different type, on the assumption
+         that images and videos were two separate lists. They are one list and
+         the page renders them in order, so that loop made it impossible to
+         put a video anywhere but where it already was: an image could not
+         cross it and it had no arrows of its own. */
       var prm = parseProjPath(path);
       var projM = M.work[prm.group][prm.idx];
       var arrM = projM.media;
       var idxM = parseInt(btn.dataset.idx, 10);
       var dirM = parseInt(btn.dataset.dir, 10);
       var t = idxM + dirM;
-      while (t >= 0 && t < arrM.length && arrM[t].type !== arrM[idxM].type) t += dirM;
       if (t < 0 || t >= arrM.length) return;
       touch('work.' + prm.group + '.' + prm.idx + '.media');
       arrM.splice(t, 0, arrM.splice(idxM, 1)[0]);
