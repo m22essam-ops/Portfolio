@@ -1323,7 +1323,7 @@ window.SITE_CONTENT = {
       "Mechanical engineering taught me how machines work. Sociology taught me how societies work. Advertising came to shape my inner social engineer.",
       "Designed in Egypt, put to work in the UAE, and licensed in Madrid, which makes my buffet of ideas accidentally intercontinental.",
       "Then I fought AI and AI won. But I have still never used Nokia or Kodak as a don't-be-that slide. Not once.",
-      "I play five-a-side badly and cook exactly one thing well: Egyptian Koshary. That is the whole list."
+      "A line lands and for four seconds you feel Hemingway. Then you remember it is for toilet paper. Then the campaign comes down anyway; posters pulled down, films stop airing, and the folder on the drive gets deleted by the guy who quit. BEST JOB IN THE WORLD. I'M DOING IT AGAIN TOMORROW."
     ],
     skillLinks: [
       {
