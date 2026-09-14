@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     THE SKYSCRAPER — the About page's ad, thinner, taller, quieter
+
+     His notes on the 300x250 (14 Sep 2026): make it thinner and taller,
+     put it at the far right, shift the whole About page right a bit so
+     the two balance, and keep it small, because it only ever runs in
+     the visitor's own browser and should feel like a thing you notice
+     rather than a thing that shouts. Copy in his tone.
+
+     So this is an IAB skyscraper: 160x600 (the "wide skyscraper") or
+     120x600, switchable from the bar at the top, along with the shift
+     and three drafts of the copy. It is the real About page around it:
+     his bio, photo, jobs and contact block, read from content.js.
+
+     THE RAIL IS THE WHOLE PAGE TALL, NOT ONE GRID ROW. The last preview
+     pinned the ad inside the bio's row, so it let go after about 450px
+     of scrolling. Here the rail sits beside everything on the page and
+     the ad pins inside it, so it stays for the entire scroll, which is
+     what a real skyscraper does.
+
+     The uploaded picture never leaves the browser (canvas, scaled,
+     localStorage on this origin). In a fixed ad slot the picture is
+     cropped to the slot the way every real ad server does it. That is
+     the visitor's picture in a joke slot, not his work, so the "never
+     crop the work" rule does not apply to it.
+
+     NOT LINKED FROM THE SITE. Needs the local server.
+     ============================================================ -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>About with a skyscraper</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Barlow+Condensed:wght@500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* ---------------- the preview's own bar ---------------- */
+  .pv-bar{
+    position:fixed;left:0;right:0;bottom:0;z-index:300;
+    background:#0B0A09;color:#F2EEE5;
+    font-family:"Barlow Condensed",sans-serif;letter-spacing:.1em;
+    text-transform:uppercase;font-size:12.5px;
+    padding:10px 18px;display:flex;gap:18px;align-items:center;flex-wrap:wrap;
+  }
+  .pv-bar b{color:#FF3B2B;letter-spacing:.14em}
+  .pv-group{display:flex;gap:6px;align-items:center}
+  .pv-group span{opacity:.6;margin-right:4px}
+  .pv-bar button{
+    font:inherit;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;
+    background:transparent;color:#F2EEE5;border:1px solid #F2EEE540;
+    padding:4px 9px;border-radius:2px;
+  }
+  .pv-bar button.on{background:#E3261A;border-color:#E3261A}
+  .pv-measure{margin-left:auto;opacity:.7}
+  body{padding-bottom:64px}
+
+  /* ---------------- the page with a rail ----------------
+     Main column and the rail side by side for the whole height of the
+     About content, so a sticky child can ride the full scroll. */
+  :root{--sky-w:160px;--sky-h:600px;--shift:0px}
+  body.sky-120{--sky-w:120px}
+  .ab-page{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) var(--sky-w);
+    gap:56px;align-items:stretch;
+  }
+  .ab-main{min-width:0;transition:padding-left .25s ease}
+  body.is-shifted .ab-main{padding-left:var(--shift)}
+  .ab-main .page-head{padding-left:0;padding-right:0}
+  .ab-rail-in{position:sticky;top:120px}
+
+  /* ---------------- the skyscraper ---------------- */
+  .sky{
+    display:block;width:var(--sky-w);height:var(--sky-h);
+    position:relative;padding:0;cursor:pointer;text-align:left;
+    background:#E6E1D6;border:1px solid #0B0A091f;
+    font:inherit;color:#0B0A09;-webkit-appearance:none;appearance:none;
+    overflow:hidden;
+  }
+  .sky:focus-visible{outline:2px solid #E3261A;outline-offset:4px}
+  .sky::before{
+    content:"AD";position:absolute;top:0;right:0;z-index:3;
+    background:#0B0A0914;color:#0B0A0999;
+    font-family:"Barlow Condensed",sans-serif;font-size:9px;
+    letter-spacing:.16em;padding:3px 6px;
+  }
+  .sky-sell{
+    position:absolute;inset:0;display:flex;flex-direction:column;
+    padding:34px 14px 18px;
+  }
+  body.sky-120 .sky-sell{padding:30px 10px 14px}
+  .sky-tag{
+    font-family:"Barlow Condensed",sans-serif;text-transform:uppercase;
+    letter-spacing:.18em;font-size:9.5px;color:#0B0A0980;margin:0 0 18px;
+  }
+  .sky-head{
+    font-family:"Barlow Condensed",sans-serif;font-weight:700;
+    text-transform:uppercase;letter-spacing:.02em;line-height:.98;
+    font-size:30px;margin:0 0 16px;color:#0B0A09;
+    overflow-wrap:break-word;hyphens:auto;
+  }
+  body.sky-120 .sky-head{font-size:23px}
+  .sky-body{
+    font-family:"Hanken Grotesk",sans-serif;font-size:13px;line-height:1.45;
+    color:#0B0A09a8;margin:0;
+  }
+  body.sky-120 .sky-body{font-size:11.5px}
+  .sky-cta{
+    margin-top:auto;
+    font-family:"Barlow Condensed",sans-serif;text-transform:uppercase;
+    letter-spacing:.12em;font-size:11px;color:#0B0A09;
+    border-top:1px solid #0B0A0926;padding-top:10px;
+    display:flex;justify-content:space-between;align-items:baseline;gap:6px;
+  }
+  .sky-cta i{font-style:normal;color:#E3261A}
+  .sky:hover .sky-cta{color:#E3261A}
+  /* a real unit fills its slot, so the visitor's picture is cropped to it */
+  .sky-ran{position:absolute;inset:0;display:none}
+  .sky-ran img{width:100%;height:100%;object-fit:cover;display:block}
+  .sky.is-sold .sky-sell{display:none}
+  .sky.is-sold .sky-ran{display:block}
+  .sky-live{
+    width:var(--sky-w);margin:8px 0 0;
+    font-family:"Barlow Condensed",sans-serif;text-transform:uppercase;
+    letter-spacing:.12em;font-size:9.5px;color:#0B0A0999;line-height:1.5;
+  }
+  .sky-live b{color:#E3261A;letter-spacing:.12em}
+  .sky-down{
+    display:block;margin-top:2px;background:none;border:0;padding:0;cursor:pointer;
+    font:inherit;letter-spacing:inherit;text-transform:inherit;
+    color:#0B0A0999;text-decoration:underline;
+  }
+  .sky-down:hover{color:#E3261A}
+
+  /* A skyscraper needs a desktop beside it. Below this it goes, the way
+     real ones do, rather than squeezing the bio into a strip. */
+  @media (max-width:1100px){
+    .ab-page{grid-template-columns:1fr}
+    .ab-rail{display:none}
+    body.is-shifted .ab-main{padding-left:0}
+  }
+</style>
+</head>
+<body class="page page-about tex-dots is-shifted">
+<div class="tex-press" aria-hidden="true"></div>
+
+<nav class="page-nav">
+  <div class="wrap">
+    <a class="logo" href="index.html">mohammed essam</a>
+    <div class="links">
+      <a href="work.html">The work</a>
+      <a href="about.html" class="on">Who I am</a>
+      <a href="mailto:m22essam@gmail.com">Say hi</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+  <div class="ab-page">
+
+    <div class="ab-main" id="abMain">
+      <header class="page-head"><h1 id="aboutHeading"></h1></header>
+
+      <div class="about-grid" id="abGrid">
+        <div class="about-shot"><img class="about-portrait" id="aboutPortrait" src="" alt=""></div>
+        <div>
+          <div id="aboutText"></div>
+          <div class="lists">
+            <p class="blk-head">Experience</p>
+            <div class="exp-list" id="expList"></div>
+            <p class="blk-head">Languages</p>
+            <div class="lang-list" id="langList"></div>
+          </div>
+        </div>
+      </div>
+
+      <section class="about-contact" id="aboutContact">
+        <p class="blk-head">Say hi</p>
+        <a class="about-mail" id="aboutMail" href="#"></a>
+        <div class="about-social" id="aboutSocial"></div>
+      </section>
+    </div>
+
+    <aside class="ab-rail" aria-label="Advertisement">
+      <div class="ab-rail-in">
+        <button class="sky" id="sky" type="button" aria-label="Advertising space. Click to run your own ad.">
+          <span class="sky-sell">
+            <span class="sky-tag" id="skyTag"></span>
+            <span class="sky-head" id="skyHead"></span>
+            <span class="sky-body" id="skyBody"></span>
+            <span class="sky-cta"><span id="skyCta"></span><i>&rarr;</i></span>
+          </span>
+          <span class="sky-ran"><img alt="Your advertisement" id="skyImg"></span>
+        </button>
+        <p class="sky-live" id="skyLive" hidden></p>
+      </div>
+    </aside>
+
+  </div>
+</div>
+
+<footer class="stub" id="siteFoot"></footer>
+
+<div class="pv-bar">
+  <b>Preview</b>
+  <div class="pv-group"><span>Size</span>
+    <button type="button" data-size="160" class="on">160&times;600</button>
+    <button type="button" data-size="120">120&times;600</button>
+  </div>
+  <div class="pv-group"><span>Shift page right</span>
+    <button type="button" data-shift="on" class="on">On</button>
+    <button type="button" data-shift="off">Off</button>
+  </div>
+  <div class="pv-group"><span>Copy</span>
+    <button type="button" data-copy="0" class="on">A</button>
+    <button type="button" data-copy="1">B</button>
+    <button type="button" data-copy="2">C</button>
+  </div>
+  <span class="pv-measure" id="pvMeasure"></span>
+</div>
+
+<input type="file" id="skyPick" accept="image/*" hidden>
+
+<script src="content.js"></script>
+<script src="site.js"></script>
+<script>
+(function () {
+  'use strict';
+  var C = window.SITE_CONTENT || {}, A = C.about || {};
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function imgSrc(n){n=String(n||'').trim();return !n?'':(/^https?:\/\//i.test(n)?n:'images/'+n);}
+
+  /* ---------------- his real About ---------------- */
+  document.getElementById('aboutHeading').textContent = A.heading || 'Read me.';
+  document.getElementById('aboutPortrait').src = imgSrc(A.portrait || (A.portraits || [])[0]);
+
+  var links = {};
+  (A.skillLinks || []).forEach(function (l) {
+    if (l && l.skill && l.url) links[String(l.skill).trim().toLowerCase()] = l.url;
+  });
+  var html = (A.paragraphs || []).map(function (p) {
+    return '<p class="about-text">' + esc(p) + '</p>';
+  }).join('');
+  if ((A.skills || []).length) {
+    html += '<div class="skills-list">' + A.skills.map(function (s) {
+      var to = links[String(s).trim().toLowerCase()];
+      return to ? '<a class="skill-tag is-link" href="' + esc(to) + '">' + esc(s) + '</a>'
+                : '<span class="skill-tag">' + esc(s) + '</span>';
+    }).join('') + '</div>';
+  }
+  document.getElementById('aboutText').innerHTML = html;
+
+  document.getElementById('expList').innerHTML = (A.experience || []).map(function (e) {
+    return '<div class="exp-row"><span class="exp-lead"><b>' + esc(e.org) + '</b> ' +
+           '<span class="exp-role">' + esc(e.role) + '</span></span>' +
+           '<span class="exp-time">' + esc(e.time) + '</span></div>';
+  }).join('');
+  document.getElementById('langList').innerHTML = (A.languages || []).map(function (l) {
+    return '<div class="lang-row"><span class="lang-name">' + esc(l.name) + '</span>' +
+           '<span class="lang-say" dir="auto">' + esc(l.say) + '</span></div>';
+  }).join('');
+
+  var mail = ((C.contact && C.contact.links) || []).filter(function (l) {
+    return l && /^mailto:/i.test(l.url || '');
+  })[0];
+  var addr = mail ? String(mail.url).replace(/^mailto:/i, '') : 'm22essam@gmail.com';
+  var am = document.getElementById('aboutMail');
+  am.href = 'mailto:' + addr; am.textContent = addr;
+  if (typeof window.buildSocialRow === 'function') {
+    document.getElementById('aboutSocial').innerHTML = window.buildSocialRow();
+  }
+
+  /* ---------------- the copy, three drafts in his voice ---------------- */
+  var COPY = [
+    { tag: 'Advertisement', head: 'Reach: 1.',
+      body: 'The most honest number in media.', cta: 'Run your ad' },
+    { tag: 'Sponsored', head: 'Too dodgy for primetime?',
+      body: 'Casinos, coins, miracle cures. Rejected by every network. Welcome here.', cta: 'Your ad here' },
+    { tag: 'Ad space', head: 'Nobody will see this.',
+      body: 'Perfect for the ad nobody should.', cta: 'Upload yours' }
+  ];
+
+  function setCopy(i) {
+    var c = COPY[i] || COPY[0];
+    document.getElementById('skyTag').textContent = c.tag;
+    document.getElementById('skyHead').textContent = c.head;
+    document.getElementById('skyBody').textContent = c.body;
+    document.getElementById('skyCta').textContent = c.cta;
+    fitSkyHead();
+  }
+
+  /* The headline shrinks until its LONGEST WORD fits the slot. A skyscraper
+     is 98 to 130px of usable width, and "PRIMETIME?" measured 134px at the
+     normal size: without this it broke in the middle of the word, which
+     reads as a bug, not a line. Sized per word rather than per line because
+     wrapping between words is fine and wanted; only a split word is wrong.
+     His copy will change, so this has to hold for words nobody has written
+     yet. Same idea as fitHead() and fitLegal() on the ticket. */
+  function fitSkyHead() {
+    var head = document.getElementById('skyHead');
+    var sell = head.parentNode;
+    head.style.fontSize = '';
+    var cs = getComputedStyle(sell);
+    var avail = sell.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    if (!avail) return;
+    var probe = document.createElement('span');
+    probe.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap';
+    head.appendChild(probe);
+    for (var pass = 0; pass < 4; pass++) {
+      var widest = 0;
+      String(head.firstChild ? head.firstChild.textContent : '').split(/\s+/).forEach(function (w) {
+        probe.textContent = w;
+        widest = Math.max(widest, probe.getBoundingClientRect().width);
+      });
+      if (widest <= avail) break;
+      var now = parseFloat(getComputedStyle(head).fontSize);
+      head.style.fontSize = Math.max(14, Math.floor(now * avail / widest)) + 'px';
+    }
+    probe.remove();
+  }
+
+  /* ---------------- the shift ----------------
+     "Shift the whole About page right a bit so it balances". Balance is
+     measured, not guessed: the page's own content (photo + gap + bio) is
+     centred in the room left of the rail. It never goes negative, so on a
+     screen where the content already fills the room it simply stays put. */
+  function measureShift() {
+    var main = document.getElementById('abMain');
+    var grid = document.getElementById('abGrid');
+    var txt = document.getElementById('aboutText');
+    var page = document.querySelector('.ab-page');
+    var was = document.body.classList.contains('is-shifted');
+    document.body.classList.remove('is-shifted');           /* measure unshifted */
+    var mainW = main.getBoundingClientRect().width;
+    /* Two corrections, both measured wrong the first time:
+       - the content's left edge is the GRID's, not the photo's. The photo is
+         rotated 1.6deg and its bounding box pokes 7px further left.
+       - balance is judged against the AD, not against the end of the main
+         column, so the gap before the rail counts as room on the right.
+         Centring inside the main column alone left 63px on one side and
+         132px on the other. */
+    var railGap = parseFloat(getComputedStyle(page).columnGap) || 0;
+    var contentW = txt.getBoundingClientRect().right - grid.getBoundingClientRect().left;
+    var shift = Math.max(0, Math.round((mainW + railGap - contentW) / 2));
+    document.documentElement.style.setProperty('--shift', shift + 'px');
+    if (was) document.body.classList.add('is-shifted');
+    var rail = document.querySelector('.ab-rail');
+    var rr = rail.getBoundingClientRect();
+    document.getElementById('pvMeasure').textContent =
+      'viewport ' + window.innerWidth + ' · shift ' + shift + 'px · ad at ' +
+      Math.round(rr.left) + '..' + Math.round(rr.right);
+  }
+
+  /* ---------------- the slot ---------------- */
+  var KEY = 'sky:ad', sky = document.getElementById('sky');
+  var pick = document.getElementById('skyPick'), live = document.getElementById('skyLive');
+
+  function sold(url) {
+    if (url) {
+      document.getElementById('skyImg').src = url;
+      sky.classList.add('is-sold');
+      live.hidden = false;
+      live.innerHTML = '<b>Live</b> &middot; reach: 1<br>In your browser only' +
+        '<button class="sky-down" type="button" id="skyDown">Take it down</button>';
+    } else {
+      document.getElementById('skyImg').removeAttribute('src');
+      sky.classList.remove('is-sold');
+      live.hidden = true; live.innerHTML = '';
+    }
+  }
+
+  /* Scaled before storing: a phone photo as a data URL can be several MB
+     against about five for the whole origin. 480px wide covers a 160px
+     slot at 3x, and the crop to the slot happens on screen, not here, so
+     switching between the two sizes never needs a re-upload. */
+  function shrink(file, cb) {
+    var r = new FileReader();
+    r.onload = function () {
+      var im = new Image();
+      im.onload = function () {
+        var s = Math.min(1, 480 / (im.naturalWidth || 480));
+        var c = document.createElement('canvas');
+        c.width = Math.max(1, Math.round(im.naturalWidth * s));
+        c.height = Math.max(1, Math.round(im.naturalHeight * s));
+        try { c.getContext('2d').drawImage(im, 0, 0, c.width, c.height); cb(c.toDataURL('image/jpeg', .82)); }
+        catch (e) { cb(String(r.result)); }
+      };
+      im.onerror = function () { cb(''); };
+      im.src = String(r.result);
+    };
+    r.onerror = function () { cb(''); };
+    r.readAsDataURL(file);
+  }
+
+  sky.addEventListener('click', function () { pick.value = ''; pick.click(); });
+  pick.addEventListener('change', function () {
+    var f = pick.files && pick.files[0];
+    if (!f) return;
+    shrink(f, function (url) {
+      if (!url) return;
+      sold(url);
+      try { localStorage.setItem(KEY, url); } catch (e) { /* runs for this visit */ }
+    });
+  });
+  live.addEventListener('click', function (ev) {
+    if (!ev.target.closest || !ev.target.closest('#skyDown')) return;
+    try { localStorage.removeItem(KEY); } catch (e) {}
+    sold('');
+  });
+
+  /* ---------------- the bar ---------------- */
+  function onlyOn(group, btn) {
+    [].forEach.call(document.querySelectorAll('[data-' + group + ']'), function (b) {
+      b.classList.toggle('on', b === btn);
+    });
+  }
+  document.querySelector('.pv-bar').addEventListener('click', function (ev) {
+    var b = ev.target.closest('button'); if (!b) return;
+    if (b.dataset.size) {
+      document.body.classList.toggle('sky-120', b.dataset.size === '120');
+      onlyOn('size', b);
+    } else if (b.dataset.shift) {
+      document.body.classList.toggle('is-shifted', b.dataset.shift === 'on');
+      onlyOn('shift', b);
+    } else if (b.dataset.copy) {
+      setCopy(+b.dataset.copy); onlyOn('copy', b);
+    }
+    fitSkyHead();
+    measureShift();
+  });
+
+  setCopy(0);
+  var saved = null; try { saved = localStorage.getItem(KEY); } catch (e) {}
+  if (saved) sold(saved);
+  function settle() { fitSkyHead(); measureShift(); }
+  window.addEventListener('load', settle);
+  window.addEventListener('resize', settle);
+  /* the fit is meaningless in the fallback face: measure again once the
+     condensed webfont has actually arrived */
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(settle);
+  settle();
+})();
+</script>
+</body>
+</html>
