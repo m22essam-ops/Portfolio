@@ -61,7 +61,13 @@
   /* ---------------- the page with a rail ----------------
      Main column and the rail side by side for the whole height of the
      About content, so a sticky child can ride the full scroll. */
-  :root{--sky-w:160px;--sky-h:600px;--shift:0px}
+  /* TALLER (14 Sep 2026, his ask), but never taller than the screen it is
+     pinned to. The ad sticks 120px from the top, so it gets the viewport less
+     that and less the preview bar at the bottom, between 600 and 820px. A
+     fixed 900px unit would have its own foot cut off while pinned on any
+     laptop, which is the one way to make a joke ad look broken. On the live
+     page, which has no bar, the 190 becomes 150. */
+  :root{--sky-w:160px;--sky-h:clamp(600px, calc(100vh - 190px), 820px);--shift:0px}
   body.sky-120{--sky-w:120px}
   .ab-page{
     display:grid;
@@ -100,10 +106,9 @@
   .sky-head{
     font-family:"Barlow Condensed",sans-serif;font-weight:700;
     text-transform:uppercase;letter-spacing:.02em;line-height:.98;
-    font-size:30px;margin:0 0 16px;color:#0B0A09;
-    overflow-wrap:break-word;hyphens:auto;
+    font-size:40px;margin:0 0 18px;color:#0B0A09;
   }
-  body.sky-120 .sky-head{font-size:23px}
+  body.sky-120 .sky-head{font-size:31px}
   .sky-body{
     font-family:"Hanken Grotesk",sans-serif;font-size:13px;line-height:1.45;
     color:#0B0A09a8;margin:0;
@@ -136,6 +141,32 @@
   }
   .sky-down:hover{color:#E3261A}
 
+  /* ---------------- SAY HI, two ways ----------------
+     NOW: what is live. A 2px red rule across 1200px, a 24px address, and a
+     row of bare 34px outline icons, with the résumé as a separate button
+     above it. He hates it, twice, and the reasons are visible: red is the
+     site's one loud colour and a red rule over a contact block is the
+     call-to-action band again, and a strip of floating icons is every
+     "follow me" footer on the internet.
+
+     ROWS: the proposal. The page already has a list language he chose, the
+     job rows (agency, then the detail in grey, then a right-hand column, on
+     hairlines, capped at 760px). Contact becomes four more rows of that, so
+     it reads as more of the page instead of a widget dropped onto it. No
+     icons, no red rule, and the résumé folds into the same list instead of
+     being a second, differently shaped button. The WhatsApp number is NOT
+     printed: the link already reaches it, and a phone number set in type on
+     a public page is a gift to every scraper. */
+  a.exp-row{text-decoration:none;color:inherit}
+  a.exp-row .exp-time{transition:color .16s ease}
+  a.exp-row:hover .exp-org b,
+  a.exp-row:hover .exp-time{color:#E3261A}
+  .c-rows{margin-top:70px}
+  .c-rows .exp-list{margin-top:14px}
+  body.contact-rows .about-contact,
+  body.contact-rows #aboutResume{display:none}
+  body:not(.contact-rows) .c-rows{display:none}
+
   /* A skyscraper needs a desktop beside it. Below this it goes, the way
      real ones do, rather than squeezing the bio into a strip. */
   @media (max-width:1100px){
@@ -145,7 +176,7 @@
   }
 </style>
 </head>
-<body class="page page-about tex-dots is-shifted">
+<body class="page page-about tex-dots is-shifted contact-rows">
 <div class="tex-press" aria-hidden="true"></div>
 
 <nav class="page-nav">
@@ -178,10 +209,18 @@
         </div>
       </div>
 
+      <!-- NOW: exactly what is live -->
+      <div id="aboutResume"></div>
       <section class="about-contact" id="aboutContact">
         <p class="blk-head">Say hi</p>
         <a class="about-mail" id="aboutMail" href="#"></a>
         <div class="about-social" id="aboutSocial"></div>
+      </section>
+
+      <!-- ROWS: the proposal, in the job list's own language -->
+      <section class="c-rows">
+        <p class="blk-head">Say hi</p>
+        <div class="exp-list" id="cRowList"></div>
       </section>
     </div>
 
@@ -216,9 +255,12 @@
     <button type="button" data-shift="off">Off</button>
   </div>
   <div class="pv-group"><span>Copy</span>
-    <button type="button" data-copy="0" class="on">A</button>
-    <button type="button" data-copy="1">B</button>
-    <button type="button" data-copy="2">C</button>
+    <button type="button" data-copy="0" class="on">Yours</button>
+    <button type="button" data-copy="1">Grammar fix</button>
+  </div>
+  <div class="pv-group"><span>Say hi</span>
+    <button type="button" data-contact="now">Now (live)</button>
+    <button type="button" data-contact="rows" class="on">Rows</button>
   </div>
   <span class="pv-measure" id="pvMeasure"></span>
 </div>
@@ -255,10 +297,25 @@
   }
   document.getElementById('aboutText').innerHTML = html;
 
-  document.getElementById('expList').innerHTML = (A.experience || []).map(function (e) {
-    return '<div class="exp-row"><span class="exp-lead"><b>' + esc(e.org) + '</b> ' +
-           '<span class="exp-role">' + esc(e.role) + '</span></span>' +
-           '<span class="exp-time">' + esc(e.time) + '</span></div>';
+  /* the SAME markup about.html builds (orgHtml + exp-org), so the contact
+     rows below are being judged against the real job rows, not a lookalike */
+  function orgHtml(org) {
+    var s = String(org == null ? '' : org), m = /[,，、(（]/.exec(s);
+    return (m && m.index > 0)
+      ? '<b>' + esc(s.slice(0, m.index)) + '</b><span class="exp-place">' + esc(s.slice(m.index)) + '</span>'
+      : '<b>' + esc(s) + '</b>';
+  }
+  function row(lead, detail, right, href) {
+    var inner = '<span class="exp-lead"><span class="exp-org">' + lead + '</span>' +
+                '<span class="exp-role">' + detail + '</span></span>' +
+                '<span class="exp-time">' + right + '</span>';
+    return href
+      ? '<a class="exp-row" href="' + esc(href) + '"' +
+        (/^mailto:/i.test(href) ? '' : ' target="_blank" rel="noopener"') + '>' + inner + '</a>'
+      : '<div class="exp-row">' + inner + '</div>';
+  }
+  document.getElementById('expList').innerHTML = (A.education || []).concat(A.experience || []).map(function (e) {
+    return row(orgHtml(e.org), esc(e.role), esc(e.time));
   }).join('');
   document.getElementById('langList').innerHTML = (A.languages || []).map(function (l) {
     return '<div class="lang-row"><span class="lang-name">' + esc(l.name) + '</span>' +
@@ -274,15 +331,48 @@
   if (typeof window.buildSocialRow === 'function') {
     document.getElementById('aboutSocial').innerHTML = window.buildSocialRow();
   }
+  var R = (C.contact && C.contact.resume) || {};
+  if (R.url) {
+    document.getElementById('aboutResume').innerHTML =
+      '<a class="resume-btn" href="' + esc(R.url) + '" target="_blank" rel="noopener">' +
+      '<span>' + esc(R.label || 'Download my résumé') + '</span>' +
+      '<span class="resume-arrow" aria-hidden="true">&#8595;</span></a>';
+  }
+
+  /* ---- ROWS: every contact link as a job-style row ----
+     The detail is taken from the URL so admin stays the one place he edits:
+     a LinkedIn slug, an Instagram handle, a Vimeo address. WhatsApp says
+     "Message me" instead of printing the number. The résumé is its own row
+     and its duplicate in contact.links is skipped by matching the URL. */
+  function detailFor(l) {
+    var u = String(l.url || '');
+    if (/^mailto:/i.test(u)) return { lead: 'Email', detail: esc(u.replace(/^mailto:/i, '')), right: 'Write &#8599;' };
+    if (/wa\.me|whatsapp/i.test(u)) return { lead: 'WhatsApp', detail: 'Message me', right: '&#8599;' };
+    var m;
+    if ((m = /linkedin\.com\/in\/([^\/?#]+)/i.exec(u))) return { lead: 'LinkedIn', detail: '/in/' + esc(m[1]), right: '&#8599;' };
+    if ((m = /instagram\.com\/([^\/?#]+)/i.exec(u))) return { lead: 'Instagram', detail: '@' + esc(m[1]), right: '&#8599;' };
+    if ((m = /vimeo\.com\/([^\/?#]+)/i.exec(u))) return { lead: 'Vimeo', detail: 'vimeo.com/' + esc(m[1]), right: '&#8599;' };
+    return { lead: esc(l.label || 'Link'), detail: esc(u.replace(/^https?:\/\/(www\.)?/i, '').slice(0, 40)), right: '&#8599;' };
+  }
+  var rowsHtml = ((C.contact && C.contact.links) || []).filter(function (l) {
+    return l && l.url && !(R.url && String(l.url).trim() === String(R.url).trim());
+  }).map(function (l) {
+    var d = detailFor(l);
+    return row('<b>' + d.lead + '</b>', d.detail, d.right, l.url);
+  }).join('');
+  if (R.url) rowsHtml += row('<b>Résumé</b>', 'Google Drive', 'Download &#8595;', R.url);
+  document.getElementById('cRowList').innerHTML = rowsHtml;
 
   /* ---------------- the copy, three drafts in his voice ---------------- */
+  /* His copy, 14 Sep 2026, exactly as written, and one alternative that
+     changes a single word. "Reach" takes the audience as its object (you
+     reach people, not "reach your product to" people), so the fix swaps
+     reach for show and keeps his structure and his joke intact. */
   var COPY = [
-    { tag: 'Advertisement', head: 'Reach: 1.',
-      body: 'The most honest number in media.', cta: 'Run your ad' },
-    { tag: 'Sponsored', head: 'Too dodgy for primetime?',
-      body: 'Casinos, coins, miracle cures. Rejected by every network. Welcome here.', cta: 'Your ad here' },
     { tag: 'Ad space', head: 'Nobody will see this.',
-      body: 'Perfect for the ad nobody should.', cta: 'Upload yours' }
+      body: 'Reach your product to a maximum of 1 person here.', cta: 'Upload yours' },
+    { tag: 'Ad space', head: 'Nobody will see this.',
+      body: 'Show your product to a maximum of 1 person here.', cta: 'Upload yours' }
   ];
 
   function setCopy(i) {
@@ -429,6 +519,9 @@
       onlyOn('shift', b);
     } else if (b.dataset.copy) {
       setCopy(+b.dataset.copy); onlyOn('copy', b);
+    } else if (b.dataset.contact) {
+      document.body.classList.toggle('contact-rows', b.dataset.contact === 'rows');
+      onlyOn('contact', b);
     }
     fitSkyHead();
     measureShift();
