@@ -1306,7 +1306,13 @@ window.SITE_CONTENT = {
   },
   about: {
     label: "Don't take it personally (it seems so)",
-    heading: "Read me.",
+    heading: "The part where I talk about myself...",
+    ad: {
+      tag: "Ad space",
+      head: "Nobody will see this.",
+      body: "Maximum reach: 1 person.",
+      cta: "Upload yours"
+    },
     portrait: "portrait-studio.jpg",
     portraits: [
       "portrait-studio.jpg",
@@ -1318,12 +1324,11 @@ window.SITE_CONTENT = {
     ],
     portraitAlt: "Mohammed Essam",
     paragraphs: [
-      "I got my first bike at seven. I learned to balance on it at eighteen. Every photograph of me in between has my arm in a cast.",
-      "Then I wanted to be a mechanical engineer, right up until I became one. So I shifted to sociology.",
-      "Mechanical engineering taught me how machines work. Sociology taught me how societies work. Advertising came to shape my inner social engineer.",
-      "Designed in Egypt, put to work in the UAE, and licensed in Madrid, which makes my buffet of ideas accidentally intercontinental.",
-      "Then I fought AI and AI won. But I have still never used Nokia or Kodak as a don't-be-that slide. Not once.",
-      "I play five-a-side badly and cook exactly one thing well: Egyptian Koshary. That is the whole list."
+      "It took me eleven years and three broken arms to learn how to ride a bike. That's still pretty much my process.",
+      "I wanted to be a mechanical engineer. Right up until I became one. So I switched to sociology. Engineering taught me how machines break. Sociology taught me how people break. Advertising is pretty much the commercial break.",
+      "Made in Cairo, road-tested in Dubai, and right now getting fine-tuned in Madrid. The time zone keeps changing. The voice doesn't.",
+      "A line lands and for four seconds you feel Hemingway. Then you remember it is for toilet paper. Then the campaign comes down anyway; posters pulled down, films stop airing, and the folder on the drive gets deleted by the guy who quit. BEST JOB IN THE WORLD. I'M DOING IT AGAIN TOMORROW.",
+      "I fought AI. AI won. We've since agreed it's my unpaid intern. It can have the pixels. But I will never put Nokia or Kodak on a don't-be-that slide. Not once."
     ],
     skillLinks: [
       {

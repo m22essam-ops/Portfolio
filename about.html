@@ -54,52 +54,74 @@
   </div>
 </nav>
 
-<header class="page-head">
-  <div class="wrap">
-    <h1 id="aboutHeading"></h1>
-  </div>
-</header>
+<!-- THE PAGE AND ITS AD (15 Sep 2026). Two columns for the whole height of
+     the page: everything he wrote on the left, and a skyscraper ad on the
+     right that stays pinned while you scroll. The ad was his idea for the
+     dead right-hand half of this page, and the joke is that it works: click
+     it, pick a picture, and your ad is running, to an audience of one,
+     because the picture never leaves your own browser.
 
+     The rail is the whole page tall on purpose. Pinned inside one grid row,
+     an earlier version let go after 450px of scrolling. Below 1100px the ad
+     is gone, as real skyscrapers are, and the page is exactly what it was. -->
 <div class="wrap">
-  <div class="about-grid">
-    <!-- the picture needs a red ground behind it for the screen blend to
-         print against, so it sits in its own frame -->
-    <div class="about-shot" id="aboutShot">
-      <img class="about-portrait" id="aboutPortrait" src="" alt="">
-    </div>
-    <div>
-      <div id="aboutText"></div>
-      <!-- The two lists break out of this column and run the full page
-           width. They are inside it so they follow the bio, and pulled left
-           by exactly the left column plus the gap. -->
-      <div class="lists">
-        <p class="blk-head" id="expHead" hidden>Experience</p>
-        <div class="exp-list" id="expList"></div>
-        <p class="blk-head" id="langHead" hidden>Languages</p>
-        <div class="lang-list" id="langList"></div>
+  <div class="ab-page" id="abPage">
+    <div class="ab-main" id="abMain">
+
+      <header class="page-head ab-head">
+        <h1 id="aboutHeading"></h1>
+      </header>
+
+      <div class="about-grid" id="abGrid">
+        <!-- the picture needs a red ground behind it for the screen blend to
+             print against, so it sits in its own frame -->
+        <div class="about-shot" id="aboutShot">
+          <img class="about-portrait" id="aboutPortrait" src="" alt="">
+        </div>
+        <div>
+          <div id="aboutText"></div>
+          <!-- The two lists break out of this column and run the full page
+               width. They are inside it so they follow the bio, and pulled left
+               by exactly the left column plus the gap. The résumé is the last
+               row of Experience: the full version of the list it sits under. -->
+          <div class="lists">
+            <p class="blk-head" id="expHead" hidden>Experience</p>
+            <div class="exp-list" id="expList"></div>
+            <p class="blk-head" id="langHead" hidden>Languages</p>
+            <div class="lang-list" id="langList"></div>
+          </div>
+        </div>
       </div>
+
+      <!-- SAY HI, as rows in the job list's own language (15 Sep 2026). It was a
+           2px red rule, a big address and a strip of bare icons, which he hated
+           twice: red over a contact block is the call-to-action band again, and
+           floating icons are every "follow me" strip there is. Built from
+           contact.links, so admin is still the one place to edit. -->
+      <section class="c-rows" id="aboutContact" hidden>
+        <p class="blk-head">Say hi</p>
+        <div class="exp-list" id="contactRows"></div>
+      </section>
+
     </div>
+
+    <aside class="ab-rail" aria-label="Advertisement">
+      <div class="ab-rail-in">
+        <button class="sky" id="sky" type="button" aria-label="Advertising space. Click to run your own ad in your browser.">
+          <span class="sky-sell">
+            <span class="sky-tag" id="skyTag"></span>
+            <span class="sky-head" id="skyHead"></span>
+            <span class="sky-body" id="skyBody"></span>
+            <span class="sky-cta"><span id="skyCta"></span><i aria-hidden="true">&rarr;</i></span>
+          </span>
+          <span class="sky-ran"><img alt="Your advertisement" id="skyImg"></span>
+        </button>
+        <p class="sky-live" id="skyLive" hidden></p>
+      </div>
+    </aside>
   </div>
-  <!-- the résumé, under the experience list. Filled by the script below from
-       contact.resume, and left out entirely when there is no link in it. -->
-  <div id="aboutResume"></div>
-
-  <!-- WHERE TO FIND HIM, at a size you can actually use (13 Sep 2026, his
-       ask). The icons exist in the footer on every page, at 23px, as the last
-       thing before the bottom of the screen. This is the page somebody reads
-       when they are deciding whether to get in touch, so the same links are
-       repeated here, bigger, with the address written out beside them.
-
-       Same builder as the footer (window.buildSocialRow), same contact.links,
-       so adding a link in admin fills both or neither. -->
-  <section class="about-contact" id="aboutContact" hidden>
-    <p class="blk-head">Say hi</p>
-    <a class="about-mail" id="aboutMail" href="#"></a>
-    <div class="about-social" id="aboutSocial"></div>
-  </section>
-
-  <p class="about-terms" id="aboutTerms"></p>
 </div>
+<input type="file" id="skyPick" accept="image/*" hidden>
 
 <!-- the tear-off stub. site.js fills it. -->
 <footer class="stub" id="siteFoot"></footer>
@@ -317,67 +339,188 @@
      portfolio and every CV convention calls this column experience, and a
      recruiter scanning for the word was not finding it. */
   var milestones = (A.education || []).concat(jobs);
-  fillBlock('expHead', 'expList', rows(milestones));
 
-  /* ---- the résumé ----
-     Straight out of contact.resume, which is admin section 6, so the link and
-     the words on the button are both his. No link in there and the button is
-     not built at all, rather than sitting on the page going nowhere.
-     It opens in its own tab because it leaves the site. */
-  var R = (C.contact && C.contact.resume) || {};
-  if (R.url && String(R.url).trim()) {
-    document.getElementById('aboutResume').innerHTML =
-      '<a class="resume-btn" href="' + esc(String(R.url).trim()) + '" target="_blank" rel="noopener">' +
-        '<span>' + esc(R.label || 'Download my résumé') + '</span>' +
-        '<span class="resume-arrow" aria-hidden="true">&#8595;</span>' +
+  /* A row that is a link: the same three parts as a job row, so contact and
+     the résumé read as more of the page rather than widgets dropped on it.
+     Leaving the site opens a new tab; a mailto does not, and stays BARE so
+     sweepMail() can put the half-written draft on it like every other
+     address on the page (a link that already carries a query is hands-off). */
+  function linkRow(lead, detail, right, href) {
+    return '<a class="exp-row" href="' + esc(href) + '"' +
+      (/^mailto:/i.test(href) ? '' : ' target="_blank" rel="noopener"') + '>' +
+      '<span class="exp-lead">' +
+        '<span class="exp-org"><b>' + lead + '</b></span>' +
+        '<span class="exp-role">' + detail + '</span>' +
+      '</span>' +
+      '<span class="exp-time">' + right + '</span>' +
       '</a>';
   }
 
-  /* The terms line is NOT printed here any more (13 Sep 2026, his call).
-     `ticket.terms` still carries "Odds of winning awards: Historically low..."
-     and the home card still prints it, so the field is untouched and the joke
-     survives where it was written for. It was only ever borrowed down here,
-     and on a page that already ends with his experience it read as a fourth
-     telling of a joke the visitor met on the way in. */
-  (function () {
-    var el = document.getElementById('aboutTerms');
-    if (el) el.remove();
-  })();
+  /* ---- the résumé, as the last row of Experience (15 Sep 2026) ----
+     It was a separate button with a shape of its own. The list it sits under
+     is the short version of the résumé, so the full version belongs at the
+     foot of that list. Straight out of contact.resume, admin section 6; no
+     link in there and there is no row. */
+  var R = (C.contact && C.contact.resume) || {};
+  var resumeUrl = R.url ? String(R.url).trim() : '';
+  fillBlock('expHead', 'expList', rows(milestones) +
+    (resumeUrl ? linkRow('Résumé', 'The full version', 'Download &#8595;', resumeUrl) : ''));
 
-  /* The contact block. Built from the same contact.links the footer uses, via
-     the builder site.js exposes, so there is one list of links on the site.
-
-     The address is left BARE here on purpose, exactly as the footer leaves
-     its own: sweepMail() puts the half-written draft on every mailto on the
-     page, and a link that arrives already carrying a query is marked
-     hands-off for the life of the page. Pre-fill it and this would be the one
-     address on the site stuck on whichever draft was dealt first.
-
-     No links and no address, and the whole block stays hidden rather than
-     printing a heading over nothing. */
+  /* ---- Say hi, as rows ----
+     Every contact link becomes a row. The detail is read off the URL, so
+     admin stays the one place to edit: a LinkedIn slug, an Instagram handle,
+     a Vimeo address. WhatsApp says "Message me" and never prints the number:
+     the link reaches it already, and a phone number set in type on a public
+     page is a gift to every scraper. The résumé's duplicate in
+     contact.links is skipped by matching the URL, since it has its own row. */
   (function () {
     var box = document.getElementById('aboutContact');
     if (!box) return;
-    var links = (C.contact && C.contact.links) || [];
-    var mail = '';
-    links.forEach(function (l) {
-      if (!mail && l && l.url && /^mailto:/i.test(l.url)) mail = l.url;
+    function detailFor(l) {
+      var u = String(l.url || ''), m;
+      if (/^mailto:/i.test(u)) {
+        return ['Email', esc(u.replace(/^mailto:/i, '').split('?')[0]), 'Write &#8599;'];
+      }
+      if (/wa\.me|whatsapp/i.test(u)) return ['WhatsApp', 'Message me', '&#8599;'];
+      if ((m = /linkedin\.com\/in\/([^\/?#]+)/i.exec(u))) return ['LinkedIn', '/in/' + esc(m[1]), '&#8599;'];
+      if ((m = /instagram\.com\/([^\/?#]+)/i.exec(u))) return ['Instagram', '@' + esc(m[1]), '&#8599;'];
+      if ((m = /vimeo\.com\/([^\/?#]+)/i.exec(u))) return ['Vimeo', 'vimeo.com/' + esc(m[1]), '&#8599;'];
+      return [esc(l.label || 'Link'), esc(u.replace(/^https?:\/\/(www\.)?/i, '').slice(0, 40)), '&#8599;'];
+    }
+    var html = ((C.contact && C.contact.links) || []).filter(function (l) {
+      return l && l.url && String(l.url).trim() && String(l.url).trim() !== resumeUrl;
+    }).map(function (l) {
+      var d = detailFor(l);
+      return linkRow(d[0], d[1], d[2], String(l.url).trim());
+    }).join('');
+    document.getElementById('contactRows').innerHTML = html;
+    box.hidden = !html;
+  })();
+
+  /* ---- the ad ----
+     His copy lives in about.ad (admin section 5), so he can rewrite it
+     without touching this file. The picture a visitor uploads is scaled on
+     a canvas and kept in localStorage on this origin: it is never uploaded,
+     never in content.js, and nobody else can see it. That is the promise the
+     ad makes, and it is funnier for being true. */
+  (function () {
+    var sky = document.getElementById('sky');
+    if (!sky) return;
+    var page = document.getElementById('abPage');
+    var AD = A.ad || {};
+    document.getElementById('skyTag').textContent = AD.tag || 'Ad space';
+    document.getElementById('skyHead').textContent = AD.head || 'Nobody will see this.';
+    document.getElementById('skyBody').textContent = AD.body || '';
+    document.getElementById('skyCta').textContent = AD.cta || 'Upload yours';
+
+    /* The headline shrinks until its LONGEST WORD fits. A skyscraper has
+       about 130px of usable width and a split word reads as a bug; wrapping
+       between words is fine. Same idea as fitHead() on the ticket. */
+    function fitHead() {
+      var head = document.getElementById('skyHead'), sell = head.parentNode;
+      head.style.fontSize = '';
+      var cs = getComputedStyle(sell);
+      var avail = sell.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+      if (!avail) return;
+      var probe = document.createElement('span');
+      probe.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap';
+      head.appendChild(probe);
+      for (var pass = 0; pass < 4; pass++) {
+        var widest = 0;
+        String(head.firstChild ? head.firstChild.textContent : '').split(/\s+/).forEach(function (w) {
+          probe.textContent = w;
+          widest = Math.max(widest, probe.getBoundingClientRect().width);
+        });
+        if (widest <= avail) break;
+        head.style.fontSize = Math.max(14, Math.floor(parseFloat(getComputedStyle(head).fontSize) * avail / widest)) + 'px';
+      }
+      probe.remove();
+    }
+
+    /* THE SHIFT. His ask: move the whole page right so it balances the ad.
+       Balance is measured, not guessed: the space left of the content is made
+       equal to the space between the content and the ad. It is measured from
+       the grid, not the photo (the photo is rotated 1.6deg and its box pokes
+       7px further left), and it never goes negative. Only while the ad is
+       showing; under 1100px there is no ad and no shift. */
+    function balance() {
+      var rail = document.querySelector('.ab-rail');
+      if (!rail || getComputedStyle(rail).display === 'none') {
+        page.style.setProperty('--shift', '0px');
+        return;
+      }
+      page.style.setProperty('--shift', '0px');
+      var main = document.getElementById('abMain').getBoundingClientRect().width;
+      var gap = parseFloat(getComputedStyle(page).columnGap) || 0;
+      var content = document.getElementById('aboutText').getBoundingClientRect().right -
+                    document.getElementById('abGrid').getBoundingClientRect().left;
+      page.style.setProperty('--shift', Math.max(0, Math.round((main + gap - content) / 2)) + 'px');
+    }
+
+    var KEY = 'about:ad', live = document.getElementById('skyLive');
+    var pick = document.getElementById('skyPick');
+    function sold(url) {
+      if (url) {
+        document.getElementById('skyImg').src = url;
+        sky.classList.add('is-sold');
+        live.hidden = false;
+        live.innerHTML = '<b>Live</b> &middot; reach: 1<br>In your browser only' +
+          '<button class="sky-down" type="button" id="skyDown">Take it down</button>';
+      } else {
+        document.getElementById('skyImg').removeAttribute('src');
+        sky.classList.remove('is-sold');
+        live.hidden = true;
+        live.innerHTML = '';
+      }
+    }
+    /* Scaled before it is stored: a phone photo as a data URL can be several
+       megabytes against about five for the whole origin. 480px wide covers
+       the slot at 3x; the crop to the slot happens on screen, not here. */
+    function shrink(file, cb) {
+      var r = new FileReader();
+      r.onload = function () {
+        var im = new Image();
+        im.onload = function () {
+          var s = Math.min(1, 480 / (im.naturalWidth || 480));
+          var c = document.createElement('canvas');
+          c.width = Math.max(1, Math.round(im.naturalWidth * s));
+          c.height = Math.max(1, Math.round(im.naturalHeight * s));
+          try { c.getContext('2d').drawImage(im, 0, 0, c.width, c.height); cb(c.toDataURL('image/jpeg', 0.82)); }
+          catch (e) { cb(String(r.result)); }
+        };
+        im.onerror = function () { cb(''); };
+        im.src = String(r.result);
+      };
+      r.onerror = function () { cb(''); };
+      r.readAsDataURL(file);
+    }
+    sky.addEventListener('click', function () { pick.value = ''; pick.click(); });
+    pick.addEventListener('change', function () {
+      var f = pick.files && pick.files[0];
+      if (!f) return;
+      shrink(f, function (url) {
+        if (!url) return;
+        sold(url);
+        /* quota, a private window or storage switched off: it runs for this
+           visit and is forgotten, which is a smaller problem than a dialog */
+        try { localStorage.setItem(KEY, url); } catch (e) {}
+      });
     });
-    if (!mail && C.contact && C.contact.ctaUrl && /^mailto:/i.test(C.contact.ctaUrl)) {
-      mail = C.contact.ctaUrl;
-    }
-    var a = document.getElementById('aboutMail');
-    if (mail) {
-      a.href = mail;                                   /* bare: sweepMail fills it */
-      a.textContent = mail.replace(/^mailto:/i, '').split('?')[0];
-    } else if (a) {
-      a.remove();
-    }
-    var row = (typeof window.buildSocialRow === 'function')
-      ? window.buildSocialRow(links) : '';
-    var host = document.getElementById('aboutSocial');
-    if (row) host.innerHTML = row; else host.remove();
-    if (mail || row) box.hidden = false;
+    live.addEventListener('click', function (ev) {
+      if (!ev.target.closest || !ev.target.closest('#skyDown')) return;
+      try { localStorage.removeItem(KEY); } catch (e) {}
+      sold('');
+    });
+    var saved = null;
+    try { saved = localStorage.getItem(KEY); } catch (e) {}
+    if (saved) sold(saved);
+
+    function settle() { fitHead(); balance(); }
+    settle();
+    window.addEventListener('load', settle);
+    window.addEventListener('resize', settle);
+    /* the fit means nothing in the fallback face: again once fonts arrive */
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(settle);
   })();
 
   /* the footer stub, including its small print, is built by site.js */

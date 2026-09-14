@@ -1843,9 +1843,65 @@ which is its deliberate 860px centred reading column and is documented above.
 `.about-shot` measures 7px left of the text and that is not a bug either: it
 is the bounding box of its `rotate(-1.6deg)`.
 
+## Added 15 Sep 2026
+
+### About: a new bio, an ad that works, and Say hi as rows
+
+**The bio is his** (15 Sep), five paragraphs, the koshary line gone and the
+Hemingway paragraph kept fourth. The heading is his line too, "The part where I
+talk about myself...", replacing "Read me.". At the site's heading clamp a
+38-character line ran to four lines, so About's heading is
+`clamp(38px,5vw,76px)`: two lines at every width from 375 to 2560.
+
+**The ad.** The dead right half of About (measured 426px of the grid never used)
+became his idea: an ad slot. It is an IAB wide skyscraper, 160px, on a rail the
+whole page tall with the unit pinned inside it, so it stays in view for the
+entire scroll. Click it, pick a picture, and the picture runs in the slot, with
+"LIVE · REACH: 1 · IN YOUR BROWSER ONLY" under it. **The picture never leaves the
+browser**: scaled on a canvas, stored in localStorage as `about:ad`, never
+uploaded, never in content.js. Copy is in `about.ad` (tag/head/body/cta), four
+fields in admin section 5. Hidden below 1100px, as real skyscrapers are.
+
+- **The rail must be the page, not a grid row.** Pinned inside the bio's row it
+  let go after 450px. And the sticky goes on a CHILD of the grid item: with
+  `align-self:start` the item shrinks to its content and has no room to stick.
+- **Height is sized to the screen it is pinned to**:
+  `clamp(540px, calc((100vh - 150px) * .9), 738px)`. It sticks 120px from the
+  top, so its foot is never cut off. He asked taller, then 10% shorter; the .9
+  is that second ask.
+- **The headline shrinks until its longest word fits** (about 130px of width).
+  "PRIMETIME?" once broke mid-word in a draft.
+- **The shift is his ask** ("shift the whole about me to the right so it
+  balances"). `balance()` sets `--shift` so the space left of the content equals
+  the space from the content to the ad. Measured from `#abGrid`, NOT the photo:
+  the photo is rotated 1.6deg and its box pokes 7px left. Exactly equal at 1600
+  (101|101), 1920 (237|237), 2560 (493|493). At 1280 and 1440 there is barely
+  any room and it lands 29|56 and 33|56; the cost there is the bio column
+  narrowing a little, still a comfortable measure.
+- **The shift means "The part where I talk..." no longer sits under his name in
+  the nav.** That is the trade he chose; the older "About must share the nav's
+  left edge" rule is overridden on desktop for this page only.
+
+**Say hi is rows.** It was a 2px red rule, a 24px address and a strip of bare 34px
+icons, and he hated it twice. It is now rows in the job list's own language
+(`a.exp-row`: same hairlines, same 51px height): Email, WhatsApp, LinkedIn,
+Instagram, Vimeo. Details are read off the URLs so admin stays the one place to
+edit. **WhatsApp says "Message me" and never prints the number.** The mailto is
+built BARE so `sweepMail()` fills in the half-written draft, verified.
+**The résumé is the last row of Experience**, not a button: the list above it is
+the short version of it. Its duplicate in `contact.links` is skipped by URL.
+
+**His admin tab reverted the bio once in this pass** (his save put the koshary
+line back over the Hemingway one). If a bio edit ever vanishes, the first
+suspect is an admin tab opened before the change and saved after it.
+
 ## Don't
 
 - Don't add a build step or framework.
+- Don't print the WhatsApp number on the About page. The row says "Message me".
+- Don't pin the About ad inside a grid row or put the sticky on the grid item.
+- Don't send the About ad's uploaded picture anywhere. "In your browser only" is
+  the joke, and it is only funny because it is true.
 - Don't let `cleanAll()`, the media filter in work.html, or the slot padder
   forget spacers. A spacer has no `src` by design and each of those three
   would silently delete or miscount it.

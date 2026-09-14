@@ -527,6 +527,13 @@ button.del:hover { border-color: var(--danger); color: var(--danger); }
       <label class="field"><span>Section label</span><input data-path="about.label"></label>
       <label class="field"><span>Heading</span><input data-path="about.heading"></label>
     </div>
+    <div class="subhead">The ad on the right of the page (desktop only). A visitor can click it and run their own picture in it, in their own browser only.</div>
+    <div class="grid2">
+      <label class="field"><span>Ad: small tag at the top</span><input data-path="about.ad.tag" placeholder="Ad space"></label>
+      <label class="field"><span>Ad: headline</span><input data-path="about.ad.head" placeholder="Nobody will see this."></label>
+      <label class="field"><span>Ad: line under the headline</span><input data-path="about.ad.body" placeholder="Maximum reach: 1 person."></label>
+      <label class="field"><span>Ad: button at the bottom</span><input data-path="about.ad.cta" placeholder="Upload yours"></label>
+    </div>
     <label class="field"><span>Portrait file name (put the file in images/)</span><input data-path="about.portrait"><small>Used on its own if the box below is empty.</small></label>
     <label class="field"><span>More photos, one file name per line</span><textarea data-path="about.portraits" data-type="textlist" rows="4" placeholder="about-photo.jpg&#10;me-in-cairo.jpg&#10;me-in-madrid.jpg"></textarea><small>Two or more and the About picture becomes a shuffle: hover it, tap it or press Enter on it and it steps to the next. Put the one you want seen first at the top. Leave this empty and it stays a single photo.</small><small id="portraitNote"></small></label>
     <label class="field"><span>Bio (one paragraph per line)</span><textarea data-path="about.paragraphs" data-type="textlist" rows="5"></textarea></label>
