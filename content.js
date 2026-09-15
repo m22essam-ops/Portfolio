@@ -608,7 +608,7 @@ window.SITE_CONTENT = {
         client: "Tuborg",
         category: "D&AD brief",
         year: "2026",
-        image: "Tuborg poster on poster 4x3.jpg",
+        image: "i_need_it_in_seconds_max_to-ezgif.com-video-to-gif-converter.gif",
         alt: "Tuborg Pop the Pressure",
         sticker: "D&AD brief",
         tagline: "Thousands of balloons, one Glastonbury set.",
