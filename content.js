@@ -86,8 +86,7 @@ window.SITE_CONTENT = {
         tagline: "A super app for a city that is not on your side.",
         story: [
           "Sometimes the city is not in your favour, especially when you are in a rush or sticking to a budget. The Yango super app has an answer for each of those.",
-          "Three films: The Wedding Rush and No-Haggle No-Worries for Pakistan, One-Super-Tap for Oman.",
-          "The entire tower sold out within a week."
+          "Three films: The Wedding Rush and No-Haggle No-Worries for Pakistan, One-Super-Tap for Oman."
         ],
         media: [
           {
