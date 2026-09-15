@@ -650,6 +650,39 @@ window.SITE_CONTENT = {
             src: "tuborg tote.jpg",
             caption: "",
             layout: "half"
+          },
+          {
+            type: "image",
+            src: "tuborg 1.jpg",
+            caption: "",
+            layout: "third"
+          },
+          {
+            type: "image",
+            src: "tuborg 2.jpg",
+            caption: "",
+            layout: "third"
+          },
+          {
+            type: "image",
+            src: "tuborg 3.jpg",
+            caption: "",
+            layout: "third"
+          },
+          {
+            type: "image",
+            src: "tuborg 4.jpg",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "tuborg 5.jpg",
+            caption: ""
+          },
+          {
+            type: "image",
+            src: "tuborg 6.jpg",
+            caption: ""
           }
         ],
         credits: [
@@ -1307,12 +1340,6 @@ window.SITE_CONTENT = {
   about: {
     label: "Don't take it personally (it seems so)",
     heading: "The part where I talk about myself...",
-    ad: {
-      tag: "Ad space",
-      head: "Nobody will see this.",
-      body: "Maximum reach: 1 person.",
-      cta: "Upload yours"
-    },
     portrait: "portrait-studio.jpg",
     portraits: [
       "portrait-studio.jpg",
@@ -1391,7 +1418,13 @@ window.SITE_CONTENT = {
         org: "Social Nuts, Cairo",
         time: "Jul 2021 – Jul 2023"
       }
-    ]
+    ],
+    ad: {
+      tag: "Ad space",
+      head: "Nobody will see this.",
+      body: "Maximum reach: 1 person.",
+      cta: "Upload yours"
+    }
   },
   manipulating: {
     label: "The skill you clicked",
