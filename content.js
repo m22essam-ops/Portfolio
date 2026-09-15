@@ -784,7 +784,7 @@ window.SITE_CONTENT = {
         client: "Canesten",
         category: "Miami Ad School",
         year: "2026",
-        image: "Circle_Sticker_Mockup_4.png",
+        image: "Gemini_Generated_Image_p4317mp4317mp431.jpeg",
         alt: "Let's Call It What It Is, Canesten",
         sticker: "Never left the deck",
         tagline: "You can't treat what you won't say",
