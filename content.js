@@ -672,17 +672,20 @@ window.SITE_CONTENT = {
           {
             type: "image",
             src: "tuborg 4.jpg",
-            caption: ""
+            caption: "",
+            layout: "third"
           },
           {
             type: "image",
             src: "tuborg 5.jpg",
-            caption: ""
+            caption: "",
+            layout: "third"
           },
           {
             type: "image",
             src: "tuborg 6.jpg",
-            caption: ""
+            caption: "",
+            layout: "third"
           }
         ],
         credits: [
