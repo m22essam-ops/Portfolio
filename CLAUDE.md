@@ -1895,9 +1895,38 @@ the short version of it. Its duplicate in `contact.links` is skipped by URL.
 line back over the Hemingway one). If a bio edit ever vanishes, the first
 suspect is an admin tab opened before the change and saved after it.
 
+### The portrait glitch: built, shown, killed (15 Sep 2026)
+
+He asked for a different glitch on every hover of the home portrait, three of
+them, shown first. Worth knowing before anyone suggests it again: **there was
+never a glitch there.** The hover only fades the dot-screen canvas to half
+opacity so the photo shows through, and that reveal is the affordance for the
+click to About.
+
+Three were built on the real halftone and photo: **misregister** (red and ink
+plates cut from the print jumping out of register), **slice** (strips shearing
+sideways, one or two flashing negative) and **photocopy** (negative flashes, a
+burnt frame, a light bar), dealt shuffled one per hover with no back-to-back
+repeat. **He killed all of it** ("kill it."). The home page keeps the plain
+fade. The preview was never pushed and was dropped; do not rebuild it.
+
+One lesson from it that applies anywhere: **size a motion effect as a share of
+the thing it moves, not in pixels, and look at a frozen frame.** Slice's
+first draft jumped up to 22px and measured 14px on a 303px photo mid-glitch,
+which on a faint dot screen read as nothing at all.
+
+**A git trap met twice now:** his admin writes uploaded images to disk AND
+GitHub, so after one of his saves those files sit in the folder untracked
+while his commits add them, and `git rebase` / `checkout` refuse with "could not
+detach HEAD". Compare each with `git show origin/main:<path>`, move the
+identical ones aside, then sync. **Quote paths: his filenames have spaces**
+("tuborg 1.jpg"), and a plain `for f in $(...)` splits them and skips the check.
+
 ## Don't
 
 - Don't add a build step or framework.
+- Don't put a glitch on the home portrait's hover. Three were built and he
+  killed them; the fade is the whole effect.
 - Don't print the WhatsApp number on the About page. The row says "Message me".
 - Don't pin the About ad inside a grid row or put the sticky on the grid item.
 - Don't send the About ad's uploaded picture anywhere. "In your browser only" is
