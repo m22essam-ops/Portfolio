@@ -2216,6 +2216,39 @@ body.page-about .exp-row{max-width:none}
 .pj-btn.is-solid{background:var(--pj-ink);color:var(--pj-paper)}
 .pj-btn.is-solid:hover{background:var(--pj-red);border-color:var(--pj-red)}
 
+/* ---- THE CONTROL STRIP AT THE FOOT (19 Sep 2026) ----
+   Screen 04 of the brutalist sheet, the one he pointed at: the buttons, the
+   field and SEND, on the ticket's own paper with the perforated edge. It ends
+   the project the way the header opens it, so a page in this system reads as
+   one printed object rather than a ticket sitting on top of a website.
+
+   THE FIELD IS HIS ADDRESS, NOT A SIGN-UP BOX. A "YOUR EMAIL" input that
+   collects nothing and posts nowhere is a prop, and this site does not print
+   promises it cannot keep. It shows the address, it is selectable, and SEND
+   opens the visitor's mail app with the half-written draft already in it,
+   which is the one contact mechanic the whole site is built on. The href is
+   left BARE for sweepMail() to fill, or this strip would freeze on whichever
+   draft was dealt first. */
+.pj-strip{margin:34px 0 8px}
+.pj-strip .pj-lab{
+  font-family:var(--pj-mono);font-size:12px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--fg-faint);margin:0 0 10px;
+}
+.pj-strip .pj-row{
+  display:flex;align-items:stretch;gap:14px;flex-wrap:wrap;
+  padding:16px 18px;
+}
+.pj-mail{
+  flex:1;min-width:240px;display:flex;align-items:center;
+  font-family:var(--pj-mono);font-size:14px;letter-spacing:.12em;
+  text-transform:uppercase;background:var(--pj-paper);color:var(--pj-ink);
+  border:2px solid var(--pj-ink);padding:11px 14px;
+}
+@media (max-width:700px){
+  .pj-strip .pj-row{padding:14px}
+  .pj-mail{font-size:12px;letter-spacing:.08em;min-width:0}
+}
+
 @media (max-width:700px){
   .pj-body{padding:20px 18px 22px}
   .pj-band{padding:10px 16px;font-size:11px;letter-spacing:.14em}

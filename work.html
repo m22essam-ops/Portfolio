@@ -438,6 +438,24 @@
     }
     html += '</nav>';
 
+    /* the control strip closes the page in the same system the header opens
+       it in. Only under ?hdr=1, like the header itself, while he decides. */
+    if (ticketHdr) {
+      var addr = String((C.contact || {}).ctaUrl || 'mailto:m22essam@gmail.com')
+        .replace(/^mailto:/, '').split('?')[0];
+      html += '<div class="pj-strip">' +
+        '<p class="pj-lab">04 / Say hi</p>' +
+        '<div class="pj-ticket pj-perf"><div class="pj-row">' +
+          '<a class="pj-btn" href="work.html">All work</a>' +
+          (next ? '<a class="pj-btn" href="work.html?slug=' + encodeURIComponent(next.p.slug) +
+                  '">Next project</a>' : '') +
+          '<span class="pj-mail">' + esc(addr) + '</span>' +
+          /* bare mailto on purpose: site.js fills in the half-written draft */
+          '<a class="pj-btn is-solid" href="mailto:' + esc(addr) + '">Send &rarr;</a>' +
+        '</div></div>' +
+      '</div>';
+    }
+
     html += '</div></section>';
     page.innerHTML = html;
     buildLightbox();
