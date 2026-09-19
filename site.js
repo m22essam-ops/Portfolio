@@ -534,4 +534,117 @@
       }
     });
   }
+
+  /* ----- WHAT SEARCH ENGINES ARE TOLD -----
+     Two jobs, both done here so no page has to repeat them.
+
+     1. `setPageHead()` writes the title, the description, the canonical and
+        the og: pair for a page whose content is only known at run time, which
+        on this site means every project page. Google renders the page before
+        it indexes it, so a head written by script is a head it reads.
+
+        The canonical is INJECTED, never edited: work.html used to carry a
+        hard-coded canonical pointing at itself, so all fifteen project pages
+        told Google "the real page is the work index" and asked to be folded
+        into it. The tag is gone from the HTML and written here instead, which
+        is also what Google's own JavaScript guidance asks for: one canonical
+        tag on the page, not a static one quietly rewritten.
+
+     2. `siteSchema()` prints the structured data every page shares: who he is,
+        what he does, and where else he exists. It is built from content.js, so
+        a link added in admin turns up in the markup with no second edit. */
+
+  var SITE = 'https://www.mohammedessam.com';
+
+  function metaTag(sel, attr, key, val) {
+    var el = document.head.querySelector(sel);
+    if (!val) { if (el) el.remove(); return; }
+    if (!el) {
+      el = document.createElement('meta');
+      el.setAttribute(attr, key);
+      document.head.appendChild(el);
+    }
+    el.setAttribute('content', val);
+  }
+
+  window.setPageHead = function (o) {
+    o = o || {};
+    if (o.title) {
+      document.title = o.title;
+      metaTag('meta[property="og:title"]', 'property', 'og:title', o.title);
+    }
+    if (o.description) {
+      metaTag('meta[name="description"]', 'name', 'description', o.description);
+      metaTag('meta[property="og:description"]', 'property', 'og:description', o.description);
+    }
+    /* A page that should not be in the index says so and keeps its canonical
+       to itself: "not found" is served with a 200 by GitHub Pages, so without
+       this it reads as a real, empty page. */
+    metaTag('meta[name="robots"]', 'name', 'robots', o.noindex ? 'noindex' : '');
+    var link = document.head.querySelector('link[rel="canonical"]');
+    if (o.canonical && !o.noindex) {
+      if (!link) {
+        link = document.createElement('link');
+        link.rel = 'canonical';
+        document.head.appendChild(link);
+      }
+      link.href = o.canonical;
+      metaTag('meta[property="og:url"]', 'property', 'og:url', o.canonical);
+    } else if (link) {
+      link.remove();
+    }
+  };
+
+  window.addSchema = function (obj) {
+    if (!obj) return;
+    var s = document.createElement('script');
+    s.type = 'application/ld+json';
+    s.textContent = JSON.stringify(obj);
+    document.head.appendChild(s);
+  };
+
+  (function siteSchema() {
+    var C = window.SITE_CONTENT || {};
+    var A = C.about || {};
+    var K = C.contact || {};
+    var profiles = (K.links || []).map(function (l) { return l.url || ''; })
+      .filter(function (u) { return /^https?:/.test(u) && !/drive\.google|wa\.me|calendly/.test(u); });
+
+    var person = {
+      '@type': 'Person',
+      '@id': SITE + '/#me',
+      name: 'Mohammed Essam',
+      /* The same man is spelled four ways across the places his work lives,
+         so the ones a person might search are listed rather than hidden. */
+      alternateName: ['Mohamed Essam', 'Mohamed Essameldeen'],
+      jobTitle: 'Copywriter',
+      url: SITE + '/',
+      email: (String(K.ctaUrl || '').match(/mailto:([^?]+)/) || [])[1] || undefined,
+      address: { '@type': 'PostalAddress', addressLocality: 'Madrid', addressCountry: 'ES' },
+      knowsLanguage: (A.languages || []).map(function (l) { return l.name; }).filter(Boolean),
+      alumniOf: (A.education || []).map(function (e) {
+        return { '@type': 'EducationalOrganization', name: (e.org || '').split(',')[0] };
+      }).filter(function (e) { return e.name; }),
+      worksFor: (A.experience || []).slice(0, 1).map(function (e) {
+        return { '@type': 'Organization', name: (e.org || '').split(',')[0] };
+      })[0],
+      sameAs: profiles
+    };
+    window.__person = { '@id': SITE + '/#me' };
+
+    var home = /\/(index\.html)?$/.test(location.pathname);
+    var graph = [person];
+    if (home) {
+      /* Google reads this one to decide what to call the site in a result. */
+      graph.push({
+        '@type': 'WebSite',
+        '@id': SITE + '/#site',
+        name: 'Mohammed Essam',
+        alternateName: 'Mohammed Essam, copywriter',
+        url: SITE + '/',
+        publisher: { '@id': SITE + '/#me' }
+      });
+    }
+    window.addSchema({ '@context': 'https://schema.org', '@graph': graph });
+  })();
 })();

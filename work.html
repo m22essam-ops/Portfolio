@@ -24,7 +24,11 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="A lottery ticket that reads: Award-losing copywriter.">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://www.mohammedessam.com/work.html">
+<!-- NO CANONICAL HERE ON PURPOSE. This one file is sixteen addresses: the
+     index, the two filtered views and every project. A canonical sitting in
+     the HTML would be the same on all of them, which is what it was, and it
+     named the work index, so every project page asked Google to drop it and
+     keep the index. site.js writes the right one per view instead. -->
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -139,9 +143,17 @@
     var note    = ranOnly  ? (W.ranNote  || '')
                 : wantOnly ? (W.wantNote || '')
                 :            (W.note     || '');
-    document.getElementById('pageTitle').textContent =
-      (ranOnly ? 'Work that worked' : wantOnly ? 'Work I want to do' : 'The work') +
+    var indexTitle = (ranOnly ? 'Work that worked' : wantOnly ? 'Spec work' : 'The work') +
       ' · Mohammed Essam';
+    document.getElementById('pageTitle').textContent = indexTitle;
+    if (window.setPageHead) {
+      window.setPageHead({
+        title: indexTitle,
+        description: note || W.note || 'Copywriting by Mohammed Essam. Cairo, Dubai, Madrid.',
+        canonical: 'https://www.mohammedessam.com/work.html' +
+          (ranOnly ? '?ran=1' : wantOnly ? '?ran=0' : '')
+      });
+    }
 
     /* The way back to all the work goes AFTER the grid, not under the heading.
        It sat at the top for one pass and it was the wrong thing in the wrong
@@ -214,6 +226,38 @@
     var p = entry.p;
 
     document.getElementById('pageTitle').textContent = p.title + ' · Mohammed Essam';
+
+    /* The project's own address, its own description and its own entry in the
+       structured data. Before this every project claimed to be the work index
+       and shared one sentence with it. */
+    if (window.setPageHead) {
+      var line = [p.tagline, (p.story || [])[0]].filter(Boolean).join(' ').replace(/\s+/g, ' ');
+      if (line.length > 165) line = line.slice(0, 162).replace(/[\s,;:]+\S*$/, '') + '...';
+      var url = 'https://www.mohammedessam.com/work.html?slug=' + encodeURIComponent(p.slug);
+      window.setPageHead({
+        title: p.title + ' · Mohammed Essam',
+        description: line || (p.title + ', by copywriter Mohammed Essam.'),
+        canonical: url
+      });
+      if (window.addSchema) {
+        window.addSchema({
+          '@context': 'https://schema.org',
+          '@type': 'CreativeWork',
+          name: p.title,
+          headline: p.tagline || undefined,
+          description: line || undefined,
+          url: url,
+          image: p.image ? 'https://www.mohammedessam.com/' + window.imgSrc(p.image) : undefined,
+          genre: p.category || undefined,
+          dateCreated: p.year || undefined,
+          about: p.client || undefined,
+          author: window.__person || undefined,
+          creditText: (p.credits || []).map(function (c) {
+            return (c.role || '') + ': ' + (c.name || '');
+          }).join('; ') || undefined
+        });
+      }
+    }
 
     var status = entry.ran
       ? (W.producedLabel || 'Produced')
@@ -592,6 +636,12 @@
         ? line.replace(/home(?![\s\S]*home)/i, '<a href="index.html">home</a>')
         : line + ' <a href="index.html">Home</a>';
 
+      /* GitHub Pages answers this address with a 200, so without the noindex
+         a mistyped slug reads to a search engine as a real page that happens
+         to be empty. */
+      if (window.setPageHead) {
+        window.setPageHead({ title: 'Not found · Mohammed Essam', noindex: true });
+      }
       page.innerHTML = '<section class="project"><div class="wrap">' +
         '<a class="back-link" href="work.html">← All work</a>' +
         '<h1 class="project-title">Not found</h1>' +

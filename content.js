@@ -142,6 +142,66 @@ window.SITE_CONTENT = {
         "ran": true
       },
       {
+        slug: "rivan-tower",
+        title: "Rivan Tower - The Hotel Is Yours",
+        client: "Rivan Tower",
+        category: "Film",
+        year: "2023",
+        image: "live/rivan-tower-cover.jpg",
+        alt: "Rivan Tower, The Hotel Is Yours",
+        sticker: "Sold out in a week",
+        tagline: "Own the room, do not rent it.",
+        story: [
+          "Rivan Tower wanted to change how Egyptians see hotels: own the room instead of renting it.",
+          "We cast Bayoumi Fouad and shot a comedy film in two days that treated hotel living as a permanent address rather than a holiday.",
+          "The entire tower sold out within a week."
+        ],
+        media: [
+          {
+            type: "video",
+            src: "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/E_M31UfOGqI?si=N4DgvPjoWDW2Hkck\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+            caption: ""
+          }
+        ],
+        credits: [
+          {
+            role: "Written and directed by",
+            name: "Mohammed Essam"
+          },
+          {
+            role: "Creative strategist",
+            name: "Aya El-Hadad"
+          },
+          {
+            role: "DOP",
+            name: "Haitham Nasser"
+          },
+          {
+            role: "Editor and colorist",
+            name: "Donia Sallam"
+          },
+          {
+            role: "Motion graphics",
+            name: "Ahmad Mokhtar, Omar Abdelmonem"
+          },
+          {
+            role: "Account director",
+            name: "Dina Abuel-Magd"
+          },
+          {
+            role: "Production",
+            name: "Mohamed Gharieb, Mahmoud Gharieb, Osama Nakeeb"
+          },
+          {
+            role: "Agency",
+            name: "Social Nuts"
+          }
+        ],
+        next: {},
+        "draft": false,
+        "ran": true
+      },
+      {
         slug: "murder-whats-next",
         title: "Liquid Death - Murder What's Next",
         client: "Liquid Death",
@@ -199,7 +259,7 @@ window.SITE_CONTENT = {
         sticker: "sides are the main",
         tagline: "The only ballot with a drive-thru.",
         story: [
-          "So easy is it to pick thy side, and so impactful is thy side on thy meal. Why then, when Americans do think upon elections, they think: first, It'scomplicated; and second, it maketh no impact.",
+          "So easy is it to pick thy side, and so impactful is thy side on thy meal. Why, then, when Americans think about elections, they think: first, It's Complicated; and second, it makes no impact.",
           "So McDonald's did redesign their ordering screens, that people might lay their hands upon a thing deliciously helpful."
         ],
         media: [
@@ -411,7 +471,7 @@ window.SITE_CONTENT = {
           },
           {
             role: "Agency",
-            name: "Socialize"
+            name: "We Are Social"
           },
           {
             role: "Creative director",
@@ -432,66 +492,6 @@ window.SITE_CONTENT = {
           {
             role: "Account managers",
             name: "Mo Awkel, Marwa Elkhateeb"
-          }
-        ],
-        next: {},
-        "draft": false,
-        "ran": true
-      },
-      {
-        slug: "rivan-tower",
-        title: "Rivan Tower - The Hotel Is Yours",
-        client: "Rivan Tower",
-        category: "Film",
-        year: "2023",
-        image: "live/rivan-tower-cover.jpg",
-        alt: "Rivan Tower, The Hotel Is Yours",
-        sticker: "Sold out in a week",
-        tagline: "Own the room, do not rent it.",
-        story: [
-          "Rivan Tower wanted to change how Egyptians see hotels: own the room instead of renting it.",
-          "We cast Bayoumi Fouad and shot a comedy film in two days that treated hotel living as a permanent address rather than a holiday.",
-          "The entire tower sold out within a week."
-        ],
-        media: [
-          {
-            type: "video",
-            src: "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/E_M31UfOGqI?si=N4DgvPjoWDW2Hkck\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
-            caption: ""
-          }
-        ],
-        credits: [
-          {
-            role: "Written and directed by",
-            name: "Mohammed Essam"
-          },
-          {
-            role: "Creative strategist",
-            name: "Aya El-Hadad"
-          },
-          {
-            role: "DOP",
-            name: "Haitham Nasser"
-          },
-          {
-            role: "Editor and colorist",
-            name: "Donia Sallam"
-          },
-          {
-            role: "Motion graphics",
-            name: "Ahmad Mokhtar, Omar Abdelmonem"
-          },
-          {
-            role: "Account director",
-            name: "Dina Abuel-Magd"
-          },
-          {
-            role: "Production",
-            name: "Mohamed Gharieb, Mahmoud Gharieb, Osama Nakeeb"
-          },
-          {
-            role: "Agency",
-            name: "Social Nuts"
           }
         ],
         next: {},
@@ -543,7 +543,7 @@ window.SITE_CONTENT = {
           },
           {
             role: "Agency",
-            name: "Socialize, We Are Social"
+            name: "We Are Social"
           }
         ],
         next: {},
@@ -790,7 +790,7 @@ window.SITE_CONTENT = {
         story: [
           "Women do not struggle with the symptoms, they struggle with the words. We whisper, we nickname, down there, the itch, and that avoidance is what keeps people from getting help.",
           "So we hijacked the one game where nicknames are actually illegal. Taboo, rebuilt: say down there, you lose. Say thrush, you score.",
-          "Same rule in every market: you cannot treat what you cannot name."
+          "Same rule in every market: You can't treat what you won't say."
         ],
         media: [
           {
@@ -816,6 +816,11 @@ window.SITE_CONTENT = {
             src: "Window Sign Mockup.jpg",
             caption: "",
             layout: "full"
+          },
+          {
+            type: "video",
+            src: "<div style=\"padding:56.25% 0 0 0;position:relative;\"><iframe src=\"https://player.vimeo.com/video/1228327377?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;\" title=\"Canesten - Let's Call It what It Is\"></iframe></div><script src=\"https://player.vimeo.com/api/player.js\"></script>",
+            caption: ""
           }
         ],
         credits: [
@@ -1385,7 +1390,7 @@ window.SITE_CONTENT = {
       },
       {
         name: "Spanish",
-        say: "si leche normal"
+        say: "sí leche normal"
       },
       {
         name: "Italian",

@@ -20,6 +20,57 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Not here, Mohammed Essam</title>
 <meta name="robots" content="noindex">
+<script>
+/* ============ THE OLD ADDRESSES STILL WORK ============
+   The domain used to be his Adobe Portfolio, and its project pages were
+   plain slugs at the root: mohammedessam.com/rivan-tower. Those links are
+   in his CV, on LinkedIn and in other people's bookmarks, and every one of
+   them was landing here on a dead end.
+
+   GitHub Pages cannot redirect, so this page does it. It runs in the head,
+   before anything is drawn, so a person following an old link sees the
+   project rather than the word 404.
+
+   The list is the crawl's own file names (images/live/) read backwards: each
+   picture was saved under the page it came from, so these are the real old
+   addresses, not guesses. A project that is now a draft goes to the work
+   index rather than to a page that would refuse to render. */
+(function () {
+  var OLD = {
+    'about-me': 'about.html',
+    'al-momtaz-chronicals': 'work.html?slug=momtaz-cement-chronicles',
+    'cah-less-not-even-a-problem': 'work.html?slug=song-for-the-cashless',
+    'dominos-nothing-bad-happens-after-2-am': 'work.html?slug=Knights-of-glowing-box',
+    'lets-call-it-what-it-is-canesteen': 'work.html?slug=canesten-lets-call-it',
+    'middle-finger-to-death': 'work.html',
+    'modon-developments': 'work.html',
+    'nivea-i-might-never-see-the-sun-again': 'work.html',
+    'oumph-like-any-ad': 'work.html',
+    'pringles-arabia-champions-of-fun-ft-david-vila': 'work.html?slug=pringles-champions-of-fun',
+    'pringles-arabia-cheesy-cheese': 'work.html?slug=pringles-cheesy-cheese',
+    'red-expo-jingle-ad': 'work.html?slug=red-expo-got-the-keys',
+    'rivan-tower': 'work.html?slug=rivan-tower',
+    'skybridge': 'work.html?slug=afg-skybridge',
+    'the-quarantine-game-bnk-alhthr': 'work.html?slug=quarantine-games',
+    'tuborg-pop-the-pressure': 'work.html?slug=pop-the-pressure',
+    'uqwyeuoa-random-8-words': 'work.html?slug=the-mumbled-code',
+    'yango-move-smart-move-smooth': 'work.html?slug=yango-unstoppable-rides',
+    'work': 'work.html',
+    'works': 'work.html',
+    'projects': 'work.html',
+    'portfolio': 'work.html',
+    'contact': 'about.html',
+    'contact-me': 'about.html',
+    'about': 'about.html',
+    'cv': 'about.html',
+    'resume': 'about.html',
+    'home': 'index.html'
+  };
+  var key = location.pathname.replace(/^\/+|\/+$/g, '').replace(/\.html?$/i, '').toLowerCase();
+  window.__oldKey = key;
+  if (OLD[key]) location.replace('/' + OLD[key]);
+})();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Syne:wght@400..800&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -75,6 +126,20 @@
   var C = window.SITE_CONTENT || {};
   var J = C.jokes || {};
   var el = document.getElementById('notFoundLine');
+
+  /* Anything the list above did not name gets one more chance: the address is
+     compared with every project's slug and title, so an old or half-remembered
+     URL (/rivan-tower-the-hotel-is-yours) still lands on the right page, and
+     keeps working for projects added after today. */
+  var key = window.__oldKey || '';
+  if (key.length > 5) {
+    var flat = function (s) { return String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); };
+    var hit = ((C.work || {}).projects || []).filter(function (p) { return !p.draft; }).filter(function (p) {
+      var a = flat(p.slug), b = flat(p.title), c = flat(p.client);
+      return a === key || b === key || (key.length > 7 && (b.indexOf(key) === 0 || key.indexOf(a) === 0 || (c && c !== 'red' && key.indexOf(c) === 0)));
+    })[0];
+    if (hit) { location.replace('/work.html?slug=' + encodeURIComponent(hit.slug)); return; }
+  }
   /* his line, trimmed: it is stored with a trailing space. If he ever empties
      the field the paragraph removes itself rather than leaving a gap, same
      contract as every other optional line on the site. */
