@@ -339,27 +339,27 @@ window.SITE_CONTENT = {
             caption: ""
           },
           {
-            type: "image",
-            src: "Dominos art style .jpg",
-            caption: "",
-            layout: "full"
-          },
-          {
             type: "video",
             src: "<div style=\"padding:56.25% 0 0 0;position:relative;\"><iframe src=\"https://player.vimeo.com/video/1205222256?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;\" title=\"Dominos - The True Color\"></iframe></div>",
             caption: ""
           },
           {
             type: "image",
+            src: "Dominos art style .jpg",
+            caption: "",
+            layout: "full"
+          },
+          {
+            type: "image",
             src: "dominos bus stop poster mockup.jpg",
             caption: "",
-            layout: "half"
+            layout: "third"
           },
           {
             type: "image",
             src: "Screen 35ML Mockup.jpg",
             caption: "",
-            layout: "half"
+            layout: "two-thirds"
           }
         ],
         credits: [
