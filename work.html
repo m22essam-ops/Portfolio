@@ -441,73 +441,31 @@
     html += '</div></section>';
     page.innerHTML = html;
     buildLightbox();
-    matchRowHeights();
   }
 
-  /* ============ TWO BLOCKS IN A ROW ARE THE SAME HEIGHT ============
-     His ask, 13 Sep 2026: the red carton "alligend size-wise with the gif
-     next to it". A 460x990 phone and a 560x626 carton sat side by side at
-     wildly different scales and the row read as two unrelated things.
+  /* ============ WHY THERE IS NO ROW-MATCHING ANY MORE ============
+     Until 19 Sep 2026 this file evened up every row: group the pictures by
+     their top edge, find the tallest, give that height to the others, and
+     let `object-fit:contain` absorb the difference. It was his ask of
+     13 Sep, and it worked on the row it was written for, two blocks of
+     similar shape.
 
-     THIS CANNOT BE DONE IN CSS and the attempt is worth recording so nobody
-     tries it again. `height:100%` on the image with the grid's default
-     `align-items:stretch` looks like the answer and collapses the lot: the
-     row takes its height from its items, the items are asking the row how
-     tall they are, and every image in all eight projects measured 0px.
+     It is removed because it is the thing that broke the rail. A picture
+     given a height it did not ask for is painted smaller inside its own box
+     and centred there, so the box stayed on the grid and the PICTURE drifted
+     inwards: 140px on each side on Liquid Death, 136 on Pick a Side. He
+     asked on 19 Sep for one ruler down the page, everything starting and
+     ending on it, nothing resized and no ratio touched. A picture can have
+     its own height or the row can have one shared height; it cannot have
+     both and stay on the rail. The rail won.
 
-     So: let the pictures size themselves, then even them up afterwards.
-     Group by their top edge, find the tallest, and give that height to the
-     others. `object-fit:contain` in the stylesheet means the extra height is
-     never a crop and never a stretch, and on a cutout there is no visible box
-     for the spare room to show in.
+     So: no script here, and nothing setting a height in the stylesheet. Two
+     pictures side by side are the same WIDTH, which is what the grid is for,
+     and their own heights, which is what their ratios are for. If a row
+     reads badly because one picture is far taller than its neighbour, the
+     fix is the slot: half, third, or a spacer, all of them in admin.
 
-     Runs after the images have their real dimensions. A cached image is
-     already complete and fires no load event, hence the check. */
-  function matchRowHeights() {
-    var grid = document.querySelector('.media-grid');
-    if (!grid) return;
-    var imgs = [].slice.call(grid.querySelectorAll('.project-media img'));
-    if (imgs.length < 2) return;
-
-    function apply() {
-      /* clear first, or a second pass measures the heights it set last time */
-      imgs.forEach(function (im) { im.style.height = ''; });
-      var rows = {};
-      imgs.forEach(function (im) {
-        var r = im.getBoundingClientRect();
-        if (!r.height) return;
-        var key = Math.round(r.top + window.scrollY);
-        (rows[key] = rows[key] || []).push(im);
-      });
-      Object.keys(rows).forEach(function (k) {
-        var row = rows[k];
-        if (row.length < 2) return;
-        var tall = 0;
-        row.forEach(function (im) { tall = Math.max(tall, im.getBoundingClientRect().height); });
-        row.forEach(function (im) { im.style.height = tall + 'px'; });
-      });
-    }
-
-    var left = imgs.filter(function (im) { return !im.complete; }).length;
-    if (!left) { apply(); }
-    else {
-      imgs.forEach(function (im) {
-        if (im.complete) return;
-        var done = function () { if (--left <= 0) apply(); };
-        im.addEventListener('load', done, { once: true });
-        im.addEventListener('error', done, { once: true });
-      });
-    }
-    /* the column width changes with the window, so the row has to be evened
-       up again; the images keep their aspect, only the shared height moves */
-    clearTimeout(matchRowHeights._t);
-    window.removeEventListener('resize', matchRowHeights._r || function () {});
-    matchRowHeights._r = function () {
-      clearTimeout(matchRowHeights._t);
-      matchRowHeights._t = setTimeout(apply, 150);
-    };
-    window.addEventListener('resize', matchRowHeights._r);
-  }
+     Do not bring the matching back without reading this paragraph twice. */
 
   /* ============ THE LIGHTBOX ============
      Click any still on a project page and it opens full size (his ask,

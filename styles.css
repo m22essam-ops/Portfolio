@@ -1077,12 +1077,30 @@ body.has-won .tk-badge{background:var(--ink)}
    tall it is, and every image on every project measured 0px. Block layout,
    intrinsic height, and matchRowHeights() in work.html evens the row up after
    the pictures know their own size. */
+/* EVERY PICTURE STARTS AND ENDS ON THE RAIL (19 Sep 2026, his ask: "I need
+   alignment for everything, like a guide or a ruler in the design").
+
+   It did not. The 80vh ceiling below used to shrink any tall picture and
+   `object-fit:contain` then centred what was left inside a full-width box,
+   so the painted picture floated: measured at 1440, the rail runs 98 to 1338
+   and Liquid Death's stills printed 238 to 1198, 140px inside it on both
+   sides, with Pick a Side at 79 to 136 and Domino's at 82. The heading, the
+   words and the credits were all on 98. Nothing lined up with anything.
+
+   A picture now takes the full width of its slot and its own height from its
+   own ratio. Nothing is cropped, nothing is stretched, no file is touched:
+   the only thing that changed is that the box is no longer bigger than the
+   picture in it.
+
+   THE TRADE, because it is his and it reverses the 12 Sep ceiling: a tall
+   picture in a wide slot is now taller than the screen. The lever is the
+   slot, not the stylesheet. A portrait at half or third comes back under one
+   screen AND keeps the rail, which is a choice he can make per picture in
+   admin. */
 .project-media img{
   display:block;
   width:100%;max-width:100%;
-  height:auto;max-height:80vh;
-  object-fit:contain;
-  margin-inline:auto;
+  height:auto;
   /* LIFT, NOT A FRAME (13 Sep 2026, his ask: the work "looks so white on
      white"). This is `filter: drop-shadow`, deliberately NOT `box-shadow`.
      A box-shadow is drawn around the element's RECTANGLE, so on the
@@ -1099,12 +1117,12 @@ body.has-won .tk-badge{background:var(--ink)}
 }
 /* opaque and rectangular, so the cheap shadow is the right one here */
 .video-wrap{box-shadow:0 8px 22px rgba(11,10,9,.20)}
-/* The film gets the same ceiling, but through its WIDTH, so the 16:9 stays
-   exactly 16:9 instead of being clipped inside a box that is no longer 16:9.
-   padding-top is a percentage of the width, so clamping the width is all it
-   takes. At 900px tall this computes to 1280px and the 1240px column is
-   already inside it: nothing moves on an ordinary screen. */
-.video-wrap{max-width:calc(80vh * 16 / 9);margin-inline:auto}
+/* The film takes the width of its slot, exactly like a picture, and its
+   height from 16:9. It used to carry the 80vh ceiling through its width,
+   which on a short screen made it narrower than the column and centred it:
+   at 700px tall that is a 995px film inside a 1240px rail, 122px adrift on
+   each side. The ratio is held by padding-top, so width is all it needs. */
+.video-wrap{margin-inline:auto}
 .project-media figcaption{
   margin-top:11px;font-size:12px;color:var(--fg-faint);
   font-family:var(--mono);letter-spacing:.1em;text-transform:uppercase;
@@ -2209,15 +2227,13 @@ body.page-about .exp-row{max-width:none}
   display:block;width:100%;padding:0;border:0;background:none;
   cursor:zoom-in;line-height:0;
 }
-/* This rule is more specific than the one that sets the 80vh ceiling, so it
-   has to carry the ceiling too or the stills, which are the only things that
-   are ever tall, would be the one kind of media that ignores it. */
+/* More specific than the rule above, so it has to say the same thing or the
+   stills, which are the only media that is ever tall, would be the one kind
+   that ignores the rail. */
 .project-media .zoomable img{
   display:block;
   width:100%;max-width:100%;
-  height:auto;max-height:80vh;
-  object-fit:contain;
-  margin-inline:auto;
+  height:auto;
   filter:drop-shadow(0 8px 22px rgba(11,10,9,.20));
 }
 /* the affordance. Nothing else on a project page reacts to a pointer, so a
