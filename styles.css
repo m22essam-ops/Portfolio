@@ -792,6 +792,137 @@ body.has-won .tk-badge{background:var(--ink)}
   opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0);
 }
 
+/* ================= THE HEADER: THE NAME IS THE STUB =================
+   His ask, 19 Sep 2026: cut the old bar and replace it with the language of
+   screen 04, the controls sheet. Three passes to get here and both dead ends
+   are worth recording.
+
+   1. A black band with mono type. Wrong, and he said so: the reference is
+      not a black bar, it is paper with an ink outline and hard-shadow
+      buttons.
+   2. The paper stub lying on a full-width RED field, which is literally what
+      the sheet shows. Right language, wrong on a page: "i hated the red
+      strip". On the sheet the red is the backdrop of a specimen; on a work
+      page it is a loud band sitting over somebody's campaign stills.
+
+   So: option C of three shown without red. The name sits in a solid ink
+   plate that runs the full height of the header and is perforated down its
+   right edge, like the stub you tear off a ticket. The controls keep the
+   sheet's own button: paper, ink border, hard offset shadow, and the press.
+   Red survives only where it already lived, on hover and on the page you
+   are on. Every number is the drawn one times 1.1, his ask, one set.
+
+   NOT LIVE. Behind ?nav=ticket, remembered for the tab; ?nav=off restores
+   the ordinary bar.
+   ==================================================================== */
+body.nav-ticket .page-nav{
+  background:var(--bg);backdrop-filter:none;
+  border-bottom:2.2px solid rgba(26,26,24,.16);
+  font-size:13.2px;
+}
+body.nav-ticket .page-nav .wrap{
+  display:flex;align-items:stretch;gap:0;height:auto;min-height:80px;
+}
+
+/* the plate. `align-items:stretch` on the row is what makes it run edge to
+   edge vertically: it is the header's height, not a box inside it. */
+body.nav-ticket .nav-plate{
+  display:flex;align-items:center;gap:9.9px;position:relative;
+  background:var(--pj-ink,#1A1A18);color:var(--pj-paper,#EFE9DC);
+  padding:0 22px;
+}
+/* the tear, down the right edge where the stub comes away. Holes in the
+   plate's own ink, so the paper behind shows through them. */
+body.nav-ticket .nav-plate::after{
+  content:"";position:absolute;right:-6.5px;top:0;bottom:0;width:13px;
+  background:var(--pj-ink,#1A1A18);pointer-events:none;
+  -webkit-mask-image:radial-gradient(circle 6.5px at 13px 13px,transparent 96%,#000 97%);
+          mask-image:radial-gradient(circle 6.5px at 13px 13px,transparent 96%,#000 97%);
+  -webkit-mask-size:13px 26px; mask-size:13px 26px;
+  -webkit-mask-repeat:repeat-y; mask-repeat:repeat-y;
+}
+body.nav-ticket .page-nav .logo{display:flex;align-items:baseline;gap:9.9px}
+body.nav-ticket .page-nav .logo b{
+  font-family:var(--display);font-size:20.9px;letter-spacing:.005em;
+  color:var(--pj-paper,#EFE9DC);
+}
+body.nav-ticket .page-nav .logo span{
+  margin-top:0;font-family:var(--mono);font-size:12.1px;letter-spacing:.14em;
+  color:var(--pj-paper,#EFE9DC);opacity:.6;
+}
+
+/* the controls, straight off the sheet */
+body.nav-ticket .page-nav .links{
+  gap:11px;margin-left:auto;align-items:center;padding-left:26px;
+}
+body.nav-ticket .page-nav .links > a,
+body.nav-ticket .page-nav .links > .nav-item > a{
+  display:inline-flex;align-items:center;gap:8.8px;
+  font-family:var(--mono);font-size:12.65px;letter-spacing:.18em;
+  text-transform:uppercase;opacity:1;
+  background:var(--pj-paper,#EFE9DC);color:var(--pj-ink,#1A1A18);
+  border:2.2px solid var(--pj-ink,#1A1A18);padding:9.9px 14.3px 8.8px;
+  box-shadow:4.4px 4.4px 0 var(--pj-ink,#1A1A18);
+  transition:transform .06s linear,box-shadow .06s linear,background .12s,color .12s;
+}
+body.nav-ticket .page-nav .links > a:hover,
+body.nav-ticket .page-nav .links > .nav-item > a:hover,
+body.nav-ticket .page-nav .links > a.on,
+body.nav-ticket .page-nav .links > .nav-item.is-open > a{
+  background:var(--red);color:var(--pj-paper,#EFE9DC);border-color:var(--pj-ink,#1A1A18);
+}
+body.nav-ticket .page-nav .links > a:active,
+body.nav-ticket .page-nav .links > .nav-item > a:active{
+  transform:translate(4.4px,4.4px);box-shadow:0 0 0 var(--pj-ink,#1A1A18);
+}
+/* Say hi is the primary, the way SEND is on the sheet */
+body.nav-ticket .page-nav .links > a:last-child{
+  background:var(--pj-ink,#1A1A18);color:var(--pj-paper,#EFE9DC);
+}
+body.nav-ticket .page-nav .links > a:last-child:hover{background:var(--red)}
+
+/* the panel is paper with the same ink border and hard shadow. Padding, never
+   margin: the gap is the bridge the pointer crosses to reach it. */
+body.nav-ticket .page-nav .nav-menu{padding-top:15.4px}
+body.nav-ticket .page-nav .nav-menu-in{
+  background:var(--pj-paper,#EFE9DC);
+  border:3.3px solid var(--pj-ink,#1A1A18);
+  box-shadow:5.5px 5.5px 0 var(--pj-ink,#1A1A18);
+}
+body.nav-ticket .page-nav .nav-menu-in::before{background:var(--pj-ink,#1A1A18);top:-7.7px}
+body.nav-ticket .page-nav .nav-menu-in::after{background:var(--pj-paper,#EFE9DC);top:-4.4px}
+body.nav-ticket .page-nav .nav-menu a{
+  font-family:var(--mono);font-size:12.65px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--pj-ink,#1A1A18);opacity:.8;
+  border-bottom:2.2px solid var(--pj-ink,#1A1A18);padding:12.1px 15.4px;
+}
+body.nav-ticket .page-nav .nav-menu a:last-child{border-bottom:0}
+body.nav-ticket .page-nav .nav-menu a:hover,
+body.nav-ticket .page-nav .nav-menu a:focus-visible{
+  background:var(--red);color:var(--pj-paper,#EFE9DC);opacity:1;
+}
+
+/* the phone: the plate keeps its own row and the controls take the next one,
+   full width, so the name never competes with three buttons inside 331px */
+@media (max-width:820px){
+  body.nav-ticket .page-nav .wrap{flex-wrap:wrap;min-height:0}
+  body.nav-ticket .nav-plate{width:100%;padding:11px 15.4px;justify-content:flex-start}
+  body.nav-ticket .nav-plate::after{
+    right:0;left:0;top:auto;bottom:-6.5px;width:auto;height:13px;
+    -webkit-mask-size:26px 13px; mask-size:26px 13px;
+    -webkit-mask-repeat:repeat-x; mask-repeat:repeat-x;
+  }
+  body.nav-ticket .page-nav .links{
+    margin-left:0;padding:17.6px 0 11px;width:100%;gap:8.8px;flex-wrap:wrap;
+  }
+  body.nav-ticket .page-nav .links > a,
+  body.nav-ticket .page-nav .links > .nav-item > a{
+    font-size:11.55px;letter-spacing:.12em;padding:8.8px 11px 7.7px;
+    box-shadow:3.3px 3.3px 0 var(--pj-ink,#1A1A18);
+  }
+  body.nav-ticket .page-nav .logo b{font-size:17.6px}
+}
+
 .page-head{padding:88px 0 44px}
 .page-head h1{font-size:clamp(52px,11vw,138px)}
 .page-head .note{margin:22px 0 0;font-size:12px;color:var(--fg-dim);max-width:60ch;letter-spacing:.12em}

@@ -4,6 +4,41 @@
 (function () {
   var C = window.SITE_CONTENT || {};
 
+  /* ----- THE HEADER IS A TICKET STUB (live 20 Sep 2026) -----
+     The name sits in a solid ink plate that runs the full height of the
+     header and tears down its right edge; the nav is the controls sheet's
+     own buttons on the paper beside it. His pick of three, after a black bar
+     and a red field were both sent back. The look is in styles.css under
+     "THE HEADER: THE NAME IS THE STUB".
+
+     `nav-ticket` is in each page's BODY TAG, not added here, so the header
+     paints as itself in the first frame. A class added by script arrives
+     after the first paint and the old bar flashes.
+
+     ?nav=off is kept as the way back for a look: it strips the class and the
+     tab remembers, so the ordinary bar can be walked through for comparison.
+     ?nav=ticket returns. */
+  try {
+    var navWant = (location.search.match(/[?&]nav=([a-z]+)/) || [])[1];
+    if (navWant === 'off') sessionStorage.setItem('navPlain', '1');
+    else if (navWant === 'ticket') sessionStorage.removeItem('navPlain');
+    if (sessionStorage.getItem('navPlain') === '1') document.body.classList.remove('nav-ticket');
+  } catch (e) { /* storage blocked: the header stays as the markup says */ }
+
+  if (document.body.classList.contains('nav-ticket')) {
+    var bar = document.querySelector('.page-nav .wrap');
+    var logoEl = bar && bar.querySelector('.logo');
+    if (bar && logoEl && !bar.querySelector('.nav-plate')) {
+      /* The logo is MOVED into the plate, never rebuilt, so the lockup
+         builder below, the dropdown, the mail sweep and the current-page
+         marking all keep working on the elements they already know. */
+      var plate = document.createElement('div');
+      plate.className = 'nav-plate';
+      bar.insertBefore(plate, logoEl);
+      plate.appendChild(logoEl);
+    }
+  }
+
   /* ----- top nav -----
      The logo is a two-line lockup: the name in capitals, the job underneath
      and deliberately not bold. Plain text, no red dot: the trailing period
