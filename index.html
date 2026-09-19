@@ -379,24 +379,46 @@ body.scratched .chip.valor .chip-front::after{
 /* it is an <a> now, so it needs to be told to be a block */
 .med{display:block;position:relative;width:100%;aspect-ratio:1;
      border:var(--hair) solid var(--ink);overflow:hidden;background:var(--paper)}
-/* Hovering lifts half the dot screen off, so the photograph underneath comes
-   through. It is the affordance for the click: nothing else on this card
-   reacts to a pointer this way, so the picture reads as the one thing that
-   is a door. Half, not all: a portrait that resolves completely stops being
-   part of the printed ticket. */
+/* HOVER DEVELOPS THE PHOTOGRAPH (19 Sep 2026, his ask: "reveal it in a
+   higher quality with a low opacity red tint").
+
+   It used to fade the dot screen to half and stop there, so what you got was
+   a half-printed picture sitting under half a dot screen: muddier than either
+   one on its own. Now three things move together in half a second, and they
+   are one gesture, not three effects:
+
+     the dot screen lifts almost completely (.06, not 0, so a trace of the
+     print stays and the picture never becomes a stock photograph),
+     the harsh press treatment comes off the photograph underneath, which is
+     what makes it read as higher quality: grayscale and 2.1 contrast are a
+     cheap-print look, and at rest that is the point,
+     and a low red wash lands over it, so the revealed picture still belongs
+     to the red field it is printed on.
+
+   It is still the affordance for the click: nothing else on this card reacts
+   to a pointer. And it is a develop, not a glitch. Three glitches were built
+   here on 15 Sep and he killed all of them. */
 .med canvas{transition:opacity .5s ease}
-.med:hover canvas,.med:focus-visible canvas{opacity:.5}
+.med:hover canvas,.med:focus-visible canvas,.med:focus-within canvas{opacity:.06}
 .med:focus-visible{outline:var(--rule) solid var(--ink);outline-offset:2px}
 .med img,.med canvas{position:absolute;inset:0;width:100%;height:100%;
                      object-fit:cover;display:block}
-/* hover lifts half the dot screen off in half a second, so the photograph
-   under the print shows through. The canvas is what carries the halftone, so
-   fading IT is the whole effect: the image beneath is already there. */
-.med canvas{transition:opacity .5s ease}
-.med:hover canvas,.med:focus-within canvas{opacity:.5}
-/* the fallback if the dot screen cannot run: still cheap print, just not
-   dotted. The canvas is drawn over the top when it succeeds. */
-.med img{filter:grayscale(1) contrast(2.1) brightness(1.06)}
+/* at rest: cheap print, and the fallback if the dot screen cannot run at all.
+   On hover it develops into the real photograph. */
+.med img{filter:grayscale(1) contrast(2.1) brightness(1.06);
+         transition:filter .5s ease}
+.med:hover img,.med:focus-within img{filter:grayscale(0) contrast(1.04) brightness(1.02)}
+/* THE RED WASH. A pseudo-element, so it needs no markup and cannot be hit by
+   a pointer. It is painted after the canvas because it comes after it in the
+   box's own paint order, and it is the field's red, not a new colour. */
+.med::after{content:"";position:absolute;inset:0;background:var(--red);
+            opacity:0;pointer-events:none;transition:opacity .5s ease}
+.med:hover::after,.med:focus-within::after{opacity:.18}
+/* Asked for less motion: the picture still develops, it just does not animate
+   there. The reveal is information, the half-second is decoration. */
+@media (prefers-reduced-motion:reduce){
+  .med canvas,.med img,.med::after{transition:none}
+}
 
 /* ---- 1. the rigid internal grid ----
    Every line in this column is a grid item starting in the same column, so
