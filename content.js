@@ -1347,6 +1347,7 @@ window.SITE_CONTENT = {
   about: {
     label: "Don't take it personally (it seems so)",
     heading: "The part where I talk about myself...",
+    line: "Mohammed Essam, senior copywriter. English and Arabic. Cairo, then Dubai, now Madrid.",
     portrait: "portrait-studio.jpg",
     portraits: [
       "portrait-studio.jpg",
@@ -1459,6 +1460,9 @@ window.SITE_CONTENT = {
   contact: {
     label: "03 — Get in touch",
     ctaUrl: "mailto:m22essam@gmail.com",
+    sameAs: [
+      "https://www.youtube.com/@ESAMiat"
+    ],
     mailTemplates: [
       {
         subject: "Opportunity at [AGENCY THAT PAYS ON TIME]",

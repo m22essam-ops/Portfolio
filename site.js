@@ -607,8 +607,17 @@
     var C = window.SITE_CONTENT || {};
     var A = C.about || {};
     var K = C.contact || {};
+    /* Where else he exists. The contact rows supply most of it; `sameAs` in
+       content.js is for the accounts that are his but are not a way to reach
+       him, the YouTube channel his films are hosted on being the one that
+       matters: it publishes his work under a different spelling of his name,
+       and naming it here is how a search engine is told they are one person.
+       The mail, the WhatsApp, the CV and the calendar are dropped: they are
+       doors, not profiles. */
     var profiles = (K.links || []).map(function (l) { return l.url || ''; })
-      .filter(function (u) { return /^https?:/.test(u) && !/drive\.google|wa\.me|calendly/.test(u); });
+      .concat(K.sameAs || [])
+      .filter(function (u) { return /^https?:/.test(u) && !/drive\.google|wa\.me|calendly/.test(u); })
+      .filter(function (u, i, a) { return a.indexOf(u) === i; });
 
     var person = {
       '@type': 'Person',
@@ -618,6 +627,7 @@
          so the ones a person might search are listed rather than hidden. */
       alternateName: ['Mohamed Essam', 'Mohamed Essameldeen'],
       jobTitle: 'Copywriter',
+      description: (A.line || '').trim() || undefined,
       url: SITE + '/',
       email: (String(K.ctaUrl || '').match(/mailto:([^?]+)/) || [])[1] || undefined,
       address: { '@type': 'PostalAddress', addressLocality: 'Madrid', addressCountry: 'ES' },

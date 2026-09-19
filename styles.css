@@ -1730,6 +1730,15 @@ body.page-about { --bg:#F1E4DC; --well:#E4D2C6; --nav-bg:#F1E4DCf2; }
    heading is set a size down. */
 body.page-about .ab-head{padding-left:0;padding-right:0}
 body.page-about .ab-head h1{font-size:clamp(38px,5vw,76px);line-height:1;max-width:14em}
+/* The plain line under the heading: the system voice, the register the
+   serial and the small print are in, because it is a label and not another
+   joke. Big enough to read at a glance and to count as real text, quiet
+   enough that the heading still goes first. */
+.ab-line{
+  font-family:var(--mono);font-size:clamp(15px,1.5vw,18px);
+  letter-spacing:.06em;text-transform:uppercase;
+  color:var(--fg-faint);margin:14px 0 0;max-width:46ch;line-height:1.35;
+}
 
 /* ---------------- the skyscraper ----------------
    An IAB wide skyscraper, 160px wide. Taller than the standard 600 at his

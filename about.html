@@ -70,6 +70,14 @@
 
       <header class="page-head ab-head">
         <h1 id="aboutHeading"></h1>
+        <!-- WHAT HE IS, IN PLAIN WORDS (19 Sep 2026).
+             The page opens on a joke and then a story about a bicycle, so
+             nothing on it ever said the job title, the languages or the city.
+             A person skimming had to read four paragraphs to find out, and a
+             search engine reads visible words far more seriously than it
+             reads a tag. One line, in the system voice, and it is a field in
+             admin like everything else: empty it and it disappears. -->
+        <p class="ab-line" id="aboutLine" hidden></p>
       </header>
 
       <div class="about-grid" id="abGrid">
@@ -157,6 +165,10 @@
 
   var heading = A.heading || 'Who I am.';
   document.getElementById('aboutHeading').textContent = heading;
+
+  var lineEl = document.getElementById('aboutLine');
+  var line = String(A.line == null ? '' : A.line).trim();
+  if (line) { lineEl.textContent = line; lineEl.hidden = false; }
 
   var portrait = document.getElementById('aboutPortrait');
   /* ---- the portrait, and the rest of the roll ----
