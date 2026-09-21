@@ -20,9 +20,20 @@
      ?nav=ticket returns. */
   try {
     var navWant = (location.search.match(/[?&]nav=([a-z]+)/) || [])[1];
-    if (navWant === 'off') sessionStorage.setItem('navPlain', '1');
-    else if (navWant === 'ticket') sessionStorage.removeItem('navPlain');
-    if (sessionStorage.getItem('navPlain') === '1') document.body.classList.remove('nav-ticket');
+    if (navWant === 'strip') sessionStorage.removeItem('navLook');   /* the default */
+    else if (navWant) sessionStorage.setItem('navLook', navWant);
+    var look = sessionStorage.getItem('navLook');
+    /* ?nav=off the ordinary bar, ?nav=plate the full-height block, ?nav=tab
+       the paper header with the torn name tab, ?nav=stripplain this strip
+       with the name straight on the ink. All four are ways BACK from what
+       ships; nothing here is needed for the default to draw. */
+    if (look === 'off') document.body.classList.remove('nav-ticket', 'nav-strip');
+    if (look === 'plate') document.body.classList.remove('nav-strip');
+    if (look === 'tab') {
+      document.body.classList.remove('nav-strip');
+      document.body.classList.add('nav-tab');
+    }
+    if (look === 'stripplain') document.body.classList.add('nav-bare');
   } catch (e) { /* storage blocked: the header stays as the markup says */ }
 
   if (document.body.classList.contains('nav-ticket')) {

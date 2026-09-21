@@ -841,6 +841,132 @@ body.nav-ticket .nav-plate::after{
   -webkit-mask-size:13px 26px; mask-size:13px 26px;
   -webkit-mask-repeat:repeat-y; mask-repeat:repeat-y;
 }
+/* ---- OPTION C, HIS PICK (21 Sep 2026): THE WHOLE STRIP IS INK ----
+   "make the whole strip black and the boxes are white", with the torn edge
+   kept. So the band is the ticket's ink from edge to edge, the name is set
+   straight on it in paper, the nav becomes paper boxes lifted off the black,
+   and the perforation runs along the bottom of the strip, which is where a
+   ticket tears.
+
+   Behind ?nav=strip while he looks at it; ?nav=plate is the block that is
+   live today and ?nav=tab is the trimmed tab. */
+body.nav-ticket.nav-strip .page-nav{
+  background:var(--pj-ink,#1A1A18);
+  border-bottom:0;
+  position:sticky;
+}
+body.nav-ticket.nav-strip .page-nav .wrap{min-height:80px}
+/* the tear, along the bottom, in the strip's own ink */
+body.nav-ticket.nav-strip .page-nav::after{
+  content:"";position:absolute;left:0;right:0;bottom:-11px;height:11px;
+  background:var(--pj-ink,#1A1A18);pointer-events:none;
+  -webkit-mask-image:radial-gradient(circle 5.5px at 11px 11px,transparent 96%,#000 97%);
+          mask-image:radial-gradient(circle 5.5px at 11px 11px,transparent 96%,#000 97%);
+  -webkit-mask-size:22px 11px; mask-size:22px 11px;
+  -webkit-mask-repeat:repeat-x; mask-repeat:repeat-x;
+}
+/* THE NAME IN A BOX (his ask, 21 Sep). It is a paper box like the controls,
+   so the whole strip is white boxes on ink, but it is torn down both ends
+   and it carries no shadow, which is what keeps it the object rather than a
+   fourth button. ?nav=strip-plain sets the name straight on the ink again. */
+body.nav-ticket.nav-strip .nav-plate{
+  background:none;align-self:center;position:relative;
+  padding:11px 20px 10px;
+}
+body.nav-ticket.nav-strip .nav-plate::before{
+  content:"";position:absolute;inset:0;z-index:0;
+  background:var(--pj-paper,#EFE9DC);
+  --perfR:7px;--perfP:19px;
+  -webkit-mask-image:
+    radial-gradient(circle var(--perfR) at left center,transparent 96%,#000 97%),
+    radial-gradient(circle var(--perfR) at right center,transparent 96%,#000 97%);
+          mask-image:
+    radial-gradient(circle var(--perfR) at left center,transparent 96%,#000 97%),
+    radial-gradient(circle var(--perfR) at right center,transparent 96%,#000 97%);
+  -webkit-mask-size:100% var(--perfP);  mask-size:100% var(--perfP);
+  -webkit-mask-repeat:repeat-y;         mask-repeat:repeat-y;
+  -webkit-mask-composite:source-in;     mask-composite:intersect;
+}
+body.nav-ticket.nav-strip .nav-plate::after{display:none}
+body.nav-ticket.nav-strip .nav-plate > *{position:relative;z-index:1}
+body.nav-ticket.nav-strip .page-nav .logo b{color:var(--pj-ink,#1A1A18);font-size:20.9px}
+body.nav-ticket.nav-strip .page-nav .logo span{color:var(--pj-ink,#1A1A18);opacity:.55}
+/* the version without the box, kept for comparison */
+body.nav-ticket.nav-strip.nav-bare .nav-plate{padding:0}
+body.nav-ticket.nav-strip.nav-bare .nav-plate::before{display:none}
+body.nav-ticket.nav-strip.nav-bare .page-nav .logo b{color:var(--pj-paper,#EFE9DC)}
+body.nav-ticket.nav-strip.nav-bare .page-nav .logo span{color:var(--pj-paper,#EFE9DC);opacity:.55}
+/* the controls: paper boxes, lifted off the black rather than outlined on it */
+body.nav-ticket.nav-strip .page-nav .links > a,
+body.nav-ticket.nav-strip .page-nav .links > .nav-item > a{
+  background:var(--pj-paper,#EFE9DC);color:var(--pj-ink,#1A1A18);
+  border-color:var(--pj-paper,#EFE9DC);
+  box-shadow:4.4px 4.4px 0 rgba(0,0,0,.55);
+}
+body.nav-ticket.nav-strip .page-nav .links > a:hover,
+body.nav-ticket.nav-strip .page-nav .links > .nav-item > a:hover,
+body.nav-ticket.nav-strip .page-nav .links > a.on,
+body.nav-ticket.nav-strip .page-nav .links > .nav-item.is-open > a{
+  background:var(--red);color:var(--pj-paper,#EFE9DC);border-color:var(--red);
+}
+/* Say hi reverses: on a black strip the outlined one is the odd one out, and
+   the odd one out is the primary */
+body.nav-ticket.nav-strip .page-nav .links > a:last-child{
+  background:transparent;color:var(--pj-paper,#EFE9DC);
+  border-color:var(--pj-paper,#EFE9DC);box-shadow:none;
+}
+body.nav-ticket.nav-strip .page-nav .links > a:last-child:hover{
+  background:var(--red);border-color:var(--red);color:var(--pj-paper,#EFE9DC);
+}
+/* the dropdown clears the tear and keeps the paper panel */
+body.nav-ticket.nav-strip .page-nav .nav-menu{padding-top:26px}
+@media (max-width:820px){
+  body.nav-ticket.nav-strip .page-nav .wrap{min-height:0}
+  body.nav-ticket.nav-strip .nav-plate{width:100%;padding:12px 0 0}
+}
+
+/* ---- OPTION A, HIS PICK (21 Sep 2026): THE NAME IS A TAB ----
+   "trim the black box and put my name in a suitable tab like this one ..
+   but keep the torn edges". So the plate stops being a floor-to-ceiling
+   block and becomes a control the size of the words, in the same paper,
+   border and hard shadow as the nav beside it, and the perforation moves
+   onto the tab itself: torn down BOTH ends, the way the strip on his sheet
+   is torn at both ends.
+
+   Behind ?nav=tab while he looks at it. ?nav=plate goes back to the block.
+
+   The mask sits on a ::before layer again, never on the tab: a mask clips
+   everything inside the element, and the name is inside it. */
+body.nav-ticket.nav-tab .nav-plate{
+  background:none;color:var(--pj-ink,#1A1A18);
+  align-self:center;position:relative;
+  /* the same box as the controls beside it: their padding plus their border */
+  padding:12.1px 18px 11px;min-height:43px;align-items:center;
+}
+body.nav-ticket.nav-tab .nav-plate::before{
+  content:"";position:absolute;inset:0;z-index:0;
+  background:var(--pj-paper,#EFE9DC);border:2.2px solid var(--pj-ink,#1A1A18);
+  box-shadow:4.4px 4.4px 0 var(--pj-ink,#1A1A18);
+  --perfR:7px;--perfP:19px;
+  -webkit-mask-image:
+    radial-gradient(circle var(--perfR) at left center,transparent 96%,#000 97%),
+    radial-gradient(circle var(--perfR) at right center,transparent 96%,#000 97%);
+          mask-image:
+    radial-gradient(circle var(--perfR) at left center,transparent 96%,#000 97%),
+    radial-gradient(circle var(--perfR) at right center,transparent 96%,#000 97%);
+  -webkit-mask-size:100% var(--perfP);  mask-size:100% var(--perfP);
+  -webkit-mask-repeat:repeat-y;         mask-repeat:repeat-y;
+  -webkit-mask-composite:source-in;     mask-composite:intersect;
+}
+/* the old full-height tear belongs to the block, not to the tab */
+body.nav-ticket.nav-tab .nav-plate::after{display:none}
+body.nav-ticket.nav-tab .nav-plate > *{position:relative;z-index:1}
+body.nav-ticket.nav-tab .page-nav .logo b{color:var(--pj-ink,#1A1A18);font-size:19px}
+body.nav-ticket.nav-tab .page-nav .logo span{color:var(--pj-ink,#1A1A18);opacity:.55}
+@media (max-width:820px){
+  body.nav-ticket.nav-tab .nav-plate{width:auto;padding:10px 14px 9px;min-height:0}
+}
+
 body.nav-ticket .page-nav .logo{display:flex;align-items:baseline;gap:9.9px}
 body.nav-ticket .page-nav .logo b{
   font-family:var(--display);font-size:20.9px;letter-spacing:.005em;
