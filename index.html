@@ -408,16 +408,14 @@ body.scratched .chip.valor .chip-front::after{
 .med img{filter:grayscale(1) contrast(2.1) brightness(1.06);
          transition:filter .5s ease}
 .med:hover img,.med:focus-within img{filter:grayscale(0) contrast(1.04) brightness(1.02)}
-/* THE RED WASH. A pseudo-element, so it needs no markup and cannot be hit by
-   a pointer. It is painted after the canvas because it comes after it in the
-   box's own paint order, and it is the field's red, not a new colour. */
-.med::after{content:"";position:absolute;inset:0;background:var(--red);
-            opacity:0;pointer-events:none;transition:opacity .5s ease}
-.med:hover::after,.med:focus-within::after{opacity:.18}
+/* NO WASH. A red tint was added on 19 Sep at his ask and killed on 21 Sep:
+   "i hate the color effect on my image in the home". The reveal is the
+   effect. Nothing is tinted, nothing is coloured, the picture simply
+   develops out of the print. */
 /* Asked for less motion: the picture still develops, it just does not animate
    there. The reveal is information, the half-second is decoration. */
 @media (prefers-reduced-motion:reduce){
-  .med canvas,.med img,.med::after{transition:none}
+  .med canvas,.med img{transition:none}
 }
 
 /* ---- 1. the rigid internal grid ----
