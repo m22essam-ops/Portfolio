@@ -262,7 +262,7 @@ window.SITE_CONTENT = {
         client: "Get Out The Vote",
         category: "Miami Ad School",
         year: "2026",
-        image: "Sticker.webp",
+        image: "w/Sticker.webp",
         alt: "",
         sticker: "sides are the main",
         tagline: "The only ballot with a drive-thru.",
@@ -302,13 +302,13 @@ window.SITE_CONTENT = {
           },
           {
             type: "image",
-            src: "app.webp",
+            src: "w/app.webp",
             caption: "",
             layout: "half"
           },
           {
             type: "image",
-            src: "Sticker.webp",
+            src: "w/Sticker.webp",
             caption: "",
             layout: "half"
           },
@@ -402,7 +402,7 @@ window.SITE_CONTENT = {
         client: "Babyshop",
         category: "Digital activation",
         year: "2025",
-        image: "babyshop-ezgif.com-video-to-gif-converter (1).gif",
+        image: "w/babyshop-ezgif.com-video-to-gif-converter (1).webp",
         alt: "Babyshop, Make Their First Words Discount",
         sticker: "Concept only",
         tagline: "Every toddler keysmash is a promo code.",
@@ -623,7 +623,7 @@ window.SITE_CONTENT = {
         client: "Tuborg",
         category: "D&AD brief",
         year: "2026",
-        image: "i_need_it_in_seconds_max_to-ezgif.com-video-to-gif-converter.gif",
+        image: "w/i_need_it_in_seconds_max_to-ezgif.com-video-to-gif-converter.webp",
         alt: "Tuborg Pop the Pressure",
         sticker: "D&AD brief",
         tagline: "Thousands of balloons, one Glastonbury set.",
@@ -886,7 +886,7 @@ window.SITE_CONTENT = {
         media: [
           {
             type: "image",
-            src: "live/the-quarantine-game-bnk-alhthr-01.gif",
+            src: "w/live/the-quarantine-game-bnk-alhthr-01.webp",
             caption: ""
           },
           {
@@ -916,7 +916,7 @@ window.SITE_CONTENT = {
           },
           {
             type: "image",
-            src: "live/the-quarantine-game-bnk-alhthr-07.gif",
+            src: "w/live/the-quarantine-game-bnk-alhthr-07.webp",
             caption: ""
           },
           {
