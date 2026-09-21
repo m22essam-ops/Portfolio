@@ -160,11 +160,11 @@ window.SITE_CONTENT = {
           {
             type: "video",
             src: "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/E_M31UfOGqI?si=N4DgvPjoWDW2Hkck\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+            caption: "",
             title: "Rivan Tower - The Hotel Is Yours",
             poster: "https://i.ytimg.com/vi/E_M31UfOGqI/maxresdefault.jpg",
             published: "2026-08-29T07:53:32-07:00",
-            duration: "PT1M36S",
-            caption: ""
+            duration: "PT1M36S"
           }
         ],
         credits: [
@@ -216,19 +216,17 @@ window.SITE_CONTENT = {
         sticker: "Thirsty for fame",
         tagline: "The thirst was the easy one.",
         story: [
-          "Liquid Death tastes good enough that murdering your thirst stops feeling like a metaphor.",
-          "Two radio spots about what happens in the ninety seconds after. A first date. A middle seat. Same escalation both times.",
-          "Legal has asked us to point out that thirst is the only item on the list you're allowed to do."
+          "Once you finish murdering your thirst with a tallboy of ice-cold liquid death, you like it so much that you may start asking what to murder next."
         ],
         media: [
           {
             type: "video",
             src: "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/q2Wa7VXfJeY?si=mNmOs_qwjPKpUsbc\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+            caption: "",
             title: "Liquid Death - Murder at the dinner date",
             poster: "https://i.ytimg.com/vi/q2Wa7VXfJeY/maxresdefault.jpg",
             published: "2026-08-30T14:52:41-07:00",
-            duration: "PT53S",
-            caption: ""
+            duration: "PT53S"
           },
           {
             type: "image",
@@ -251,7 +249,16 @@ window.SITE_CONTENT = {
             caption: ""
           }
         ],
-        credits: [],
+        credits: [
+          {
+            role: "Copywriter ",
+            name: "Mohammed Essam"
+          },
+          {
+            role: "Client",
+            name: "Miami Ad School Madrid \\ Liquid Death"
+          }
+        ],
         next: {},
         "draft": false,
         "ran": false
@@ -278,11 +285,11 @@ window.SITE_CONTENT = {
           {
             type: "video",
             src: "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/IQvnk5GbEuc?si=f6Yjrx5A70InUNVN\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+            caption: "",
             title: "Get Out The Vote: PICK A SIDE",
             poster: "https://i.ytimg.com/vi/IQvnk5GbEuc/maxresdefault.jpg",
             published: "2026-09-12T14:41:20-07:00",
-            duration: "PT1M41S",
-            caption: ""
+            duration: "PT1M41S"
           },
           {
             type: "spacer",
@@ -353,11 +360,11 @@ window.SITE_CONTENT = {
           {
             type: "video",
             src: "<div style=\"padding:56.25% 0 0 0;position:relative;\"><iframe src=\"https://player.vimeo.com/video/1205222256?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;\" title=\"Dominos - The True Color\"></iframe></div>",
+            caption: "",
             title: "Dominos - The True Color",
             poster: "https://i.vimeocdn.com/video/2195223036-f90c511334ade74191115acb512ed7960da40380356fea2fe02016b778ebc4b8-d_295x166?region=us",
             published: "2026-06-28T07:54:28Z",
-            duration: "PT1M20S",
-            caption: ""
+            duration: "PT1M20S"
           },
           {
             type: "image",
@@ -640,11 +647,11 @@ window.SITE_CONTENT = {
           {
             type: "video",
             src: "<div style=\"padding:55.21% 0 0 0;position:relative;\"><iframe src=\"https://player.vimeo.com/video/1218494179?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;\" title=\"Tuborg - Pop The Pressure\"></iframe></div>",
+            caption: "",
             title: "Tuborg - Pop The Pressure",
             poster: "https://i.vimeocdn.com/video/2190446325-41acaea73ad0c587a4bd3bcc2c6c5d93ef07bb9e0961fdb5e1a562a63805fe51-d_295x166?region=us",
             published: "2026-08-15T05:01:07Z",
-            duration: "PT1M23S",
-            caption: ""
+            duration: "PT1M23S"
           },
           {
             type: "image",
@@ -840,11 +847,11 @@ window.SITE_CONTENT = {
           {
             type: "video",
             src: "<div style=\"padding:56.25% 0 0 0;position:relative;\"><iframe src=\"https://player.vimeo.com/video/1228327377?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;\" title=\"Canesten - Let's Call It what It Is\"></iframe></div><script src=\"https://player.vimeo.com/api/player.js\"></script>",
+            caption: "",
             title: "Canesten - Let's Call It what It Is",
             poster: "https://i.vimeocdn.com/video/2202752981-3ce27903d12bd82f90e6c8ffbb4ddb67f89c29cd3a66c2139942269feb2a5744-d_295x166?region=us",
             published: "2026-09-19T06:56:26Z",
-            duration: "PT1M27S",
-            caption: ""
+            duration: "PT1M27S"
           }
         ],
         credits: [
@@ -955,8 +962,7 @@ window.SITE_CONTENT = {
         tagline: "Three riddles, three villages, one bag of cement.",
         story: [
           "Getting into the Ramadan competition in Egypt as a cement brand is hard. Most people reach for lighter brands that month, so we went the other way.",
-          "We told the message in a folkloric style: three riddles set in three Egyptian villages, each one solved with a Momtaz Cement product.",
-          "We built them in layers, and people received them in a concentrated way."
+          "We told the message in a folkloric style: three riddles set in three Egyptian villages, each one solved with a Momtaz Cement product."
         ],
         media: [
           {
@@ -1061,11 +1067,11 @@ window.SITE_CONTENT = {
           {
             type: "video",
             src: "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/RjZs44nBovY?si=vMAh3oBEyziNxP17\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+            caption: "",
             title: "11 modon actors too seriously 1",
             poster: "https://i.ytimg.com/vi/RjZs44nBovY/maxresdefault.jpg",
             published: "2026-08-29T07:51:12-07:00",
-            duration: "PT1M45S",
-            caption: ""
+            duration: "PT1M45S"
           }
         ],
         credits: [
@@ -1149,11 +1155,11 @@ window.SITE_CONTENT = {
           {
             type: "video",
             src: "https://player.vimeo.com/video/897539307?h=de26affeff&loop=1&title=0&byline=0&portrait=0",
-            title: "Red-Expo - \u0645\u0641\u062a\u0627\u062d\u0643 \u0645\u0639\u0627\u0643",
+            caption: "",
+            title: "Red-Expo - مفتاحك معاك",
             poster: "https://i.vimeocdn.com/video/1889510597-57338576337d49ee60c3319716b1759a462e985eabb2b092ca1791d8920cfba0-d_295x166?region=us",
             published: "2023-12-24T05:32:32Z",
-            duration: "PT46S",
-            caption: ""
+            duration: "PT46S"
           },
           {
             type: "image",
@@ -1379,15 +1385,14 @@ window.SITE_CONTENT = {
   about: {
     label: "Don't take it personally (it seems so)",
     heading: "The part where I talk about myself...",
-    line: "Mohammed Essam, senior copywriter. English and Arabic. Cairo, then Dubai, now Madrid.",
     portrait: "portrait-studio.jpg",
     portraits: [
       "portrait-studio.jpg",
       "9f2ce999-469a-4e3c-b379-5856eccb8354.JPG",
       "about-photo.jpg",
       "50da4f9f-3782-490a-89a1-97954ff5833c.JPG",
-      "w/IMG_5550.jpg",
-      "w/C065B224-605D-4FA3-A1AA-0702A3FB0095.jpg"
+      "IMG_5550.JPG",
+      "C065B224-605D-4FA3-A1AA-0702A3FB0095.JPG"
     ],
     portraitAlt: "Mohammed Essam",
     paragraphs: [
@@ -1464,7 +1469,8 @@ window.SITE_CONTENT = {
       head: "Nobody will see this.",
       body: "Maximum reach: 1 person.",
       cta: "Upload yours"
-    }
+    },
+    line: "Mohammed Essam, senior copywriter. English and Arabic. Cairo, then Dubai, now Madrid."
   },
   manipulating: {
     label: "The skill you clicked",
@@ -1492,9 +1498,6 @@ window.SITE_CONTENT = {
   contact: {
     label: "03 — Get in touch",
     ctaUrl: "mailto:m22essam@gmail.com",
-    sameAs: [
-      "https://www.youtube.com/@ESAMiat"
-    ],
     mailTemplates: [
       {
         subject: "Opportunity at [AGENCY THAT PAYS ON TIME]",
@@ -1535,6 +1538,9 @@ window.SITE_CONTENT = {
         label: "Vimeo",
         url: "https://vimeo.com/essam93"
       }
+    ],
+    sameAs: [
+      "https://www.youtube.com/@ESAMiat"
     ]
   },
   footer: {
