@@ -256,6 +256,47 @@
             return (c.role || '') + ': ' + (c.name || '');
           }).join('; ') || undefined
         });
+
+        /* ---- THE FILMS, NAMED FOR GOOGLE (21 Sep 2026) ----
+           Search Console noticed a video on a project page and said so. A
+           film that is only an iframe is a black box; described properly it
+           can turn up in Google's video results, which is a way in that has
+           nothing to do with ranking for his name.
+
+           Google wants four things per film and will not show it without
+           them: a name, a thumbnail, a date and a description. They live on
+           the media item in content.js (title, poster, published, duration),
+           fetched once from YouTube and Vimeo, and they are editable in
+           admin like everything else.
+
+           A film with no thumbnail or no date is SKIPPED rather than
+           guessed at. That is the sixteen Adobe-hosted films: Adobe publishes
+           no page and no poster for them, so they stay invisible here until
+           they are re-hosted. Inventing an upload date for them would be
+           marking up something we do not know. */
+        (p.media || []).forEach(function (m) {
+          if (!m || m.type !== 'video' || !m.poster || !m.published) return;
+          var emb = String(m.src || '');
+          var got = /<iframe[^>]*\bsrc=["']([^"']+)["']/i.exec(emb);
+          if (got) {
+            var dec = document.createElement('textarea');
+            dec.innerHTML = got[1];
+            emb = dec.value;
+          }
+          window.addSchema({
+            '@context': 'https://schema.org',
+            '@type': 'VideoObject',
+            name: m.title || m.caption || p.title,
+            description: m.caption || p.tagline || line || p.title,
+            thumbnailUrl: m.poster,
+            uploadDate: m.published,
+            duration: m.duration || undefined,
+            embedUrl: /^https?:/.test(emb) ? emb : undefined,
+            /* the film is part of the case study, not a page of its own */
+            isPartOf: { '@type': 'CreativeWork', '@id': url },
+            creator: window.__person || undefined
+          });
+        });
       }
     }
 

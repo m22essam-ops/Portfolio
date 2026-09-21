@@ -160,6 +160,10 @@ window.SITE_CONTENT = {
           {
             type: "video",
             src: "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/E_M31UfOGqI?si=N4DgvPjoWDW2Hkck\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+            title: "Rivan Tower - The Hotel Is Yours",
+            poster: "https://i.ytimg.com/vi/E_M31UfOGqI/maxresdefault.jpg",
+            published: "2026-08-29",
+            duration: "PT1M36S",
             caption: ""
           }
         ],
@@ -220,6 +224,10 @@ window.SITE_CONTENT = {
           {
             type: "video",
             src: "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/q2Wa7VXfJeY?si=mNmOs_qwjPKpUsbc\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+            title: "Liquid Death - Murder at the dinner date",
+            poster: "https://i.ytimg.com/vi/q2Wa7VXfJeY/maxresdefault.jpg",
+            published: "2026-08-30",
+            duration: "PT53S",
             caption: ""
           },
           {
@@ -270,6 +278,10 @@ window.SITE_CONTENT = {
           {
             type: "video",
             src: "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/IQvnk5GbEuc?si=f6Yjrx5A70InUNVN\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+            title: "Get Out The Vote: PICK A SIDE",
+            poster: "https://i.ytimg.com/vi/IQvnk5GbEuc/maxresdefault.jpg",
+            published: "2026-09-12",
+            duration: "PT1M41S",
             caption: ""
           },
           {
@@ -341,6 +353,10 @@ window.SITE_CONTENT = {
           {
             type: "video",
             src: "<div style=\"padding:56.25% 0 0 0;position:relative;\"><iframe src=\"https://player.vimeo.com/video/1205222256?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;\" title=\"Dominos - The True Color\"></iframe></div>",
+            title: "Dominos - The True Color",
+            poster: "https://i.vimeocdn.com/video/2195223036-f90c511334ade74191115acb512ed7960da40380356fea2fe02016b778ebc4b8-d_295x166?region=us",
+            published: "2026-06-28",
+            duration: "PT1M20S",
             caption: ""
           },
           {
@@ -624,6 +640,10 @@ window.SITE_CONTENT = {
           {
             type: "video",
             src: "<div style=\"padding:55.21% 0 0 0;position:relative;\"><iframe src=\"https://player.vimeo.com/video/1218494179?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;\" title=\"Tuborg - Pop The Pressure\"></iframe></div>",
+            title: "Tuborg - Pop The Pressure",
+            poster: "https://i.vimeocdn.com/video/2190446325-41acaea73ad0c587a4bd3bcc2c6c5d93ef07bb9e0961fdb5e1a562a63805fe51-d_295x166?region=us",
+            published: "2026-08-15",
+            duration: "PT1M23S",
             caption: ""
           },
           {
@@ -820,6 +840,10 @@ window.SITE_CONTENT = {
           {
             type: "video",
             src: "<div style=\"padding:56.25% 0 0 0;position:relative;\"><iframe src=\"https://player.vimeo.com/video/1228327377?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;\" title=\"Canesten - Let's Call It what It Is\"></iframe></div><script src=\"https://player.vimeo.com/api/player.js\"></script>",
+            title: "Canesten - Let's Call It what It Is",
+            poster: "https://i.vimeocdn.com/video/2202752981-3ce27903d12bd82f90e6c8ffbb4ddb67f89c29cd3a66c2139942269feb2a5744-d_295x166?region=us",
+            published: "2026-09-19",
+            duration: "PT1M27S",
             caption: ""
           }
         ],
@@ -1037,6 +1061,10 @@ window.SITE_CONTENT = {
           {
             type: "video",
             src: "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/RjZs44nBovY?si=vMAh3oBEyziNxP17\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+            title: "11 modon actors too seriously 1",
+            poster: "https://i.ytimg.com/vi/RjZs44nBovY/maxresdefault.jpg",
+            published: "2026-08-29",
+            duration: "PT1M45S",
             caption: ""
           }
         ],
@@ -1121,6 +1149,10 @@ window.SITE_CONTENT = {
           {
             type: "video",
             src: "https://player.vimeo.com/video/897539307?h=de26affeff&loop=1&title=0&byline=0&portrait=0",
+            title: "Red-Expo - \u0645\u0641\u062a\u0627\u062d\u0643 \u0645\u0639\u0627\u0643",
+            poster: "https://i.vimeocdn.com/video/1889510597-57338576337d49ee60c3319716b1759a462e985eabb2b092ca1791d8920cfba0-d_295x166?region=us",
+            published: "2023-12-24",
+            duration: "PT46S",
             caption: ""
           },
           {
