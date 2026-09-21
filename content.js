@@ -211,7 +211,7 @@ window.SITE_CONTENT = {
         client: "Liquid Death",
         category: "Radio",
         year: "2026",
-        image: "coverr.jpg",
+        image: "w/coverr.jpg",
         alt: "",
         sticker: "Thirsty for fame",
         tagline: "The thirst was the easy one.",
@@ -232,22 +232,22 @@ window.SITE_CONTENT = {
           },
           {
             type: "image",
-            src: "Put_in_OOH_mockup_2K_20260911150112.jpeg",
+            src: "w/Put_in_OOH_mockup_2K_20260911150112.jpg",
             caption: ""
           },
           {
             type: "image",
-            src: "Gemini_Generated_Image_celimzcelimzceli.jpg",
+            src: "w/Gemini_Generated_Image_celimzcelimzceli.jpg",
             caption: ""
           },
           {
             type: "image",
-            src: "Put_in_suitable_mockup_2K_20260911150405.jpeg",
+            src: "w/Put_in_suitable_mockup_2K_20260911150405.jpg",
             caption: ""
           },
           {
             type: "image",
-            src: "Lawyers_scribbling_on_paper_2K_20260911112601.jpg",
+            src: "w/Lawyers_scribbling_on_paper_2K_20260911112601.jpg",
             caption: ""
           }
         ],
@@ -347,7 +347,7 @@ window.SITE_CONTENT = {
         media: [
           {
             type: "image",
-            src: "art board - 2.jpg",
+            src: "w/art board - 2.jpg",
             caption: ""
           },
           {
@@ -373,7 +373,7 @@ window.SITE_CONTENT = {
           },
           {
             type: "image",
-            src: "Screen 35ML Mockup.jpg",
+            src: "w/Screen 35ML Mockup.jpg",
             caption: "",
             layout: "two-thirds"
           }
@@ -660,7 +660,7 @@ window.SITE_CONTENT = {
           },
           {
             type: "image",
-            src: "Tuborg wall  mockup.png",
+            src: "w/Tuborg wall  mockup.jpg",
             caption: "",
             layout: "half"
           },
@@ -672,37 +672,37 @@ window.SITE_CONTENT = {
           },
           {
             type: "image",
-            src: "tuborg 1.jpg",
+            src: "w/tuborg 1.jpg",
             caption: "",
             layout: "third"
           },
           {
             type: "image",
-            src: "tuborg 2.jpg",
+            src: "w/tuborg 2.jpg",
             caption: "",
             layout: "third"
           },
           {
             type: "image",
-            src: "tuborg 3.jpg",
+            src: "w/tuborg 3.jpg",
             caption: "",
             layout: "third"
           },
           {
             type: "image",
-            src: "tuborg 4.jpg",
+            src: "w/tuborg 4.jpg",
             caption: "",
             layout: "third"
           },
           {
             type: "image",
-            src: "tuborg 5.jpg",
+            src: "w/tuborg 5.jpg",
             caption: "",
             layout: "third"
           },
           {
             type: "image",
-            src: "tuborg 6.jpg",
+            src: "w/tuborg 6.jpg",
             caption: "",
             layout: "third"
           }
@@ -803,7 +803,7 @@ window.SITE_CONTENT = {
         client: "Canesten",
         category: "Miami Ad School",
         year: "2026",
-        image: "Gemini_Generated_Image_p4317mp4317mp431.jpeg",
+        image: "w/Gemini_Generated_Image_p4317mp4317mp431.jpg",
         alt: "Let's Call It What It Is, Canesten",
         sticker: "Never left the deck",
         tagline: "You can't treat what you won't say",
@@ -1241,12 +1241,12 @@ window.SITE_CONTENT = {
           },
           {
             type: "image",
-            src: "live/nivea-i-might-never-see-the-sun-again-02.jpg",
+            src: "w/live/nivea-i-might-never-see-the-sun-again-02.jpg",
             caption: ""
           },
           {
             type: "image",
-            src: "live/nivea-i-might-never-see-the-sun-again-03.jpg",
+            src: "w/live/nivea-i-might-never-see-the-sun-again-03.jpg",
             caption: ""
           },
           {
@@ -1299,17 +1299,17 @@ window.SITE_CONTENT = {
         media: [
           {
             type: "image",
-            src: "live/oumph-like-any-ad-01.jpg",
+            src: "w/live/oumph-like-any-ad-01.jpg",
             caption: ""
           },
           {
             type: "image",
-            src: "live/oumph-like-any-ad-02.jpg",
+            src: "w/live/oumph-like-any-ad-02.jpg",
             caption: ""
           },
           {
             type: "image",
-            src: "live/oumph-like-any-ad-03.jpg",
+            src: "w/live/oumph-like-any-ad-03.jpg",
             caption: ""
           },
           {
@@ -1386,8 +1386,8 @@ window.SITE_CONTENT = {
       "9f2ce999-469a-4e3c-b379-5856eccb8354.JPG",
       "about-photo.jpg",
       "50da4f9f-3782-490a-89a1-97954ff5833c.JPG",
-      "IMG_5550.JPG",
-      "C065B224-605D-4FA3-A1AA-0702A3FB0095.JPG"
+      "w/IMG_5550.jpg",
+      "w/C065B224-605D-4FA3-A1AA-0702A3FB0095.jpg"
     ],
     portraitAlt: "Mohammed Essam",
     paragraphs: [
