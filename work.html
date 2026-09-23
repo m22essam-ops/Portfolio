@@ -52,9 +52,9 @@
 
 <div id="page"></div>
 
-<!-- the tear-off stub. site.js fills it, so there is one copy of it
-     for the work index, the about page and every project page. -->
-<footer class="stub" id="siteFoot"></footer>
+<!-- THE FOOTER IS ON ABOUT ONLY (23 Sep 2026, his call). Put #siteFoot
+     back on this page and site.js builds it again, unchanged. The address is
+     in the nav as Say hi and LinkedIn is up there beside it. -->
 
 <!-- content.js is fetched with a stamp that changes every minute.
      GitHub Pages serves it with cache-control: max-age=600, so for ten
@@ -209,12 +209,33 @@
         String(p.title || '').toLowerCase().indexOf(String(p.client).toLowerCase()) === 0;
       var meta = [brandInTitle ? '' : p.client, p.year].filter(Boolean).join(' · ');
 
+      /* THE CARD CARRIES THREE THINGS NOW, NOT FOUR (23 Sep 2026, his call).
+         It used to print a sticker, a serial, the title and a tagline: sixty
+         lines of type wrapped around fifteen pictures.
+
+         The serial went first, and the NUMBER is the reason. "NO. 11" implies
+         a ranking and invites the one question a portfolio must never raise,
+         which is why this piece is eleventh. He took the year out with it.
+
+         The tagline went because a sticker and a tagline are two pieces of
+         commentary on one thumbnail, and the sticker is the one carrying a
+         fact: "Sold out in a week", "Never left the deck". The tagline
+         describes a picture you are already looking at.
+
+         BOTH ARE HIDDEN, NOT DELETED, at his request, and that is the whole
+         point of doing it this way: every tagline is still in content.js and
+         still edited in admin, so `work.showSerial` and `work.showTagline`
+         put them back with a tickbox and nothing has to be retyped. */
+      var serial = W.showSerial
+        ? '<span class="serial">NO. ' + String(i + 1).padStart(2, '0') +
+            (meta ? ' · ' + esc(meta.toUpperCase()) : '') + '</span>'
+        : '';
+
       return '<a class="piece reveal" href="work.html?slug=' + encodeURIComponent(p.slug) + '">' +
         img +
-        '<span class="serial">NO. ' + String(i + 1).padStart(2, '0') +
-          (meta ? ' · ' + esc(meta.toUpperCase()) : '') + '</span>' +
+        serial +
         '<h2>' + esc(p.title) + '</h2>' +
-        (p.tagline ? '<p>' + esc(p.tagline) + '</p>' : '') +
+        (W.showTagline && p.tagline ? '<p>' + esc(p.tagline) + '</p>' : '') +
         '</a>';
     }).join('');
 
@@ -358,14 +379,19 @@
       '<div class="project-top">' +
         '<a class="back-link" href="work.html">← All work</a>' +
       '</div>' +
-      /* same rule as the grid card: the brand is not printed twice on one page */
+      /* TWO FACTS, NOT FOUR (23 Sep 2026, his call). This line used to read
+         "Film · 2025 · Produced · Three films, three markets". The last part
+         is the sticker on the card you just clicked, printed again a second
+         after you read it, and "Produced" is that same fact a third time in
+         another word. Category and year are the two things the line was for.
+
+         Same rule as the grid card: the brand is not printed twice on one
+         page, so the client is dropped when the title already opens with it. */
       '<p class="project-meta">' + esc([
           String(p.title || '').toLowerCase()
             .indexOf(String(p.client || '').toLowerCase()) === 0 ? '' : p.client,
           p.category, p.year
-        ].filter(Boolean).join(' · ')) +
-      ' · <span class="' + (entry.ran ? 'status-produced' : 'status-pitched') + '">' + esc(status) + '</span>' +
-      (p.sticker ? ' · ' + esc(p.sticker) : '') + '</p>' +
+        ].filter(Boolean).join(' · ')) + '</p>' +
       '<h1 class="project-title">' + esc(p.title) + '</h1>';
     }
 

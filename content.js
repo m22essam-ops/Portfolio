@@ -73,6 +73,9 @@ window.SITE_CONTENT = {
     producedLabel: "Produced",
     presentedLabel: "Spec",
     limit: 0,
+    showSerial: false,
+    showTagline: false,
+    showMenu: false,
     projects: [
       {
         slug: "yango-unstoppable-rides",
