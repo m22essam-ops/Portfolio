@@ -73,9 +73,9 @@ window.SITE_CONTENT = {
     producedLabel: "Produced",
     presentedLabel: "Spec",
     limit: 0,
-    showSerial: false,
-    showTagline: false,
-    showMenu: false,
+    "showSerial": false,
+    "showTagline": false,
+    "showMenu": false,
     projects: [
       {
         slug: "yango-unstoppable-rides",
@@ -1473,7 +1473,7 @@ window.SITE_CONTENT = {
       body: "Maximum reach: 1 person.",
       cta: "Upload yours"
     },
-    line: "Mohammed Essam, senior copywriter. English and Arabic. Cairo, then Dubai, now Madrid."
+    line: "But first the SEO, Mohammed Essam, copywriter. English and Arabic. Cairo, then Dubai, now Madrid."
   },
   manipulating: {
     label: "The skill you clicked",
