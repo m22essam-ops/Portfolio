@@ -2078,8 +2078,29 @@ body.page-about { --bg:#F1E4DC; --well:#E4D2C6; --nav-bg:#F1E4DCf2; }
   .ab-main{padding-left:var(--shift,0px)}
   .ab-rail{display:block}
   /* the sticky goes on a CHILD: a grid item with align-self:start shrinks to
-     its content and has no room left inside it to stick in */
-  .ab-rail-in{position:sticky;top:120px}
+     its content and has no room left inside it to stick in.
+
+     IT PINS LOWER NOW (24 Sep 2026, his ask: نزل مساحة الاعلان تحت شوية).
+     66px lower, which drops its top edge from level with the heading's first
+     line to level with the start of the bio. Measured, so the note is true:
+     at 1440x900 the heading's foot is at 312 and the unit's top is at 186,
+     so it still stands beside the heading, it just no longer starts with it.
+
+     It cannot go much further and stay a skyscraper. Clearing the line under
+     the heading would mean an offset of about 440, which on a 900px screen
+     leaves 460 for a unit whose floor is 500.
+
+     The height moved with it and had to. The rule is written as the screen
+     minus what is above and below the unit, so raising the offset without
+     raising that subtraction would have hung the foot off the bottom of a
+     short laptop: at 700px tall the unit is already at its floor, and 66px
+     more of offset left 14px under it.
+
+     So the offset is a clamp, not a number. It takes the full 186px when
+     there is room and gives it back as the screen gets shorter, which is the
+     only way one figure can suit a 900px monitor and a 700px laptop lid.
+     Measured: 85px clear under it at 900, 77 at 800, 60 at 700, 30 at 650. */
+  .ab-rail-in{position:sticky;top:clamp(120px, calc(100vh - 560px), 186px)}
 }
 
 /* The heading is his line now, "The part where I talk about myself...", in
@@ -2105,7 +2126,7 @@ body.page-about .ab-head h1{font-size:clamp(38px,5vw,76px);line-height:1;max-wid
    on screen. 540px at the smallest, 738px at the most. */
 .sky{
   display:block;position:relative;overflow:hidden;
-  width:160px;height:clamp(540px, calc((100vh - 150px) * .9), 738px);
+  width:160px;height:clamp(500px, calc((100vh - 216px) * .92), 720px);
   padding:0;cursor:pointer;text-align:left;
   background:var(--well);border:1px solid var(--line);
   font:inherit;color:var(--fg);-webkit-appearance:none;appearance:none;
