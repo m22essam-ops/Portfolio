@@ -90,26 +90,30 @@
           <div id="aboutText"></div>
           <!-- The two lists break out of this column and run the full page
                width. They are inside it so they follow the bio, and pulled left
-               by exactly the left column plus the gap. The résumé is the last
-               row of Experience: the full version of the list it sits under. -->
+               by exactly the left column plus the gap.
+
+               THE RÉSUMÉ IS A BUTTON AGAIN (24 Sep 2026, his call). It spent
+               nine days as the last row of Experience, on the reasoning that
+               the list above it is the short version of the same document. The
+               reasoning holds and he wants the button anyway: with the contact
+               rows gone it is the only thing on this page you can take away,
+               and a row in a list of jobs does not look like something you can
+               take away. The CSS for it never left. -->
           <div class="lists">
             <p class="blk-head" id="expHead" hidden>Experience</p>
             <div class="exp-list" id="expList"></div>
             <p class="blk-head" id="langHead" hidden>Languages</p>
             <div class="lang-list" id="langList"></div>
+            <div id="aboutResume"></div>
           </div>
         </div>
       </div>
 
-      <!-- SAY HI, as rows in the job list's own language (15 Sep 2026). It was a
-           2px red rule, a big address and a strip of bare icons, which he hated
-           twice: red over a contact block is the call-to-action band again, and
-           floating icons are every "follow me" strip there is. Built from
-           contact.links, so admin is still the one place to edit. -->
-      <section class="c-rows" id="aboutContact" hidden>
-        <p class="blk-head">Say hi</p>
-        <div class="exp-list" id="contactRows"></div>
-      </section>
+      <!-- THE SAY HI ROWS ARE GONE (24 Sep 2026, his call). Five rows here,
+           the address and four icons in the footer below them, and Say hi in
+           the header: eleven ways to contact him on one page. The footer does
+           it once now, at the foot, which is the one page on the site that
+           still has one. -->
 
     </div>
 
@@ -352,62 +356,24 @@
      recruiter scanning for the word was not finding it. */
   var milestones = (A.education || []).concat(jobs);
 
-  /* A row that is a link: the same three parts as a job row, so contact and
-     the résumé read as more of the page rather than widgets dropped on it.
-     Leaving the site opens a new tab; a mailto does not, and stays BARE so
-     sweepMail() can put the half-written draft on it like every other
-     address on the page (a link that already carries a query is hands-off). */
-  function linkRow(lead, detail, right, href) {
-    return '<a class="exp-row" href="' + esc(href) + '"' +
-      (/^mailto:/i.test(href) ? '' : ' target="_blank" rel="noopener"') + '>' +
-      '<span class="exp-lead">' +
-        '<span class="exp-org"><b>' + lead + '</b></span>' +
-        '<span class="exp-role">' + detail + '</span>' +
-      '</span>' +
-      '<span class="exp-time">' + right + '</span>' +
-      '</a>';
-  }
+  /* ---- the résumé, as a button again (24 Sep 2026) ----
+     Straight out of contact.resume, admin section 6: no link in there and
+     there is no button. It sits under both lists rather than inside
+     Experience, because it is not another job, it is the whole of them.
 
-  /* ---- the résumé, as the last row of Experience (15 Sep 2026) ----
-     It was a separate button with a shape of its own. The list it sits under
-     is the short version of the résumé, so the full version belongs at the
-     foot of that list. Straight out of contact.resume, admin section 6; no
-     link in there and there is no row. */
+     `linkRow()` went with the contact rows. It existed to make a link look
+     like a job row, and there are no link rows on this page any more. */
   var R = (C.contact && C.contact.resume) || {};
   var resumeUrl = R.url ? String(R.url).trim() : '';
-  fillBlock('expHead', 'expList', rows(milestones) +
-    (resumeUrl ? linkRow('Résumé', 'The full version', 'Download &#8595;', resumeUrl) : ''));
-
-  /* ---- Say hi, as rows ----
-     Every contact link becomes a row. The detail is read off the URL, so
-     admin stays the one place to edit: a LinkedIn slug, an Instagram handle,
-     a Vimeo address. WhatsApp says "Message me" and never prints the number:
-     the link reaches it already, and a phone number set in type on a public
-     page is a gift to every scraper. The résumé's duplicate in
-     contact.links is skipped by matching the URL, since it has its own row. */
-  (function () {
-    var box = document.getElementById('aboutContact');
-    if (!box) return;
-    function detailFor(l) {
-      var u = String(l.url || ''), m;
-      if (/^mailto:/i.test(u)) {
-        return ['Email', esc(u.replace(/^mailto:/i, '').split('?')[0]), 'Write &#8599;'];
-      }
-      if (/wa\.me|whatsapp/i.test(u)) return ['WhatsApp', 'Message me', '&#8599;'];
-      if ((m = /linkedin\.com\/in\/([^\/?#]+)/i.exec(u))) return ['LinkedIn', '/in/' + esc(m[1]), '&#8599;'];
-      if ((m = /instagram\.com\/([^\/?#]+)/i.exec(u))) return ['Instagram', '@' + esc(m[1]), '&#8599;'];
-      if ((m = /vimeo\.com\/([^\/?#]+)/i.exec(u))) return ['Vimeo', 'vimeo.com/' + esc(m[1]), '&#8599;'];
-      return [esc(l.label || 'Link'), esc(u.replace(/^https?:\/\/(www\.)?/i, '').slice(0, 40)), '&#8599;'];
-    }
-    var html = ((C.contact && C.contact.links) || []).filter(function (l) {
-      return l && l.url && String(l.url).trim() && String(l.url).trim() !== resumeUrl;
-    }).map(function (l) {
-      var d = detailFor(l);
-      return linkRow(d[0], d[1], d[2], String(l.url).trim());
-    }).join('');
-    document.getElementById('contactRows').innerHTML = html;
-    box.hidden = !html;
-  })();
+  var resumeBox = document.getElementById('aboutResume');
+  if (resumeBox && resumeUrl) {
+    resumeBox.innerHTML =
+      '<a class="resume-btn" href="' + esc(resumeUrl) + '" target="_blank" rel="noopener">' +
+        '<span>' + esc(R.label || 'Download my r\u00e9sum\u00e9') + '</span>' +
+        '<span class="resume-arrow" aria-hidden="true">\u2193</span>' +
+      '</a>';
+  }
+  fillBlock('expHead', 'expList', rows(milestones));
 
   /* ---- the ad ----
      His copy lives in about.ad (admin section 5), so he can rewrite it
