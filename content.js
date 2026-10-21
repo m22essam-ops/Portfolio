@@ -330,7 +330,7 @@ window.SITE_CONTENT = {
         credits: [
           {
             role: "Copywriter",
-            name: "Mohammed Essam, Salvatore Scala"
+            name: "Salvatore Scala, Mohammed Essam"
           },
           {
             role: "Art Director",
