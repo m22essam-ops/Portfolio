@@ -1399,11 +1399,12 @@ window.SITE_CONTENT = {
     ],
     portraitAlt: "Mohammed Essam",
     paragraphs: [
-      "It took me eleven years and three broken arms to learn how to ride a bike. That's still pretty much my process.",
-      "I wanted to be a mechanical engineer. Right up until I became one. So I switched to sociology. Engineering taught me how machines break. Sociology taught me how people break. Advertising is pretty much the commercial break.",
-      "Made in Cairo, road-tested in Dubai, and right now getting fine-tuned in Madrid. The time zone keeps changing. The voice doesn't.",
-      "A line lands and for four seconds you feel Hemingway. Then you remember it is for toilet paper. Then the campaign comes down anyway; posters pulled down, films stop airing, and the folder on the drive gets deleted by the guy who quit. BEST JOB IN THE WORLD. I'M DOING IT AGAIN TOMORROW.",
-      "I fought AI. AI won. We've since agreed it's my unpaid intern. It can have the pixels. But I will never put Nokia or Kodak on a don't-be-that slide. Not once."
+      "It took three broken arms to learn how to ride a bike. I still attack a brief the exact same way.",
+      "I wanted to be a mechanical engineer, right up until I became one. Turns out I like people more than machines. So I studied sociology to figure out how humans actually behave, and eventually ended up writing ads for them to skip.",
+      "Made in Cairo streets, road-tested in Dubai offices, fine-tuned in Miami Ad School in Madrid.",
+      "I fought AI. AI won; now it’s my unpaid intern.",
+      "I still refuse to put Nokia or Kodak on a \"don't-be-that\" slide. Not once.",
+      "BEST JOB IN THE WORLD. I'M DOING IT AGAIN TOMORROW."
     ],
     skillLinks: [
       {
