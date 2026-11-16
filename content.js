@@ -1519,7 +1519,7 @@ window.SITE_CONTENT = {
     sub: "",
     resume: {
       label: "Download my Résumé",
-      url: "https://drive.google.com/file/d/1Cr5taW10iahFiKxziDagqF6Mvj1vBkts/view?usp=sharing"
+      url: "https://drive.google.com/file/d/1p3ORM-LAfWwZhKsWq6CL4yV63Pfu4u74/view?usp=sharing"
     },
     links: [
       {
